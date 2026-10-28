@@ -320,6 +320,39 @@ footer {
   line-height: 1.6;
 }
 
+/* TABLEAU DE BORD - TRESORS DE NOS VILLAGES */
+#sommaire-explorateur {
+  display: none;
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 25px;
+  border-radius: 0;
+  background: #f4ecd8;
+  color: #173b2b;
+  font-family: Georgia, serif;
+  box-shadow: none;
+}
+
+#sommaire-explorateur h2 {
+  color: #173b2b;
+}
+
+#sommaire-explorateur button {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+
+#sommaire-explorateur button:hover {
+  background: #6d6925 !important;
+}
+
+#contenu-rubrique {
+  line-height: 1.7;
+}
+
 </style>
 </head>
 
@@ -1322,50 +1355,27 @@ function simulerArriveeEglise() {
 
   <p id="message-tresors" role="status" aria-live="polite"></p>
 </section>
-  
+
+
 <!-- SOMMAIRE PERSONNEL DE L'EXPLORATEUR -->
 <section id="sommaire-explorateur" style="
   display:none;
-  max-width:420px;
-  margin:25px auto;
-  padding:22px;
-  border-radius:14px;
-  background:#101126;
-  color:white;
-  font-family:Arial,sans-serif;
-  box-shadow:0 4px 15px #0003;
+  width:100%;
+  min-height:100vh;
+  box-sizing:border-box;
+  margin:0;
+  padding:25px;
+  border-radius:0;
+  background:#f4ecd8;
+  color:#173b2b;
+  font-family:Georgia,serif;
+  box-shadow:none;
 ">
-  <h2 style="margin-top:0;">🧭 Mon espace explorateur</h2>
+  <div style="display:flex;gap:20px;align-items:stretch;min-height:80vh;">
+    <aside style="width:245px;flex-shrink:0;background:#062c20;color:#fff0b5;padding:20px;border-radius:14px;">
+      <h2 style="text-align:center;">🧭 Trésors<br>de nos Villages</h2>
+      <button type="button" onclick="afficherRubrique('accueil')" style="display:block;width:100%;padding:14px;margin:8px 0;text-align:left;background:#6d6925;color:white;border:0;border-radius:8px;">🏠 Accueil</button>
 
-  <button type="button" onclick="afficherRubrique('profil')"
-    style="display:block;width:100%;padding:13px;margin:8px 0;text-align:left;border:0;border-radius:8px;background:#25265b;color:white;cursor:pointer;">
-    👤 Mon profil
-  </button>
-
-  <button type="button" onclick="afficherRubrique('aventures')"
-    style="display:block;width:100%;padding:13px;margin:8px 0;text-align:left;border:0;border-radius:8px;background:#191a36;color:white;cursor:pointer;">
-    🗺️ Mes aventures
-  </button>
-
-  <button type="button" onclick="afficherRubrique('badges')"
-    style="display:block;width:100%;padding:13px;margin:8px 0;text-align:left;border:0;border-radius:8px;background:#191a36;color:white;cursor:pointer;">
-    🏆 Mes badges
-  </button>
-
-  <button type="button" onclick="afficherRubrique('etoiles')"
-    style="display:block;width:100%;padding:13px;margin:8px 0;text-align:left;border:0;border-radius:8px;background:#191a36;color:white;cursor:pointer;">
-    ⭐ Mes étoiles
-  </button>
-
-  <button type="button" onclick="afficherRubrique('formules')"
-    style="display:block;width:100%;padding:13px;margin:8px 0;text-align:left;border:0;border-radius:8px;background:#191a36;color:white;cursor:pointer;">
-    💳 Mes formules
-  </button>
-
-  <div id="contenu-rubrique" style="margin-top:18px;padding:14px;background:#fff;color:#234735;border-radius:8px;">
-    Choisis une rubrique dans le menu.
-  </div>
-</section>
 
 
 <script type="module">
