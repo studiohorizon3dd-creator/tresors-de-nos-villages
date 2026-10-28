@@ -658,9 +658,13 @@ function initialiserCarte() {
   }).addTo(carte);
 
   L.marker([50.50510, 1.90770])
-  .addTo(carte)
-  .bindPopup("📍 Départ : mairie d’Humbert")
-  .openPopup();
+    .addTo(carte)
+    .bindPopup("📍 Départ : mairie d’Humbert")
+    .openPopup();
+
+  L.marker([50.502586, 1.906921])
+    .addTo(carte)
+    .bindPopup("⛪ Étape 2 : église Saint-Pierre d’Humbert");
 }
 
 function activerGPS() {
