@@ -153,7 +153,19 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <section class="dash-section hidden" id="dash-formulas"><h3>Mes formules</h3><div class="feature-grid"><article class="feature"><div class="feature-icon">🌱</div><h3>Facile</h3><p>Gratuit · Première aventure</p><button class="small-btn" onclick="chooseFormula('facile')">Choisir Facile</button></article><article class="feature"><div class="feature-icon">🧭</div><h3>Moyen</h3><p>1,99 € · Paiement pas encore disponible</p><button class="small-btn" onclick="chooseFormula('moyen')">Voir la formule</button></article><article class="feature"><div class="feature-icon">🔐</div><h3>Difficile</h3><p>2,99 € · Paiement pas encore disponible</p><button class="small-btn" onclick="chooseFormula('difficile')">Voir la formule</button></article></div><p id="formula-status" class="status"></p></section>
     <section class="dash-section hidden" id="dash-game"><h3>🏡 L’aventure à Humbert</h3><p>Choisissez la formule Facile pour commencer. Répondez aux énigmes pour gagner des étoiles.</p><div class="riddle-list">
       <article class="riddle"><div class="big">🏛️</div><h3>Énigme 1</h3><p>Quel lieu rassemble les habitants et permet notamment de se marier ou de voter ?</p><input id="answer1" placeholder="Ta réponse"><button onclick="checkAnswer(1)">Valider ma réponse</button><p id="feedback1" class="feedback" aria-live="polite"></p></article>
-      <article class="riddle"><div class="big">⛪</div><h3>Énigme 2</h3><p>Quel édifice possède des vitraux et un clocher qui fait sonner les cloches ?</p><input id="answer2" placeholder="Ta réponse"><button onclick="checkAnswer(2)">Valider ma réponse</button><p id="feedback2" class="feedback" aria-live="polite"></p></article>
+      <div id="zoneGPS" class="riddle" style="display:none;">
+        <h3>📍 Vérifie ton arrivée à la mairie</h3>
+        <p>Autorise la localisation pour vérifier que tu es près de la mairie d’Humbert.</p>
+        <button type="button" onclick="verifierArriveeMairie()">📍 Vérifier ma position</button>
+        <p id="statutGPS" class="feedback" aria-live="polite"></p>
+        <div id="directionEglise" style="display:none;">
+          <h3>⛪ Direction l’église !</h3>
+          <p>Bravo, tu es près de la mairie. Tu peux maintenant partir vers l’église.</p>
+          <a id="itineraireEglise" href="https://www.google.com/maps/dir/?api=1&destination=50.502586%2C1.906921&travelmode=walking" target="_blank" rel="noopener" style="display:inline-block;margin:10px 0;">🗺️ Ouvrir l’itinéraire vers l’église</a><br>
+          <button type="button" onclick="afficherEnigmeEglise()">🗝️ Découvrir l’énigme 2</button>
+        </div>
+      </div>
+      <article class="riddle" id="carteEnigme2" style="display:none;"><div class="big">⛪</div><h3>Énigme 2</h3><p>Quel édifice possède des vitraux et un clocher qui fait sonner les cloches ?</p><input id="answer2" placeholder="Ta réponse"><button onclick="checkAnswer(2)">Valider ma réponse</button><p id="feedback2" class="feedback" aria-live="polite"></p></article>
     </div><p>Les réponses validées donnent une étoile chacune. Le compteur est conservé dans ce navigateur.</p><button class="small-btn" onclick="showDashSection('dash-home')">Retour au tableau de bord</button></section>
   </div>
 </section>
@@ -250,19 +262,58 @@ function refreshProgress(){
 }
 function checkAnswer(number){
   const id="answer"+number, feedback=document.getElementById("feedback"+number);
-  const answer=document.getElementById(id).value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const input=document.getElementById(id);
+  if(!input || !feedback) return;
+  const answer=input.value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
   const correct=number===1?["mairie","la mairie"]:["eglise","l'eglise","la eglise","l eglise"];
-  if(correct.includes(answer)){
-    let p=getProgress();
-    const key=number===1?"mairie":"eglise";
-    if(!p.includes(key)){p.push(key);localStorage.setItem("progressionHumbertFacile",JSON.stringify(p));}
-    feedback.textContent="🎉 Bravo ! Tu gagnes une étoile ! ⭐";
-    refreshProgress();
-  }else{
+  if(!correct.includes(answer)){
     feedback.textContent=number===1?"🔎 Essaie encore. Pense au lieu où l’on vote.":"🔎 Essaie encore. Pense à l’édifice avec un clocher.";
+    return;
+  }
+  let p=getProgress();
+  const key=number===1?"mairie":"eglise";
+  if(!p.includes(key)){p.push(key);localStorage.setItem("progressionHumbertFacile",JSON.stringify(p));}
+  feedback.textContent="🎉 Bravo ! Tu gagnes une étoile ! ⭐";
+  refreshProgress();
+  if(number===1){
+    feedback.textContent="🎉 Bravo ! Tu as trouvé la mairie ! ⭐ Vérifie ta position GPS pour débloquer la suite.";
+    const zone=document.getElementById("zoneGPS");
+    if(zone){zone.style.display="block";zone.scrollIntoView({behavior:"smooth",block:"center"});}
   }
 }
+function verifierArriveeMairie(){
+  const statut=document.getElementById("statutGPS");
+  if(!navigator.geolocation){statut.textContent="La localisation n’est pas disponible sur cet appareil.";return;}
+  statut.textContent="Recherche de ta position… Autorise la localisation si ton navigateur le demande.";
+  navigator.geolocation.getCurrentPosition(function(position){
+    const lat=position.coords.latitude, lon=position.coords.longitude;
+    const distance=distanceMetres(lat,lon,50.50510,1.90770);
+    if(distance<=100){
+      statut.textContent="✅ Tu es près de la mairie d’Humbert ! La suite est débloquée.";
+      document.getElementById("directionEglise").style.display="block";
+      const route=document.getElementById("itineraireEglise");
+      route.href="https://www.google.com/maps/dir/?api=1&origin="+lat+","+lon+"&destination=50.502586%2C1.906921&travelmode=walking";
+    }else{
+      statut.textContent="Tu es à environ "+Math.round(distance)+" mètres de la mairie. Rapproche-toi à moins de 100 m puis réessaie.";
+    }
+  },function(error){
+    if(error.code===1) statut.textContent="La localisation est refusée. Autorise-la dans les réglages du navigateur puis réessaie.";
+    else if(error.code===2) statut.textContent="Ta position n’a pas pu être déterminée. Vérifie le GPS puis réessaie.";
+    else statut.textContent="La recherche GPS a pris trop de temps. Réessaie dans un instant.";
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+}
+function distanceMetres(lat1,lon1,lat2,lon2){
+  const rad=v=>v*Math.PI/180;
+  const dLat=rad(lat2-lat1),dLon=rad(lon2-lon1);
+  const a=Math.sin(dLat/2)**2+Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2;
+  return 6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function afficherEnigmeEglise(){
+  const carte=document.getElementById("carteEnigme2");
+  if(carte){carte.style.display="block";carte.scrollIntoView({behavior:"smooth",block:"center"});}
+}
 function chooseFormulaFromMenu(){showDashSection("dash-formulas")}
+Object.assign(window,{showDashboard,returnHome,showDashSection,openAdventure,chooseFormula,checkAnswer,chooseFormulaFromMenu,verifierArriveeMairie,afficherEnigmeEglise});
 </script>
 </body>
 </html>
