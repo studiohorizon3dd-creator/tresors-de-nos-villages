@@ -270,7 +270,22 @@ footer {
   À vous de la découvrir !</p>
 </header>
 
-<main>
+  <!-- PAGE SOMMAIRE DES VILLAGES -->
+<section id="sommaire-villages" style="display:none;">
+  <h2>🗺️ Choisis ton village</h2>
+  <p>Pars à la découverte des trésors de nos villages !</p>
+
+  <article class="carte">
+    <h3>🏡 Humbert</h3>
+    <p>Pas-de-Calais — France</p>
+    <p>Découvre le patrimoine et résous les énigmes du village.</p>
+    <button type="button" onclick="ouvrirVillageHumbert()">
+      🗝️ Découvrir Humbert
+    </button>
+  </article>
+</section>
+  
+<main style="display:none;">
   <section class="intro">
     <span class="etiquette">PREMIÈRE AVENTURE</span>
     <h2>Bienvenue à Humbert !</h2>
@@ -526,7 +541,7 @@ footer {
   </section>
 </main>
 
-<footer>
+<footer style="display:none;">
   🗝️ Trésors de nos Villages<br>
   Un projet en préparation à Humbert, Pas-de-Calais.
 </footer>
@@ -869,8 +884,13 @@ formulaire.addEventListener("submit", async (event) => {
       throw new Error(result.error.message || "Inscription impossible.");
     }
 
-    message.textContent =
-      "Demande envoyée. Vérifie les instructions reçues par e-mail pour valider ton compte.";
+message.textContent = "Compte créé ! Bienvenue dans l'aventure !";
+document.getElementById("compte-tresors").style.display = "none";
+document.getElementById("sommaire-villages").style.display = "block";
+document.getElementById("sommaire-villages").scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
   } catch (error) {
     message.textContent =
       error.message || "Une erreur est survenue. Réessaie.";
@@ -897,11 +917,26 @@ boutonConnexion.addEventListener("click", async () => {
     }
 
     message.textContent = "Connexion réussie !";
+document.getElementById("compte-tresors").style.display = "none";
+document.getElementById("sommaire-villages").style.display = "block";
+document.getElementById("sommaire-villages").scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
   } catch (error) {
     message.textContent =
       error.message || "Impossible de se connecter.";
   }
 });
+  function ouvrirVillageHumbert() {
+  document.getElementById("sommaire-villages").style.display = "none";
+  document.querySelector("main").style.display = "block";
+  document.querySelector("footer").style.display = "block";
+  document.querySelector("main").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
 </script>
 </body>
 </html>
