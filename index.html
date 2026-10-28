@@ -900,6 +900,7 @@ function enigmeSuivante() {
 }
 
 
+
 function verifierDeuxiemeReponse() {
   const reponse = document.getElementById("reponseDeuxiemeEnigme")
     .value.trim()
@@ -915,7 +916,14 @@ function verifierDeuxiemeReponse() {
     reponse === "la eglise"
   ) {
     resultat.textContent =
-      "🎉 Bravo ! Tu as trouvé l'église ! Continue ton aventure !";
+      "🎉 Bravo ! Tu as trouvé l'église ! Tu as gagné le badge Explorateur de Humbert ! 🏆";
+
+    let badges = JSON.parse(localStorage.getItem("badgesTresors") || "[]");
+
+    if (!badges.includes("Explorateur de Humbert")) {
+      badges.push("Explorateur de Humbert");
+      localStorage.setItem("badgesTresors", JSON.stringify(badges));
+    }
   } else {
     resultat.textContent =
       "🔎 Essaie encore ! Lève les yeux vers le clocher...";
