@@ -70,6 +70,8 @@ h1{font-size:clamp(34px,4vw,60px);line-height:1.02;margin:0 0 18px}
 footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 @media(max-width:800px){.sidebar{position:relative;width:100%;height:auto;padding:12px;display:block}.brand-mark{font-size:35px}.brand-name{font-size:22px;margin:6px 0 12px}.nav-list{display:flex;flex-wrap:wrap;justify-content:center}.nav-btn{width:auto;padding:10px 12px;font-size:14px}.sidebar-note{display:none}.content{margin-left:0}.hero{min-height:330px;padding:22px}.hero-copy{padding:24px}.feature-grid{grid-template-columns:1fr}.feature{padding:22px}.dash-hero{min-height:220px;padding:22px}.progress-card{margin:-18px 16px 0}.dash-section{padding:24px 16px}.riddle-list{grid-template-columns:1fr}}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 <div class="layout" id="landing">
@@ -158,6 +160,8 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
         <p>Autorise la localisation pour vérifier que tu es près de la mairie d’Humbert.</p>
         <button type="button" onclick="verifierArriveeMairie()">📍 Vérifier ma position</button>
         <p id="statutGPS" class="feedback" aria-live="polite"></p>
+        <div id="carteGPS" style="height:320px;width:100%;margin:14px 0;border-radius:12px;overflow:hidden;background:#e5eadf;"></div>
+        <div style="font-size:0.9rem;margin-bottom:12px;">📍 Mairie d’Humbert · ⛪ Église d’Humbert · Le point bleu indique ta position quand le GPS est activé.</div>
         <div id="directionEglise" style="display:none;">
           <h3>⛪ Direction l’église !</h3>
           <p>Bravo, tu es près de la mairie. Tu peux maintenant partir vers l’église.</p>
@@ -278,15 +282,44 @@ function checkAnswer(number){
   if(number===1){
     feedback.textContent="🎉 Bravo ! Tu as trouvé la mairie ! ⭐ Vérifie ta position GPS pour débloquer la suite.";
     const zone=document.getElementById("zoneGPS");
-    if(zone){zone.style.display="block";zone.scrollIntoView({behavior:"smooth",block:"center"});}
+    if(zone){
+      zone.style.display="block";
+      zone.scrollIntoView({behavior:"smooth",block:"center"});
+      setTimeout(initialiserCarte, 250);
+    }
   }
 }
+let carteGPS = null;
+let marqueurJoueurGPS = null;
+
+function initialiserCarte(){
+  if(carteGPS) { carteGPS.invalidateSize(); return; }
+  const zoneCarte = document.getElementById("carteGPS");
+  if(!zoneCarte || typeof L === "undefined") return;
+  carteGPS = L.map("carteGPS").setView([50.5038, 1.9073], 16);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(carteGPS);
+  L.marker([50.50510, 1.90770]).addTo(carteGPS)
+    .bindPopup("📍 Départ : mairie d’Humbert");
+  L.marker([50.502586, 1.906921]).addTo(carteGPS)
+    .bindPopup("⛪ Arrivée : église d’Humbert");
+  const lieux = L.latLngBounds([[50.50510, 1.90770], [50.502586, 1.906921]]);
+  carteGPS.fitBounds(lieux, {padding:[25,25]});
+}
+
 function verifierArriveeMairie(){
   const statut=document.getElementById("statutGPS");
   if(!navigator.geolocation){statut.textContent="La localisation n’est pas disponible sur cet appareil.";return;}
   statut.textContent="Recherche de ta position… Autorise la localisation si ton navigateur le demande.";
   navigator.geolocation.getCurrentPosition(function(position){
     const lat=position.coords.latitude, lon=position.coords.longitude;
+    initialiserCarte();
+    if(carteGPS){
+      if(marqueurJoueurGPS) carteGPS.removeLayer(marqueurJoueurGPS);
+      marqueurJoueurGPS = L.marker([lat,lon]).addTo(carteGPS).bindPopup("📍 Ta position actuelle");
+      carteGPS.setView([lat,lon],16);
+    }
     const distance=distanceMetres(lat,lon,50.50510,1.90770);
     if(distance<=100){
       statut.textContent="✅ Tu es près de la mairie d’Humbert ! La suite est débloquée.";
