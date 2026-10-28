@@ -1127,6 +1127,35 @@ function verifierReponse() {
     }
 
     actualiserCompteurEtoiles();
+    
+function afficherRubrique(rubrique) {
+  const contenu = document.getElementById("contenu-rubrique");
+
+  if (rubrique === "profil") {
+    contenu.textContent = "👤 Mon profil : tes informations de compte.";
+  } else if (rubrique === "aventures") {
+    contenu.textContent = "🗺️ Mes aventures : découvre les villages disponibles.";
+  } else if (rubrique === "badges") {
+    const badges = JSON.parse(
+      localStorage.getItem("badgesTresors") || "[]"
+    );
+
+    contenu.textContent = badges.length
+      ? "🏆 Mes badges : " + badges.join(", ")
+      : "🏆 Tu n'as pas encore gagné de badge.";
+  } else if (rubrique === "etoiles") {
+    const progression = JSON.parse(
+      localStorage.getItem("progressionHumbertFacile") || "[]"
+    );
+
+    contenu.textContent =
+      "⭐ Mes étoiles : " + Math.min(progression.length, 10) + " / 10";
+  } else if (rubrique === "formules") {
+    contenu.textContent = "💳 Ma formule : " +
+      (window.formuleChoisie || "Aucune formule choisie");
+  }
+}
+
   } else {
     resultat.textContent = "🔎 Essaie encore !";
     boutonSuivant.style.display = "none";
@@ -1301,7 +1330,11 @@ formulaire.addEventListener("submit", async (event) => {
 
 message.textContent = "Compte créé ! Bienvenue dans l'aventure !";
 document.getElementById("compte-tresors").style.display = "none";
-document.getElementById("page-formules").style.display = "block";
+document.getElementById("sommaire-explorateur").style.display = "block";
+document.getElementById("sommaire-explorateur").scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
 document.getElementById("page-formules").scrollIntoView({
   behavior: "smooth",
   block: "start"
@@ -1333,7 +1366,11 @@ boutonConnexion.addEventListener("click", async () => {
 
     message.textContent = "Connexion réussie !";
 document.getElementById("compte-tresors").style.display = "none";
-document.getElementById("page-formules").style.display = "block";
+document.getElementById("sommaire-explorateur").style.display = "block";
+document.getElementById("sommaire-explorateur").scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
 document.getElementById("page-formules").scrollIntoView({
   behavior: "smooth",
   block: "start"
