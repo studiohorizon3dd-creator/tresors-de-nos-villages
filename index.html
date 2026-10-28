@@ -270,20 +270,143 @@ footer {
   À vous de la découvrir !</p>
 </header>
 
-  <!-- PAGE SOMMAIRE DES VILLAGES -->
-<section id="sommaire-villages" style="display:none;">
-  <h2>🗺️ Choisis ton village</h2>
-  <p>Pars à la découverte des trésors de nos villages !</p>
+<!-- PAGE SOMMAIRE DES VILLAGES -->
+<section id="sommaire-villages" style="
+  display:none;
+  max-width:1000px;
+  margin:0 auto;
+  padding:35px 20px 50px;
+  box-sizing:border-box;
+">
 
-  <article class="carte">
-    <h3>🏡 Humbert</h3>
-    <p>Pas-de-Calais — France</p>
-    <p>Découvre le patrimoine et résous les énigmes du village.</p>
-    <button type="button" onclick="ouvrirVillageHumbert()">
-      🗝️ Découvrir Humbert
-    </button>
+  <div style="
+    text-align:center;
+    margin-bottom:35px;
+  ">
+    <div style="font-size:42px;margin-bottom:10px;">🗺️</div>
+
+    <p style="
+      color:#a47b2c;
+      font-size:13px;
+      font-weight:bold;
+      letter-spacing:3px;
+      margin:0 0 10px;
+    ">TON CARNET D'EXPLORATEUR</p>
+
+    <h2 style="
+      color:#214b35;
+      font-size:clamp(28px,5vw,42px);
+      margin:0 0 12px;
+    ">Choisis ton village</h2>
+
+    <p style="
+      color:#586458;
+      font-size:17px;
+      line-height:1.7;
+      max-width:600px;
+      margin:0 auto;
+    ">
+      Chaque village cache des histoires et des trésors.
+      À toi de partir à leur découverte !
+    </p>
+  </div>
+
+  <article style="
+    background:#ffffff;
+    border:1px solid #e4d8b9;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 12px 30px rgba(32,65,43,0.12);
+  ">
+
+    <div style="
+      background:linear-gradient(135deg,#214b35,#36704b);
+      color:white;
+      padding:24px;
+      text-align:center;
+    ">
+      <span style="
+        display:inline-block;
+        background:#f3dfaa;
+        color:#214b35;
+        border-radius:30px;
+        padding:7px 15px;
+        font-size:12px;
+        font-weight:bold;
+        letter-spacing:1px;
+      ">PREMIÈRE AVENTURE</span>
+
+      <h3 style="
+        font-size:32px;
+        margin:15px 0 5px;
+        color:white;
+      ">🏡 Humbert</h3>
+
+      <p style="margin:0;color:#f5ecd6;">
+        📍 Pas-de-Calais · France
+      </p>
+    </div>
+
+    <div style="padding:25px;text-align:center;">
+      <div style="
+        font-size:48px;
+        margin-bottom:12px;
+      ">🌳 🗝️ ⛪</div>
+
+      <p style="
+        color:#455448;
+        font-size:16px;
+        line-height:1.8;
+        max-width:550px;
+        margin:0 auto 22px;
+      ">
+        Pars à la découverte du patrimoine d'Humbert,
+        observe les lieux et résous les énigmes.
+        Ton aventure de chasseur de trésors commence ici !
+      </p>
+
+      <button
+        type="button"
+        onclick="ouvrirVillageHumbert()"
+        style="
+          background:#c49a3a;
+          color:#ffffff;
+          border:none;
+          border-radius:12px;
+          padding:16px 26px;
+          font-size:17px;
+          font-weight:bold;
+          cursor:pointer;
+          width:100%;
+          max-width:350px;
+          box-shadow:0 5px 12px rgba(130,95,25,0.2);
+        "
+      >
+        🗝️ Découvrir Humbert
+      </button>
+
+      <p style="
+        color:#7b8277;
+        font-size:13px;
+        margin:17px 0 0;
+      ">
+        🌱 Facile · 🧭 Moyen · 🔐 Difficile
+      </p>
+    </div>
+
   </article>
+
+  <p style="
+    text-align:center;
+    color:#788074;
+    font-size:14px;
+    margin-top:28px;
+  ">
+    🏆 Termine les aventures pour collectionner tes badges !
+  </p>
+
 </section>
+
   
 <main style="display:none;">
   <section class="intro">
