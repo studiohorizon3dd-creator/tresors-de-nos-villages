@@ -543,6 +543,24 @@ function choisirFormule(niveau) {
     <div class="carte-titre">
       <h3>📍 Votre aventure commence ici</h3>
       <p>Voici un aperçu illustré de votre future exploration.</p>
+      
+<div id="compteurEtoiles" style="
+  margin: 15px 0;
+  padding: 16px;
+  border-radius: 14px;
+  background: #fff4d6;
+  border: 2px solid #e4bd62;
+  text-align: center;
+">
+  <h3 style="margin: 0 0 8px;">⭐ Mon compteur d'étoiles</h3>
+  <p id="nombreEtoiles" style="font-size: 24px; margin: 0;">
+    ⭐ 0 / 10
+  </p>
+  <p id="progressionEtoiles" style="margin: 8px 0 0;">
+    Encore 10 étoiles pour gagner ton badge Facile !
+  </p>
+</div>
+
     </div>
 <div style="
   margin: 15px 0 20px;
@@ -878,9 +896,21 @@ function verifierReponse() {
 
   if (reponse === "mairie" || reponse === "la mairie") {
     resultat.textContent =
-      "🎉 Bravo ! Tu as trouvé la bonne réponse. Première énigme réussie !";
+      "🎉 Bravo ! Tu as trouvé la mairie ! Tu gagnes 1 étoile ! ⭐";
 
     boutonSuivant.style.display = "inline-block";
+
+    let progression = JSON.parse(
+      localStorage.getItem("progressionHumbertFacile") || "[]"
+    );
+
+    if (!progression.includes("mairie")) {
+      progression.push("mairie");
+      localStorage.setItem(
+        "progressionHumbertFacile",
+        JSON.stringify(progression)
+      );
+    }
   } else {
     resultat.textContent =
       "🔎 Pas encore ! Relis l'énigme et essaie encore.";
@@ -901,6 +931,7 @@ function enigmeSuivante() {
 
 
 
+
 function verifierDeuxiemeReponse() {
   const reponse = document.getElementById("reponseDeuxiemeEnigme")
     .value.trim()
@@ -916,19 +947,43 @@ function verifierDeuxiemeReponse() {
     reponse === "la eglise"
   ) {
     resultat.textContent =
-      "🎉 Bravo ! Tu as trouvé l'église ! Tu as gagné le badge Explorateur de Humbert ! 🏆";
+      "🎉 Bravo ! Tu as trouvé l'église ! Tu gagnes 1 étoile ! ⭐";
 
-    let badges = JSON.parse(localStorage.getItem("badgesTresors") || "[]");
+    let progression = JSON.parse(
+      localStorage.getItem("progressionHumbertFacile") || "[]"
+    );
 
-    if (!badges.includes("Explorateur de Humbert")) {
-      badges.push("Explorateur de Humbert");
-      localStorage.setItem("badgesTresors", JSON.stringify(badges));
+    if (!progression.includes("eglise")) {
+      progression.push("eglise");
+      localStorage.setItem(
+        "progressionHumbertFacile",
+        JSON.stringify(progression)
+      );
     }
   } else {
     resultat.textContent =
       "🔎 Essaie encore ! Lève les yeux vers le clocher...";
   }
 }
+
+function actualiserCompteurEtoiles() {
+  const progression = JSON.parse(
+    localStorage.getItem("progressionHumbertFacile") || "[]"
+  );
+
+  const nombre = Math.min(progression.length, 10);
+
+  document.getElementById("nombreEtoiles").textContent =
+    "⭐ " + nombre + " / 10";
+
+  document.getElementById("progressionEtoiles").textContent =
+    nombre >= 10
+      ? "🏆 Bravo ! Tu as gagné ton badge Facile !"
+      : "Encore " + (10 - nombre) +
+        " étoile(s) pour gagner ton badge Facile !";
+}
+
+actualiserCompteurEtoiles();
 
 
 
@@ -1046,6 +1101,7 @@ function commencerAventure() {
   document.getElementById("boutonCommencer").style.display = "none";
 }
 
+
 function verifierReponse() {
   const reponse = document.getElementById("reponseEnigme")
     .value.trim().toLowerCase()
@@ -1055,13 +1111,28 @@ function verifierReponse() {
   const boutonSuivant = document.getElementById("boutonSuivant");
 
   if (reponse === "mairie" || reponse === "la mairie") {
-    resultat.textContent = "🎉 Bravo ! Première énigme réussie !";
+    resultat.textContent = "🎉 Bravo ! Première énigme réussie ! ⭐";
     boutonSuivant.style.display = "inline-block";
+
+    let progression = JSON.parse(
+      localStorage.getItem("progressionHumbertFacile") || "[]"
+    );
+
+    if (!progression.includes("mairie")) {
+      progression.push("mairie");
+      localStorage.setItem(
+        "progressionHumbertFacile",
+        JSON.stringify(progression)
+      );
+    }
+
+    actualiserCompteurEtoiles();
   } else {
     resultat.textContent = "🔎 Essaie encore !";
     boutonSuivant.style.display = "none";
   }
 }
+
 
 function enigmeSuivante() {
   document.getElementById("deuxiemeEnigme").style.display = "block";
@@ -1072,6 +1143,7 @@ function enigmeSuivante() {
   });
 }
 
+
 function verifierDeuxiemeReponse() {
   const reponse = document.getElementById("reponseDeuxiemeEnigme")
     .value.trim().toLowerCase()
@@ -1080,11 +1152,27 @@ function verifierDeuxiemeReponse() {
   const resultat = document.getElementById("resultatDeuxiemeEnigme");
 
   if (reponse === "eglise" || reponse === "l'eglise" || reponse === "la eglise") {
-    resultat.textContent = "🎉 Bravo ! Deuxième énigme réussie !";
+    resultat.textContent = "🎉 Bravo ! Deuxième énigme réussie ! Tu gagnes 1 étoile ! ⭐";
+
+    let progression = JSON.parse(
+      localStorage.getItem("progressionHumbertFacile") || "[]"
+    );
+
+    if (!progression.includes("eglise")) {
+      progression.push("eglise");
+      localStorage.setItem(
+        "progressionHumbertFacile",
+        JSON.stringify(progression)
+      );
+    }
+
+    actualiserCompteurEtoiles();
+
   } else {
     resultat.textContent = "🔎 Essaie encore ! Pense à un édifice religieux.";
   }
 }
+
 
 
 function simulerArriveeEglise() {
