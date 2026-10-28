@@ -373,17 +373,26 @@ footer {
   </p>
 </section>
 
+
 <script>
 function choisirFormule(niveau) {
+  if (niveau !== "facile") {
+    alert("Cette formule nécessite un paiement. Le paiement en ligne n'est pas encore disponible.");
+    return;
+  }
+
   window.formuleChoisie = niveau;
+
   document.getElementById("page-formules").style.display = "none";
   document.getElementById("sommaire-villages").style.display = "block";
+
   document.getElementById("sommaire-villages").scrollIntoView({
     behavior: "smooth",
     block: "start"
   });
 }
 </script>
+
 <!-- PAGE SOMMAIRE DES VILLAGES -->
 <section id="sommaire-villages" style="
   display:none;
