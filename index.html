@@ -255,6 +255,49 @@ footer {
   .niveau strong { margin: 0 0 4px; }
 }
 </style>
+  /* Nouvelle présentation moderne */
+.carte-dessin {
+  display: none !important;
+}
+
+.parcours-explorateur {
+  margin: 20px 0;
+  padding: 24px;
+  background: #214d38;
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.parcours-explorateur h3 {
+  color: #f3d98e;
+  text-align: center;
+}
+
+.parcours-etapes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.parcours-etape {
+  background: #fff;
+  color: #214d38;
+  border-radius: 12px;
+  padding: 16px 8px;
+  text-align: center;
+}
+
+.parcours-etape strong {
+  display: block;
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .parcours-etapes {
+    grid-template-columns: 1fr;
+  }
+}
 </head>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
