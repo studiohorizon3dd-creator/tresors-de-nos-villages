@@ -254,9 +254,11 @@ footer {
   }
   .niveau strong { margin: 0 0 4px; }
 }
-</style>
-  /* Nouvelle présentation moderne */
-.carte-dessin {
+
+
+/* Nouvelle présentation moderne */
+/* Nouvelle présentation moderne */
+.carte-dessin, .legende {
   display: none !important;
 }
 
@@ -298,6 +300,7 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+</style>
 </head>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -472,7 +475,7 @@ footer {
 ">
   <img
     src="village-humbert.png"
-    villages/Village%20pastoral%20%C3%A0%20l'heure%20dor%C3%A9e.png"
+    alt="Village de campagne avec son église et ses maisons"
     style="
       display: block;
       width: 100%;
@@ -482,6 +485,17 @@ footer {
     "
   >
 </div>
+
+    <div class="parcours-explorateur">
+      <h3>🧭 Ton parcours d’explorateur</h3>
+      <p style="text-align:center;line-height:1.6;">Explore le village à ton rythme, observe les lieux et résous les énigmes pour avancer.</p>
+      <div class="parcours-etapes">
+        <div class="parcours-etape"><div style="font-size:30px;">🏛️</div><strong>Étape 1</strong><span>Découvrir la mairie</span></div>
+        <div class="parcours-etape"><div style="font-size:30px;">⛪</div><strong>Étape 2</strong><span>Observer l’église</span></div>
+        <div class="parcours-etape"><div style="font-size:30px;">🏆</div><strong>Étape finale</strong><span>Gagner ton badge</span></div>
+      </div>
+    </div>
+
     <div class="carte-dessin">
       <svg viewBox="0 0 700 390"
            xmlns="http://www.w3.org/2000/svg"
