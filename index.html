@@ -1074,5 +1074,29 @@ document.getElementById("sommaire-villages").scrollIntoView({
   });
 }
 </script>
+  <script>
+window.ouvrirVillageHumbert = function () {
+  const sommaire = document.getElementById("sommaire-villages");
+  const jeu = document.querySelector("main");
+  const pied = document.querySelector("footer");
+
+  if (!sommaire || !jeu) {
+    alert("Impossible d'ouvrir Humbert. Vérifie le code de la page.");
+    return;
+  }
+
+  sommaire.style.display = "none";
+  jeu.style.display = "block";
+
+  if (pied) {
+    pied.style.display = "block";
+  }
+
+  jeu.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+};
+</script>
 </body>
 </html>
