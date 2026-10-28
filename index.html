@@ -300,6 +300,26 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+  
+/* Préparation du nouvel en-tête */
+.entete-principal {
+  background: linear-gradient(135deg, #173f2d, #2f6847);
+  color: #fff8df;
+  padding: 35px 20px;
+  text-align: center;
+  border-bottom: 4px solid #c69b35;
+}
+
+.entete-principal h1 {
+  font-size: clamp(28px, 4vw, 48px);
+  margin: 10px 0;
+}
+
+.entete-principal p {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
 </style>
 </head>
 
@@ -309,7 +329,7 @@ footer {
 
 <body>
 
-<header>
+<header class="entete-principal">
   <div class="logo">🗺️</div>
   <h1>Trésors de nos Villages</h1>
   <p>Chaque village cache une histoire.<br>
