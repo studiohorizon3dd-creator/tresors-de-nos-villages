@@ -484,18 +484,36 @@ footer {
   🗝️ Découvrir l'indice suivant
 </button>
 
-<div id="deuxiemeEnigme" style="display: none; margin-top: 20px;">
-  <h3>🌳 Deuxième énigme</h3>
-  <p>Je suis un lieu de recueillement. On y trouve souvent une croix, et je peux me trouver à l'écart du village.</p>
-  <p><strong>Quel lieu suis-je ?</strong></p>
 
-  <input id="reponseDeuxiemeEnigme" type="text" placeholder="Écris ta réponse ici">
+<div id="deuxiemeEnigme" style="display: none; margin-top: 20px;">
+  <h3>🔔 L’énigme du clocher mystérieux</h3>
+
+  <p><em>« Aventurier, ta quête ne fait que commencer… »</em></p>
+
+  <p>
+    Depuis la mairie, cherche la vieille gardienne de pierre
+    qui veille en silence sur le village.
+  </p>
+
+  <p>
+    Elle possède des murs solides, des vitraux colorés et un
+    clocher qui semble vouloir parler au ciel.
+    Depuis des générations, elle accueille les villageois
+    et fait résonner ses cloches.
+  </p>
+
+  <p><strong>Quel est ce lieu mystérieux où tu dois te rendre ?</strong></p>
+
+  <p>🔎 Indice : Lève les yeux vers le clocher…</p>
+
+  <input id="reponseDeuxiemeEnigme" type="text"
+         placeholder="Écris ta réponse ici">
+
   <button onclick="verifierDeuxiemeReponse()">Valider ma réponse</button>
 
   <p id="resultatDeuxiemeEnigme" aria-live="polite"></p>
 </div>
 
-</div>
 
     </div>
   </section>
@@ -585,6 +603,7 @@ function enigmeSuivante() {
   });
 }
 
+
 function verifierDeuxiemeReponse() {
   const reponse = document.getElementById("reponseDeuxiemeEnigme")
     .value.trim()
@@ -595,17 +614,18 @@ function verifierDeuxiemeReponse() {
   const resultat = document.getElementById("resultatDeuxiemeEnigme");
 
   if (
-    reponse === "chapelle" ||
-    reponse === "la chapelle"
+    reponse === "eglise" ||
+    reponse === "l'eglise" ||
+    reponse === "la eglise"
   ) {
     resultat.textContent =
-      "🎉 Bravo ! Tu as résolu la deuxième énigme !";
-
+      "🎉 Bravo ! Tu as trouvé l'église ! Continue ton aventure !";
   } else {
     resultat.textContent =
-      "🔎 Essaie encore ! Pense à un petit édifice religieux.";
+      "🔎 Essaie encore ! Lève les yeux vers le clocher...";
   }
 }
+
 
 
 
@@ -624,15 +644,16 @@ function initialiserCarte() {
     return;
   }
 
-  carte = L.map("carteGPS").setView([50.5025, 1.90694], 15);
+  carte = L.map("carteGPS").setView([50.50510, 1.90770], 17);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap"
   }).addTo(carte);
 
-  L.marker([50.5025, 1.90694])
-    .addTo(carte)
-    .bindPopup("Repère provisoire à Humbert");
+  L.marker([50.50510, 1.90770])
+  .addTo(carte)
+  .bindPopup("📍 Départ : mairie d’Humbert")
+  .openPopup();
 }
 
 function activerGPS() {
