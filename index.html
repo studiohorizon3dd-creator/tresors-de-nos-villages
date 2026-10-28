@@ -798,4 +798,110 @@ function simulerArriveeEglise() {
 </script>
 
 </body>
+  <!-- Connexion et inscription Trésors de nos Villages -->
+<section id="compte-tresors" style="
+  max-width:420px;
+  margin:25px auto;
+  padding:22px;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 2px 12px #0002;
+  font-family:Arial,sans-serif;
+">
+  <h2>🏴‍☠️ Mon compte</h2>
+  <p>Rejoins l'aventure Trésors de nos Villages !</p>
+
+  <form id="inscription-tresors">
+    <label for="nom-tresors">Ton prénom</label>
+    <input id="nom-tresors" name="name" required
+      autocomplete="name"
+      style="display:block;width:100%;padding:10px;margin:8px 0 14px;box-sizing:border-box">
+
+    <label for="email-tresors">Ton adresse e-mail</label>
+    <input id="email-tresors" name="email" type="email" required
+      autocomplete="email"
+      style="display:block;width:100%;padding:10px;margin:8px 0 14px;box-sizing:border-box">
+
+    <label for="mdp-tresors">Mot de passe</label>
+    <input id="mdp-tresors" name="password" type="password"
+      minlength="8" required autocomplete="new-password"
+      style="display:block;width:100%;padding:10px;margin:8px 0 14px;box-sizing:border-box">
+
+    <button type="submit"
+      style="width:100%;padding:12px;background:#176b45;color:white;border:0;border-radius:8px;cursor:pointer">
+      Créer mon compte
+    </button>
+  </form>
+
+  <hr style="margin:20px 0">
+
+  <button id="connexion-tresors" type="button"
+    style="width:100%;padding:12px;border:1px solid #176b45;border-radius:8px;background:white;cursor:pointer">
+    J'ai déjà un compte
+  </button>
+
+  <p id="message-tresors" role="status" aria-live="polite"></p>
+</section>
+
+<script type="module">
+import { createAuthClient } from
+  "https://esm.sh/@neondatabase/auth";
+
+const auth = createAuthClient(
+  "https://ep-proud-rain-b9nldnf8.neonauth.c-7.eu-central-1.aws.neon.tech/neondb/auth"
+);
+
+const formulaire = document.getElementById("inscription-tresors");
+const message = document.getElementById("message-tresors");
+const boutonConnexion = document.getElementById("connexion-tresors");
+
+formulaire.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  message.textContent = "Création du compte en cours…";
+
+  try {
+    const name = document.getElementById("nom-tresors").value.trim();
+    const email = document.getElementById("email-tresors").value.trim();
+    const password = document.getElementById("mdp-tresors").value;
+
+    const result = await auth.signUp.email({ name, email, password });
+
+    if (result.error) {
+      throw new Error(result.error.message || "Inscription impossible.");
+    }
+
+    message.textContent =
+      "Demande envoyée. Vérifie les instructions reçues par e-mail pour valider ton compte.";
+  } catch (error) {
+    message.textContent =
+      error.message || "Une erreur est survenue. Réessaie.";
+  }
+});
+
+boutonConnexion.addEventListener("click", async () => {
+  const email = document.getElementById("email-tresors").value.trim();
+  const password = document.getElementById("mdp-tresors").value;
+
+  if (!email || !password) {
+    message.textContent =
+      "Saisis ton e-mail et ton mot de passe dans les champs ci-dessus.";
+    return;
+  }
+
+  message.textContent = "Connexion en cours…";
+
+  try {
+    const result = await auth.signIn.email({ email, password });
+
+    if (result.error) {
+      throw new Error(result.error.message || "Connexion impossible.");
+    }
+
+    message.textContent = "Connexion réussie !";
+  } catch (error) {
+    message.textContent =
+      error.message || "Impossible de se connecter.";
+  }
+});
+</script>
 </html>
