@@ -1335,10 +1335,7 @@ document.getElementById("sommaire-explorateur").scrollIntoView({
   behavior: "smooth",
   block: "start"
 });
-document.getElementById("page-formules").scrollIntoView({
-  behavior: "smooth",
-  block: "start"
-});
+
   } catch (error) {
     message.textContent =
       error.message || "Une erreur est survenue. Réessaie.";
@@ -1363,7 +1360,7 @@ boutonConnexion.addEventListener("click", async () => {
     if (result.error) {
       throw new Error(result.error.message || "Connexion impossible.");
     }
-
+   
     message.textContent = "Connexion réussie !";
 document.getElementById("compte-tresors").style.display = "none";
 document.getElementById("sommaire-explorateur").style.display = "block";
@@ -1371,10 +1368,7 @@ document.getElementById("sommaire-explorateur").scrollIntoView({
   behavior: "smooth",
   block: "start"
 });
-document.getElementById("page-formules").scrollIntoView({
-  behavior: "smooth",
-  block: "start"
-});
+
   } catch (error) {
     message.textContent =
       error.message || "Impossible de se connecter.";
