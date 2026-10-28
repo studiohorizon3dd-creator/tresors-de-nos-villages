@@ -316,6 +316,74 @@ footer {
   À vous de la découvrir !</p>
 </header>
 
+  <!-- PAGE DES FORMULES -->
+<section id="page-formules" style="
+  display:none;
+  max-width:900px;
+  margin:0 auto;
+  padding:35px 20px;
+">
+  <div style="text-align:center;margin-bottom:30px;">
+    <p style="color:#a47b2c;font-weight:bold;letter-spacing:2px;">
+      TON AVENTURE COMMENCE ICI
+    </p>
+    <h2 style="color:#214b35;font-size:clamp(28px,5vw,40px);">
+      Choisis ta formule
+    </h2>
+    <p style="color:#586458;line-height:1.7;">
+      Choisis le niveau qui te correspond, puis découvre les villages disponibles.
+    </p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;">
+
+    <article style="background:white;border:2px solid #dce8d8;border-radius:18px;padding:24px;text-align:center;">
+      <div style="font-size:38px;">🌱</div>
+      <h3 style="color:#214b35;">Facile</h3>
+      <p style="font-size:30px;font-weight:bold;color:#214b35;">Gratuit</p>
+      <p>Pour découvrir la chasse au trésor en douceur.</p>
+      <button type="button" onclick="choisirFormule('facile')" style="background:#214b35;color:white;border:0;border-radius:10px;padding:13px 18px;cursor:pointer;width:100%;">
+        Choisir cette formule
+      </button>
+    </article>
+
+    <article style="background:white;border:2px solid #e5d5a8;border-radius:18px;padding:24px;text-align:center;">
+      <div style="font-size:38px;">🧭</div>
+      <h3 style="color:#214b35;">Moyen</h3>
+      <p style="font-size:30px;font-weight:bold;color:#a47b2c;">1,99 €</p>
+      <p>Pour les aventuriers qui aiment les défis.</p>
+      <button type="button" onclick="choisirFormule('moyen')" style="background:#c49a3a;color:white;border:0;border-radius:10px;padding:13px 18px;cursor:pointer;width:100%;">
+        Choisir cette formule
+      </button>
+    </article>
+
+    <article style="background:white;border:2px solid #e5d5a8;border-radius:18px;padding:24px;text-align:center;">
+      <div style="font-size:38px;">🔐</div>
+      <h3 style="color:#214b35;">Difficile</h3>
+      <p style="font-size:30px;font-weight:bold;color:#a47b2c;">2,99 €</p>
+      <p>Pour les experts prêts à relever un grand défi.</p>
+      <button type="button" onclick="choisirFormule('difficile')" style="background:#214b35;color:white;border:0;border-radius:10px;padding:13px 18px;cursor:pointer;width:100%;">
+        Choisir cette formule
+      </button>
+    </article>
+
+  </div>
+  <p style="text-align:center;color:#777;margin-top:24px;font-size:13px;">
+    Les formules payantes affichent leurs tarifs. Le paiement en ligne sera intégré séparément.
+  </p>
+</section>
+
+<script>
+function choisirFormule(niveau) {
+  window.formuleChoisie = niveau;
+  document.getElementById("page-formules").style.display = "none";
+  document.getElementById("sommaire-villages").style.display = "block";
+  document.getElementById("sommaire-villages").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+</script>
 <!-- PAGE SOMMAIRE DES VILLAGES -->
 <section id="sommaire-villages" style="
   display:none;
@@ -1083,8 +1151,8 @@ formulaire.addEventListener("submit", async (event) => {
 
 message.textContent = "Compte créé ! Bienvenue dans l'aventure !";
 document.getElementById("compte-tresors").style.display = "none";
-document.getElementById("sommaire-villages").style.display = "block";
-document.getElementById("sommaire-villages").scrollIntoView({
+document.getElementById("page-formules").style.display = "block";
+document.getElementById("page-formules").scrollIntoView({
   behavior: "smooth",
   block: "start"
 });
@@ -1115,8 +1183,8 @@ boutonConnexion.addEventListener("click", async () => {
 
     message.textContent = "Connexion réussie !";
 document.getElementById("compte-tresors").style.display = "none";
-document.getElementById("sommaire-villages").style.display = "block";
-document.getElementById("sommaire-villages").scrollIntoView({
+document.getElementById("page-formules").style.display = "block";
+document.getElementById("page-formules").scrollIntoView({
   behavior: "smooth",
   block: "start"
 });
