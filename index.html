@@ -69,6 +69,16 @@ h1{font-size:clamp(34px,4vw,60px);line-height:1.02;margin:0 0 18px}
 .hidden{display:none!important}
 footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 @media(max-width:800px){.sidebar{position:relative;width:100%;height:auto;padding:12px;display:block}.brand-mark{font-size:35px}.brand-name{font-size:22px;margin:6px 0 12px}.nav-list{display:flex;flex-wrap:wrap;justify-content:center}.nav-btn{width:auto;padding:10px 12px;font-size:14px}.sidebar-note{display:none}.content{margin-left:0}.hero{min-height:330px;padding:22px}.hero-copy{padding:24px}.feature-grid{grid-template-columns:1fr}.feature{padding:22px}.dash-hero{min-height:220px;padding:22px}.progress-card{margin:-18px 16px 0}.dash-section{padding:24px 16px}.riddle-list{grid-template-columns:1fr}}
+
+.help-item { padding: 12px 14px; margin: 10px 0; background: #f7f4e9; border: 1px solid #e6e1d3; border-radius: 10px; }
+.help-item summary { cursor: pointer; font-weight: 700; color: #234b35; }
+.help-item p { line-height: 1.6; }
+#support-form { display: grid; gap: 10px; max-width: 650px; }
+#support-form label { font-weight: 700; margin-top: 5px; }
+#support-form select, #support-form textarea { width: 100%; padding: 12px; border: 1px solid #cfc9b9; border-radius: 9px; font: inherit; background: white; color: #26382b; }
+.support-ticket { padding: 14px; margin: 10px 0; border: 1px solid #e6e1d3; border-radius: 12px; background: #fffdf7; }
+.support-ticket small { color: #657060; }
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -137,6 +147,9 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
       <button class="nav-btn" onclick="showDashSection('dash-badges')">🏆 &nbsp; Mes badges</button>
       <button class="nav-btn" onclick="showDashSection('dash-stars')">⭐ &nbsp; Mes étoiles</button>
       <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
+      <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
+      <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
+      <button class="nav-btn" onclick="showDashSection('dash-admin-info')">⚙ &nbsp; Administration</button>
       <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
     </nav>
     <div class="sidebar-note">Bonne exploration !</div>
@@ -153,6 +166,49 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <section class="dash-section hidden" id="dash-badges"><h3>Mes badges</h3><div class="badges" id="badge-list"><div class="badge-card"><span>🔒</span>Explorateur<br><small>À débloquer</small></div></div></section>
     <section class="dash-section hidden" id="dash-stars"><h3>Mes étoiles</h3><p id="stars-summary">⭐ 0 / 10</p></section>
     <section class="dash-section hidden" id="dash-formulas"><h3>Mes formules</h3><div class="feature-grid"><article class="feature"><div class="feature-icon">🌱</div><h3>Facile</h3><p>Gratuit · Première aventure</p><button class="small-btn" onclick="chooseFormula('facile')">Choisir Facile</button></article><article class="feature"><div class="feature-icon">🧭</div><h3>Moyen</h3><p>1,99 € · Paiement pas encore disponible</p><button class="small-btn" onclick="chooseFormula('moyen')">Voir la formule</button></article><article class="feature"><div class="feature-icon">🔐</div><h3>Difficile</h3><p>2,99 € · Paiement pas encore disponible</p><button class="small-btn" onclick="chooseFormula('difficile')">Voir la formule</button></article></div><p id="formula-status" class="status"></p></section>
+    <section class="dash-section hidden" id="dash-help">
+      <h3>❔ Centre d’aide</h3>
+      <p>Voici les réponses aux questions les plus fréquentes.</p>
+      <details class="help-item"><summary>Comment commencer une aventure ?</summary><p>Choisis la formule Facile, ouvre l’aventure de Humbert et réponds à la première énigme.</p></details>
+      <details class="help-item"><summary>Comment utiliser le GPS ?</summary><p>Autorise la localisation dans ton navigateur. Pour le test réel, utilise de préférence un téléphone avec le GPS activé et ouvre le site en HTTPS.</p></details>
+      <details class="help-item"><summary>Comment trouver l’église ?</summary><p>Après validation de la mairie et confirmation de ton arrivée, lis l’indice du clocher et ouvre l’itinéraire sur la carte.</p></details>
+      <details class="help-item"><summary>Mes étoiles ne s’affichent pas</summary><p>La progression actuelle est conservée dans le navigateur utilisé. Effacer les données du navigateur peut supprimer cette progression.</p></details>
+      <p class="status">Tu ne trouves pas la réponse ? Utilise « Poser une question ».</p>
+    </section>
+
+    <section class="dash-section hidden" id="dash-support">
+      <h3>✉ Poser une question</h3>
+      <p>Décris le problème rencontré. Tu pourras retrouver ici les demandes enregistrées dans ce navigateur.</p>
+      <p class="status" id="support-notice">Important : le formulaire est préparé, mais l’envoi sécurisé par e-mail et l’historique lié au compte nécessitent encore la connexion au service serveur.</p>
+      <form id="support-form">
+        <label for="support-topic">Sujet de la demande</label>
+        <select id="support-topic" required>
+          <option value="">Choisis un sujet</option>
+          <option>GPS ou carte</option>
+          <option>Énigme ou indice</option>
+          <option>Compte ou connexion</option>
+          <option>Étoiles ou progression</option>
+          <option>Autre question</option>
+        </select>
+        <label for="support-message">Ta question</label>
+        <textarea id="support-message" rows="4" maxlength="2000" required placeholder="Explique-nous ce qui se passe…"></textarea>
+        <button class="primary-btn" type="submit">Enregistrer ma demande (test)</button>
+      </form>
+      <h3 style="margin-top:24px">Mes demandes</h3>
+      <div id="support-history"><p>Aucune demande enregistrée dans ce navigateur.</p></div>
+    </section>
+
+    <section class="dash-section hidden" id="dash-admin-info">
+      <h3>⚙ Administration du site</h3>
+      <p>Cet espace est réservé à la gestion du projet : aventures, énigmes, indices, coordonnées GPS et demandes d’aide.</p>
+      <div class="feature-grid">
+        <article class="feature"><div class="feature-icon">🗺️</div><h3>Aventures</h3><p>Préparer les parcours et leurs étapes.</p></article>
+        <article class="feature"><div class="feature-icon">🧩</div><h3>Énigmes</h3><p>Corriger les questions et les indices.</p></article>
+        <article class="feature"><div class="feature-icon">✉️</div><h3>Support</h3><p>Consulter les demandes et répondre aux joueurs.</p></article>
+      </div>
+      <p class="status">L’administration sécurisée n’est pas encore activée. Ne place pas de mot de passe administrateur dans le code public : il faudra protéger cet espace côté serveur avant de l’utiliser pour de vraies demandes.</p>
+    </section>
+
     <section class="dash-section hidden" id="dash-game"><h3>🏡 L’aventure à Humbert</h3><p>Choisissez la formule Facile pour commencer. Répondez aux énigmes pour gagner des étoiles.</p><div class="riddle-list">
       <article class="riddle"><div class="big">🏛️</div><h3>Énigme 1</h3><p>Quel lieu rassemble les habitants et permet notamment de se marier ou de voter ?</p><input id="answer1" placeholder="Ta réponse"><button onclick="checkAnswer(1)">Valider ma réponse</button><p id="feedback1" class="feedback" aria-live="polite"></p></article>
       <div id="zoneGPS" class="riddle" style="display:none;">
@@ -369,6 +425,36 @@ function verifierArriveeEglise(){
     else statut.textContent="La recherche GPS a pris trop de temps. Réessaie dans un instant.";
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
+
+function renderSupportHistory(){
+  const target=document.getElementById("support-history");
+  if(!target) return;
+  let tickets=[];
+  try{tickets=JSON.parse(localStorage.getItem("supportTicketsLocal")||"[]")}catch(e){}
+  if(!tickets.length){target.innerHTML="<p>Aucune demande enregistrée dans ce navigateur.</p>";return;}
+  target.innerHTML=tickets.slice().reverse().map(t=>`<article class="support-ticket"><strong>${escapeSupport(t.topic)}</strong><p>${escapeSupport(t.message)}</p><small>${escapeSupport(t.date)} · Statut : ${escapeSupport(t.status)}</small><p><em>Prototype local : les réponses de l’administration ne sont pas encore reliées.</em></p></article>`).join("");
+}
+function escapeSupport(value){
+  return String(value).replace(/[&<>"']/g, ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+const supportForm=document.getElementById("support-form");
+if(supportForm){
+  supportForm.addEventListener("submit",function(event){
+    event.preventDefault();
+    const topic=document.getElementById("support-topic").value;
+    const message=document.getElementById("support-message").value.trim();
+    if(!topic||!message) return;
+    let tickets=[];
+    try{tickets=JSON.parse(localStorage.getItem("supportTicketsLocal")||"[]")}catch(e){}
+    tickets.push({topic,message,date:new Date().toLocaleString("fr-FR"),status:"Enregistrée (test local)"});
+    localStorage.setItem("supportTicketsLocal",JSON.stringify(tickets));
+    document.getElementById("support-message").value="";
+    renderSupportHistory();
+    document.getElementById("support-notice").textContent="Demande enregistrée uniquement dans ce navigateur pour le moment. La notification Gmail et l’historique en ligne seront activés après la connexion du serveur.";
+  });
+}
+renderSupportHistory();
+
 function chooseFormulaFromMenu(){showDashSection("dash-formulas")}
 Object.assign(window,{showDashboard,returnHome,showDashSection,openAdventure,chooseFormula,checkAnswer,chooseFormulaFromMenu,verifierArriveeMairie,verifierArriveeEglise});
 </script>
