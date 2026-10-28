@@ -163,10 +163,12 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
         <div id="carteGPS" style="height:320px;width:100%;margin:14px 0;border-radius:12px;overflow:hidden;background:#e5eadf;"></div>
         <div style="font-size:0.9rem;margin-bottom:12px;">📍 Mairie d’Humbert · ⛪ Église d’Humbert · Le point bleu indique ta position quand le GPS est activé.</div>
         <div id="directionEglise" style="display:none;">
-          <h3>⛪ Direction l’église !</h3>
-          <p>Bravo, tu es près de la mairie. Tu peux maintenant partir vers l’église.</p>
+          <h3>⛪ Indice 2 — Le chemin vers le clocher</h3>
+          <p><em>« Quitte la maison du village où l’on vote et où l’on se marie. Cherche maintenant le bâtiment dont la voix résonne dans tout le village. Il possède un clocher, des vitraux et des cloches qui rythment la vie des habitants. Observe la carte et suis le chemin jusqu’à ce lieu mystérieux ! »</em></p>
           <a id="itineraireEglise" href="https://www.google.com/maps/dir/?api=1&destination=50.502586%2C1.906921&travelmode=walking" target="_blank" rel="noopener" style="display:inline-block;margin:10px 0;">🗺️ Ouvrir l’itinéraire vers l’église</a><br>
-          <button type="button" onclick="afficherEnigmeEglise()">🗝️ Découvrir l’énigme 2</button>
+          <p>Quand tu seras arrivé près de l’église, vérifie ta position pour débloquer l’énigme 2.</p>
+          <button type="button" onclick="verifierArriveeEglise()">📍 Vérifier mon arrivée à l’église</button>
+          <p id="statutGPSEglise" class="feedback" aria-live="polite"></p>
         </div>
       </div>
       <article class="riddle" id="carteEnigme2" style="display:none;"><div class="big">⛪</div><h3>Énigme 2</h3><p>Quel édifice possède des vitraux et un clocher qui fait sonner les cloches ?</p><input id="answer2" placeholder="Ta réponse"><button onclick="checkAnswer(2)">Valider ma réponse</button><p id="feedback2" class="feedback" aria-live="polite"></p></article>
@@ -341,12 +343,34 @@ function distanceMetres(lat1,lon1,lat2,lon2){
   const a=Math.sin(dLat/2)**2+Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2;
   return 6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
-function afficherEnigmeEglise(){
-  const carte=document.getElementById("carteEnigme2");
-  if(carte){carte.style.display="block";carte.scrollIntoView({behavior:"smooth",block:"center"});}
+function verifierArriveeEglise(){
+  const statut=document.getElementById("statutGPSEglise");
+  if(!navigator.geolocation){statut.textContent="La localisation n’est pas disponible sur cet appareil.";return;}
+  statut.textContent="Recherche de ta position près de l’église…";
+  navigator.geolocation.getCurrentPosition(function(position){
+    const lat=position.coords.latitude, lon=position.coords.longitude;
+    initialiserCarte();
+    if(carteGPS){
+      if(marqueurJoueurGPS) carteGPS.removeLayer(marqueurJoueurGPS);
+      marqueurJoueurGPS=L.marker([lat,lon]).addTo(carteGPS).bindPopup("📍 Ta position actuelle");
+      carteGPS.setView([lat,lon],16);
+    }
+    const distance=distanceMetres(lat,lon,50.502586,1.906921);
+    if(distance<=100){
+      statut.textContent="✅ Bravo ! Tu es près de l’église. L’énigme 2 est débloquée !";
+      const carte=document.getElementById("carteEnigme2");
+      if(carte){carte.style.display="block";carte.scrollIntoView({behavior:"smooth",block:"center"});}
+    }else{
+      statut.textContent="Tu es à environ "+Math.round(distance)+" mètres de l’église. Rapproche-toi à moins de 100 m puis réessaie.";
+    }
+  },function(error){
+    if(error.code===1) statut.textContent="La localisation est refusée. Autorise-la dans les réglages du navigateur puis réessaie.";
+    else if(error.code===2) statut.textContent="Ta position n’a pas pu être déterminée. Vérifie le GPS puis réessaie.";
+    else statut.textContent="La recherche GPS a pris trop de temps. Réessaie dans un instant.";
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
 function chooseFormulaFromMenu(){showDashSection("dash-formulas")}
-Object.assign(window,{showDashboard,returnHome,showDashSection,openAdventure,chooseFormula,checkAnswer,chooseFormulaFromMenu,verifierArriveeMairie,afficherEnigmeEglise});
+Object.assign(window,{showDashboard,returnHome,showDashSection,openAdventure,chooseFormula,checkAnswer,chooseFormulaFromMenu,verifierArriveeMairie,verifierArriveeEglise});
 </script>
 </body>
 </html>
