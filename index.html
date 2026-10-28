@@ -1052,10 +1052,23 @@ document.getElementById("sommaire-villages").scrollIntoView({
   }
 });
   function ouvrirVillageHumbert() {
-  document.getElementById("sommaire-villages").style.display = "none";
-  document.querySelector("main").style.display = "block";
-  document.querySelector("footer").style.display = "block";
-  document.querySelector("main").scrollIntoView({
+  const sommaire = document.getElementById("sommaire-villages");
+  const jeu = document.querySelector("main");
+  const pied = document.querySelector("footer");
+
+  if (!sommaire || !jeu) {
+    alert("Impossible d'ouvrir l'aventure d'Humbert.");
+    return;
+  }
+
+  sommaire.style.display = "none";
+  jeu.style.display = "block";
+
+  if (pied) {
+    pied.style.display = "block";
+  }
+
+  jeu.scrollIntoView({
     behavior: "smooth",
     block: "start"
   });
