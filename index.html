@@ -294,8 +294,24 @@ function returnHome(){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function showDashSection(id){
-  ["dash-home","dash-profile","dash-adventures","dash-badges","dash-stars","dash-formulas","dash-game"].forEach(s=>document.getElementById(s).classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
+  // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
+  // Cela évite que l’administration et l’aventure restent visibles ensemble.
+  const sections = [
+    "dash-home", "dash-profile", "dash-adventures", "dash-badges",
+    "dash-stars", "dash-formulas", "dash-help", "dash-support",
+    "dash-admin-info", "dash-game"
+  ];
+  sections.forEach(function(sectionId){
+    const section = document.getElementById(sectionId);
+    if(section) section.classList.add("hidden");
+  });
+  const selected = document.getElementById(id);
+  if(!selected){console.warn("Rubrique introuvable :", id);return;}
+  selected.classList.remove("hidden");
+  document.querySelectorAll("#dashboard .nav-btn").forEach(btn=>btn.classList.remove("active"));
+  const clickedButton = Array.from(document.querySelectorAll("#dashboard .nav-btn"))
+    .find(btn => (btn.getAttribute("onclick") || "").includes("'" + id + "'"));
+  if(clickedButton) clickedButton.classList.add("active");
   window.scrollTo({top:0,behavior:"smooth"});
   if(id==="dash-stars"||id==="dash-badges"||id==="dash-home")refreshProgress();
 }
