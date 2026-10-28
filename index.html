@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#234b35">
+<title>Trésors de nos Villages</title>
+
+<style>
+:root {
+  --vert: #234b35;
+  --vert-clair: #e7efe4;
+  --or: #d5ad55;
+  --fond: #f7f4e9;
+  --texte: #26382b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--texte);
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background: var(--vert);
+  color: white;
+  padding: 24px 18px 30px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 42px;
+}
+
+header h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(25px, 5vw, 38px);
+  margin: 8px 0;
+}
+
+header p {
+  margin: 0;
+  line-height: 1.6;
+  color: #e5eadc;
+}
+
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 22px 16px 40px;
+}
+
+.intro {
+  text-align: center;
+  margin: 8px 0 22px;
+}
+
+.intro h2 {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.intro p {
+  line-height: 1.6;
+  color: #586653;
+}
+
+.etiquette {
+  display: inline-block;
+  background: #e4eadb;
+  color: var(--vert);
+  border-radius: 30px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.carte {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 5px 22px #243b2912;
+  border: 1px solid #e6e1d3;
+}
+
+.carte-titre {
+  padding: 17px 18px 8px;
+}
+
+.carte-titre h3 {
+  margin: 0 0 6px;
+  font-family: Georgia, serif;
+  font-size: 21px;
+}
+
+.carte-titre p {
+  margin: 0;
+  color: #697467;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Carte illustrée de démonstration */
+.carte-dessin {
+  margin: 10px;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #e8edda;
+}
+
+.carte-dessin svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.legende {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  padding: 8px 16px 17px;
+  font-size: 12px;
+  color: #5b6858;
+}
+
+.legende span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.point {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.niveaux {
+  margin-top: 26px;
+}
+
+.niveaux h3 {
+  font-family: Georgia, serif;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.sous-titre {
+  text-align: center;
+  color: #657060;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 auto 18px;
+}
+
+.choix {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.niveau {
+  background: white;
+  border: 2px solid #e5dfce;
+  border-radius: 16px;
+  padding: 18px 12px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--texte);
+  font: inherit;
+  transition: transform .15s, border-color .15s;
+}
+
+.niveau:hover {
+  transform: translateY(-3px);
+  border-color: var(--or);
+}
+
+.niveau:focus-visible {
+  outline: 3px solid #b28a35;
+  outline-offset: 3px;
+}
+
+.icone {
+  font-size: 32px;
+  margin-bottom: 9px;
+}
+
+.niveau strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 17px;
+}
+
+.niveau small {
+  display: block;
+  line-height: 1.5;
+  color: #687364;
+}
+
+.details {
+  margin-top: 20px;
+  background: var(--vert-clair);
+  border: 1px solid #cfddca;
+  border-radius: 15px;
+  padding: 20px;
+  display: none;
+}
+
+.details.visible { display: block; }
+
+.details h3 { margin-top: 0; }
+
+.action {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 13px 20px;
+  background: var(--vert);
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 24px 12px;
+  font-size: 12px;
+  color: #697467;
+}
+
+@media (max-width: 600px) {
+  .choix { grid-template-columns: 1fr; }
+  .niveau {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    text-align: left;
+    align-items: center;
+    column-gap: 10px;
+    padding: 14px;
+  }
+  .icone {
+    grid-row: span 2;
+    margin: 0;
+  }
+  .niveau strong { margin: 0 0 4px; }
+}
+</style>
+</head>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+<body>
+
+<header>
+  <div class="logo">🗺️</div>
+  <h1>Trésors de nos Villages</h1>
+  <p>Chaque village cache une histoire.<br>
+  À vous de la découvrir !</p>
+</header>
+
+<main>
+  <section class="intro">
+    <span class="etiquette">PREMIÈRE AVENTURE</span>
+    <h2>Bienvenue à Humbert !</h2>
+    <p>Ouvrez l'œil, suivez les indices et partez à la
+    découverte des secrets de notre village.</p>
+  </section>
+
+  <section class="carte">
+    <div class="carte-titre">
+      <h3>📍 Votre aventure commence ici</h3>
+      <p>Voici un aperçu illustré de votre future exploration.</p>
+    </div>
+
+    <div class="carte-dessin">
+      <svg viewBox="0 0 700 390"
+           xmlns="http://www.w3.org/2000/svg"
+           role="img"
+           aria-label="Illustration d'une carte de chasse au trésor dans un village avec des chemins, une église et trois repères">
+
+        <rect width="700" height="390" fill="#e9efdc"/>
+
+        <!-- Champs -->
+        <path d="M0 0 H280 L235 115 L0 150Z" fill="#d8e5c5"/>
+        <path d="M390 0 H700 V135 L585 170 L480 105Z" fill="#d2e2bf"/>
+        <path d="M0 270 L155 225 L240 390 H0Z" fill="#d3e3c0"/>
+        <path d="M460 250 L700 195 V390 H530Z" fill="#d7e5c6"/>
+
+        <!-- Petit ruisseau -->
+        <path d="M700 50 C590 100 630 160 535 200 S465 300 520 390"
+              fill="none" stroke="#a8d4dc" stroke-width="24"/>
+        <path d="M700 50 C590 100 630 160 535 200 S465 300 520 390"
+              fill="none" stroke="#c6e7e9" stroke-width="15"/>
+
+        <!-- Chemins -->
+        <path d="M-20 195 C100 180 170 230 265 200 S440 130 720 220"
+              fill="none" stroke="#d3c5a1" stroke-width="30"/>
+        <path d="M-20 195 C100 180 170 230 265 200 S440 130 720 220"
+              fill="none" stroke="#fff7df" stroke-width="23"/>
+        <path d="M265 200 C300 260 355 280 410 330"
+              fill="none" stroke="#d3c5a1" stroke-width="22"/>
+        <path d="M265 200 C300 260 355 280 410 330"
+              fill="none" stroke="#fff7df" stroke-width="16"/>
+
+        <!-- Arbres -->
+        <g fill="#6c9860">
+          <circle cx="65" cy="60" r="22"/>
+          <circle cx="92" cy="85" r="18"/>
+          <circle cx="47" cy="104" r="19"/>
+          <circle cx="630" cy="65" r="25"/>
+          <circle cx="660" cy="100" r="18"/>
+          <circle cx="602" cy="112" r="21"/>
+          <circle cx="95" cy="320" r="24"/>
+          <circle cx="145" cy="345" r="20"/>
+          <circle cx="630" cy="315" r="22"/>
+          <circle cx="665" cy="345" r="18"/>
+        </g>
+        <g fill="#426f49">
+          <circle cx="65" cy="55" r="12"/>
+          <circle cx="630" cy="60" r="13"/>
+          <circle cx="95" cy="315" r="13"/>
+          <circle cx="630" cy="310" r="12"/>
+        </g>
+
+        <!-- Village et maisons -->
+        <g stroke="#b08e66" stroke-width="2">
+          <g transform="translate(350 35)">
+            <rect x="0" y="15" width="58" height="43" rx="2" fill="#f5e3bb"/>
+            <path d="M-6 17 L29 -8 L64 17Z" fill="#b86e50"/>
+            <rect x="23" y="34" width="13" height="24" fill="#8b6244"/>
+            <rect x="7" y="25" width="11" height="12" fill="#9ec5d0"/>
+            <rect x="41" y="25" width="11" height="12" fill="#9ec5d0"/>
+          </g>
+          <g transform="translate(440 55)">
+            <rect x="0" y="15" width="47" height="35" fill="#f7edcf"/>
+            <path d="M-5 16 L24 -5 L52 16Z" fill="#a96b52"/>
+            <rect x="18" y="31" width="11" height="19" fill="#98704b"/>
+          </g>
+          <g transform="translate(160 255)">
+            <rect x="0" y="14" width="52" height="38" fill="#f6e6c5"/>
+            <path d="M-6 15 L26 -6 L58 15Z" fill="#b77555"/>
+            <rect x="21" y="30" width="12" height="22" fill="#94704c"/>
+          </g>
+        </g>
+
+        <!-- Église stylisée -->
+        <g transform="translate(290 108)">
+          <rect x="0" y="37" width="70" height="57" fill="#e9d6b3" stroke="#b59c7a" stroke-width="2"/>
+          <path d="M-7 39 L35 8 L77 39Z" fill="#b66d50"/>
+          <rect x="22" y="58" width="26" height="36" rx="12" fill="#97724e"/>
+          <rect x="16" y="-7" width="38" height="49" fill="#e9d6b3" stroke="#b59c7a" stroke-width="2"/>
+          <path d="M11 -7 L35 -32 L59 -7Z" fill="#b66d50"/>
+          <rect x="30" y="-22" width="10" height="18" fill="#e9d6b3"/>
+          <path d="M35 -36 V-24 M29 -30 H41" stroke="#e9d6b3" stroke-width="4"/>
+          <path d="M28 8 Q35 -1 42 8" fill="#94b8bf"/>
+        </g>
+
+        <!-- Tracé de la chasse -->
+        <path d="M110 155 Q175 125 220 170 T330 185 T445 155 T555 225"
+              fill="none" stroke="#b38b37" stroke-width="4"
+              stroke-linecap="round" stroke-dasharray="8 8"/>
+
+        <!-- Repères -->
+        <g transform="translate(110 155)">
+          <circle r="22" fill="#fff" opacity=".9"/>
+          <circle r="16" fill="#28583a"/>
+          <text y="6" text-anchor="middle" font-size="19">1</text>
+        </g>
+        <g transform="translate(330 185)">
+          <circle r="22" fill="#fff" opacity=".9"/>
+          <circle r="16" fill="#28583a"/>
+          <text y="6" text-anchor="middle" font-size="19">2</text>
+        </g>
+        <g transform="translate(555 225)">
+          <circle r="22" fill="#fff" opacity=".9"/>
+          <circle r="16" fill="#28583a"/>
+          <text y="6" text-anchor="middle" font-size="19">3</text>
+        </g>
+
+        <!-- Boussole -->
+        <g transform="translate(638 183)">
+          <circle r="27" fill="#fffdf2" stroke="#d2b15d" stroke-width="3"/>
+          <path d="M0 -19 L7 5 L0 1 L-7 5Z" fill="#28583a"/>
+          <path d="M0 19 L7 -5 L0 -1 L-7 -5Z" fill="#d2a744"/>
+          <text x="0" y="-33" font-size="12" fill="#28583a"
+                font-weight="bold" text-anchor="middle">N</text>
+        </g>
+
+        <rect x="16" y="350" width="240" height="27" rx="13"
+              fill="#ffffff" opacity=".9"/>
+        <text x="29" y="368" font-size="12" fill="#36543a">
+          CARTE ILLUSTRÉE DE DÉMONSTRATION
+        </text>
+      </svg>
+    </div>
+
+    <div class="legende">
+      <span><i class="point" style="background:#28583a"></i>Étapes à découvrir</span>
+      <span>🌳 Nature</span>
+      <span>⛪ Patrimoine</span>
+    </div>
+  </section>
+
+  <section class="niveaux">
+    <h3>Choisissez votre aventure</h3>
+    <p class="sous-titre">
+      Trois niveaux, une même envie de découvrir.<br>
+      Quel explorateur êtes-vous ?
+    </p>
+
+    <div class="choix">
+      <button class="niveau" onclick="choisirNiveau('facile')">
+        <span class="icone">🌱</span>
+        <strong>Facile</strong>
+        <small>Explorateur<br>45 min à 1 h<br>Pour une découverte en douceur</small>
+      </button>
+
+      <button class="niveau" onclick="choisirNiveau('moyen')">
+        <span class="icone">🧭</span>
+        <strong>Moyen</strong>
+        <small>Aventurier<br>1 h 30 à 2 h<br>Pour les curieux et observateurs</small>
+      </button>
+
+      <button class="niveau" onclick="choisirNiveau('difficile')">
+        <span class="icone">🔐</span>
+        <strong>Difficile</strong>
+        <small>Maître des secrets<br>2 h 30 à 3 h<br>Pour les experts en énigmes</small>
+      </button>
+    </div>
+
+    <div id="details" class="details" aria-live="polite">
+      <h3 id="titreNiveau"></h3>
+      <p id="texteNiveau"></p>
+      <p><strong>Durée prévue :</strong> <span id="dureeNiveau"></span></p>
+      
+<p id="messageAventure">Prêt à partir à la découverte de Humbert ?</p>
+
+<div id="zoneGPS" style="margin: 20px 0; padding: 15px; background: #edf5e9; border-radius: 12px;">
+  <h3>📍 Ton parcours GPS</h3>
+  <p>Autorise ta position pour préparer ton aventure à Humbert.</p>
+
+  <button type="button" onclick="activerGPS()">
+    📍 Activer ma position GPS
+  </button>
+
+  <p id="statutGPS" aria-live="polite">
+    GPS en attente d'activation.
+  </p>
+</div>
+
+<div id="carteGPS" style="height: 350px; width: 100%; margin-top: 15px; border-radius: 12px; overflow: hidden; background: #e5eadf;">
+  <p style="padding: 20px;">🗺️ La carte apparaîtra ici.</p>
+</div>
+
+
+<button id="boutonCommencer" class="bouton-commencer" onclick="commencerAventure()">
+  🗝️ Commencer l'aventure
+</button>
+
+<div id="premiereEnigme" style="display: none; margin-top: 20px;">
+  <h3>🔎 Première énigme</h3>
+  <p>Pour commencer, cherche le lieu qui rassemble les habitants du village et où l'on peut se marier ou voter.</p>
+  <p><strong>Quel est ce lieu ?</strong></p>
+
+  <input id="reponseEnigme" type="text" placeholder="Écris ta réponse ici">
+
+  <button onclick="verifierReponse()">Valider ma réponse</button>
+
+  <p id="resultatEnigme" aria-live="polite"></p>
+  
+<button id="boutonSuivant" style="display: none;" onclick="enigmeSuivante()">
+  🗝️ Découvrir l'indice suivant
+</button>
+
+<div id="deuxiemeEnigme" style="display: none; margin-top: 20px;">
+  <h3>🌳 Deuxième énigme</h3>
+  <p>Je suis un lieu de recueillement. On y trouve souvent une croix, et je peux me trouver à l'écart du village.</p>
+  <p><strong>Quel lieu suis-je ?</strong></p>
+
+  <input id="reponseDeuxiemeEnigme" type="text" placeholder="Écris ta réponse ici">
+  <button onclick="verifierDeuxiemeReponse()">Valider ma réponse</button>
+
+  <p id="resultatDeuxiemeEnigme" aria-live="polite"></p>
+</div>
+
+</div>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  🗝️ Trésors de nos Villages<br>
+  Un projet en préparation à Humbert, Pas-de-Calais.
+</footer>
+
+<script>
+
+function choisirNiveau(niveau) {
+  const infos = {
+    facile: {
+      titre: "🌱 Mode Explorateur",
+      texte: "Des devinettes accessibles, des observations et des indices pour toute la famille.",
+      duree: "45 minutes à 1 heure"
+    },
+    moyen: {
+      titre: "🧭 Mode Aventurier",
+      texte: "Des codes à déchiffrer, des détails à observer et des énigmes à résoudre.",
+      duree: "1 h 30 à 2 heures"
+    },
+    difficile: {
+      titre: "🔐 Mode Maître des secrets",
+      texte: "Des énigmes plus complexes où chaque indice compte.",
+      duree: "2 h 30 à 3 heures"
+    }
+  };
+
+  document.getElementById("titreNiveau").textContent =
+    infos[niveau].titre;
+
+  document.getElementById("texteNiveau").textContent =
+    infos[niveau].texte;
+
+  document.getElementById("dureeNiveau").textContent =
+    infos[niveau].duree;
+
+  document.getElementById("details").classList.add("visible");
+
+  document.getElementById("details").scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+
+function commencerAventure() {
+  document.getElementById("premiereEnigme").style.display = "block";
+  document.getElementById("messageAventure").textContent =
+    "L'aventure commence ! Observe bien les indices.";
+  document.getElementById("boutonCommencer").style.display = "none";
+}
+
+
+function verifierReponse() {
+  const reponse = document.getElementById("reponseEnigme")
+    .value.trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  const resultat = document.getElementById("resultatEnigme");
+  const boutonSuivant = document.getElementById("boutonSuivant");
+
+  if (reponse === "mairie" || reponse === "la mairie") {
+    resultat.textContent =
+      "🎉 Bravo ! Tu as trouvé la bonne réponse. Première énigme réussie !";
+
+    boutonSuivant.style.display = "inline-block";
+  } else {
+    resultat.textContent =
+      "🔎 Pas encore ! Relis l'énigme et essaie encore.";
+    boutonSuivant.style.display = "none";
+  }
+}
+
+function enigmeSuivante() {
+  document.getElementById("deuxiemeEnigme").style.display = "block";
+
+  document.getElementById("boutonSuivant").style.display = "none";
+
+  document.getElementById("deuxiemeEnigme").scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+
+function verifierDeuxiemeReponse() {
+  const reponse = document.getElementById("reponseDeuxiemeEnigme")
+    .value.trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  const resultat = document.getElementById("resultatDeuxiemeEnigme");
+
+  if (
+    reponse === "chapelle" ||
+    reponse === "la chapelle"
+  ) {
+    resultat.textContent =
+      "🎉 Bravo ! Tu as résolu la deuxième énigme !";
+
+  } else {
+    resultat.textContent =
+      "🔎 Essaie encore ! Pense à un petit édifice religieux.";
+  }
+}
+
+
+
+
+let carte = null;
+let marqueurJoueur = null;
+
+function initialiserCarte() {
+  if (carte) return;
+
+  const zoneCarte = document.getElementById("carteGPS");
+
+  if (!zoneCarte || typeof L === "undefined") {
+    document.getElementById("statutGPS").textContent =
+      "La carte ne se charge pas. Vérifie ta connexion Internet.";
+    return;
+  }
+
+  carte = L.map("carteGPS").setView([50.5025, 1.90694], 15);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(carte);
+
+  L.marker([50.5025, 1.90694])
+    .addTo(carte)
+    .bindPopup("Repère provisoire à Humbert");
+}
+
+function activerGPS() {
+  const statut = document.getElementById("statutGPS");
+
+  if (!navigator.geolocation) {
+    statut.textContent = "Le GPS n'est pas disponible dans ce navigateur.";
+    return;
+  }
+
+  statut.textContent = "Recherche de ta position...";
+
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      statut.textContent =
+        "Position trouvée ! Latitude : " + lat.toFixed(6) +
+        " | Longitude : " + lon.toFixed(6);
+
+      initialiserCarte();
+
+      if (carte) {
+        if (marqueurJoueur) {
+          carte.removeLayer(marqueurJoueur);
+        }
+
+        marqueurJoueur = L.marker([lat, lon])
+          .addTo(carte)
+          .bindPopup("Ta position actuelle");
+
+        carte.setView([lat, lon], 16);
+      }
+    },
+    function(erreur) {
+      if (erreur.code === 1) {
+        statut.textContent = "Autorisation GPS refusée.";
+      } else if (erreur.code === 2) {
+        statut.textContent = "Position indisponible.";
+      } else {
+        statut.textContent = "Délai dépassé. Réessaie.";
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    }
+  );
+}
+
+function choisirNiveau(niveau) {
+  const infos = {
+    facile: {
+      titre: "🌱 Mode Explorateur",
+      texte: "Des devinettes accessibles pour toute la famille.",
+      duree: "45 minutes à 1 heure"
+    },
+    moyen: {
+      titre: "🧭 Mode Aventurier",
+      texte: "Des codes à déchiffrer et des indices à observer.",
+      duree: "1 h 30 à 2 heures"
+    },
+    difficile: {
+      titre: "🔐 Mode Maître des secrets",
+      texte: "Des énigmes plus complexes où chaque indice compte.",
+      duree: "2 h 30 à 3 heures"
+    }
+  };
+
+  document.getElementById("titreNiveau").textContent = infos[niveau].titre;
+  document.getElementById("texteNiveau").textContent = infos[niveau].texte;
+  document.getElementById("dureeNiveau").textContent = infos[niveau].duree;
+  document.getElementById("details").classList.add("visible");
+}
+
+function commencerAventure() {
+  document.getElementById("premiereEnigme").style.display = "block";
+  document.getElementById("messageAventure").textContent =
+    "L'aventure commence ! Observe bien les indices.";
+  document.getElementById("boutonCommencer").style.display = "none";
+}
+
+function verifierReponse() {
+  const reponse = document.getElementById("reponseEnigme")
+    .value.trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  const resultat = document.getElementById("resultatEnigme");
+  const boutonSuivant = document.getElementById("boutonSuivant");
+
+  if (reponse === "mairie" || reponse === "la mairie") {
+    resultat.textContent = "🎉 Bravo ! Première énigme réussie !";
+    boutonSuivant.style.display = "inline-block";
+  } else {
+    resultat.textContent = "🔎 Essaie encore !";
+    boutonSuivant.style.display = "none";
+  }
+}
+
+function enigmeSuivante() {
+  document.getElementById("deuxiemeEnigme").style.display = "block";
+  document.getElementById("boutonSuivant").style.display = "none";
+  document.getElementById("deuxiemeEnigme").scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+}
+
+function verifierDeuxiemeReponse() {
+  const reponse = document.getElementById("reponseDeuxiemeEnigme")
+    .value.trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  const resultat = document.getElementById("resultatDeuxiemeEnigme");
+
+  if (reponse === "chapelle" || reponse === "la chapelle") {
+    resultat.textContent = "🎉 Bravo ! Deuxième énigme réussie !";
+  } else {
+    resultat.textContent = "🔎 Essaie encore ! Pense à un édifice religieux.";
+  }
+}
+
+
+</script>
+
+</body>
+</html>
