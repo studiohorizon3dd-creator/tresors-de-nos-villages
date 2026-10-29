@@ -438,10 +438,11 @@ function showDashSection(id){
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
   const sections = [
-    "dash-home", "dash-profile", "dash-adventures", "dash-badges",
-    "dash-stars", "dash-formulas", "dash-help", "dash-support",
-    "dash-admin-info", "dash-game"
-  ];
+  "dash-home", "dash-profile", "dash-aventures", "dash-badges",
+  "dash-stars", "dash-formulas", "dash-help", "dash-support",
+  "dash-admin-info", "dash-game",
+  "dash-admin-aventures", "dash-admin-enigmes", "dash-admin-support"
+];
   sections.forEach(function(sectionId){
     const section = document.getElementById(sectionId);
     if(section) section.classList.add("hidden");
