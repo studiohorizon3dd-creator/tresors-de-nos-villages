@@ -371,7 +371,42 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
           <p id="statutGPSEglise" class="feedback" aria-live="polite"></p>
         </div>
       </div>
-      <article class="riddle" id="carteEnigme2" style="display:none;"><div class="big">⛪</div><h3>Énigme 2</h3><p>Quel édifice possède des vitraux et un clocher qui fait sonner les cloches ?</p><input id="answer2" placeholder="Ta réponse"><button onclick="checkAnswer(2)">Valider ma réponse</button><p id="feedback2" class="feedback" aria-live="polite"></p></article>
+
+<article class="riddle" id="carteEnigme2" style="display:none;">
+  <div class="big">⛪</div>
+  <h3>Énigme 2 — Le secret de l’église</h3>
+
+  <p>
+    Bravo ! Tu es arrivé près de l’église d’Humbert.
+    Observe la photo pour retrouver la petite boîte ronde.
+  </p>
+
+  <div id="indicePhotoEglise" style="display:none;">
+    <img
+      src="indice-eglise.jpg"
+      alt="Photo indice de la rue de l’Église et de la jardinière"
+      style="width:100%;max-width:500px;border-radius:12px;display:block;margin:15px auto;"
+    >
+    <p>
+      🔎 Regarde attentivement la photo et cherche le petit secret
+      caché derrière la jardinière !
+    </p>
+  </div>
+
+  <label for="codeEglise">🔐 Entre le code trouvé dans la boîte :</label>
+  <input
+    id="codeEglise"
+    type="text"
+    placeholder="Ton code secret"
+    autocomplete="off"
+  >
+
+  <button type="button" onclick="verifierCodeEglise()">
+    Valider le code
+  </button>
+
+  <p id="feedbackCodeEglise" class="feedback" aria-live="polite"></p>
+</article>
     </div><p>Les réponses validées donnent une étoile chacune. Le compteur est conservé dans ce navigateur.</p><button class="small-btn" onclick="showDashSection('dash-home')">Retour au tableau de bord</button></section>
   </div>
 </section>
@@ -775,32 +810,85 @@ function simulerArriveeEglise() {
   }
 }
 
+
 function verifierArriveeEglise(){
-  const statut=document.getElementById("statutGPSEglise");
-  if(!navigator.geolocation){statut.textContent="La localisation n’est pas disponible sur cet appareil.";return;}
-  statut.textContent="Recherche de ta position près de l’église…";
-  navigator.geolocation.getCurrentPosition(function(position){
-    const lat=position.coords.latitude, lon=position.coords.longitude;
-    initialiserCarte();
-    if(carteGPS){
-      if(marqueurJoueurGPS) carteGPS.removeLayer(marqueurJoueurGPS);
-      marqueurJoueurGPS=L.marker([lat,lon]).addTo(carteGPS).bindPopup("📍 Ta position actuelle");
-      carteGPS.setView([lat,lon],16);
-    }
-    const distance=distanceMetres(lat,lon,50.502586,1.906921);
-    if(distance<=100){
-      statut.textContent="✅ Bravo ! Tu es près de l’église. L’énigme 2 est débloquée !";
-      const carte=document.getElementById("carteEnigme2");
-      if(carte){carte.style.display="block";carte.scrollIntoView({behavior:"smooth",block:"center"});}
-    }else{
-      statut.textContent="Tu es à environ "+Math.round(distance)+" mètres de l’église. Rapproche-toi à moins de 100 m puis réessaie.";
-    }
-  },function(error){
-    if(error.code===1) statut.textContent="La localisation est refusée. Autorise-la dans les réglages du navigateur puis réessaie.";
-    else if(error.code===2) statut.textContent="Ta position n’a pas pu être déterminée. Vérifie le GPS puis réessaie.";
-    else statut.textContent="La recherche GPS a pris trop de temps. Réessaie dans un instant.";
-  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+  
+function verifierCodeEglise() {
+  const champ = document.getElementById("codeEglise");
+  const retour = document.getElementById("feedbackCodeEglise");
+
+  if (!champ || !retour) return;
+
+  const code = champ.value.trim().toUpperCase();
+
+  if (code === "EGLISE26") {
+    retour.textContent = "🎉 Bravo ! Tu as trouvé le code de l’église ! La suite de l’aventure est débloquée. ⭐";
+    retour.style.color = "green";
+
+    // Mémorise la validation de l'étape 2
+    localStorage.setItem("egliseCodeValide", "true");
+  } else {
+    retour.textContent = "❌ Ce n’est pas le bon code. Regarde bien la photo et réessaie !";
+    retour.style.color = "red";
+  }
 }
+
+  const statut = document.getElementById("statutGPSEglise");
+
+  if (!navigator.geolocation) {
+    statut.textContent = "La localisation n’est pas disponible sur cet appareil.";
+    return;
+  }
+
+  statut.textContent = "Recherche de ta position près de l’église…";
+
+  navigator.geolocation.getCurrentPosition(function(position){
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    initialiserCarte();
+
+    if (carteGPS) {
+      if (marqueurJoueurGPS) carteGPS.removeLayer(marqueurJoueurGPS);
+      marqueurJoueurGPS = L.marker([lat, lon])
+        .addTo(carteGPS)
+        .bindPopup("📍 Ta position actuelle");
+      carteGPS.setView([lat, lon], 16);
+    }
+
+    const distance = distanceMetres(lat, lon, 50.502586, 1.906921);
+
+    if (distance <= 100) {
+      statut.textContent = "✅ Bravo ! Tu es près de l’église. Cherche la boîte grâce à la photo !";
+
+      const carte = document.getElementById("carteEnigme2");
+      if (carte) {
+        carte.style.display = "block";
+      }
+
+      const indice = document.getElementById("indicePhotoEglise");
+      if (indice) {
+        indice.style.display = "block";
+        indice.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else if (carte) {
+        carte.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    } else {
+      statut.textContent =
+        "Tu es à environ " + Math.round(distance) +
+        " mètres de l’église. Rapproche-toi à moins de 100 m puis réessaie.";
+    }
+  }, function(error){
+    if (error.code === 1) {
+      statut.textContent = "La localisation est refusée. Autorise-la dans les réglages du navigateur puis réessaie.";
+    } else if (error.code === 2) {
+      statut.textContent = "Ta position n’a pas pu être déterminée. Vérifie le GPS puis réessaie.";
+    } else {
+      statut.textContent = "La recherche GPS a pris trop de temps. Réessaie dans un instant.";
+    }
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
+
 
 
 async function renderSupportHistory() {
