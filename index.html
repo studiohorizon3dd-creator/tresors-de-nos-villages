@@ -310,6 +310,8 @@ async function getAdminBearerToken() {
   }
   return data.token;
 }
+window.getAdminBearerToken = getAdminBearerToken;
+  
 async function adminApi(path, options = {}) {
   const token = await getAdminBearerToken();
   const response = await fetch(`${API_BASE}${path}`, {
