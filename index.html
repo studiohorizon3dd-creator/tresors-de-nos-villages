@@ -206,7 +206,12 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
         <article class="feature"><div class="feature-icon">🧩</div><h3>Énigmes</h3><p>Corriger les questions et les indices.</p></article>
         <article class="feature"><div class="feature-icon">✉️</div><h3>Support</h3><p>Consulter les demandes et répondre aux joueurs.</p></article>
       </div>
-      <p class="status">L’administration sécurisée n’est pas encore activée. Ne place pas de mot de passe administrateur dans le code public : il faudra protéger cet espace côté serveur avant de l’utiliser pour de vraies demandes.</p>
+      <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
+      <div id="admin-support-area" hidden>
+        <h3>Demandes d’aide des joueurs</h3>
+        <p>Les demandes sont chargées depuis le serveur sécurisé.</p>
+        <div id="admin-support-list"></div>
+      </div>
     </section>
 
     <section class="dash-section hidden" id="dash-game"><h3>🏡 L’aventure à Humbert</h3><p>Choisissez la formule Facile pour commencer. Répondez aux énigmes pour gagner des étoiles.</p><div class="riddle-list">
@@ -270,6 +275,93 @@ loginBtn.addEventListener("click", async () => {
     status.textContent = error.message || "Impossible de se connecter.";
   }
 });
+const API_BASE = "https://tresors-de-nos-villages-serveur.onrender.com";
+async function getAdminBearerToken() {
+  // Neon Auth exposes getJWTToken() in the browser client. Handle both string
+  // and wrapped response shapes so no session cookie is copied across domains.
+  if (typeof auth.getJWTToken === "function") {
+    const result = await auth.getJWTToken();
+    const token = typeof result === "string" ? result : (result?.token ?? result?.data?.token ?? result?.data?.session?.access_token);
+    if (token) return token;
+  }
+  if (typeof auth.token === "function") {
+    const result = await auth.token();
+    const token = typeof result === "string" ? result : (result?.token ?? result?.data?.token);
+    if (token) return token;
+  }
+  throw new Error("Impossible de récupérer le jeton de connexion Neon. Déconnecte-toi puis reconnecte-toi.");
+}
+async function adminApi(path, options = {}) {
+  const token = await getAdminBearerToken();
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", ...(options.headers || {}) }
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
+  return data;
+}
+window.openAdminPanel = async function() {
+  const statusEl = document.getElementById("admin-panel-status");
+  const supportArea = document.getElementById("admin-support-area");
+  statusEl.textContent = "Vérification des droits administrateur…";
+  supportArea.hidden = true;
+  try {
+    await adminApi("/api/admin/me");
+    window.setAdminAccessGranted(true);
+    window.showDashSection("dash-admin-info");
+    statusEl.textContent = "Accès administrateur confirmé.";
+    const result = await adminApi("/api/admin/support");
+    const list = document.getElementById("admin-support-list");
+    list.replaceChildren();
+    if (!result.requests?.length) {
+      list.textContent = "Aucune demande d’aide pour le moment.";
+    } else {
+      for (const request of result.requests) {
+        const card = document.createElement("article");
+        card.className = "feature";
+        const title = document.createElement("h4");
+        title.textContent = `${request.subject} — ${request.status}`;
+        const message = document.createElement("p");
+        message.textContent = request.message;
+        const reply = document.createElement("textarea");
+        reply.placeholder = "Écrire une réponse au joueur…";
+        reply.setAttribute("aria-label", `Réponse à ${request.subject}`);
+        const send = document.createElement("button");
+        send.type = "button";
+        send.textContent = "Envoyer la réponse";
+        send.addEventListener("click", async () => {
+          send.disabled = true;
+          try {
+            await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/replies`, { method: "POST", body: JSON.stringify({ message: reply.value }) });
+            statusEl.textContent = "Réponse enregistrée.";
+            await window.openAdminPanel();
+          } catch (error) { statusEl.textContent = error.message; send.disabled = false; }
+        });
+        const state = document.createElement("select");
+        state.setAttribute("aria-label", `Statut de ${request.subject}`);
+        for (const [value, label] of [["en_attente","En attente"],["en_cours","En cours"],["repondu","Répondu"],["ferme","Fermé"]]) {
+          const option = document.createElement("option"); option.value = value; option.textContent = label; option.selected = value === request.status; state.append(option);
+        }
+        const update = document.createElement("button");
+        update.type = "button"; update.textContent = "Mettre à jour le statut";
+        update.addEventListener("click", async () => {
+          update.disabled = true;
+          try { await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/status`, { method: "PATCH", body: JSON.stringify({ status: state.value }) }); statusEl.textContent = "Statut mis à jour."; await window.openAdminPanel(); }
+          catch (error) { statusEl.textContent = error.message; update.disabled = false; }
+        });
+        card.append(title, message, reply, send, state, update);
+        list.append(card);
+      }
+    }
+    supportArea.hidden = false;
+  } catch (error) {
+    window.setAdminAccessGranted(false);
+    statusEl.textContent = error.message || "Accès administrateur refusé.";
+    supportArea.hidden = true;
+  }
+};
+
 window.signOutAndHome = async function() {
   try { if (auth.signOut) await auth.signOut(); } catch(e) {}
   returnHome();
@@ -293,7 +385,13 @@ function returnHome(){
   document.getElementById("landing").style.display="block";
   window.scrollTo({top:0,behavior:"smooth"});
 }
+let adminAccessGranted = false;
+window.setAdminAccessGranted = function(value){ adminAccessGranted = value === true; };
 function showDashSection(id){
+  if(id === "dash-admin-info" && !adminAccessGranted){
+    if(window.openAdminPanel) window.openAdminPanel();
+    return;
+  }
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
   const sections = [
