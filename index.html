@@ -561,14 +561,75 @@ function verifierArriveeEglise(){
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
 
-function renderSupportHistory(){
-  const target=document.getElementById("support-history");
-  if(!target) return;
-  let tickets=[];
-  try{tickets=JSON.parse(localStorage.getItem("supportTicketsLocal")||"[]")}catch(e){}
-  if(!tickets.length){target.innerHTML="<p>Aucune demande enregistrée dans ce navigateur.</p>";return;}
-  target.innerHTML=tickets.slice().reverse().map(t=>`<article class="support-ticket"><strong>${escapeSupport(t.topic)}</strong><p>${escapeSupport(t.message)}</p><small>${escapeSupport(t.date)} · Statut : ${escapeSupport(t.status)}</small><p><em>Prototype local : les réponses de l’administration ne sont pas encore reliées.</em></p></article>`).join("");
+
+async function renderSupportHistory() {
+  const target = document.getElementById("support-history");
+  if (!target) return;
+
+  target.textContent = "Chargement de tes demandes…";
+
+  try {
+    if (typeof window.getAdminBearerToken !== "function") {
+      throw new Error("Recharge la page et reconnecte-toi pour consulter tes demandes.");
+    }
+
+    const token = await window.getAdminBearerToken();
+
+    const response = await fetch(
+      "https://tresors-de-nos-villages-serveur.onrender.com/api/support/mine",
+      {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/json"
+        }
+      }
+    );
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Impossible de charger tes demandes.");
+    }
+
+    const tickets = data.requests || [];
+
+    if (!tickets.length) {
+      target.textContent = "Aucune demande enregistrée sur le serveur.";
+      return;
+    }
+
+    target.replaceChildren();
+
+    tickets.forEach((ticket) => {
+      const card = document.createElement("article");
+      card.className = "support-ticket";
+
+      const title = document.createElement("strong");
+      title.textContent = ticket.subject || "Demande d’aide";
+
+      const message = document.createElement("p");
+      message.textContent = ticket.message || "";
+
+      const date = document.createElement("small");
+      date.textContent =
+        `${ticket.created_at ? new Date(ticket.created_at).toLocaleString("fr-FR") : ""} · Statut : ${ticket.status || "En attente"}`;
+
+      card.append(title, message, date);
+
+      (ticket.replies || []).forEach((reply) => {
+        const answer = document.createElement("p");
+        answer.textContent = `Réponse de l’administration : ${reply.message}`;
+        card.append(answer);
+      });
+
+      target.append(card);
+    });
+  } catch (error) {
+    target.textContent = error.message || "Erreur lors du chargement des demandes.";
+  }
 }
+
 function escapeSupport(value){
   return String(value).replace(/[&<>"']/g, ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
