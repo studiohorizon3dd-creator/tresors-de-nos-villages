@@ -781,6 +781,7 @@ function distanceMetres(lat1,lon1,lat2,lon2){
   return 6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
   
+
 function simulerArriveeEglise() {
   if (
     !adminAccessGranted ||
@@ -790,23 +791,29 @@ function simulerArriveeEglise() {
     return;
   }
 
-  const enigme2 = document.getElementById("carteEnigme2");
+  const carte = document.getElementById("carteEnigme2");
+  if (carte) {
+    carte.style.display = "block";
+  }
 
-  if (enigme2) {
-    enigme2.style.display = "block";
-    enigme2.scrollIntoView({ behavior: "smooth", block: "center" });
+  const indice = document.getElementById("indicePhotoEglise");
+  if (indice) {
+    indice.style.display = "block";
   }
 
   const statut = document.getElementById("statutGPSEglise");
-
   if (statut) {
     statut.textContent =
-      "🧪 Mode test : arrivée à l’église simulée. L’énigme 2 est débloquée !";
+      "🧪 Mode test : arrivée à l’église simulée. La photo et l’énigme 2 sont débloquées !";
   }
 
   const bouton = document.getElementById("boutonTestEglise");
   if (bouton) {
     bouton.hidden = true;
+  }
+
+  if (carte) {
+    carte.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 }
 
