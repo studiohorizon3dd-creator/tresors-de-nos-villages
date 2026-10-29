@@ -804,22 +804,25 @@ function simulerArriveeEglise() {
   }
 }
 
+
 function verifierCodeEglise() {
   const champ = document.getElementById("codeEglise");
   const retour = document.getElementById("feedbackCodeEglise");
 
   if (!champ || !retour) return;
 
-  const code = champ.value.trim().toUpperCase();
+  const reponse = champ.value.trim().toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
-  if (code === "EGLISE26") {
+  if (reponse === "CLOCHER" || reponse === "LE CLOCHER") {
     retour.textContent =
-      "🎉 Bravo ! Tu as trouvé le code de l’église ! La suite de l’aventure est débloquée. ⭐";
+      "🎉 Bravo ! Le clocher permet d'accueillir les cloches. Tu as résolu l'énigme 2 ! ⭐";
     retour.style.color = "green";
     localStorage.setItem("egliseCodeValide", "true");
   } else {
     retour.textContent =
-      "❌ Ce n’est pas le bon code. Regarde bien la photo et réessaie !";
+      "❌ Pas tout à fait ! Réfléchis à l'endroit où sont installées les cloches.";
     retour.style.color = "red";
   }
 }
