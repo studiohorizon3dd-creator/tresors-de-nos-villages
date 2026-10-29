@@ -705,10 +705,9 @@ if (supportForm) {
     } finally {
       button.disabled = false;
     }
-  });
-}
-
-renderSupportHistory();
+window.addEventListener("load", () => {
+  renderSupportHistory();
+});
 
 
 function chooseFormulaFromMenu(){showDashSection("dash-formulas")}
