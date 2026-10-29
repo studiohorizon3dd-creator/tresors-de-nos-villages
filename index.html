@@ -264,6 +264,7 @@ const auth = createAuthClient(AUTH_URL);
  async function restoreLogin() {
   try {
     const result = await auth.getSession();
+    console.log("RESULTAT SESSION :", result);
     const session = result?.data?.session ?? result?.data;
 
     if (session?.user) {
