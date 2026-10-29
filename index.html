@@ -735,6 +735,36 @@ function distanceMetres(lat1,lon1,lat2,lon2){
   const a=Math.sin(dLat/2)**2+Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2;
   return 6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
+  
+function simulerArriveeEglise() {
+  if (
+    !adminAccessGranted ||
+    localStorage.getItem("modeTestAventure") !== "true"
+  ) {
+    alert("Le mode test administrateur n’est pas activé.");
+    return;
+  }
+
+  const enigme2 = document.getElementById("carteEnigme2");
+
+  if (enigme2) {
+    enigme2.style.display = "block";
+    enigme2.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  const statut = document.getElementById("statutGPSEglise");
+
+  if (statut) {
+    statut.textContent =
+      "🧪 Mode test : arrivée à l’église simulée. L’énigme 2 est débloquée !";
+  }
+
+  const bouton = document.getElementById("boutonTestEglise");
+  if (bouton) {
+    bouton.hidden = true;
+  }
+}
+
 function verifierArriveeEglise(){
   const statut=document.getElementById("statutGPSEglise");
   if(!navigator.geolocation){statut.textContent="La localisation n’est pas disponible sur cet appareil.";return;}
