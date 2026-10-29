@@ -162,7 +162,40 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
       <section class="dash-section"><h3>Comment fonctionne l’aventure ?</h3><div class="feature-grid"><article class="feature"><div class="feature-icon">🏡</div><h3>Explorez</h3><p>Découvrez le village.</p></article><article class="feature"><div class="feature-icon">🔎</div><h3>Résolvez</h3><p>Trouvez les réponses.</p></article><article class="feature"><div class="feature-icon">⭐</div><h3>Collectionnez</h3><p>Gagnez des étoiles et des badges.</p></article></div></section>
     </div>
     <section class="dash-section hidden" id="dash-profile"><h3>Mon profil</h3><p id="profile-text">Bienvenue, explorateur !</p></section>
-    <section class="dash-section hidden" id="dash-adventures"><h3>Mes aventures</h3><article class="feature"><div class="feature-icon">🏡</div><h3>Humbert · Pas-de-Calais</h3><p>Votre première aventure vous attend.</p><button class="small-btn" onclick="openAdventure()">Découvrir Humbert</button></article></section>
+    
+<section class="dash-section hidden" id="dash-adventures">
+  <h3>Mes aventures</h3>
+
+  <div class="feature-grid">
+    <article class="feature">
+      <div class="feature-icon">🏡</div>
+      <h3>Humbert · Pas-de-Calais</h3>
+      <p>Votre première aventure vous attend.</p>
+      <button class="small-btn" type="button" onclick="openAdventure()">
+        Découvrir Humbert
+      </button>
+    </article>
+
+    <article class="feature">
+      <div class="feature-icon">🌱</div>
+      <h3>Aix-en-Issart · Pas-de-Calais</h3>
+      <p>Aventure en cours de création.</p>
+      <button class="small-btn" type="button" disabled>
+        En préparation
+      </button>
+    </article>
+
+    <article class="feature">
+      <div class="feature-icon">🌱</div>
+      <h3>Sempy · Pas-de-Calais</h3>
+      <p>Aventure en cours de création.</p>
+      <button class="small-btn" type="button" disabled>
+        En préparation
+      </button>
+    </article>
+  </div>
+</section>
+
     <section class="dash-section hidden" id="dash-badges"><h3>Mes badges</h3><div class="badges" id="badge-list"><div class="badge-card"><span>🔒</span>Explorateur<br><small>À débloquer</small></div></div></section>
     <section class="dash-section hidden" id="dash-stars"><h3>Mes étoiles</h3><p id="stars-summary">⭐ 0 / 10</p></section>
     <section class="dash-section hidden" id="dash-formulas"><h3>Mes formules</h3><div class="feature-grid"><article class="feature"><div class="feature-icon">🌱</div><h3>Facile</h3><p>Gratuit · Première aventure</p><button class="small-btn" onclick="chooseFormula('facile')">Choisir Facile</button></article><article class="feature"><div class="feature-icon">🧭</div><h3>Moyen</h3><p>1,99 € · Paiement pas encore disponible</p><button class="small-btn" onclick="chooseFormula('moyen')">Voir la formule</button></article><article class="feature"><div class="feature-icon">🔐</div><h3>Difficile</h3><p>2,99 € · Paiement pas encore disponible</p><button class="small-btn" onclick="chooseFormula('difficile')">Voir la formule</button></article></div><p id="formula-status" class="status"></p></section>
