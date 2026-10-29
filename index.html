@@ -572,23 +572,61 @@ function renderSupportHistory(){
 function escapeSupport(value){
   return String(value).replace(/[&<>"']/g, ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
-const supportForm=document.getElementById("support-form");
-if(supportForm){
-  supportForm.addEventListener("submit",function(event){
+
+const supportForm = document.getElementById("support-form");
+
+if (supportForm) {
+  supportForm.addEventListener("submit", async function(event) {
     event.preventDefault();
-    const topic=document.getElementById("support-topic").value;
-    const message=document.getElementById("support-message").value.trim();
-    if(!topic||!message) return;
-    let tickets=[];
-    try{tickets=JSON.parse(localStorage.getItem("supportTicketsLocal")||"[]")}catch(e){}
-    tickets.push({topic,message,date:new Date().toLocaleString("fr-FR"),status:"Enregistrée (test local)"});
-    localStorage.setItem("supportTicketsLocal",JSON.stringify(tickets));
-    document.getElementById("support-message").value="";
-    renderSupportHistory();
-    document.getElementById("support-notice").textContent="Demande enregistrée uniquement dans ce navigateur pour le moment. La notification Gmail et l’historique en ligne seront activés après la connexion du serveur.";
+
+    const topic = document.getElementById("support-topic").value;
+    const message = document.getElementById("support-message").value.trim();
+    const notice = document.getElementById("support-notice");
+    const button = supportForm.querySelector('button[type="submit"]');
+
+    if (!topic || !message) return;
+
+    button.disabled = true;
+    notice.textContent = "Envoi de ta demande en cours…";
+
+    try {
+      if (typeof window.getAdminBearerToken !== "function") {
+        throw new Error("La fonction de connexion n’est pas disponible. Recharge la page et reconnecte-toi.");
+      }
+
+      const token = await window.getAdminBearerToken();
+
+      const response = await fetch(
+        "https://tresors-de-nos-villages-serveur.onrender.com/api/support",
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ subject: topic, message })
+        }
+      );
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data.error || "Impossible d’enregistrer la demande.");
+      }
+
+      document.getElementById("support-message").value = "";
+      notice.textContent = "Ta demande a bien été enregistrée sur le serveur.";
+      await renderSupportHistory();
+    } catch (error) {
+      notice.textContent = error.message || "Erreur lors de l’envoi de la demande.";
+    } finally {
+      button.disabled = false;
+    }
   });
 }
+
 renderSupportHistory();
+
 
 function chooseFormulaFromMenu(){showDashSection("dash-formulas")}
 Object.assign(window,{showDashboard,returnHome,showDashSection,openAdventure,chooseFormula,checkAnswer,chooseFormulaFromMenu,verifierArriveeMairie,verifierArriveeEglise});
