@@ -241,6 +241,11 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     ← Retour à l’administration
   </button>
 
+  <button type="button" onclick="activerModeTestAventure()">
+    🧪 Tester l’aventure
+  </button>
+  <p id="admin-test-status" role="status" aria-live="polite"></p>
+
   <hr>
 
   <h3>Créer une aventure</h3>
@@ -312,6 +317,12 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <section class="dash-section hidden" id="dash-game"><h3>🏡 L’aventure à Humbert</h3><p>Choisissez la formule Facile pour commencer. Répondez aux énigmes pour gagner des étoiles.</p><div class="riddle-list">
       <article class="riddle"><div class="big">🏛️</div><h3>Énigme 1</h3><p>Quel lieu rassemble les habitants et permet notamment de se marier ou de voter ?</p><input id="answer1" placeholder="Ta réponse"><button onclick="checkAnswer(1)">Valider ma réponse</button><p id="feedback1" class="feedback" aria-live="polite"></p></article>
       <div id="zoneGPS" class="riddle" style="display:none;">
+        
+<button type="button" id="boutonModeTestGPS" hidden
+  onclick="simulerArriveeMairie()">
+  🧪 Simuler mon arrivée à la mairie
+</button>
+
         <h3>📍 Vérifie ton arrivée à la mairie</h3>
         <p>Autorise la localisation pour vérifier que tu es près de la mairie d’Humbert.</p>
         <button type="button" onclick="verifierArriveeMairie()">📍 Vérifier ma position</button>
@@ -532,6 +543,28 @@ function showDashSection(id){
   window.scrollTo({top:0,behavior:"smooth"});
   if(id==="dash-stars"||id==="dash-badges"||id==="dash-home")refreshProgress();
 }
+  
+function activerModeTestAventure() {
+  const status = document.getElementById("admin-test-status");
+
+  if (!adminAccessGranted) {
+    if (status) status.textContent = "Accès administrateur requis.";
+    return;
+  }
+
+  localStorage.setItem("modeTestAventure", "true");
+  showDashSection("dash-game");
+
+  const zone = document.getElementById("zoneGPS");
+  if (zone) zone.style.display = "block";
+
+  const statut = document.getElementById("statutGPS");
+  if (statut) {
+    statut.textContent =
+      "🧪 Mode test administrateur activé : tu peux tester le parcours depuis ton PC.";
+  }
+}
+
 function openAdventure(){
   const formula=localStorage.getItem("formuleTresors")||"";
   if(!formula){showDashSection("dash-formulas");document.getElementById("formula-status").textContent="Choisis d’abord une formule pour continuer.";return;}
@@ -597,6 +630,33 @@ function initialiserCarte(){
     .bindPopup("⛪ Arrivée : église d’Humbert");
   const lieux = L.latLngBounds([[50.50510, 1.90770], [50.502586, 1.906921]]);
   carteGPS.fitBounds(lieux, {padding:[25,25]});
+}
+
+function simulerArriveeMairie() {
+  if (!adminAccessGranted || localStorage.getItem("modeTestAventure") !== "true") {
+    alert("Le mode test administrateur n’est pas activé.");
+    return;
+  }
+
+  const statut = document.getElementById("statutGPS");
+  const direction = document.getElementById("directionEglise");
+  const bouton = document.getElementById("boutonModeTestGPS");
+
+  if (statut) {
+    statut.textContent =
+      "🧪 Test réussi : arrivée simulée à la mairie ! Tu peux poursuivre vers l’église.";
+  }
+
+  if (direction) {
+    direction.style.display = "block";
+    direction.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  const route = document.getElementById("itineraireEglise");
+  if (route) {
+    route.href =
+      "https://www.google.com/maps/dir/?api=1&destination=50.502586%2C1.906921&travelmode=walking";
+  }
 }
 
 function verifierArriveeMairie(){
