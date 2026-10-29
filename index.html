@@ -239,7 +239,8 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 
 <script type="module">
 import { createAuthClient } from "https://esm.sh/@neondatabase/auth";
-const auth = createAuthClient("https://ep-proud-rain-b9nldnf8.neonauth.c-7.eu-central-1.aws.neon.tech/neondb/auth");
+const AUTH_URL = "https://ep-proud-rain-b9nldnf8.neonauth.c-7.eu-central-1.aws.neon.tech/neondb/auth";
+const auth = createAuthClient(AUTH_URL);
 const form = document.getElementById("signup-form");
 const status = document.getElementById("auth-status");
 const loginBtn = document.getElementById("login-btn");
@@ -277,19 +278,19 @@ loginBtn.addEventListener("click", async () => {
 });
 const API_BASE = "https://tresors-de-nos-villages-serveur.onrender.com";
 async function getAdminBearerToken() {
-  // Neon Auth exposes getJWTToken() in the browser client. Handle both string
-  // and wrapped response shapes so no session cookie is copied across domains.
-  if (typeof auth.getJWTToken === "function") {
-    const result = await auth.getJWTToken();
-    const token = typeof result === "string" ? result : (result?.token ?? result?.data?.token ?? result?.data?.session?.access_token);
-    if (token) return token;
+  // Neon Better Auth exposes the short-lived JWT at /token (not /get-jwt-token).
+  // The browser session cookie is sent only to Neon Auth; it is never copied to Render.
+  const response = await fetch(`${AUTH_URL.replace(/\/$/, "")}/token`, {
+    method: "GET",
+    credentials: "include",
+    headers: { "Accept": "application/json" },
+    cache: "no-store"
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || typeof data.token !== "string" || !data.token) {
+    throw new Error(data.message || data.error?.message || `Neon n’a pas fourni de jeton de connexion (${response.status}). Reconnecte-toi puis réessaie.`);
   }
-  if (typeof auth.token === "function") {
-    const result = await auth.token();
-    const token = typeof result === "string" ? result : (result?.token ?? result?.data?.token);
-    if (token) return token;
-  }
-  throw new Error("Impossible de récupérer le jeton de connexion Neon. Déconnecte-toi puis reconnecte-toi.");
+  return data.token;
 }
 async function adminApi(path, options = {}) {
   const token = await getAdminBearerToken();
