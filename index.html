@@ -784,8 +784,220 @@ if (supportForm) {
   });
 }
 
+/* ===== GESTION DES AVENTURES ADMIN ===== */
+
+const adminAdventureForm = document.getElementById("admin-adventure-form");
+const adminAdventureStatus = document.getElementById("admin-adventure-status");
+const adminAdventureList = document.getElementById("admin-adventure-list");
+const adminStepForm = document.getElementById("admin-adventure-step-form");
+
+async function adminAdventureRequest(path, options = {}) {
+  if (typeof window.getAdminBearerToken !== "function") {
+    throw new Error("Reconnecte-toi pour gérer les aventures.");
+  }
+
+  const token = await window.getAdminBearerToken();
+
+  const response = await fetch(
+    "https://tresors-de-nos-villages-serveur.onrender.com" + path,
+    {
+      ...options,
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Accept": "application/json",
+        ...(options.body ? { "Content-Type": "application/json" } : {}),
+        ...options.headers
+      }
+    }
+  );
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.error || "Une erreur est survenue.");
+  }
+
+  return data;
+}
+
+async function loadAdminAdventures() {
+  if (!adminAdventureList) return;
+
+  adminAdventureList.textContent = "Chargement des aventures…";
+
+  try {
+    const data = await adminAdventureRequest("/api/admin/adventures");
+    adminAdventureList.replaceChildren();
+
+    if (!data.adventures || data.adventures.length === 0) {
+      adminAdventureList.textContent = "Aucune aventure enregistrée pour le moment.";
+      return;
+    }
+
+    data.adventures.forEach((adventure) => {
+      const card = document.createElement("article");
+      card.className = "support-ticket";
+
+      const title = document.createElement("h4");
+      title.textContent = adventure.title + " — " + adventure.village;
+
+      const description = document.createElement("p");
+      description.textContent = adventure.description || "Aucune description.";
+
+      const stepsButton = document.createElement("button");
+      stepsButton.type = "button";
+      stepsButton.textContent = "📍 Gérer les étapes";
+      stepsButton.addEventListener("click", () => {
+        openAdminAdventureSteps(adventure);
+      });
+
+      card.append(title, description, stepsButton);
+      adminAdventureList.append(card);
+    });
+  } catch (error) {
+    adminAdventureList.textContent = error.message;
+  }
+}
+
+if (adminAdventureForm) {
+  adminAdventureForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const button = adminAdventureForm.querySelector('button[type="submit"]');
+    button.disabled = true;
+    adminAdventureStatus.textContent = "Enregistrement de l’aventure…";
+
+    try {
+      const formData = new FormData(adminAdventureForm);
+
+      const data = await adminAdventureRequest("/api/admin/adventures", {
+        method: "POST",
+        body: JSON.stringify({
+          title: formData.get("title"),
+          village: formData.get("village"),
+          description: formData.get("description")
+        })
+      });
+
+      adminAdventureStatus.textContent =
+        "✅ Aventure « " + data.adventure.title + " » enregistrée !";
+
+      adminAdventureForm.reset();
+      await loadAdminAdventures();
+    } catch (error) {
+      adminAdventureStatus.textContent = "❌ " + error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
+
+async function openAdminAdventureSteps(adventure) {
+  const area = document.getElementById("admin-adventure-steps");
+  const title = document.getElementById("admin-steps-title");
+  const idInput = document.getElementById("admin-step-adventure-id");
+  const list = document.getElementById("admin-adventure-step-list");
+
+  area.hidden = false;
+  title.textContent = "Étapes de : " + adventure.title;
+  idInput.value = adventure.id;
+  list.textContent = "Chargement des étapes…";
+
+  try {
+    const data = await adminAdventureRequest(
+      "/api/admin/adventures/" + adventure.id + "/steps"
+    );
+
+    list.replaceChildren();
+
+    if (!data.steps || data.steps.length === 0) {
+      list.textContent = "Aucune étape enregistrée pour cette aventure.";
+    } else {
+      data.steps.forEach((step) => {
+        const item = document.createElement("article");
+        item.className = "support-ticket";
+
+        const heading = document.createElement("h4");
+        heading.textContent = "Étape " + step.step_number + " — " + step.place_name;
+
+        const riddle = document.createElement("p");
+        riddle.textContent = "Énigme : " + (step.riddle || "Non renseignée");
+
+        const hint = document.createElement("p");
+        hint.textContent = "Indice : " + (step.hint || "Non renseigné");
+
+        const gps = document.createElement("p");
+        gps.textContent =
+          step.latitude != null && step.longitude != null
+            ? "GPS : " + step.latitude + ", " + step.longitude
+            : "Coordonnées GPS non renseignées.";
+
+        item.append(heading, riddle, hint, gps);
+        list.append(item);
+      });
+    }
+
+    document.getElementById("admin-step-number").value =
+      (data.steps?.length || 0) + 1;
+
+    area.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    list.textContent = error.message;
+  }
+}
+
+if (adminStepForm) {
+  adminStepForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const button = adminStepForm.querySelector('button[type="submit"]');
+    const status = document.getElementById("admin-step-status");
+    const adventureId = document.getElementById("admin-step-adventure-id").value;
+
+    button.disabled = true;
+    status.textContent = "Enregistrement de l’étape…";
+
+    try {
+      const value = (id) => document.getElementById(id).value.trim();
+
+      await adminAdventureRequest(
+        "/api/admin/adventures/" + adventureId + "/steps",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            step_number: Number(value("admin-step-number")),
+            place_name: value("admin-step-place"),
+            latitude: value("admin-step-latitude") || null,
+            longitude: value("admin-step-longitude") || null,
+            riddle: value("admin-step-riddle"),
+            answer: value("admin-step-answer"),
+            hint: value("admin-step-hint")
+          })
+        }
+      );
+
+      status.textContent = "✅ Étape enregistrée !";
+      adminStepForm.reset();
+      document.getElementById("admin-step-adventure-id").value = adventureId;
+
+      const adventureTitle = document.getElementById("admin-steps-title").textContent
+        .replace("Étapes de : ", "");
+
+      await openAdminAdventureSteps({
+        id: adventureId,
+        title: adventureTitle
+      });
+    } catch (error) {
+      status.textContent = "❌ " + error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+}
+
 window.addEventListener("load", () => {
   renderSupportHistory();
+  loadAdminAdventures();
 });
 
 function chooseFormulaFromMenu() {
