@@ -702,16 +702,31 @@ if (supportForm) {
       await renderSupportHistory();
     } catch (error) {
       notice.textContent = error.message || "Erreur lors de l’envoi de la demande.";
-    } finally {
+        } finally {
       button.disabled = false;
     }
+  });
+}
+
 window.addEventListener("load", () => {
   renderSupportHistory();
 });
 
+function chooseFormulaFromMenu() {
+  showDashSection("dash-formulas");
+}
 
-function chooseFormulaFromMenu(){showDashSection("dash-formulas")}
-Object.assign(window,{showDashboard,returnHome,showDashSection,openAdventure,chooseFormula,checkAnswer,chooseFormulaFromMenu,verifierArriveeMairie,verifierArriveeEglise});
+Object.assign(window, {
+  showDashboard,
+  returnHome,
+  showDashSection,
+  openAdventure,
+  chooseFormula,
+  checkAnswer,
+  chooseFormulaFromMenu,
+  verifierArriveeMairie,
+  verifierArriveeEglise
+});
 </script>
 </body>
 </html>
