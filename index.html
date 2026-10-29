@@ -632,6 +632,7 @@ function initialiserCarte(){
   carteGPS.fitBounds(lieux, {padding:[25,25]});
 }
 
+
 function simulerArriveeMairie() {
   if (!adminAccessGranted || localStorage.getItem("modeTestAventure") !== "true") {
     alert("Le mode test administrateur n’est pas activé.");
@@ -640,24 +641,33 @@ function simulerArriveeMairie() {
 
   const statut = document.getElementById("statutGPS");
   const direction = document.getElementById("directionEglise");
-  const bouton = document.getElementById("boutonModeTestGPS");
+  const boutonTest = document.getElementById("boutonModeTestGPS");
+  const route = document.getElementById("itineraireEglise");
 
   if (statut) {
     statut.textContent =
-      "🧪 Test réussi : arrivée simulée à la mairie ! Tu peux poursuivre vers l’église.";
+      "🧪 Mode test : arrivée à la mairie simulée. Tu peux poursuivre vers l’église.";
   }
 
   if (direction) {
     direction.style.display = "block";
-    direction.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  const route = document.getElementById("itineraireEglise");
   if (route) {
     route.href =
       "https://www.google.com/maps/dir/?api=1&destination=50.502586%2C1.906921&travelmode=walking";
   }
+
+  const zoneEglise = document.getElementById("directionEglise");
+  if (zoneEglise) {
+    zoneEglise.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  if (boutonTest) {
+    boutonTest.textContent = "🧪 Arrivée à la mairie simulée";
+  }
 }
+
 
 function verifierArriveeMairie(){
   const statut=document.getElementById("statutGPS");
