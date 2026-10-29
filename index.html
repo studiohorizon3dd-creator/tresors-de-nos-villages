@@ -577,11 +577,14 @@ function showDashSection(id){
   if(id==="dash-stars"||id==="dash-badges"||id==="dash-home")refreshProgress();
 }
   
+
 function activerModeTestAventure() {
   const status = document.getElementById("admin-test-status");
 
   if (!adminAccessGranted) {
-    if (status) status.textContent = "Accès administrateur requis.";
+    if (status) {
+      status.textContent = "Accès administrateur requis.";
+    }
     return;
   }
 
@@ -589,7 +592,14 @@ function activerModeTestAventure() {
   showDashSection("dash-game");
 
   const zone = document.getElementById("zoneGPS");
-  if (zone) zone.style.display = "block";
+  if (zone) {
+    zone.style.display = "block";
+  }
+
+  const boutonTest = document.getElementById("boutonModeTestGPS");
+  if (boutonTest) {
+    boutonTest.hidden = false;
+  }
 
   const statut = document.getElementById("statutGPS");
   if (statut) {
