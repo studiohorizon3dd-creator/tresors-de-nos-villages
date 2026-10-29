@@ -232,6 +232,81 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <div id="admin-support-list"></div>
   </div>
 </section>
+    
+<section class="dash-section hidden" id="dash-admin-aventures">
+  <h3>🗺️ Gestion des aventures</h3>
+  <p>Crée tes parcours, puis ajoute les lieux, les coordonnées GPS et les énigmes.</p>
+
+  <button type="button" onclick="showDashSection('dash-admin-info')">
+    ← Retour à l’administration
+  </button>
+
+  <hr>
+
+  <h3>Créer une aventure</h3>
+  <form id="admin-adventure-form">
+    <label for="admin-adventure-title">Nom de l’aventure</label>
+    <input id="admin-adventure-title" name="title" required maxlength="150"
+      placeholder="Ex. : À la découverte de Humbert">
+
+    <label for="admin-adventure-village">Village</label>
+    <input id="admin-adventure-village" name="village" required maxlength="150"
+      placeholder="Ex. : Humbert">
+
+    <label for="admin-adventure-description">Description</label>
+    <textarea id="admin-adventure-description" name="description"
+      placeholder="Présente le parcours"></textarea>
+
+    <button type="submit">💾 Créer l’aventure</button>
+  </form>
+
+  <p id="admin-adventure-status" role="status" aria-live="polite"></p>
+
+  <hr>
+
+  <h3>Mes aventures</h3>
+  <div id="admin-adventure-list">
+    <p>Les aventures apparaîtront ici.</p>
+  </div>
+
+  <div id="admin-adventure-steps" hidden>
+    <h3 id="admin-steps-title">Étapes du parcours</h3>
+
+    <form id="admin-adventure-step-form">
+      <input type="hidden" id="admin-step-adventure-id">
+
+      <label for="admin-step-number">Numéro de l’étape</label>
+      <input id="admin-step-number" type="number" min="1" required value="1">
+
+      <label for="admin-step-place">Lieu</label>
+      <input id="admin-step-place" required maxlength="200"
+        placeholder="Ex. : Mairie de Humbert">
+
+      <label for="admin-step-latitude">Latitude GPS</label>
+      <input id="admin-step-latitude" type="number" step="any"
+        placeholder="Ex. : 50.502586">
+
+      <label for="admin-step-longitude">Longitude GPS</label>
+      <input id="admin-step-longitude" type="number" step="any"
+        placeholder="Ex. : 1.906921">
+
+      <label for="admin-step-riddle">Énigme</label>
+      <textarea id="admin-step-riddle" placeholder="Écris la question"></textarea>
+
+      <label for="admin-step-answer">Réponse attendue</label>
+      <input id="admin-step-answer" placeholder="Réponse à valider">
+
+      <label for="admin-step-hint">Indice</label>
+      <textarea id="admin-step-hint" placeholder="Aide pour le joueur"></textarea>
+
+      <button type="submit">💾 Enregistrer l’étape</button>
+    </form>
+
+    <p id="admin-step-status" role="status" aria-live="polite"></p>
+    <div id="admin-adventure-step-list"></div>
+  </div>
+</section>
+
 
 
     <section class="dash-section hidden" id="dash-game"><h3>🏡 L’aventure à Humbert</h3><p>Choisissez la formule Facile pour commencer. Répondez aux énigmes pour gagner des étoiles.</p><div class="riddle-list">
