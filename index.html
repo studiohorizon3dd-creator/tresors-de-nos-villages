@@ -621,7 +621,7 @@ async function renderSupportHistory() {
 
       (ticket.replies || []).forEach((reply) => {
         const answer = document.createElement("p");
-        answer.textContent = `Réponse de l’administration : ${reply.message}`;cv
+        answer.textContent = `Réponse de l’administration : ${reply.message}`;
         card.append(answer);
       });
 
