@@ -198,21 +198,39 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
       <div id="support-history"><p>Aucune demande enregistrée dans ce navigateur.</p></div>
     </section>
 
-    <section class="dash-section hidden" id="dash-admin-info">
-      <h3>⚙ Administration du site</h3>
-      <p>Cet espace est réservé à la gestion du projet : aventures, énigmes, indices, coordonnées GPS et demandes d’aide.</p>
-      <div class="feature-grid">
-        <article class="feature"><div class="feature-icon">🗺️</div><h3>Aventures</h3><p>Préparer les parcours et leurs étapes.</p></article>
-        <article class="feature"><div class="feature-icon">🧩</div><h3>Énigmes</h3><p>Corriger les questions et les indices.</p></article>
-        <article class="feature"><div class="feature-icon">✉️</div><h3>Support</h3><p>Consulter les demandes et répondre aux joueurs.</p></article>
-      </div>
-      <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
-      <div id="admin-support-area" hidden>
-        <h3>Demandes d’aide des joueurs</h3>
-        <p>Les demandes sont chargées depuis le serveur sécurisé.</p>
-        <div id="admin-support-list"></div>
-      </div>
-    </section>
+<section class="dash-section hidden" id="dash-admin-info">
+  <h3>⚙ Administration du site</h3>
+  <p>Cet espace est réservé à la gestion du projet : aventures, énigmes, indices, coordonnées GPS et demandes d’aide.</p>
+
+  <div class="feature-grid">
+    <button type="button" class="feature" onclick="showDashSection('dash-admin-aventures')">
+      <div class="feature-icon">🗺️</div>
+      <h3>Aventures</h3>
+      <p>Préparer les parcours et leurs étapes.</p>
+    </button>
+
+    <button type="button" class="feature" onclick="showDashSection('dash-admin-enigmes')">
+      <div class="feature-icon">🧩</div>
+      <h3>Énigmes</h3>
+      <p>Corriger les questions et les indices.</p>
+    </button>
+
+    <button type="button" class="feature" onclick="showDashSection('dash-admin-support')">
+      <div class="feature-icon">✉️</div>
+      <h3>Support</h3>
+      <p>Consulter les demandes et répondre aux joueurs.</p>
+    </button>
+  </div>
+
+  <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
+
+  <div id="admin-support-area" hidden>
+    <h3>Demandes d’aide des joueurs</h3>
+    <p>Les demandes sont chargées depuis le serveur sécurisé.</p>
+    <div id="admin-support-list"></div>
+  </div>
+</section>
+
 
     <section class="dash-section hidden" id="dash-game"><h3>🏡 L’aventure à Humbert</h3><p>Choisissez la formule Facile pour commencer. Répondez aux énigmes pour gagner des étoiles.</p><div class="riddle-list">
       <article class="riddle"><div class="big">🏛️</div><h3>Énigme 1</h3><p>Quel lieu rassemble les habitants et permet notamment de se marier ou de voter ?</p><input id="answer1" placeholder="Ta réponse"><button onclick="checkAnswer(1)">Valider ma réponse</button><p id="feedback1" class="feedback" aria-live="polite"></p></article>
