@@ -176,27 +176,29 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
       <p class="status">Tu ne trouves pas la réponse ? Utilise « Poser une question ».</p>
     </section>
 
-    <section class="dash-section hidden" id="dash-support">
-      <h3>✉ Poser une question</h3>
-      <p>Décris le problème rencontré. Tu pourras retrouver ici les demandes enregistrées dans ce navigateur.</p>
-      <p class="status" id="support-notice">Important : le formulaire est préparé, mais l’envoi sécurisé par e-mail et l’historique lié au compte nécessitent encore la connexion au service serveur.</p>
-      <form id="support-form">
-        <label for="support-topic">Sujet de la demande</label>
-        <select id="support-topic" required>
-          <option value="">Choisis un sujet</option>
-          <option>GPS ou carte</option>
-          <option>Énigme ou indice</option>
-          <option>Compte ou connexion</option>
-          <option>Étoiles ou progression</option>
-          <option>Autre question</option>
-        </select>
-        <label for="support-message">Ta question</label>
-        <textarea id="support-message" rows="4" maxlength="2000" required placeholder="Explique-nous ce qui se passe…"></textarea>
-        <button class="primary-btn" type="submit">Enregistrer ma demande (test)</button>
-      </form>
-      <h3 style="margin-top:24px">Mes demandes</h3>
-      <div id="support-history"><p>Aucune demande enregistrée dans ce navigateur.</p></div>
-    </section>
+  
+<section class="dash-section hidden" id="dash-support">
+  <h3>✉ Poser une question</h3>
+  <p>Décris le problème rencontré. Tu pourras retrouver ici les demandes liées à ton compte.</p>
+  <p class="status" id="support-notice">Tu peux nous envoyer ta demande et retrouver ici les réponses de l’administration.</p>
+  <form id="support-form">
+    <label for="support-topic">Sujet de la demande</label>
+    <select id="support-topic" required>
+      <option value="">Choisis un sujet</option>
+      <option>GPS ou carte</option>
+      <option>Énigme ou indice</option>
+      <option>Compte ou connexion</option>
+      <option>Étoiles ou progression</option>
+      <option>Autre question</option>
+    </select>
+    <label for="support-message">Ta question</label>
+    <textarea id="support-message" rows="4" maxlength="2000" required placeholder="Explique-nous ce qui se passe…"></textarea>
+    <button class="primary-btn" type="submit">Envoyer ma demande</button>
+  </form>
+  <h3 style="margin-top:24px">Mes demandes</h3>
+  <div id="support-history"><p>Chargement de tes demandes…</p></div>
+</section>
+
 
 <section class="dash-section hidden" id="dash-admin-info">
   <h3>⚙ Administration du site</h3>
@@ -619,7 +621,7 @@ async function renderSupportHistory() {
 
       (ticket.replies || []).forEach((reply) => {
         const answer = document.createElement("p");
-        answer.textContent = `Réponse de l’administration : ${reply.message}`;
+        answer.textContent = `Réponse de l’administration : ${reply.message}`;cv
         card.append(answer);
       });
 
