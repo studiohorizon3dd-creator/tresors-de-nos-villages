@@ -579,7 +579,14 @@ loginBtn.addEventListener("click", async () => {
   try {
     const result = await auth.signIn.email({email,password});
     if (result.error) throw new Error(result.error.message || "Connexion impossible.");
-    showDashboard(email.split("@")[0]);
+    const sessionResult = await auth.getSession();
+const user = sessionResult?.data?.user
+  ?? sessionResult?.data?.session?.user;
+
+showDashboard(
+  user?.name || email.split("@")[0],
+  user?.email || email
+);
   } catch (error) {
     status.textContent = error.message || "Impossible de se connecter.";
   }
