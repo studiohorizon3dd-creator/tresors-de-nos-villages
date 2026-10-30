@@ -758,7 +758,17 @@ function refreshProgress(){
   const p = getProgress();
   const count = Math.min(p.length, 10);
 
-  // Progression du profil
+  // Progression générale
+  const text = document.getElementById("progress-text");
+  if(text) text.textContent = count + " / 10 étoiles";
+
+  const fill = document.getElementById("progress-fill");
+  if(fill) fill.style.width = (count * 10) + "%";
+
+  const summary = document.getElementById("stars-summary");
+  if(summary) summary.textContent = "⭐ " + count + " / 10";
+
+  // Progression dans le profil
   const profileCount = document.getElementById("profile-stars-count");
   if(profileCount) profileCount.textContent = count + " / 10 ⭐";
 
@@ -771,16 +781,6 @@ function refreshProgress(){
       ? "Bravo ! Toutes les étoiles sont gagnées ! 🎉"
       : "Encore " + (10 - count) + " étoile(s) à gagner !";
   }
-
-  // Progression de l'accueil
-  const text = document.getElementById("progress-text");
-  if(text) text.textContent = count + " / 10 étoiles";
-
-  const fill = document.getElementById("progress-fill");
-  if(fill) fill.style.width = (count * 10) + "%";
-
-  const summary = document.getElementById("stars-summary");
-  if(summary) summary.textContent = "⭐ " + count + " / 10";
 
   // Badges
   const badgeHTML = count >= 10
@@ -800,28 +800,6 @@ function refreshProgress(){
       : "Continue tes aventures pour obtenir ton premier badge !";
   }
 }
-  const text=document.getElementById("progress-text");
-  if(text)text.textContent=count+" / 10 étoiles";
-  const fill=document.getElementById("progress-fill");if(fill)fill.style.width=(count*10)+"%";
-  const summary=document.getElementById("stars-summary");if(summary)summary.textContent="⭐ "+count+" / 10";
-  const list=document.getElementById("badge-list");
-    const profileBadges = document.getElementById("profile-badge-list");
-  const badgeMessage = document.getElementById("profile-badge-message");
-
-  if(profileBadges) {
-    profileBadges.innerHTML = count >= 10
-      ? '<div class="badge-card"><span>🏅</span>Explorateur<br><small>Badge gagné !</small></div>'
-      : '<div class="badge-card"><span>🔒</span>Explorateur<br><small>Encore '+(10-count)+' étoile(s)</small></div>';
-  }
-
-  if(badgeMessage) {
-    badgeMessage.textContent = count >= 10
-      ? "Félicitations ! Tu as obtenu ton badge Explorateur ! 🎉"
-      : "Continue tes aventures pour obtenir ton premier badge !";
-  }
-  if(list)list.innerHTML=count>=10?'<div class="badge-card"><span>🏅</span>Explorateur<br><small>Badge gagné</small></div>':'<div class="badge-card"><span>🔒</span>Explorateur<br><small>Encore '+(10-count)+' étoile(s)</small></div>';
-}
-function checkAnswer(number){
   const id="answer"+number, feedback=document.getElementById("feedback"+number);
   const input=document.getElementById(id);
   if(!input || !feedback) return;
