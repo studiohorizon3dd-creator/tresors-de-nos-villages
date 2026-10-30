@@ -945,6 +945,33 @@ function simulerArriveeArbre() {
 
 
 function verifierArriveeEglise() {
+  function verifierCodeEglise() {
+  const champ = document.getElementById("codeEglise");
+  const retour = document.getElementById("feedbackCodeEglise");
+
+  if (!champ || !retour) return;
+
+  const reponse = champ.value.trim().toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  if (reponse === "CLOCHER" || reponse === "LE CLOCHER") {
+    retour.textContent =
+      "🎉 Bravo ! Le clocher permet d'accueillir les cloches. Tu as résolu l'énigme 2 ! ⭐";
+    retour.style.color = "green";
+    localStorage.setItem("egliseCodeValide", "true");
+
+    const indice = document.getElementById("indiceVersArbre");
+    if (indice) {
+      indice.style.display = "block";
+      indice.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  } else {
+    retour.textContent =
+      "❌ Pas tout à fait ! Réfléchis à l'endroit où sont installées les cloches.";
+    retour.style.color = "red";
+  }
+}
   const statut = document.getElementById("statutGPSEglise");
 
   if (!navigator.geolocation) {
