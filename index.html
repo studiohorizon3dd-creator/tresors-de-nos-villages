@@ -170,12 +170,20 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
         <p>Retrouve ici tes informations et tes découvertes.</p>
     </div>
 
-    <div class="feature-grid">
-        <article class="feature">
-            <div class="feature-icon">⭐</div>
-            <h3>Ma progression</h3>
-            <p>Consulte les étoiles gagnées pendant tes aventures.</p>
-        </article>
+   <article class="feature">
+    <div class="feature-icon">⭐</div>
+    <h3>Ma progression</h3>
+
+    <p>Mes étoiles gagnées :</p>
+
+    <h2 id="profile-stars-count">0 / 10 ⭐</h2>
+
+    <div class="progress-track">
+        <div class="progress-fill" id="profile-progress-fill" style="width:0%"></div>
+    </div>
+
+    <p id="profile-progress-message">Continue tes aventures pour gagner des étoiles !</p>
+</article>
 
         <article class="feature">
             <div class="feature-icon">🏅</div>
@@ -737,6 +745,18 @@ function chooseFormula(level){
 function getProgress(){try{return JSON.parse(localStorage.getItem("progressionHumbertFacile")||"[]")}catch(e){return []}}
 function refreshProgress(){
   const p=getProgress(), count=Math.min(p.length,10);
+    const profileCount = document.getElementById("profile-stars-count");
+  if(profileCount) profileCount.textContent = count + " / 10 ⭐";
+
+  const profileFill = document.getElementById("profile-progress-fill");
+  if(profileFill) profileFill.style.width = (count * 10) + "%";
+
+  const profileMessage = document.getElementById("profile-progress-message");
+  if(profileMessage) {
+    profileMessage.textContent = count >= 10
+      ? "Bravo ! Toutes les étoiles sont gagnées ! 🎉"
+      : "Encore " + (10 - count) + " étoile(s) à gagner !";
+  }
   const text=document.getElementById("progress-text");
   if(text)text.textContent=count+" / 10 étoiles";
   const fill=document.getElementById("progress-fill");if(fill)fill.style.width=(count*10)+"%";
