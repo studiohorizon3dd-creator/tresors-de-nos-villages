@@ -821,7 +821,7 @@ function refreshProgress(){
   }
   if(list)list.innerHTML=count>=10?'<div class="badge-card"><span>🏅</span>Explorateur<br><small>Badge gagné</small></div>':'<div class="badge-card"><span>🔒</span>Explorateur<br><small>Encore '+(10-count)+' étoile(s)</small></div>';
 }
-function checkAnswer(number)
+function checkAnswer(number){
   const id="answer"+number, feedback=document.getElementById("feedback"+number);
   const input=document.getElementById(id);
   if(!input || !feedback) return;
