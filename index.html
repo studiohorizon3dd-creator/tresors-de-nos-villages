@@ -868,34 +868,81 @@ function simulerArriveeEglise() {
 }
 
 
-function verifierCodeEglise() {
-  const champ = document.getElementById("codeEglise");
-  const retour = document.getElementById("feedbackCodeEglise");
+
+function verifierArriveeArbre() {
+  const statut = document.getElementById("statutGPSArbre");
+
+  if (!statut) return;
+
+  if (!navigator.geolocation) {
+    statut.textContent = "La localisation n'est pas disponible.";
+    return;
+  }
+
+  statut.textContent = "Recherche de ta position près de l'arbre…";
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    const distance = distanceMetres(lat, lon, 50.500444, 1.900556);
+
+    if (distance <= 100) {
+      statut.textContent = "🎉 Bravo ! Tu as trouvé le vieux gardien ! 🌳";
+
+      const enigme = document.getElementById("carteEnigme3");
+      if (enigme) {
+        enigme.style.display = "block";
+        enigme.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    } else {
+      statut.textContent = "Tu es à environ " + Math.round(distance) +
+        " mètres de l'arbre. Continue ton chemin !";
+    }
+  }, function() {
+    statut.textContent = "Impossible de trouver ta position. Réessaie.";
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
+
+function verifierCodeArbre() {
+  const champ = document.getElementById("codeArbre");
+  const retour = document.getElementById("feedbackCodeArbre");
 
   if (!champ || !retour) return;
 
-  const reponse = champ.value.trim().toUpperCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+  const reponse = champ.value.trim();
 
-  if (reponse === "CLOCHER" || reponse === "LE CLOCHER") {
+  if (reponse === "2835") {
     retour.textContent =
-      "🎉 Bravo ! Le clocher permet d'accueillir les cloches. Tu as résolu l'énigme 2 ! ⭐";
+      "🎉 Bravo ! Tu as découvert le code du vieux gardien ! ⭐";
     retour.style.color = "green";
-    localStorage.setItem("egliseCodeValide", "true");
-    
-    const indice = document.getElementById("indiceVersArbre");
 
-if (indice) {
-  indice.style.display = "block";
-  indice.scrollIntoView({ behavior: "smooth", block: "center" });
-}
+    localStorage.setItem("arbreCodeValide", "true");
   } else {
     retour.textContent =
-      "❌ Pas tout à fait ! Réfléchis à l'endroit où sont installées les cloches.";
+      "❌ Ce n'est pas le bon code. Essaie encore !";
     retour.style.color = "red";
   }
 }
+
+function simulerArriveeArbre() {
+  const statut = document.getElementById("statutGPSArbre");
+
+  if (statut) {
+    statut.textContent = "🎉 Arrivée à l'arbre simulée !";
+  }
+
+  const enigme = document.getElementById("carteEnigme3");
+
+  if (enigme) {
+    enigme.style.display = "block";
+    enigme.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+}
+
 
 function verifierArriveeEglise() {
   const statut = document.getElementById("statutGPSEglise");
