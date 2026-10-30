@@ -93,6 +93,26 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 .map-village-card{background:#fbf2dc;border:1px solid #d7c69b;border-radius:12px;padding:14px}
 .map-village-card strong{display:block;margin-bottom:6px}
 @media(max-width:600px){#village-map{height:340px}}
+
+/* Présentation soignée du formulaire de contact des mairies */
+#dash-town-contact{max-width:1100px;margin:0 auto;padding:38px clamp(18px,4vw,48px)}
+#dash-town-contact>h3{font-size:clamp(27px,3vw,36px);color:var(--forest);margin-bottom:10px}
+#dash-town-contact>p{max-width:760px;line-height:1.7;color:#536253;margin:0 0 24px}
+#dash-town-contact .town-contact-card{max-width:780px;margin:0 auto;background:linear-gradient(145deg,#fffaf0,#f8efd9);border:1px solid #d7ad45;border-radius:22px;padding:clamp(20px,4vw,38px);box-shadow:0 12px 32px rgba(6,44,32,.10)}
+#dash-town-contact .town-contact-intro{background:var(--forest);color:#fff4cf;border-radius:15px;padding:20px 22px;margin-bottom:25px}
+#dash-town-contact .town-contact-intro .eyebrow{color:#e6c56f;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 7px}
+#dash-town-contact .town-contact-intro h4{font-size:23px;margin:0 0 7px;color:#fff0b5}
+#dash-town-contact .town-contact-intro p{margin:0;line-height:1.55;color:#f8edcf}
+#town-contact-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 18px;align-items:start}
+#town-contact-form label{display:block;font-weight:700;color:#254b36;margin:8px 0 0;font-size:15px}
+#town-contact-form input,#town-contact-form select,#town-contact-form textarea{display:block;width:100%;min-width:0;padding:12px 13px;border:1px solid #d4c49c;border-radius:10px;background:#fffefa;color:#183326;font:16px Georgia,"Times New Roman",serif;box-shadow:inset 0 1px 2px rgba(0,0,0,.03)}
+#town-contact-form input:focus,#town-contact-form select:focus,#town-contact-form textarea:focus{outline:3px solid rgba(215,173,69,.28);border-color:#b58b2f}
+#town-contact-form textarea{resize:vertical;min-height:145px;line-height:1.5}
+#town-contact-form label[for="town-message"],#town-contact-form #town-message,#town-contact-form button,#town-contact-status{grid-column:1/-1}
+#town-contact-form .primary-btn{justify-self:start;margin-top:8px;padding:14px 25px;border-radius:999px}
+#town-contact-status{background:#f1ead6;border-left:3px solid var(--gold);padding:12px 14px;border-radius:8px;line-height:1.5;margin:4px 0 0}
+@media(max-width:650px){#town-contact-form{grid-template-columns:1fr}#town-contact-form label[for="town-message"],#town-contact-form #town-message,#town-contact-form button,#town-contact-status{grid-column:1}#town-contact-form .primary-btn{width:100%}#dash-town-contact{padding:25px 14px}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -355,7 +375,12 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 <section class="dash-section hidden" id="dash-town-contact">
   <h3>✉️ Contact – Mairies</h3>
   <p>Vous représentez une mairie ou une commune et souhaitez proposer un parcours, obtenir des renseignements ou échanger autour du projet ? Écrivez-nous.</p>
-  <div class="feature" style="margin:18px 0">
+  <div class="town-contact-card">
+    <div class="town-contact-intro">
+      <p class="eyebrow">Espace partenaires</p>
+      <h4>Vous êtes une mairie ?</h4>
+      <p>Parlons ensemble de votre commune et imaginons un parcours pour faire découvrir ses richesses.</p>
+    </div>
     <form id="town-contact-form">
       <label for="town-name">Nom de la mairie / commune</label>
       <input id="town-name" type="text" required maxlength="120" placeholder="Ex. : Mairie de ...">
@@ -373,7 +398,7 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
       </select>
       <label for="town-message">Votre message</label>
       <textarea id="town-message" rows="5" maxlength="3000" required placeholder="Présentez votre demande…"></textarea>
-      <button class="primary-btn" type="submit">Préparer mon message</button>
+      <button class="primary-btn" type="submit">✉️ &nbsp; Préparer mon message</button>
       <p class="status" id="town-contact-status" role="status" aria-live="polite">Le formulaire sera relié à l’adresse de contact du projet dès qu’elle aura été renseignée.</p>
     </form>
   </div>
