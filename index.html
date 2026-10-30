@@ -418,7 +418,34 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 
   <button type="button" onclick="ouvrirGPSArbre()">
     📍 Me guider vers l'arbre
+    <button type="button" onclick="verifierArriveeArbre()">
+  📍 Je suis arrivé à l'arbre
+</button>
+
+<p id="statutGPSArbre" class="feedback" aria-live="polite"></p>
   </button>
+</article>
+      <!-- ENIGME 3 : CODE DU VIEUX GARDIEN -->
+<article class="riddle" id="carteEnigme3" style="display:none;">
+  <div class="big">🌳</div>
+  <h3>Énigme 3 — Le code du vieux gardien</h3>
+
+  <p>Tu as trouvé le vieux gardien ! Résous les quatre questions pour découvrir son code secret.</p>
+
+  <p>1. Combien de roues possède une bicyclette ?</p>
+  <p>2. Combien de pattes possède une araignée ?</p>
+  <p>3. Combien de côtés possède un triangle ?</p>
+  <p>4. Combien de doigts avons-nous sur une main ?</p>
+
+  <label for="codeArbre">🔐 Entre le code secret à 4 chiffres :</label>
+  <input id="codeArbre" type="text" inputmode="numeric"
+    maxlength="4" placeholder="Code secret">
+
+  <button type="button" onclick="verifierCodeArbre()">
+    Valider mon code
+  </button>
+
+  <p id="feedbackCodeArbre" class="feedback" aria-live="polite"></p>
 </article>
 
 
@@ -914,7 +941,68 @@ function verifierArriveeEglise() {
     }
   }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
 }
+function ouvrirGPSArbre() {
+  const latitude = 50.500444;
+  const longitude = 1.900556;
 
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=walking`;
+
+  window.open(url, "_blank");
+}
+  function verifierArriveeArbre() {
+  const statut = document.getElementById("statutGPSArbre");
+
+  if (!statut) return;
+
+  if (!navigator.geolocation) {
+    statut.textContent = "La localisation n'est pas disponible.";
+    return;
+  }
+    function verifierCodeArbre() {
+  const champ = document.getElementById("codeArbre");
+  const retour = document.getElementById("feedbackCodeArbre");
+
+  if (!champ || !retour) return;
+
+  const reponse = champ.value.trim();
+
+  if (reponse === "2835") {
+    retour.textContent =
+      "🎉 Bravo ! Tu as découvert le code du vieux gardien ! ⭐";
+    retour.style.color = "green";
+
+    localStorage.setItem("arbreCodeValide", "true");
+  } else {
+    retour.textContent =
+      "❌ Ce n'est pas le bon code. Essaie encore !";
+    retour.style.color = "red";
+  }
+}
+
+  statut.textContent = "Recherche de ta position près de l'arbre…";
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    const distance = distanceMetres(lat, lon, 50.500444, 1.900556);
+
+    if (distance <= 100) {
+      statut.textContent = "🎉 Bravo ! Tu as trouvé le vieux gardien ! 🌳";
+
+      const enigme = document.getElementById("carteEnigme3");
+      if (enigme) {
+        enigme.style.display = "block";
+        enigme.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    } else {
+      statut.textContent = "Tu es à environ " + Math.round(distance) +
+        " mètres de l'arbre. Continue ton chemin !";
+    }
+  }, function() {
+    statut.textContent = "Impossible de trouver ta position. Réessaie.";
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
 
 
 
