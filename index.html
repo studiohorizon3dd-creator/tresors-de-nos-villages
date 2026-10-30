@@ -438,8 +438,51 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
   <p id="feedbackCodeArbre" class="feedback" aria-live="polite"></p>
 </article>
 
+<!-- INDICE 4 : RUE DU BOUT DU BAS -->
+<article class="riddle" id="indiceRueBoutDuBas" style="display:none;">
+  <div class="big">🛤️</div>
+  <h3>Indice 4 — La rue du Bout du Bas</h3>
+  <p>Bravo, explorateur ! Tu as découvert le code du vieux gardien. La prochaine étape se trouve rue du Bout du Bas. Ouvre ton GPS et laisse-toi guider !</p>
+  <button type="button" onclick="ouvrirGPSRueBoutDuBas()">📍 Me guider vers la rue du Bout du Bas</button>
+  <button type="button" onclick="verifierArriveeRueBoutDuBas()">📍 Je suis arrivé à la rue</button>
+  <button type="button" onclick="simulerArriveeRueBoutDuBas()">🧪 Simuler mon arrivée à la rue</button>
+  <p id="statutGPSRueBoutDuBas" class="feedback" aria-live="polite"></p>
+</article>
 
-    </div><p>Les réponses validées donnent une étoile chacune. Le compteur est conservé dans ce navigateur.</p><button class="small-btn" onclick="showDashSection('dash-home')">Retour au tableau de bord</button></section>
+<!-- ENIGME 4 : NOM DE LA RUE -->
+<article class="riddle" id="carteEnigmeRue" style="display:none;">
+  <div class="big">🔎</div>
+  <h3>Énigme 4 — Le nom de cette rue</h3>
+  <p>Sauras-tu retrouver le nom de cette rue ?</p>
+  <label for="reponseRue">Écris le nom de la rue :</label>
+  <input id="reponseRue" type="text" placeholder="Ta réponse" autocomplete="off">
+  <button type="button" onclick="verifierNomRue()">Valider ma réponse</button>
+  <p id="feedbackRue" class="feedback" aria-live="polite"></p>
+</article>
+
+<!-- INDICE 5 : SALLE DES FETES -->
+<article class="riddle" id="indiceSalleDesFetes" style="display:none;">
+  <div class="big">🎉</div>
+  <h3>Indice 5 — La salle des fêtes</h3>
+  <p>Bravo, explorateur ! Tu as découvert le nom de cette rue et gagné une nouvelle étoile. Continuons notre découverte du village ! Il existe un endroit où les habitants se retrouvent pour partager des repas, danser et célébrer ensemble. Sauras-tu retrouver ce lieu de convivialité ? Ouvre ton GPS et laisse-toi guider !</p>
+  <button type="button" onclick="ouvrirGPSSalleDesFetes()">📍 Me guider vers la salle des fêtes</button>
+  <button type="button" onclick="verifierArriveeSalleDesFetes()">📍 Je suis arrivé à la salle des fêtes</button>
+  <button type="button" onclick="simulerArriveeSalleDesFetes()">🧪 Simuler mon arrivée à la salle des fêtes</button>
+  <p id="statutGPSSalleDesFetes" class="feedback" aria-live="polite"></p>
+</article>
+
+<!-- ENIGME 5 : SALLE DES FETES -->
+<article class="riddle" id="carteEnigmeSalleDesFetes" style="display:none;">
+  <div class="big">🏡</div>
+  <h3>Énigme 5 — Le lieu de convivialité</h3>
+  <p>Quel bâtiment accueille les habitants pour les fêtes, les repas et les événements du village ?</p>
+  <label for="reponseSalleDesFetes">Écris ta réponse :</label>
+  <input id="reponseSalleDesFetes" type="text" placeholder="Ta réponse" autocomplete="off">
+  <button type="button" onclick="verifierSalleDesFetes()">Valider ma réponse</button>
+  <p id="feedbackSalleDesFetes" class="feedback" aria-live="polite"></p>
+</article>
+
+    </div><p>Les réponses validées donnent une étoile chacune. Le compteur est conservé dans ce navigateur. Le compteur est conservé dans ce navigateur.</p><button class="small-btn" onclick="showDashSection('dash-home')">Retour au tableau de bord</button></section>
   </div>
 </section>
 
@@ -948,20 +991,20 @@ function verifierArriveeArbre() {
 function verifierCodeArbre() {
   const champ = document.getElementById("codeArbre");
   const retour = document.getElementById("feedbackCodeArbre");
-
   if (!champ || !retour) return;
 
-  const reponse = champ.value.trim();
-
-  if (reponse === "2835") {
-    retour.textContent =
-      "🎉 Bravo ! Tu as découvert le code du vieux gardien ! ⭐";
+  if (champ.value.trim() === "2835") {
+    retour.textContent = "🎉 Bravo ! Tu as découvert le code du vieux gardien ! ⭐";
     retour.style.color = "green";
-
     localStorage.setItem("arbreCodeValide", "true");
+    ajouterEtoileHumbert("vieux_gardien");
+    const indice = document.getElementById("indiceRueBoutDuBas");
+    if (indice) {
+      indice.style.display = "block";
+      indice.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   } else {
-    retour.textContent =
-      "❌ Ce n'est pas le bon code. Essaie encore !";
+    retour.textContent = "❌ Ce n'est pas le bon code. Essaie encore !";
     retour.style.color = "red";
   }
 }
@@ -981,6 +1024,138 @@ function simulerArriveeArbre() {
       behavior: "smooth",
       block: "center"
     });
+  }
+}
+
+
+// Outils communs aux nouvelles étapes de Humbert.
+function ajouterEtoileHumbert(cle) {
+  const progression = getProgress();
+  if (!progression.includes(cle)) {
+    progression.push(cle);
+    localStorage.setItem("progressionHumbertFacile", JSON.stringify(progression));
+  }
+  refreshProgress();
+}
+
+function distanceMetres(lat1, lon1, lat2, lon2) {
+  const rad = valeur => valeur * Math.PI / 180;
+  const dLat = rad(lat2 - lat1);
+  const dLon = rad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function normaliserReponseHumbert(valeur) {
+  return valeur.trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function ouvrirGPSRueBoutDuBas() {
+  window.open("https://www.google.com/maps/dir/?api=1&destination=50.502306%2C1.901194&travelmode=walking", "_blank", "noopener");
+}
+
+function afficherEnigmeRue() {
+  const enigme = document.getElementById("carteEnigmeRue");
+  if (enigme) {
+    enigme.style.display = "block";
+    enigme.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function simulerArriveeRueBoutDuBas() {
+  if (!adminAccessGranted || localStorage.getItem("modeTestAventure") !== "true") {
+    alert("Le mode test administrateur n’est pas activé.");
+    return;
+  }
+  document.getElementById("statutGPSRueBoutDuBas").textContent = "🧪 Arrivée rue du Bout du Bas simulée !";
+  afficherEnigmeRue();
+}
+
+function verifierArriveeRueBoutDuBas() {
+  const statut = document.getElementById("statutGPSRueBoutDuBas");
+  if (!navigator.geolocation) { statut.textContent = "La localisation n’est pas disponible."; return; }
+  statut.textContent = "Recherche de ta position rue du Bout du Bas…";
+  navigator.geolocation.getCurrentPosition(position => {
+    const distance = distanceMetres(position.coords.latitude, position.coords.longitude, 50.502306, 1.901194);
+    if (distance <= 100) {
+      statut.textContent = "🎉 Tu es arrivé rue du Bout du Bas ! Résous l’énigme.";
+      afficherEnigmeRue();
+    } else {
+      statut.textContent = "Tu es à environ " + Math.round(distance) + " mètres de la rue du Bout du Bas. Rapproche-toi puis réessaie.";
+    }
+  }, () => { statut.textContent = "Impossible de trouver ta position. Vérifie le GPS puis réessaie."; }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
+
+function verifierNomRue() {
+  const champ = document.getElementById("reponseRue");
+  const retour = document.getElementById("feedbackRue");
+  if (!champ || !retour) return;
+  const reponse = normaliserReponseHumbert(champ.value);
+  if (reponse === "BOUT DU BAS" || reponse === "RUE DU BOUT DU BAS") {
+    retour.textContent = "🎉 Bravo ! Tu as retrouvé le nom de la rue et gagné une étoile ! ⭐";
+    retour.style.color = "green";
+    localStorage.setItem("rueBoutDuBasValidee", "true");
+    ajouterEtoileHumbert("rue_bout_du_bas");
+    const indice = document.getElementById("indiceSalleDesFetes");
+    if (indice) {
+      indice.style.display = "block";
+      indice.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  } else {
+    retour.textContent = "🔎 Pas tout à fait. Observe bien le nom de la rue et réessaie.";
+    retour.style.color = "red";
+  }
+}
+
+function ouvrirGPSSalleDesFetes() {
+  window.open("https://www.google.com/maps/dir/?api=1&destination=50.5049379%2C1.9064618&travelmode=walking", "_blank", "noopener");
+}
+
+function afficherEnigmeSalleDesFetes() {
+  const enigme = document.getElementById("carteEnigmeSalleDesFetes");
+  if (enigme) {
+    enigme.style.display = "block";
+    enigme.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function simulerArriveeSalleDesFetes() {
+  if (!adminAccessGranted || localStorage.getItem("modeTestAventure") !== "true") {
+    alert("Le mode test administrateur n’est pas activé.");
+    return;
+  }
+  document.getElementById("statutGPSSalleDesFetes").textContent = "🧪 Arrivée à la salle des fêtes simulée !";
+  afficherEnigmeSalleDesFetes();
+}
+
+function verifierArriveeSalleDesFetes() {
+  const statut = document.getElementById("statutGPSSalleDesFetes");
+  if (!navigator.geolocation) { statut.textContent = "La localisation n’est pas disponible."; return; }
+  statut.textContent = "Recherche de ta position près de la salle des fêtes…";
+  navigator.geolocation.getCurrentPosition(position => {
+    const distance = distanceMetres(position.coords.latitude, position.coords.longitude, 50.5049379, 1.9064618);
+    if (distance <= 100) {
+      statut.textContent = "🎉 Tu es arrivé près de la salle des fêtes ! Voici la dernière énigme.";
+      afficherEnigmeSalleDesFetes();
+    } else {
+      statut.textContent = "Tu es à environ " + Math.round(distance) + " mètres de la salle des fêtes. Rapproche-toi puis réessaie.";
+    }
+  }, () => { statut.textContent = "Impossible de trouver ta position. Vérifie le GPS puis réessaie."; }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
+
+function verifierSalleDesFetes() {
+  const champ = document.getElementById("reponseSalleDesFetes");
+  const retour = document.getElementById("feedbackSalleDesFetes");
+  if (!champ || !retour) return;
+  const reponse = normaliserReponseHumbert(champ.value);
+  if (reponse === "SALLE DES FETES" || reponse === "LA SALLE DES FETES") {
+    retour.textContent = "🎉 Bravo ! Tu as trouvé la salle des fêtes et gagné une étoile ! ⭐ Tu as terminé cette partie du parcours de Humbert !";
+    retour.style.color = "green";
+    localStorage.setItem("salleDesFetesValidee", "true");
+    ajouterEtoileHumbert("salle_des_fetes");
+  } else {
+    retour.textContent = "🔎 Pas tout à fait. Pense au lieu où les habitants se réunissent pour les fêtes et les repas.";
+    retour.style.color = "red";
   }
 }
 
