@@ -36,7 +36,6 @@ h1{font-size:clamp(34px,4vw,60px);line-height:1.02;margin:0 0 18px}
 .section-title{text-align:center;font-size:clamp(25px,3vw,36px);margin:0 0 10px}
 .section-intro{text-align:center;max-width:700px;margin:0 auto 26px;line-height:1.7;color:#566354}
 .feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-
 /* Présentation détaillée des formules */
 .formula-intro{max-width:850px;line-height:1.7;color:#536253;margin-bottom:22px}
 .formula-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:stretch}
@@ -66,6 +65,7 @@ h1{font-size:clamp(34px,4vw,60px);line-height:1.02;margin:0 0 18px}
 .formula-body button{margin-top:12px}
 .formula-body button:disabled{opacity:.65;cursor:not-allowed}
 @media(max-width:900px){.formula-grid{grid-template-columns:1fr}}
+
 
 .feature{background:#fffaf0;border:1px solid #ead7a7;border-radius:18px;padding:26px 18px;text-align:center;box-shadow:0 5px 15px #4b3a1110}
 .feature-icon{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;margin:-4px auto 16px;background:var(--forest);border:3px solid var(--gold);color:#ffda69;font-size:36px}
@@ -261,6 +261,19 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
         <p><strong>Adresse e-mail :</strong> <span id="player-email">Chargement...</span></p>
 
         <p><strong>Mon compte :</strong> <span id="player-account-status">Connecté</span></p>
+    </article>
+
+    <article class="feature" id="leaderboard-preference-card">
+      <div class="feature-icon">🏆</div>
+      <h3>Le classement des explorateurs</h3>
+      <p>Accepter d’apparaître dans le classement avec ton prénom et le nombre de villages découverts.</p>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+        <input type="checkbox" id="leaderboard-opt-in" onchange="saveLeaderboardPreference(this.checked)">
+        <span>Participer au classement</span>
+      </label>
+      <p id="leaderboard-preference-status" aria-live="polite">Chargement de ton choix…</p>
+      <button type="button" class="small-btn" onclick="loadLeaderboard()">Voir le classement</button>
+      <ol id="leaderboard-list" aria-live="polite" style="padding-left:22px;margin-top:14px;"><li>Le classement sera chargé ici.</li></ol>
     </article>
 
    <article class="feature">
@@ -491,6 +504,7 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
   <p class="formula-safety">⏱️ Les durées sont indicatives. Les distances seront ajoutées lorsque chaque parcours et ses étapes GPS seront définis.</p>
   <p id="formula-status" class="status" aria-live="polite"></p>
 </section>
+    
     <section class="dash-section hidden" id="dash-help">
       <h3>❔ Centre d’aide</h3>
       <p>Voici les réponses aux questions les plus fréquentes.</p>
@@ -827,6 +841,7 @@ form.addEventListener("submit", async (event) => {
     if (result.error) throw new Error(result.error.message || "Inscription impossible.");
     status.textContent = "Compte créé. Bienvenue dans l’aventure !";
     showDashboard(name, email);
+    window.loadExplorerProfile?.();
   } catch (error) {
     status.textContent = error.message || "Une erreur est survenue. Réessaie.";
   }
@@ -850,6 +865,7 @@ showDashboard(
   user?.name || email.split("@")[0],
   user?.email || email
 );
+    window.loadExplorerProfile?.();
   } catch (error) {
     status.textContent = error.message || "Impossible de se connecter.";
   }
@@ -882,6 +898,82 @@ async function adminApi(path, options = {}) {
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
   return data;
 }
+
+async function profileApi(path, options = {}) {
+  const token = await getAdminBearerToken();
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", ...(options.headers || {}) }
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
+  return data;
+}
+
+window.loadExplorerProfile = async function() {
+  const checkbox = document.getElementById("leaderboard-opt-in");
+  const status = document.getElementById("leaderboard-preference-status");
+  if (!checkbox || !status) return;
+  try {
+    const data = await profileApi("/api/profile");
+    checkbox.checked = data.profile?.leaderboard_opt_in === true;
+    status.textContent = checkbox.checked ? "Tu participes au classement." : "Tu ne participes pas au classement.";
+  } catch (error) {
+    status.textContent = error.message || "Impossible de charger ton choix.";
+  }
+};
+
+window.loadLeaderboard = async function() {
+  const list = document.getElementById("leaderboard-list");
+  if (!list) return;
+  list.replaceChildren();
+  const loading = document.createElement("li");
+  loading.textContent = "Chargement du classement…";
+  list.appendChild(loading);
+  try {
+    const response = await fetch(`${API_BASE}/api/leaderboard`, { headers: { "Accept": "application/json" }, cache: "no-store" });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
+    list.replaceChildren();
+    if (!data.leaderboard?.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "Aucun explorateur n'est encore inscrit au classement.";
+      list.appendChild(empty);
+      return;
+    }
+    data.leaderboard.forEach((player, index) => {
+      const item = document.createElement("li");
+      item.textContent = `${index + 1}. ${player.pseudo} — ${player.villages_count} village(s)`;
+      list.appendChild(item);
+    });
+  } catch (error) {
+    list.replaceChildren();
+    const item = document.createElement("li");
+    item.textContent = error.message || "Impossible de charger le classement.";
+    list.appendChild(item);
+  }
+};
+
+window.saveLeaderboardPreference = async function(enabled) {
+  const checkbox = document.getElementById("leaderboard-opt-in");
+  const status = document.getElementById("leaderboard-preference-status");
+  if (!checkbox || !status) return;
+  checkbox.disabled = true;
+  status.textContent = "Enregistrement…";
+  try {
+    const data = await profileApi("/api/profile/leaderboard", {
+      method: "PATCH", body: JSON.stringify({ leaderboard_opt_in: enabled === true })
+    });
+    checkbox.checked = data.profile?.leaderboard_opt_in === true;
+    status.textContent = checkbox.checked ? "Ton prénom apparaîtra dans le classement." : "Tu as quitté le classement.";
+  } catch (error) {
+    checkbox.checked = !enabled;
+    status.textContent = error.message || "Impossible d'enregistrer ton choix.";
+  } finally {
+    checkbox.disabled = false;
+  }
+};
+
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
   const supportArea = document.getElementById("admin-support-area");
@@ -1033,6 +1125,7 @@ function showDashSection(id){
   if(!selected){console.warn("Rubrique introuvable :", id);return;}
   selected.classList.remove("hidden");
   if(id === "dash-village-map") actualiserCarteVillages();
+  if(id === "dash-profile") window.loadExplorerProfile?.();
   document.querySelectorAll("#dashboard .nav-btn").forEach(btn=>btn.classList.remove("active"));
   const clickedButton = Array.from(document.querySelectorAll("#dashboard .nav-btn"))
     .find(btn => (btn.getAttribute("onclick") || "").includes("'" + id + "'"));
