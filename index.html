@@ -537,10 +537,9 @@ const auth = createAuthClient(AUTH_URL);
 
     if (session?.user) {
       showDashboard(
-        session.user.name ||
-        session.user.email?.split("@")[0] ||
-        "explorateur"
-      );
+  session.user.name || session.user.email?.split("@")[0] || "explorateur",
+  session.user.email || ""
+);
     }
   } catch (error) {
     console.error("Restauration de session :", error);
