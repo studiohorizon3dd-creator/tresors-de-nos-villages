@@ -415,15 +415,19 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     alt="L'arbre à retrouver"
     style="width:100%;max-width:500px;border-radius:12px;display:block;margin:15px auto;"
   >
+<button type="button" onclick="ouvrirGPSArbre()">
+  📍 Me guider vers l'arbre
+</button>
 
-  <button type="button" onclick="ouvrirGPSArbre()">
-    📍 Me guider vers l'arbre
-    <button type="button" onclick="verifierArriveeArbre()">
+<button type="button" onclick="verifierArriveeArbre()">
   📍 Je suis arrivé à l'arbre
 </button>
 
+<button type="button" onclick="simulerArriveeArbre()">
+  🧪 Arrivée à l'arbre simulée
+</button>
+
 <p id="statutGPSArbre" class="feedback" aria-live="polite"></p>
-  </button>
 </article>
       <!-- ENIGME 3 : CODE DU VIEUX GARDIEN -->
 <article class="riddle" id="carteEnigme3" style="display:none;">
@@ -442,6 +446,7 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     maxlength="4" placeholder="Code secret">
 
   <button type="button" onclick="verifierCodeArbre()">
+
     Valider mon code
   </button>
 
