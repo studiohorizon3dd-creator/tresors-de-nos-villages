@@ -990,6 +990,23 @@ function ouvrirGPSArbre() {
     retour.style.color = "red";
   }
 }
+    function simulerArriveeArbre() {
+  const statut = document.getElementById("statutGPSArbre");
+
+  if (statut) {
+    statut.textContent = "🎉 Arrivée à l'arbre simulée !";
+  }
+
+  const enigme = document.getElementById("carteEnigme3");
+
+  if (enigme) {
+    enigme.style.display = "block";
+    enigme.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+}
 
   statut.textContent = "Recherche de ta position près de l'arbre…";
 
