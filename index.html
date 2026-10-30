@@ -863,6 +863,20 @@ function refreshProgress(){
 let carteGPS = null;
 let marqueurJoueurGPS = null;
 
+// Calcule la distance en mètres entre deux coordonnées GPS.
+function distanceMetres(lat1, lon1, lat2, lon2) {
+  const rayonTerre = 6371000;
+  const radians = valeur => valeur * Math.PI / 180;
+  const dLat = radians(lat2 - lat1);
+  const dLon = radians(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(radians(lat1)) * Math.cos(radians(lat2)) *
+    Math.sin(dLon / 2) ** 2;
+
+  return rayonTerre * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 function initialiserCarte(){
   if(carteGPS) { carteGPS.invalidateSize(); return; }
   const zoneCarte = document.getElementById("carteGPS");
@@ -947,13 +961,7 @@ function verifierArriveeMairie(){
     else statut.textContent="La recherche GPS a pris trop de temps. Réessaie dans un instant.";
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
-function verifierArriveeEglise(){
-  const rad=v=>v*Math.PI/180;
-  const dLat=rad(lat2-lat1),dLon=rad(lon2-lon1);
-  const a=Math.sin(dLat/2)**2+Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2;
-  return 6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-  
+
 
 function simulerArriveeEglise() {
   if (
@@ -1158,79 +1166,6 @@ function ouvrirGPSArbre() {
 
   window.open(url, "_blank");
 }
-  function verifierArriveeArbre() {
-  const statut = document.getElementById("statutGPSArbre");
-
-  if (!statut) return;
-
-  if (!navigator.geolocation) {
-    statut.textContent = "La localisation n'est pas disponible.";
-    return;
-  }
-    function verifierCodeArbre() {
-  const champ = document.getElementById("codeArbre");
-  const retour = document.getElementById("feedbackCodeArbre");
-
-  if (!champ || !retour) return;
-
-  const reponse = champ.value.trim();
-
-  if (reponse === "2835") {
-    retour.textContent =
-      "🎉 Bravo ! Tu as découvert le code du vieux gardien ! ⭐";
-    retour.style.color = "green";
-
-    localStorage.setItem("arbreCodeValide", "true");
-  } else {
-    retour.textContent =
-      "❌ Ce n'est pas le bon code. Essaie encore !";
-    retour.style.color = "red";
-  }
-}
-    function simulerArriveeArbre() {
-  const statut = document.getElementById("statutGPSArbre");
-
-  if (statut) {
-    statut.textContent = "🎉 Arrivée à l'arbre simulée !";
-  }
-
-  const enigme = document.getElementById("carteEnigme3");
-
-  if (enigme) {
-    enigme.style.display = "block";
-    enigme.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  }
-}
-
-  statut.textContent = "Recherche de ta position près de l'arbre…";
-
-  navigator.geolocation.getCurrentPosition(function(position) {
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-
-    const distance = distanceMetres(lat, lon, 50.500444, 1.900556);
-
-    if (distance <= 100) {
-      statut.textContent = "🎉 Bravo ! Tu as trouvé le vieux gardien ! 🌳";
-
-      const enigme = document.getElementById("carteEnigme3");
-      if (enigme) {
-        enigme.style.display = "block";
-        enigme.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    } else {
-      statut.textContent = "Tu es à environ " + Math.round(distance) +
-        " mètres de l'arbre. Continue ton chemin !";
-    }
-  }, function() {
-    statut.textContent = "Impossible de trouver ta position. Réessaie.";
-  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
-}
-
-
 
 async function renderSupportHistory() {
   const target = document.getElementById("support-history");
