@@ -562,7 +562,7 @@ form.addEventListener("submit", async (event) => {
     const result = await auth.signUp.email({name,email,password});
     if (result.error) throw new Error(result.error.message || "Inscription impossible.");
     status.textContent = "Compte créé. Bienvenue dans l’aventure !";
-    showDashboard(name);
+    showDashboard(name, email);
   } catch (error) {
     status.textContent = error.message || "Une erreur est survenue. Réessaie.";
   }
