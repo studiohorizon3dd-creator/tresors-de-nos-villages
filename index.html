@@ -534,13 +534,14 @@ const auth = createAuthClient(AUTH_URL);
     const result = await auth.getSession();
     console.log("RESULTAT SESSION :", result);
     const session = result?.data?.session ?? result?.data;
+    const user = result?.data?.user ?? session?.user;
 
-    if (session?.user) {
-      showDashboard(
-  session.user.name || session.user.email?.split("@")[0] || "explorateur",
-  session.user.email || ""
-);
-    }
+   if (user) {
+  showDashboard(
+    user.name || "explorateur",
+    user.email || ""
+  );
+}
   } catch (error) {
     console.error("Restauration de session :", error);
   }
