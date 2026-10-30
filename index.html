@@ -755,8 +755,11 @@ function chooseFormula(level){
 }
 function getProgress(){try{return JSON.parse(localStorage.getItem("progressionHumbertFacile")||"[]")}catch(e){return []}}
 function refreshProgress(){
-  const p=getProgress(), count=Math.min(p.length,10);
-    const profileCount = document.getElementById("profile-stars-count");
+  const p = getProgress();
+  const count = Math.min(p.length, 10);
+
+  // Progression du profil
+  const profileCount = document.getElementById("profile-stars-count");
   if(profileCount) profileCount.textContent = count + " / 10 ⭐";
 
   const profileFill = document.getElementById("profile-progress-fill");
@@ -768,6 +771,35 @@ function refreshProgress(){
       ? "Bravo ! Toutes les étoiles sont gagnées ! 🎉"
       : "Encore " + (10 - count) + " étoile(s) à gagner !";
   }
+
+  // Progression de l'accueil
+  const text = document.getElementById("progress-text");
+  if(text) text.textContent = count + " / 10 étoiles";
+
+  const fill = document.getElementById("progress-fill");
+  if(fill) fill.style.width = (count * 10) + "%";
+
+  const summary = document.getElementById("stars-summary");
+  if(summary) summary.textContent = "⭐ " + count + " / 10";
+
+  // Badges
+  const badgeHTML = count >= 10
+    ? '<div class="badge-card"><span>🏅</span>Explorateur<br><small>Badge gagné !</small></div>'
+    : '<div class="badge-card"><span>🔒</span>Explorateur<br><small>Encore ' + (10-count) + ' étoile(s)</small></div>';
+
+  const list = document.getElementById("badge-list");
+  if(list) list.innerHTML = badgeHTML;
+
+  const profileBadges = document.getElementById("profile-badge-list");
+  if(profileBadges) profileBadges.innerHTML = badgeHTML;
+
+  const badgeMessage = document.getElementById("profile-badge-message");
+  if(badgeMessage) {
+    badgeMessage.textContent = count >= 10
+      ? "Félicitations ! Tu as obtenu ton badge Explorateur ! 🎉"
+      : "Continue tes aventures pour obtenir ton premier badge !";
+  }
+}
   const text=document.getElementById("progress-text");
   if(text)text.textContent=count+" / 10 étoiles";
   const fill=document.getElementById("progress-fill");if(fill)fill.style.width=(count*10)+"%";
