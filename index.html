@@ -944,8 +944,7 @@ function simulerArriveeArbre() {
 }
 
 
-function verifierArriveeEglise() {
-  function verifierCodeEglise() {
+function verifierCodeEglise() {
   const champ = document.getElementById("codeEglise");
   const retour = document.getElementById("feedbackCodeEglise");
 
@@ -972,6 +971,7 @@ function verifierArriveeEglise() {
     retour.style.color = "red";
   }
 }
+  function verifierArriveeEglise() {
   const statut = document.getElementById("statutGPSEglise");
 
   if (!navigator.geolocation) {
