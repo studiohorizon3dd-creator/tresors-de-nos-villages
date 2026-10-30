@@ -800,6 +800,7 @@ function refreshProgress(){
       : "Continue tes aventures pour obtenir ton premier badge !";
   }
 }
+  function checkAnswer(number){
   const id="answer"+number, feedback=document.getElementById("feedback"+number);
   const input=document.getElementById(id);
   if(!input || !feedback) return;
