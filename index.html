@@ -185,11 +185,22 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <p id="profile-progress-message">Continue tes aventures pour gagner des étoiles !</p>
 </article>
 
-        <article class="feature">
-            <div class="feature-icon">🏅</div>
-            <h3>Mes badges</h3>
-            <p>Retrouve les récompenses que tu as obtenues.</p>
-        </article>
+       <article class="feature">
+    <div class="feature-icon">🏅</div>
+    <h3>Mes badges</h3>
+
+    <div id="profile-badge-list">
+        <div class="badge-card">
+            <span>🔒</span>
+            Explorateur
+            <small>À débloquer : 10 étoiles</small>
+        </div>
+    </div>
+
+    <p id="profile-badge-message">
+        Continue tes aventures pour obtenir ton premier badge !
+    </p>
+</article>
 
         <article class="feature">
             <div class="feature-icon">🗺️</div>
@@ -762,6 +773,20 @@ function refreshProgress(){
   const fill=document.getElementById("progress-fill");if(fill)fill.style.width=(count*10)+"%";
   const summary=document.getElementById("stars-summary");if(summary)summary.textContent="⭐ "+count+" / 10";
   const list=document.getElementById("badge-list");
+    const profileBadges = document.getElementById("profile-badge-list");
+  const badgeMessage = document.getElementById("profile-badge-message");
+
+  if(profileBadges) {
+    profileBadges.innerHTML = count >= 10
+      ? '<div class="badge-card"><span>🏅</span>Explorateur<br><small>Badge gagné !</small></div>'
+      : '<div class="badge-card"><span>🔒</span>Explorateur<br><small>Encore '+(10-count)+' étoile(s)</small></div>';
+  }
+
+  if(badgeMessage) {
+    badgeMessage.textContent = count >= 10
+      ? "Félicitations ! Tu as obtenu ton badge Explorateur ! 🎉"
+      : "Continue tes aventures pour obtenir ton premier badge !";
+  }
   if(list)list.innerHTML=count>=10?'<div class="badge-card"><span>🏅</span>Explorateur<br><small>Badge gagné</small></div>':'<div class="badge-card"><span>🔒</span>Explorateur<br><small>Encore '+(10-count)+' étoile(s)</small></div>';
 }
 function checkAnswer(number){
