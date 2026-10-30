@@ -161,6 +161,8 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
       <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
       <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
       <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
+      <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
+      <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
       <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
       <button class="nav-btn" onclick="showDashSection('dash-admin-info')">⚙ &nbsp; Administration</button>
       <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
@@ -312,6 +314,19 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <section class="dash-section hidden" id="dash-help">
       <h3>❔ Centre d’aide</h3>
       <p>Voici les réponses aux questions les plus fréquentes.</p>
+      <article class="feature" style="margin:18px 0">
+        <div class="feature-icon">🧭</div>
+        <h3>Comment jouer ?</h3>
+        <ol style="line-height:1.8;padding-left:22px">
+          <li>Choisis un village et vérifie que son aventure est disponible.</li>
+          <li>Ouvre l’aventure et lis le premier indice.</li>
+          <li>Utilise le GPS pour rejoindre le lieu indiqué. Autorise la localisation sur ton téléphone.</li>
+          <li>Une fois arrivé, observe les alentours et réponds à l’énigme.</li>
+          <li>Valide ta réponse pour poursuivre le parcours et gagner des étoiles.</li>
+          <li>À la fin, retrouve ton tampon dans ton passeport et consulte tes badges et ton journal d’aventure.</li>
+        </ol>
+        <p><strong>Conseils :</strong> reste sur les chemins et espaces publics, respecte les lieux et la tranquillité des habitants. Ne pénètre jamais dans une propriété privée.</p>
+      </article>
       <details class="help-item"><summary>Comment commencer une aventure ?</summary><p>Choisis la formule Facile, ouvre l’aventure de Humbert et réponds à la première énigme.</p></details>
       <details class="help-item"><summary>Comment utiliser le GPS ?</summary><p>Autorise la localisation dans ton navigateur. Pour le test réel, utilise de préférence un téléphone avec le GPS activé et ouvre le site en HTTPS.</p></details>
       <details class="help-item"><summary>Comment trouver l’église ?</summary><p>Après validation de la mairie et confirmation de ton arrivée, lis l’indice du clocher et ouvre l’itinéraire sur la carte.</p></details>
@@ -320,6 +335,50 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     </section>
 
   
+<section class="dash-section hidden" id="dash-news">
+  <h3>📰 Actualités</h3>
+  <p>Retrouve ici les nouvelles de Trésors de nos Villages et les prochains parcours à découvrir.</p>
+  <article class="feature" style="margin:18px 0">
+    <p class="eyebrow">Le projet</p>
+    <h3>Bienvenue sur Trésors de nos Villages !</h3>
+    <p>Le site évolue pour vous faire découvrir les villages autrement, grâce à des parcours, des indices et des énigmes à résoudre.</p>
+    <p class="status">Première aventure : Humbert, dans le Pas-de-Calais.</p>
+  </article>
+  <article class="feature" style="margin:18px 0">
+    <p class="eyebrow">Prochainement</p>
+    <h3>De nouveaux villages en préparation</h3>
+    <p>D’autres communes pourront bientôt rejoindre la carte. Les parcours seront annoncés ici lorsqu’ils seront prêts.</p>
+    <p class="status">Reviens consulter cette page pour suivre les nouveautés !</p>
+  </article>
+</section>
+
+<section class="dash-section hidden" id="dash-town-contact">
+  <h3>✉️ Contact – Mairies</h3>
+  <p>Vous représentez une mairie ou une commune et souhaitez proposer un parcours, obtenir des renseignements ou échanger autour du projet ? Écrivez-nous.</p>
+  <div class="feature" style="margin:18px 0">
+    <form id="town-contact-form">
+      <label for="town-name">Nom de la mairie / commune</label>
+      <input id="town-name" type="text" required maxlength="120" placeholder="Ex. : Mairie de ...">
+      <label for="town-person">Votre nom et fonction</label>
+      <input id="town-person" type="text" maxlength="120" placeholder="Nom, fonction (facultatif)">
+      <label for="town-email">Votre adresse e-mail</label>
+      <input id="town-email" type="email" required maxlength="180" placeholder="nom@commune.fr">
+      <label for="town-subject">Objet de votre demande</label>
+      <select id="town-subject" required>
+        <option value="">Choisissez un sujet</option>
+        <option>Proposer ma commune</option>
+        <option>Demander des informations</option>
+        <option>Échanger sur un parcours</option>
+        <option>Autre demande</option>
+      </select>
+      <label for="town-message">Votre message</label>
+      <textarea id="town-message" rows="5" maxlength="3000" required placeholder="Présentez votre demande…"></textarea>
+      <button class="primary-btn" type="submit">Préparer mon message</button>
+      <p class="status" id="town-contact-status" role="status" aria-live="polite">Le formulaire sera relié à l’adresse de contact du projet dès qu’elle aura été renseignée.</p>
+    </form>
+  </div>
+</section>
+
 <section class="dash-section hidden" id="dash-support">
   <h3>✉ Poser une question</h3>
   <p>Décris le problème rencontré. Tu pourras retrouver ici les demandes liées à ton compte.</p>
@@ -736,6 +795,30 @@ function returnHome(){
 }
 let adminAccessGranted = false;
 window.setAdminAccessGranted = function(value){ adminAccessGranted = value === true; };
+document.addEventListener("DOMContentLoaded", function(){
+  const form = document.getElementById("town-contact-form");
+  if(!form) return;
+  form.addEventListener("submit", async function(event){
+    event.preventDefault();
+    const values = [
+      "Contact mairie – Trésors de nos Villages",
+      "Commune : " + document.getElementById("town-name").value.trim(),
+      "Nom et fonction : " + (document.getElementById("town-person").value.trim() || "Non précisé"),
+      "E-mail : " + document.getElementById("town-email").value.trim(),
+      "Objet : " + document.getElementById("town-subject").value,
+      "",
+      document.getElementById("town-message").value.trim()
+    ].join("\\n");
+    const status = document.getElementById("town-contact-status");
+    try {
+      await navigator.clipboard.writeText(values);
+      status.textContent = "Message copié ! Il ne reste qu’à le coller dans un e-mail. L’adresse de contact du projet reste à configurer pour permettre un envoi direct depuis le site.";
+    } catch(error) {
+      status.textContent = "Ton message est prêt. La copie automatique n’a pas fonctionné ; l’adresse de contact du projet reste à configurer pour l’envoi.";
+    }
+  });
+});
+
 function showDashSection(id){
   if(id === "dash-admin-info" && !adminAccessGranted){
     if(window.openAdminPanel) window.openAdminPanel();
@@ -745,7 +828,7 @@ function showDashSection(id){
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
   "dash-home", "dash-profile", "dash-adventures", "dash-village-map", "dash-badges",
-  "dash-stars", "dash-formulas", "dash-help", "dash-support",
+  "dash-stars", "dash-formulas", "dash-help", "dash-news", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
 ];
