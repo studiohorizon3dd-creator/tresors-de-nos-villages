@@ -683,10 +683,22 @@ function showAccount(){
   document.getElementById("account-area").style.display="block";
   document.getElementById("account-area").scrollIntoView({behavior:"smooth",block:"start"});
 }
-function showDashboard(name){
+function showDashboard(name, email){
   document.getElementById("landing").style.display="none";
   document.getElementById("dashboard").style.display="block";
-  document.getElementById("profile-text").textContent="Bienvenue "+(name||"explorateur")+" !";
+
+  document.getElementById("profile-text").textContent =
+    "Bienvenue " + (name || "explorateur") + " !";
+
+  document.getElementById("player-firstname").textContent =
+    name || "Non renseigné";
+
+  document.getElementById("player-email").textContent =
+    email || "Non renseignée";
+
+  document.getElementById("player-account-status").textContent =
+    "Compte connecté";
+
   refreshProgress();
   window.scrollTo({top:0,behavior:"smooth"});
 }
