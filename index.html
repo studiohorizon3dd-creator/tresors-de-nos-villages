@@ -113,6 +113,18 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 #town-contact-status{background:#f1ead6;border-left:3px solid var(--gold);padding:12px 14px;border-radius:8px;line-height:1.5;margin:4px 0 0}
 @media(max-width:650px){#town-contact-form{grid-template-columns:1fr}#town-contact-form label[for="town-message"],#town-contact-form #town-message,#town-contact-form button,#town-contact-status{grid-column:1}#town-contact-form .primary-btn{width:100%}#dash-town-contact{padding:25px 14px}}
 
+
+/* Galerie des villages */
+.village-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;margin:24px 0}
+.village-gallery-card{overflow:hidden;background:#fffaf0;border:1px solid #e5d3a4;border-radius:18px;box-shadow:0 8px 22px rgba(6,44,32,.08)}
+.village-gallery-art{height:155px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff0b5;background:linear-gradient(135deg,#062c20,#246344);border-bottom:3px solid #d7ad45}
+.village-gallery-art span{font-size:48px;line-height:1.2}.village-gallery-art small{font-size:11px;letter-spacing:2px;font-weight:bold;margin-top:8px;color:#f4d987}
+.sempy-art{background:linear-gradient(135deg,#315c42,#87945c)}
+.village-gallery-body{padding:20px}.village-gallery-body h3{font-size:25px;margin:10px 0 4px;color:#123d2b}.village-gallery-body p{line-height:1.55}.village-gallery-body .primary-btn,.village-gallery-body .small-btn{margin-top:8px}
+.village-status{display:inline-block;font-size:12px;font-weight:bold;padding:6px 10px;border-radius:30px}.village-status.available{background:#e3efdf;color:#245b35}.village-status.preparing{background:#f5edcf;color:#78601e}
+.village-proposal-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:22px;background:#062c20;color:#fff0b5;border:1px solid #d7ad45;border-radius:18px;margin-top:26px}.village-proposal-banner h3{margin:0 0 8px;color:#fff0b5}.village-proposal-banner p{margin:0;color:#f6edcf;line-height:1.5}
+@media(max-width:650px){.village-proposal-banner{align-items:stretch}.village-proposal-banner .primary-btn{width:100%}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -179,6 +191,8 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
       <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
       <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
       <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
+      <button class="nav-btn" onclick="showDashSection('dash-village-gallery')">🏡 &nbsp; Galerie des villages</button>
+      <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
       <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
       <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
       <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
@@ -370,6 +384,37 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <p>D’autres communes pourront bientôt rejoindre la carte. Les parcours seront annoncés ici lorsqu’ils seront prêts.</p>
     <p class="status">Reviens consulter cette page pour suivre les nouveautés !</p>
   </article>
+</section>
+
+<section class="dash-section hidden" id="dash-village-gallery">
+  <h3>🏡 Galerie des villages</h3>
+  <p>Chaque commune a son histoire, ses paysages et ses petits trésors. Découvre les villages qui font déjà partie du projet et ceux qui nous rejoindront bientôt.</p>
+  <div class="village-gallery-grid">
+    <article class="village-gallery-card">
+      <div class="village-gallery-art humbert-art"><span>🏡</span><small>PREMIÈRE AVENTURE</small></div>
+      <div class="village-gallery-body">
+        <span class="village-status available">● Aventure disponible</span>
+        <h3>Humbert</h3>
+        <p>Pas-de-Calais</p>
+        <p>Pars à la découverte de Humbert à travers ses indices et ses énigmes.</p>
+        <button class="primary-btn" type="button" onclick="showDashSection('dash-adventures')">Découvrir l’aventure</button>
+      </div>
+    </article>
+    <article class="village-gallery-card">
+      <div class="village-gallery-art sempy-art"><span>🌿</span><small>BIENTÔT</small></div>
+      <div class="village-gallery-body">
+        <span class="village-status preparing">● Parcours en préparation</span>
+        <h3>Sempy</h3>
+        <p>Pas-de-Calais</p>
+        <p>Un nouveau village à découvrir prochainement. Son parcours sera annoncé dès qu’il sera prêt.</p>
+        <button class="small-btn" type="button" onclick="showDashSection('dash-news')">Suivre les actualités</button>
+      </div>
+    </article>
+  </div>
+  <div class="village-proposal-banner">
+    <div><h3>Votre village a aussi une histoire à raconter ?</h3><p>Proposez votre commune et aidons les visiteurs à découvrir ses richesses.</p></div>
+    <button class="primary-btn" type="button" onclick="ouvrirPropositionVillage()">Proposer mon village</button>
+  </div>
 </section>
 
 <section class="dash-section hidden" id="dash-town-contact">
@@ -844,6 +889,14 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 
+function ouvrirPropositionVillage(){
+  showDashSection("dash-town-contact");
+  const sujet = document.getElementById("town-subject");
+  if(sujet) sujet.value = "Proposer ma commune";
+  const commune = document.getElementById("town-name");
+  if(commune) commune.focus({preventScroll:true});
+}
+
 function showDashSection(id){
   if(id === "dash-admin-info" && !adminAccessGranted){
     if(window.openAdminPanel) window.openAdminPanel();
@@ -853,7 +906,7 @@ function showDashSection(id){
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
   "dash-home", "dash-profile", "dash-adventures", "dash-village-map", "dash-badges",
-  "dash-stars", "dash-formulas", "dash-help", "dash-news", "dash-town-contact", "dash-support",
+  "dash-stars", "dash-formulas", "dash-help", "dash-news", "dash-village-gallery", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
 ];
