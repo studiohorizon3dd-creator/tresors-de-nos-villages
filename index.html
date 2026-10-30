@@ -84,6 +84,16 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 .support-ticket { padding: 14px; margin: 10px 0; border: 1px solid #e6e1d3; border-radius: 12px; background: #fffdf7; }
 .support-ticket small { color: #657060; }
 
+
+.passport-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.passport-stat{background:#f5ecd8;border:1px solid #e6d3a5;border-radius:12px;padding:12px;text-align:center}
+.passport-stat strong{display:block;font-size:28px;color:var(--green)}
+.passport-stat span{display:block;font-size:13px;color:var(--muted)}
+.passport-entry{border:1px solid #e6d3a5;border-radius:12px;padding:14px;margin-top:12px;background:#fffaf0}
+.passport-entry h4{margin:0 0 6px;font-size:19px}
+.passport-entry p{margin:5px 0}
+.passport-stamp{display:inline-block;border:2px solid #77752b;border-radius:999px;padding:5px 10px;color:#656321;font-weight:bold;font-size:13px}
+.passport-stamp.complete{border-color:#174b35;color:#174b35}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -219,10 +229,17 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     </p>
 </article>
 
-        <article class="feature">
+        <article class="feature passport-feature" id="passport-card">
             <div class="feature-icon">🗺️</div>
             <h3>Mon passeport du voyageur</h3>
             <p>Garde une trace de tes villages visités.</p>
+            <div class="passport-stats">
+              <div class="passport-stat"><strong id="passport-villages-count">0</strong><span>Village visité</span></div>
+              <div class="passport-stat"><strong id="passport-stars-count">0</strong><span>Étoiles gagnées</span></div>
+            </div>
+            <div id="passport-content" aria-live="polite">
+              <p>Ton carnet de voyage apparaîtra ici dès que tu commenceras une aventure.</p>
+            </div>
         </article>
 
         <article class="feature">
@@ -703,7 +720,7 @@ function showDashSection(id){
     .find(btn => (btn.getAttribute("onclick") || "").includes("'" + id + "'"));
   if(clickedButton) clickedButton.classList.add("active");
   window.scrollTo({top:0,behavior:"smooth"});
-  if(id==="dash-stars"||id==="dash-badges"||id==="dash-home")refreshProgress();
+  if(id==="dash-stars"||id==="dash-badges"||id==="dash-home"||id==="dash-profile"||id==="dash-adventures")refreshProgress();
 }
   
 
@@ -750,6 +767,29 @@ function chooseFormula(level){
   showDashSection("dash-adventures");
 }
 function getProgress(){try{return JSON.parse(localStorage.getItem("progressionHumbertFacile")||"[]")}catch(e){return []}}
+function refreshPassport(){
+  const progress = getProgress();
+  const started = localStorage.getItem("formuleTresors") === "facile" || progress.length > 0;
+  const completed = progress.includes("salle_des_fetes") || localStorage.getItem("salleDesFetesValidee") === "true";
+  const villageCount = document.getElementById("passport-villages-count");
+  const starsCount = document.getElementById("passport-stars-count");
+  const content = document.getElementById("passport-content");
+  if (villageCount) villageCount.textContent = completed ? "1" : "0";
+  if (starsCount) starsCount.textContent = String(progress.length);
+  if (!content) return;
+  if (!started) {
+    content.innerHTML = '<p>Ton carnet de voyage apparaîtra ici dès que tu commenceras une aventure.</p>';
+    return;
+  }
+  const status = completed
+    ? '<span class="passport-stamp complete">✓ Village visité</span>'
+    : '<span class="passport-stamp">En cours</span>';
+  const message = completed
+    ? 'Félicitations ! Tu as terminé ton aventure à Humbert. Garde ce souvenir dans ton passeport ! 🎉'
+    : 'Ton aventure a commencé. Termine les énigmes pour obtenir le tampon « Village visité ». ';
+  content.innerHTML = '<div class="passport-entry"><h4>🏡 Humbert</h4><p>Pas-de-Calais</p><p>' + status + '</p><p>' + message + '</p></div>';
+}
+
 function refreshProgress(){
   const p = getProgress();
   const count = Math.min(p.length, 10);
@@ -795,6 +835,7 @@ function refreshProgress(){
       ? "Félicitations ! Tu as obtenu ton badge Explorateur ! 🎉"
       : "Continue tes aventures pour obtenir ton premier badge !";
   }
+  refreshPassport();
 }
   function checkAnswer(number){
   const id="answer"+number, feedback=document.getElementById("feedback"+number);
