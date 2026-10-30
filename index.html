@@ -290,12 +290,6 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
   <p>Cet espace est réservé à la gestion du projet : aventures, énigmes, indices, coordonnées GPS et demandes d’aide.</p>
 
   <div class="feature-grid">
-    <button type="button" class="feature" onclick="showDashSection('dash-admin-aventures')">
-      <div class="feature-icon">🗺️</div>
-      <h3>Aventures</h3>
-      <p>Préparer les parcours et leurs étapes.</p>
-    </button>
-
     <button type="button" class="feature" onclick="showDashSection('dash-admin-enigmes')">
       <div class="feature-icon">🧩</div>
       <h3>Énigmes</h3>
@@ -311,6 +305,11 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 
   <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
 
+  <button type="button" onclick="activerModeTestAventure()">
+    🧪 Tester l’aventure
+  </button>
+  <p id="admin-test-status" role="status" aria-live="polite"></p>
+
   <div id="admin-support-area" hidden>
     <h3>Demandes d’aide des joueurs</h3>
     <p>Les demandes sont chargées depuis le serveur sécurisé.</p>
@@ -318,87 +317,6 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
   </div>
 </section>
     
-<section class="dash-section hidden" id="dash-admin-aventures">
-  <h3>🗺️ Gestion des aventures</h3>
-  <p>Crée tes parcours, puis ajoute les lieux, les coordonnées GPS et les énigmes.</p>
-
-  <button type="button" onclick="showDashSection('dash-admin-info')">
-    ← Retour à l’administration
-  </button>
-
-  <button type="button" onclick="activerModeTestAventure()">
-    🧪 Tester l’aventure
-  </button>
-  <p id="admin-test-status" role="status" aria-live="polite"></p>
-
-  <hr>
-
-  <h3>Créer une aventure</h3>
-  <form id="admin-adventure-form">
-    <label for="admin-adventure-title">Nom de l’aventure</label>
-    <input id="admin-adventure-title" name="title" required maxlength="150"
-      placeholder="Ex. : À la découverte de Humbert">
-
-    <label for="admin-adventure-village">Village</label>
-    <input id="admin-adventure-village" name="village" required maxlength="150"
-      placeholder="Ex. : Humbert">
-
-    <label for="admin-adventure-description">Description</label>
-    <textarea id="admin-adventure-description" name="description"
-      placeholder="Présente le parcours"></textarea>
-
-    <button type="submit">💾 Créer l’aventure</button>
-  </form>
-
-  <p id="admin-adventure-status" role="status" aria-live="polite"></p>
-
-  <hr>
-
-  <h3>Mes aventures</h3>
-  <div id="admin-adventure-list">
-    <p>Les aventures apparaîtront ici.</p>
-  </div>
-
-  <div id="admin-adventure-steps" hidden>
-    <h3 id="admin-steps-title">Étapes du parcours</h3>
-
-    <form id="admin-adventure-step-form">
-      <input type="hidden" id="admin-step-adventure-id">
-
-      <label for="admin-step-number">Numéro de l’étape</label>
-      <input id="admin-step-number" type="number" min="1" required value="1">
-
-      <label for="admin-step-place">Lieu</label>
-      <input id="admin-step-place" required maxlength="200"
-        placeholder="Ex. : Mairie de Humbert">
-
-      <label for="admin-step-latitude">Latitude GPS</label>
-      <input id="admin-step-latitude" type="number" step="any"
-        placeholder="Ex. : 50.502586">
-
-      <label for="admin-step-longitude">Longitude GPS</label>
-      <input id="admin-step-longitude" type="number" step="any"
-        placeholder="Ex. : 1.906921">
-
-      <label for="admin-step-riddle">Énigme</label>
-      <textarea id="admin-step-riddle" placeholder="Écris la question"></textarea>
-
-      <label for="admin-step-answer">Réponse attendue</label>
-      <input id="admin-step-answer" placeholder="Réponse à valider">
-
-      <label for="admin-step-hint">Indice</label>
-      <textarea id="admin-step-hint" placeholder="Aide pour le joueur"></textarea>
-
-      <button type="submit">💾 Enregistrer l’étape</button>
-    </form>
-
-    <p id="admin-step-status" role="status" aria-live="polite"></p>
-    <div id="admin-adventure-step-list"></div>
-  </div>
-</section>
-
-
-
     <section class="dash-section hidden" id="dash-game"><h3>🏡 L’aventure à Humbert</h3><p>Choisissez la formule Facile pour commencer. Répondez aux énigmes pour gagner des étoiles.</p><div class="riddle-list">
       <article class="riddle"><div class="big">🏛️</div><h3>Énigme 1</h3><p>Quel lieu rassemble les habitants et permet notamment de se marier ou de voter ?</p><input id="answer1" placeholder="Ta réponse"><button onclick="checkAnswer(1)">Valider ma réponse</button><p id="feedback1" class="feedback" aria-live="polite"></p></article>
       <div id="zoneGPS" class="riddle" style="display:none;">
@@ -728,7 +646,7 @@ function showDashSection(id){
   "dash-home", "dash-profile", "dash-adventures", "dash-badges",
   "dash-stars", "dash-formulas", "dash-help", "dash-support",
   "dash-admin-info", "dash-game",
-  "dash-admin-aventures", "dash-admin-enigmes", "dash-admin-support"
+  "dash-admin-enigmes", "dash-admin-support"
 ];
   sections.forEach(function(sectionId){
     const section = document.getElementById(sectionId);
@@ -863,20 +781,6 @@ function refreshProgress(){
 let carteGPS = null;
 let marqueurJoueurGPS = null;
 
-// Calcule la distance en mètres entre deux coordonnées GPS.
-function distanceMetres(lat1, lon1, lat2, lon2) {
-  const rayonTerre = 6371000;
-  const radians = valeur => valeur * Math.PI / 180;
-  const dLat = radians(lat2 - lat1);
-  const dLon = radians(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(radians(lat1)) * Math.cos(radians(lat2)) *
-    Math.sin(dLon / 2) ** 2;
-
-  return rayonTerre * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
 function initialiserCarte(){
   if(carteGPS) { carteGPS.invalidateSize(); return; }
   const zoneCarte = document.getElementById("carteGPS");
@@ -961,7 +865,13 @@ function verifierArriveeMairie(){
     else statut.textContent="La recherche GPS a pris trop de temps. Réessaie dans un instant.";
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
-
+function verifierArriveeEglise(){
+  const rad=v=>v*Math.PI/180;
+  const dLat=rad(lat2-lat1),dLon=rad(lon2-lon1);
+  const a=Math.sin(dLat/2)**2+Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2;
+  return 6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+  
 
 function simulerArriveeEglise() {
   if (
@@ -1166,6 +1076,79 @@ function ouvrirGPSArbre() {
 
   window.open(url, "_blank");
 }
+  function verifierArriveeArbre() {
+  const statut = document.getElementById("statutGPSArbre");
+
+  if (!statut) return;
+
+  if (!navigator.geolocation) {
+    statut.textContent = "La localisation n'est pas disponible.";
+    return;
+  }
+    function verifierCodeArbre() {
+  const champ = document.getElementById("codeArbre");
+  const retour = document.getElementById("feedbackCodeArbre");
+
+  if (!champ || !retour) return;
+
+  const reponse = champ.value.trim();
+
+  if (reponse === "2835") {
+    retour.textContent =
+      "🎉 Bravo ! Tu as découvert le code du vieux gardien ! ⭐";
+    retour.style.color = "green";
+
+    localStorage.setItem("arbreCodeValide", "true");
+  } else {
+    retour.textContent =
+      "❌ Ce n'est pas le bon code. Essaie encore !";
+    retour.style.color = "red";
+  }
+}
+    function simulerArriveeArbre() {
+  const statut = document.getElementById("statutGPSArbre");
+
+  if (statut) {
+    statut.textContent = "🎉 Arrivée à l'arbre simulée !";
+  }
+
+  const enigme = document.getElementById("carteEnigme3");
+
+  if (enigme) {
+    enigme.style.display = "block";
+    enigme.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+}
+
+  statut.textContent = "Recherche de ta position près de l'arbre…";
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    const distance = distanceMetres(lat, lon, 50.500444, 1.900556);
+
+    if (distance <= 100) {
+      statut.textContent = "🎉 Bravo ! Tu as trouvé le vieux gardien ! 🌳";
+
+      const enigme = document.getElementById("carteEnigme3");
+      if (enigme) {
+        enigme.style.display = "block";
+        enigme.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    } else {
+      statut.textContent = "Tu es à environ " + Math.round(distance) +
+        " mètres de l'arbre. Continue ton chemin !";
+    }
+  }, function() {
+    statut.textContent = "Impossible de trouver ta position. Réessaie.";
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+}
+
+
 
 async function renderSupportHistory() {
   const target = document.getElementById("support-history");
@@ -1291,220 +1274,8 @@ if (supportForm) {
   });
 }
 
-/* ===== GESTION DES AVENTURES ADMIN ===== */
-
-const adminAdventureForm = document.getElementById("admin-adventure-form");
-const adminAdventureStatus = document.getElementById("admin-adventure-status");
-const adminAdventureList = document.getElementById("admin-adventure-list");
-const adminStepForm = document.getElementById("admin-adventure-step-form");
-
-async function adminAdventureRequest(path, options = {}) {
-  if (typeof window.getAdminBearerToken !== "function") {
-    throw new Error("Reconnecte-toi pour gérer les aventures.");
-  }
-
-  const token = await window.getAdminBearerToken();
-
-  const response = await fetch(
-    "https://tresors-de-nos-villages-serveur.onrender.com" + path,
-    {
-      ...options,
-      headers: {
-        "Authorization": "Bearer " + token,
-        "Accept": "application/json",
-        ...(options.body ? { "Content-Type": "application/json" } : {}),
-        ...options.headers
-      }
-    }
-  );
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.error || "Une erreur est survenue.");
-  }
-
-  return data;
-}
-
-async function loadAdminAdventures() {
-  if (!adminAdventureList) return;
-
-  adminAdventureList.textContent = "Chargement des aventures…";
-
-  try {
-    const data = await adminAdventureRequest("/api/admin/adventures");
-    adminAdventureList.replaceChildren();
-
-    if (!data.adventures || data.adventures.length === 0) {
-      adminAdventureList.textContent = "Aucune aventure enregistrée pour le moment.";
-      return;
-    }
-
-    data.adventures.forEach((adventure) => {
-      const card = document.createElement("article");
-      card.className = "support-ticket";
-
-      const title = document.createElement("h4");
-      title.textContent = adventure.title + " — " + adventure.village;
-
-      const description = document.createElement("p");
-      description.textContent = adventure.description || "Aucune description.";
-
-      const stepsButton = document.createElement("button");
-      stepsButton.type = "button";
-      stepsButton.textContent = "📍 Gérer les étapes";
-      stepsButton.addEventListener("click", () => {
-        openAdminAdventureSteps(adventure);
-      });
-
-      card.append(title, description, stepsButton);
-      adminAdventureList.append(card);
-    });
-  } catch (error) {
-    adminAdventureList.textContent = error.message;
-  }
-}
-
-if (adminAdventureForm) {
-  adminAdventureForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const button = adminAdventureForm.querySelector('button[type="submit"]');
-    button.disabled = true;
-    adminAdventureStatus.textContent = "Enregistrement de l’aventure…";
-
-    try {
-      const formData = new FormData(adminAdventureForm);
-
-      const data = await adminAdventureRequest("/api/admin/adventures", {
-        method: "POST",
-        body: JSON.stringify({
-          title: formData.get("title"),
-          village: formData.get("village"),
-          description: formData.get("description")
-        })
-      });
-
-      adminAdventureStatus.textContent =
-        "✅ Aventure « " + data.adventure.title + " » enregistrée !";
-
-      adminAdventureForm.reset();
-      await loadAdminAdventures();
-    } catch (error) {
-      adminAdventureStatus.textContent = "❌ " + error.message;
-    } finally {
-      button.disabled = false;
-    }
-  });
-}
-
-async function openAdminAdventureSteps(adventure) {
-  const area = document.getElementById("admin-adventure-steps");
-  const title = document.getElementById("admin-steps-title");
-  const idInput = document.getElementById("admin-step-adventure-id");
-  const list = document.getElementById("admin-adventure-step-list");
-
-  area.hidden = false;
-  title.textContent = "Étapes de : " + adventure.title;
-  idInput.value = adventure.id;
-  list.textContent = "Chargement des étapes…";
-
-  try {
-    const data = await adminAdventureRequest(
-      "/api/admin/adventures/" + adventure.id + "/steps"
-    );
-
-    list.replaceChildren();
-
-    if (!data.steps || data.steps.length === 0) {
-      list.textContent = "Aucune étape enregistrée pour cette aventure.";
-    } else {
-      data.steps.forEach((step) => {
-        const item = document.createElement("article");
-        item.className = "support-ticket";
-
-        const heading = document.createElement("h4");
-        heading.textContent = "Étape " + step.step_number + " — " + step.place_name;
-
-        const riddle = document.createElement("p");
-        riddle.textContent = "Énigme : " + (step.riddle || "Non renseignée");
-
-        const hint = document.createElement("p");
-        hint.textContent = "Indice : " + (step.hint || "Non renseigné");
-
-        const gps = document.createElement("p");
-        gps.textContent =
-          step.latitude != null && step.longitude != null
-            ? "GPS : " + step.latitude + ", " + step.longitude
-            : "Coordonnées GPS non renseignées.";
-
-        item.append(heading, riddle, hint, gps);
-        list.append(item);
-      });
-    }
-
-    document.getElementById("admin-step-number").value =
-      (data.steps?.length || 0) + 1;
-
-    area.scrollIntoView({ behavior: "smooth", block: "start" });
-  } catch (error) {
-    list.textContent = error.message;
-  }
-}
-
-if (adminStepForm) {
-  adminStepForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const button = adminStepForm.querySelector('button[type="submit"]');
-    const status = document.getElementById("admin-step-status");
-    const adventureId = document.getElementById("admin-step-adventure-id").value;
-
-    button.disabled = true;
-    status.textContent = "Enregistrement de l’étape…";
-
-    try {
-      const value = (id) => document.getElementById(id).value.trim();
-
-      await adminAdventureRequest(
-        "/api/admin/adventures/" + adventureId + "/steps",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            step_number: Number(value("admin-step-number")),
-            place_name: value("admin-step-place"),
-            latitude: value("admin-step-latitude") || null,
-            longitude: value("admin-step-longitude") || null,
-            riddle: value("admin-step-riddle"),
-            answer: value("admin-step-answer"),
-            hint: value("admin-step-hint")
-          })
-        }
-      );
-
-      status.textContent = "✅ Étape enregistrée !";
-      adminStepForm.reset();
-      document.getElementById("admin-step-adventure-id").value = adventureId;
-
-      const adventureTitle = document.getElementById("admin-steps-title").textContent
-        .replace("Étapes de : ", "");
-
-      await openAdminAdventureSteps({
-        id: adventureId,
-        title: adventureTitle
-      });
-    } catch (error) {
-      status.textContent = "❌ " + error.message;
-    } finally {
-      button.disabled = false;
-    }
-  });
-}
-
 window.addEventListener("load", () => {
   renderSupportHistory();
-  loadAdminAdventures();
 });
 
 function chooseFormulaFromMenu() {
