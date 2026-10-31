@@ -700,6 +700,23 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     </button>
   </div>
 
+
+  <div class="feature" style="margin:18px 0;">
+    <h3>📊 Statistiques du site</h3>
+    <p>Visiteurs actifs (5 dernières minutes), visiteurs anonymes et explorateurs connectés.</p>
+    <button type="button" class="primary-btn" onclick="loadSiteAnalytics()">Actualiser les statistiques</button>
+    <p id="analytics-status" role="status" aria-live="polite">Les statistiques se chargent après validation de l'accès administrateur.</p>
+    <div class="feature-grid" id="analytics-counters">
+      <article class="feature"><h4>Visiteurs actifs</h4><p id="analytics-active">—</p></article>
+      <article class="feature"><h4>Explorateurs connectés</h4><p id="analytics-members">—</p></article>
+      <article class="feature"><h4>Visiteurs anonymes</h4><p id="analytics-anonymous">—</p></article>
+      <article class="feature"><h4>Visites sur 24 h</h4><p id="analytics-24h">—</p></article>
+    </div>
+    <h4>Dernières visites</h4>
+    <div id="analytics-recent"><p>Aucune donnée chargée.</p></div>
+    <p style="font-size:0.85rem;">Les visiteurs anonymes sont comptés sans nom ni adresse e-mail. Un visiteur est considéré actif s'il a consulté le site au cours des 5 dernières minutes.</p>
+  </div>
+
   <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
 
   <button type="button" onclick="activerModeTestAventure()">
@@ -2043,6 +2060,89 @@ Object.assign(window, {
   verifierArriveeMairie,
   verifierArriveeEglise
 });
+
+// ===== Statistiques de fréquentation =====
+(function setupVisitorHeartbeat() {
+  const storageKey = "tresorsVisitorKey";
+  let visitorKey = "";
+  try {
+    visitorKey = sessionStorage.getItem(storageKey) || "";
+    if (!visitorKey) {
+      visitorKey = (crypto.randomUUID ? crypto.randomUUID() : (
+        "v_" + Math.random().toString(36).slice(2) + Date.now().toString(36) + Math.random().toString(36).slice(2)
+      ));
+      sessionStorage.setItem(storageKey, visitorKey);
+    }
+  } catch {
+    visitorKey = "v_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
+
+  async function sendHeartbeat() {
+    try {
+      const payload = {
+        visitor_key: visitorKey,
+        page_path: location.pathname + location.hash,
+        village: localStorage.getItem("villageTresorsSelectionne") || "",
+        formula: localStorage.getItem("formuleTresors") || ""
+      };
+      const headers = { "Content-Type": "application/json" };
+      if (typeof window.getAdminBearerToken === "function") {
+        try { headers.Authorization = "Bearer " + await window.getAdminBearerToken(); } catch {}
+      }
+      await fetch("https://tresors-de-nos-villages-serveur.onrender.com/api/analytics/heartbeat", {
+        method: "POST", headers, body: JSON.stringify(payload), keepalive: true
+      });
+    } catch (error) {
+      // Analytics must never prevent the site from working.
+      console.debug("Visitor analytics unavailable.");
+    }
+  }
+
+  sendHeartbeat();
+  setInterval(sendHeartbeat, 60000);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") sendHeartbeat();
+  });
+})();
+
+window.loadSiteAnalytics = async function() {
+  const status = document.getElementById("analytics-status");
+  const recent = document.getElementById("analytics-recent");
+  if (!status || !recent) return;
+  status.textContent = "Chargement des statistiques…";
+  try {
+    const token = await window.getAdminBearerToken();
+    const response = await fetch("https://tresors-de-nos-villages-serveur.onrender.com/api/admin/analytics", {
+      headers: { Authorization: "Bearer " + token, Accept: "application/json" },
+      cache: "no-store"
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Accès aux statistiques refusé.");
+    const totals = data.totals || {};
+    document.getElementById("analytics-active").textContent = totals.active_visitors ?? 0;
+    document.getElementById("analytics-members").textContent = totals.active_members ?? 0;
+    document.getElementById("analytics-anonymous").textContent = totals.active_anonymous ?? 0;
+    document.getElementById("analytics-24h").textContent = totals.visits_24h ?? 0;
+    recent.replaceChildren();
+    if (!data.recent?.length) {
+      recent.textContent = "Aucune visite enregistrée pour le moment.";
+    } else {
+      const list = document.createElement("ul");
+      for (const visit of data.recent) {
+        const item = document.createElement("li");
+        const date = visit.last_seen ? new Date(visit.last_seen).toLocaleString("fr-FR") : "";
+        const details = [visit.visitor_label, visit.page_path, visit.village, visit.formula, date].filter(Boolean);
+        item.textContent = details.join(" · ");
+        list.appendChild(item);
+      }
+      recent.appendChild(list);
+    }
+    status.textContent = "Statistiques actualisées. Les visiteurs actifs sont ceux vus dans les 5 dernières minutes.";
+  } catch (error) {
+    status.textContent = error.message || "Impossible de charger les statistiques.";
+  }
+};
+
 </script>
 </body>
 </html>
