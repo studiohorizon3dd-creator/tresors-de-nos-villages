@@ -248,6 +248,19 @@ body.halloween-accueil .home-hero{
 @media(max-width:650px){#admin-village-form{grid-template-columns:1fr!important}#admin-village-form label[style*="grid-column:1/-1"]{grid-column:1!important}}
 
 
+/* Espace privé des testeurs */
+.tester-space-header{background:linear-gradient(135deg,#173f31,#285b43);color:#fffaf0;border:1px solid #c9ae65;border-radius:18px;padding:25px;margin-bottom:20px;box-shadow:0 10px 26px rgba(35,54,39,.10)}
+.tester-space-header .eyebrow{font-size:11px;letter-spacing:1.5px;font-weight:700;color:#f0d58b;margin:0 0 8px}
+.tester-space-header h3{color:#fffaf0;margin:0 0 10px;font-size:25px}
+.tester-space-header p{max-width:760px;line-height:1.65;margin:0 0 16px}
+.tester-official-badge{display:inline-block;background:#f5e7bd;color:#214b37;border:1px solid #d2b66b;border-radius:30px;padding:7px 13px;font-weight:700;font-size:13px}
+.tester-space-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.tester-space-card{background:#fffaf0;border:1px solid #e3d5b6;border-radius:15px;padding:20px;box-shadow:0 5px 16px rgba(35,54,39,.05)}
+.tester-space-card h4{color:#214b37;margin:8px 0}
+.tester-space-card p,.tester-space-card li{font-size:14px;line-height:1.6;color:#4d594d}
+.tester-space-card ul{padding-left:20px}
+.tester-space-tag{display:inline-block;margin-top:8px;padding:6px 9px;border-radius:8px;background:#f0ead8;color:#53624f;font-size:12px;font-weight:600}
+.tester-space-note{font-size:12px;color:#697467;line-height:1.6;margin-top:18px}
 /* Espace de candidature testeur */
 .tester-panel{max-width:850px;margin:20px auto;background:#fffaf0;border:1px solid #d7ad45;border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:0 8px 22px #18332612}
 .tester-panel h3{color:#123d2b;margin-top:0}.tester-panel label{display:block;font-weight:700;margin:12px 0 6px}.tester-panel textarea{width:100%;min-height:120px;padding:12px;border:1px solid #d4c49c;border-radius:9px;font:inherit}.tester-status{padding:12px 14px;border-radius:9px;background:#f1ead6;line-height:1.55;margin:12px 0}.tester-table-wrap{overflow-x:auto}
@@ -352,6 +365,7 @@ body.halloween-accueil .home-hero{
       <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
       <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
       <button class="nav-btn" onclick="showDashSection('dash-testers')">🧪 &nbsp; Devenir testeur</button>
+      <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
       <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
       <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
       <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
@@ -534,6 +548,41 @@ body.halloween-accueil .home-hero{
     </form>
     <p style="font-size:12px;color:#697467;line-height:1.5">L’envoi d’une demande ne donne pas automatiquement accès aux tests. La validation est faite par l’administration. Si la demande concerne un mineur, elle doit être effectuée avec son parent ou responsable légal.</p>
   </div>
+</section>
+
+<section class="dash-section hidden" id="dash-tester-space">
+  <div class="tester-space-header">
+    <p class="eyebrow">ACCÈS RÉSERVÉ AUX TESTEURS VALIDÉS</p>
+    <h3>🔐 Espace testeurs</h3>
+    <p>Bienvenue dans les coulisses de Trésors de nos Villages ! Merci de nous aider à améliorer les aventures avant leur ouverture.</p>
+    <span class="tester-official-badge">🧪 Testeur officiel</span>
+  </div>
+  <div class="tester-space-grid">
+    <article class="tester-space-card">
+      <div class="feature-icon">🗺️</div>
+      <h4>Parcours à tester</h4>
+      <p>Les parcours seront affichés ici dès qu’une session de test sera ouverte et que les autorisations nécessaires seront confirmées.</p>
+      <span class="tester-space-tag">Aucun parcours ouvert pour le moment</span>
+    </article>
+    <article class="tester-space-card">
+      <div class="feature-icon">🧩</div>
+      <h4>Missions de test</h4>
+      <ul>
+        <li>Vérifier que les énigmes sont compréhensibles.</li>
+        <li>Signaler les indices difficiles ou ambigus.</li>
+        <li>Vérifier le bon fonctionnement de la carte et du GPS.</li>
+        <li>Donner son avis sur la durée et la difficulté du parcours.</li>
+      </ul>
+      <span class="tester-space-tag">Consignes communiquées au lancement des tests</span>
+    </article>
+    <article class="tester-space-card">
+      <div class="feature-icon">💬</div>
+      <h4>Retours et problèmes</h4>
+      <p>Lorsqu’une session sera ouverte, tu pourras transmettre tes observations à l’équipe depuis les consignes de cette session.</p>
+      <span class="tester-space-tag">Outil de retour à venir</span>
+    </article>
+  </div>
+  <p class="tester-space-note">Cet espace est réservé aux comptes dont la candidature a été acceptée. L’accès testeur ne donne pas automatiquement accès aux aventures payantes ni aux données des autres joueurs.</p>
 </section>
 
 <section class="dash-section hidden" id="dash-adventures">
@@ -1391,6 +1440,8 @@ window.loadTesterApplication = async function(){
   try{
     const data = await profileApi("/api/testers/me");
     const app = data.application;
+    const testerNav = document.getElementById("tester-space-nav");
+    if(testerNav) testerNav.hidden = app?.status !== "accepted";
     if(!app){
       status.textContent = "Tu n’as pas encore envoyé de demande. Tu peux remplir le formulaire ci-dessous.";
       submit.disabled = false;
@@ -1400,7 +1451,7 @@ window.loadTesterApplication = async function(){
     }
     if(motivation) motivation.value = app.motivation || "";
     if(checkbox) checkbox.checked = app.adult_confirmation === true;
-    const labels = {pending:"Demande envoyée : elle est en attente de validation. Tu recevras une réponse lorsque l’administration aura étudié ta candidature.",accepted:"Bonne nouvelle ! Ta demande a été acceptée. Tu fais partie des testeurs.",rejected:"Ta demande n’a pas été retenue pour le moment. Tu peux contacter l’administration si tu souhaites en discuter."};
+    const labels = {pending:"Demande envoyée : elle est en attente de validation. Tu recevras une réponse lorsque l’administration aura étudié ta candidature.",accepted:"Bonne nouvelle ! Ta demande a été acceptée. Tu fais partie des testeurs. Ton espace privé est maintenant disponible dans le menu.",rejected:"Ta demande n’a pas été retenue pour le moment. Tu peux contacter l’administration si tu souhaites en discuter."};
     status.textContent = labels[app.status] || "Statut de la demande : " + app.status;
     submit.disabled = app.status === "pending" || app.status === "accepted";
     submit.textContent = app.status === "pending" ? "Demande en attente" : app.status === "accepted" ? "Demande acceptée" : "Renvoyer une demande";
@@ -1705,6 +1756,7 @@ function showDashboard(name, email){
     "Compte connecté";
 
   refreshProgress();
+  window.loadTesterApplication?.();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function returnHome(){
@@ -1754,7 +1806,7 @@ function showDashSection(id){
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
-  "dash-home", "dash-profile", "dash-testers", "dash-adventures", "dash-village-map", "dash-badges",
+  "dash-home", "dash-profile", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-badges",
   "dash-stars", "dash-formulas", "dash-help", "dash-news", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
