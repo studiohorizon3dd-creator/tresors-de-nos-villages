@@ -248,6 +248,16 @@ body.halloween-accueil .home-hero{
 @media(max-width:650px){#admin-village-form{grid-template-columns:1fr!important}#admin-village-form label[style*="grid-column:1/-1"]{grid-column:1!important}}
 
 
+/* Invitation testeur sur l'accueil */
+.tester-home-card{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:20px 30px;padding:20px 22px;background:#fffaf0;border:1px solid #d7ad45;border-radius:15px;box-shadow:0 5px 18px rgba(35,54,39,.06)}
+.tester-home-icon{width:54px;height:54px;flex:0 0 54px;border-radius:50%;display:grid;place-items:center;background:#073523;border:2px solid #d7ad45;font-size:26px}
+.tester-home-copy{flex:1;min-width:210px}
+.tester-home-copy .eyebrow{margin:0 0 5px;color:#987321;font-size:10px;letter-spacing:1.2px;font-weight:800}
+.tester-home-copy h3{margin:0 0 5px;color:#123d2b}
+.tester-home-copy p{margin:4px 0;line-height:1.45}
+.tester-home-status{font-size:12px;color:#64705f}
+.tester-home-card .primary-btn{white-space:nowrap}
+@media(max-width:650px){.tester-home-card{margin:16px;padding:17px}.tester-home-card .primary-btn{width:100%}}
 /* Espace privé des testeurs */
 .tester-space-header{background:linear-gradient(135deg,#173f31,#285b43);color:#fffaf0;border:1px solid #c9ae65;border-radius:18px;padding:25px;margin-bottom:20px;box-shadow:0 10px 26px rgba(35,54,39,.10)}
 .tester-space-header .eyebrow{font-size:11px;letter-spacing:1.5px;font-weight:700;color:#f0d58b;margin:0 0 8px}
@@ -364,7 +374,6 @@ body.halloween-accueil .home-hero{
     <nav class="nav-list" aria-label="Menu explorateur">
       <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
       <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
-      <button class="nav-btn" onclick="showDashSection('dash-testers')">🧪 &nbsp; Devenir testeur</button>
       <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
       <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
       <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
@@ -374,7 +383,7 @@ body.halloween-accueil .home-hero{
       <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
       <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
       <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
-      <button class="nav-btn" onclick="showDashSection('dash-admin-info')">⚙ &nbsp; Administration</button>
+      <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" hidden>⚙ &nbsp; Administration</button>
       <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
     </nav>
     <div class="sidebar-note">Bonne exploration !</div>
@@ -383,6 +392,16 @@ body.halloween-accueil .home-hero{
     <div id="dash-home">
       <header class="dash-hero"><div><p class="eyebrow" style="color:#ffe49b">Votre carnet d’explorateur</p><h2>Bienvenue dans l’aventure !</h2></div></header>
       <div class="progress-card"><div class="progress-top"><span>⭐ Votre progression</span><span id="progress-text">0 / 10 étoiles</span></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div></div>
+      <section class="tester-home-card" id="tester-home-card" hidden>
+        <div class="tester-home-icon">🧪</div>
+        <div class="tester-home-copy">
+          <p class="eyebrow">PARTICIPE À L’AVENTURE</p>
+          <h3>Et si tu devenais testeur ?</h3>
+          <p>Aide-nous à tester les parcours, les énigmes et le GPS avant l’ouverture officielle.</p>
+          <p class="tester-home-status" id="tester-home-status">Les candidatures sont ouvertes.</p>
+        </div>
+        <button class="primary-btn" id="tester-home-button" type="button" onclick="showDashSection('dash-testers')">Découvrir et candidater</button>
+      </section>
 <section class="dash-section">
   <h3>Le parcours d’indices</h3>
   <p>Résolvez les énigmes pour gagner des étoiles. Les étapes se découvrent dans l’aventure, pas sur cette page.</p>
@@ -1265,6 +1284,15 @@ async function adminApi(path, options = {}) {
   return data;
 }
 
+window.checkAdminAccess = async function(){
+  try{
+    await adminApi("/api/admin/me");
+    window.setAdminAccessGranted(true);
+  }catch(_error){
+    window.setAdminAccessGranted(false);
+  }
+};
+
 async function profileApi(path, options = {}) {
   const token = await getAdminBearerToken();
   const response = await fetch(`${API_BASE}${path}`, {
@@ -1441,7 +1469,16 @@ window.loadTesterApplication = async function(){
     const data = await profileApi("/api/testers/me");
     const app = data.application;
     const testerNav = document.getElementById("tester-space-nav");
-    if(testerNav) testerNav.hidden = app?.status !== "accepted";
+    const testerHome = document.getElementById("tester-home-card");
+    const testerHomeStatus = document.getElementById("tester-home-status");
+    const testerHomeButton = document.getElementById("tester-home-button");
+    const isAcceptedTester = app?.status === "accepted";
+    if(testerNav) testerNav.hidden = !(isAcceptedTester || adminAccessGranted);
+    if(testerHome) testerHome.hidden = isAcceptedTester;
+    if(testerHomeStatus && app?.status === "pending") testerHomeStatus.textContent = "Ta candidature est en attente de validation.";
+    if(testerHomeButton && app?.status === "pending") { testerHomeButton.textContent = "Voir ma candidature"; testerHomeButton.onclick = () => showDashSection("dash-testers"); }
+    if(testerHomeStatus && app?.status === "rejected") testerHomeStatus.textContent = "Tu peux consulter ta candidature et les informations de réponse.";
+    if(testerHomeButton && app?.status === "rejected") { testerHomeButton.textContent = "Consulter ma candidature"; testerHomeButton.onclick = () => showDashSection("dash-testers"); }
     if(!app){
       status.textContent = "Tu n’as pas encore envoyé de demande. Tu peux remplir le formulaire ci-dessous.";
       submit.disabled = false;
@@ -1757,6 +1794,7 @@ function showDashboard(name, email){
 
   refreshProgress();
   window.loadTesterApplication?.();
+  window.checkAdminAccess?.();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function returnHome(){
@@ -1765,7 +1803,13 @@ function returnHome(){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 let adminAccessGranted = false;
-window.setAdminAccessGranted = function(value){ adminAccessGranted = value === true; };
+window.setAdminAccessGranted = function(value){
+  adminAccessGranted = value === true;
+  const adminNav = document.getElementById("admin-nav-button");
+  const testerNav = document.getElementById("tester-space-nav");
+  if(adminNav) adminNav.hidden = !adminAccessGranted;
+  if(adminAccessGranted && testerNav) testerNav.hidden = false;
+};
 document.addEventListener("DOMContentLoaded", function(){
   const form = document.getElementById("town-contact-form");
   if(!form) return;
