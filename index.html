@@ -157,29 +157,17 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 @media(max-width:650px){.village-proposal-banner{align-items:stretch}.village-proposal-banner .primary-btn{width:100%}}
 
 
-/* Menu des formules — présentation clarifiée */
-.formula-heading{max-width:950px;margin:0 auto 24px;text-align:center}
-.formula-heading .eyebrow{margin-bottom:8px}
-.formula-heading h3{font-size:clamp(28px,3vw,38px);color:var(--forest);margin:0 0 12px}
-.formula-intro{max-width:850px;line-height:1.7;color:#536253;margin:0 auto 22px}
-.formula-howto{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:22px 0 34px}
-.formula-howto-step{display:flex;gap:12px;align-items:flex-start;background:#fffaf0;border:1px solid #e4d2a4;border-radius:14px;padding:16px;box-shadow:0 5px 15px #4b3a1108}
-.formula-howto-step>span{flex:0 0 34px;height:34px;display:grid;place-items:center;border-radius:50%;background:var(--forest);border:2px solid var(--gold);color:#fff0b5;font-weight:bold}
-.formula-howto-step strong{display:block;color:#174b35;margin:2px 0 5px}
-.formula-howto-step p{margin:0;color:#596456;line-height:1.5;font-size:14px}
-.formula-group-title{margin:28px 0 16px;padding:15px 18px;border-left:4px solid var(--gold);background:#f0e7d1;border-radius:0 12px 12px 0}
-.formula-group-title h4{margin:0 0 5px;color:var(--forest);font-size:23px}
-.formula-group-title p{margin:0;color:#596456;line-height:1.5}
-.formula-grid-travel{grid-template-columns:repeat(2,minmax(0,1fr))}
-.formula-visual.travel-two,.formula-visual.travel-three{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;color:#fff4cf;text-shadow:0 2px 5px #172719;padding:12px}
-.formula-visual.travel-two{background:linear-gradient(135deg,#174b35,#b18a35)}
-.formula-visual.travel-three{background:linear-gradient(135deg,#5c251e,#c18b36)}
-.formula-visual.travel-two span,.formula-visual.travel-three span{font-size:36px}
-.formula-visual.travel-two strong,.formula-visual.travel-three strong{font-size:21px;letter-spacing:1px}
-.formula-visual.travel-two small,.formula-visual.travel-three small{font-size:13px;font-weight:bold}
-.formula-card-travel{border-color:#c9a34c}
-.formula-note{margin:28px 0 12px;padding:17px 20px;background:#e9efdf;border:1px solid #cbd8bd;border-radius:12px;color:#254b36;line-height:1.6}
-@media(max-width:900px){.formula-howto{grid-template-columns:1fr}.formula-grid-travel{grid-template-columns:1fr}}
+/* Nouvelle page d'accueil immersive */
+.home-hero{position:relative;min-height:430px;padding:48px clamp(18px,4vw,56px);display:flex;align-items:center;background:linear-gradient(90deg,rgba(2,28,20,.82),rgba(2,28,20,.38) 56%,rgba(2,28,20,.08)),url("images/accueil-aventure.jpg") center/cover no-repeat;color:#fff7dc}
+.home-hero-copy{max-width:620px;padding:26px 30px;background:rgba(4,38,27,.78);border:1px solid #d7ad45;border-radius:18px;box-shadow:0 12px 34px #0005;backdrop-filter:blur(2px)}
+.home-hero-copy .eyebrow{color:#f1ce70}.home-hero-copy h1{font-size:clamp(34px,4.2vw,58px);line-height:1.04;margin:0 0 14px;color:#fff2c6}.home-hero-copy p{font-size:clamp(17px,2vw,21px);line-height:1.55;margin:0;color:#fff9e8}
+.home-hero-copy .gold-line{margin:16px 0}.home-hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.home-hero-actions .primary-btn{padding:13px 23px}.home-secondary-btn{border:1px solid #f0d27a;border-radius:999px;background:#fff4d9;color:#173c2a;padding:13px 22px;font-weight:bold}
+.home-promises{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:20px clamp(16px,4vw,48px);background:#0a3828;color:#fff2c9}.home-promise{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;font-weight:bold;line-height:1.35}.home-promise span{font-size:26px}
+.home-formulas{padding:42px clamp(16px,4vw,48px);background:#f7efdD}.home-formula-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}.home-formula{background:#fffaf0;border:1px solid #e4ca83;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px #263b2512}.home-formula-top{padding:17px 18px 9px;display:flex;align-items:center;gap:12px}.home-formula-icon{width:48px;height:48px;flex:0 0 48px;border-radius:50%;display:grid;place-items:center;background:#073523;border:2px solid #d7ad45;font-size:24px}.home-formula h3{font-size:20px;margin:0;color:#123d2b}.home-formula p{padding:0 18px 18px;margin:0;line-height:1.55;color:#4b594d}.home-formula-foot{text-align:center;margin-top:24px;color:#5d6758;line-height:1.6}
+.home-how{padding:38px clamp(16px,4vw,48px);background:#fffaf0}.home-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:22px}.home-step{text-align:center;padding:18px 12px;border:1px solid #ead7a7;border-radius:14px;background:#fff}.home-step strong{display:block;font-size:28px;margin-bottom:8px;color:#987321}.home-step p{margin:0;line-height:1.45}
+@media(max-width:900px){.home-formula-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.home-promises{grid-template-columns:repeat(2,minmax(0,1fr))}.home-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.home-hero{min-height:440px;padding:18px}.home-hero-copy{padding:21px 18px}.home-formula-grid{grid-template-columns:1fr}.home-promises{gap:15px}.home-promise{font-size:14px}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -198,28 +186,53 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <div class="sidebar-note">Explorez · Observez<br>Réfléchissez · Trouvez !</div>
   </aside>
   <div class="content">
-    <header class="hero" id="accueil">
-      <div class="hero-copy">
-        <p class="eyebrow">Bienvenue dans</p>
+    <header class="home-hero" id="accueil">
+      <div class="home-hero-copy">
+        <p class="eyebrow">Bienvenue dans votre prochaine aventure</p>
         <h1>Trésors de nos Villages</h1>
         <div class="gold-line"></div>
-        <p>Explorez les villages, résolvez les énigmes et collectionnez les étoiles !</p>
+        <p><strong>Et si votre village cachait un trésor ?</strong><br>Explorez des lieux, résolvez des énigmes et découvrez les petites histoires qui rendent chaque village unique.</p>
+        <div class="home-hero-actions">
+          <button class="primary-btn" type="button" onclick="showAccount()">Découvrir les aventures&nbsp; →</button>
+          <button class="home-secondary-btn" type="button" onclick="goTo('formules-public')">Voir les formules</button>
+        </div>
       </div>
     </header>
-    <section class="section" id="concept">
-      <h2 class="section-title">Comment fonctionne l’aventure ?</h2>
-      <p class="section-intro">Partez à la découverte du patrimoine, ouvrez l’œil et avancez à votre rythme. Chaque bonne réponse vous rapproche de votre prochain badge.</p>
-      <div class="feature-grid">
-        <article class="feature"><div class="feature-icon">🏡</div><h3>1. Explorez</h3><p>Découvrez le patrimoine et les histoires de nos villages.</p></article>
-        <article class="feature"><div class="feature-icon">🔎</div><h3>2. Résolvez les énigmes</h3><p>Observez les indices, réfléchissez et trouvez les réponses.</p></article>
-        <article class="feature"><div class="feature-icon">⭐</div><h3>3. Collectionnez les étoiles</h3><p>Progressez à votre rythme et débloquez des badges.</p></article>
+    <div class="home-promises" aria-label="Les points forts de l'aventure">
+      <div class="home-promise"><span>🗺️</span> Des villages à explorer</div>
+      <div class="home-promise"><span>🔎</span> Des énigmes à résoudre</div>
+      <div class="home-promise"><span>⭐</span> Des étoiles à collectionner</div>
+      <div class="home-promise"><span>👨‍👩‍👧‍👦</span> Une aventure pour tous</div>
+    </div>
+    <section class="home-formulas" id="formules-public">
+      <h2 class="section-title">Choisissez votre façon de partir à l'aventure</h2>
+      <p class="section-intro">En solo, en famille ou entre amis, il existe une formule pour chaque envie. Découvrez les univers et choisissez celui qui vous ressemble.</p>
+      <div class="home-formula-grid">
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🧒</div><h3>Mode Enfant</h3></div><p>Des jeux d'observation, des devinettes et des découvertes pour apprendre en s'amusant.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">👨‍👩‍👧</div><h3>Mode Famille</h3></div><p>Une aventure à partager, où petits et grands mettent leurs idées en commun.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🌿</div><h3>Mode Facile</h3></div><p>Une première exploration tranquille, avec des indices accessibles et des énigmes simples.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🧩</div><h3>Mode Moyen</h3></div><p>Des défis qui demandent réflexion, observation et un peu de logique.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🔥</div><h3>Mode Extrême</h3></div><p>Un grand défi pour les explorateurs qui aiment se creuser les méninges.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🌙</div><h3>Mode Nuit</h3></div><p>Une ambiance mystérieuse, des histoires et des énigmes pour changer de décor.</p></article>
+      </div>
+      <p class="home-formula-foot">Chaque formule possède son ambiance, ses défis et ses récompenses. Les détails se découvrent dans votre espace aventurier.</p>
+      <div class="cta-wrap" style="padding:20px 0 0"><button class="primary-btn" type="button" onclick="showAccount()">Je découvre mon aventure&nbsp; →</button></div>
+    </section>
+    <section class="home-how" id="concept">
+      <h2 class="section-title">Comment fonctionne l'aventure ?</h2>
+      <p class="section-intro">Quelques étapes simples pour transformer une balade en chasse au trésor.</p>
+      <div class="home-steps">
+        <article class="home-step"><strong>🗺️ 1</strong><p>Choisissez une aventure</p></article>
+        <article class="home-step"><strong>🧭 2</strong><p>Suivez les indications et les indices</p></article>
+        <article class="home-step"><strong>🔎 3</strong><p>Résolvez les énigmes sur le terrain</p></article>
+        <article class="home-step"><strong>⭐ 4</strong><p>Gagnez des étoiles et des badges</p></article>
       </div>
     </section>
     <section class="section" id="villages-public">
-      <h2 class="section-title">Une aventure près de chez vous</h2>
-      <p class="section-intro">Commencez avec notre première aventure à Humbert, dans le Pas-de-Calais. Les indices apparaissent seulement dans le jeu.</p>
+      <h2 class="section-title">Des aventures au cœur de nos villages</h2>
+      <p class="section-intro">Le projet se construit avec les communes pour proposer des parcours de découverte et mettre en valeur le patrimoine local. Les villages et aventures disponibles seront annoncés ici au fur et à mesure de leur confirmation.</p>
     </section>
-    <div class="cta-wrap"><button class="primary-btn" onclick="showAccount()">✥ &nbsp; Commencer l’aventure &nbsp; →</button></div>
+    <div class="cta-wrap"><button class="primary-btn" type="button" onclick="showAccount()">Créer mon compte / Me connecter&nbsp; →</button></div>
     <section class="account-area" id="account-area">
       <div class="account-card" id="account-card">
         <h2>♙ Mon compte</h2>
@@ -428,22 +441,8 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <section class="dash-section hidden" id="dash-badges"><h3>Mes badges</h3><div class="badges" id="badge-list"><div class="badge-card"><span>🔒</span>Explorateur<br><small>À débloquer</small></div></div></section>
     <section class="dash-section hidden" id="dash-stars"><h3>Mes étoiles</h3><p id="stars-summary">⭐ 0 / 10</p></section>
     <section class="dash-section hidden" id="dash-formulas">
-  <div class="formula-heading">
-    <p class="eyebrow">Carnet d’explorateur</p>
-    <h3>♧ Mes formules d’aventure</h3>
-    <p class="formula-intro">Choisis d’abord le ou les villages que tu souhaites découvrir, puis sélectionne la formule qui correspond à ton envie. Chaque niveau propose son propre parcours, ses énigmes et ses récompenses.</p>
-  </div>
-
-  <div class="formula-howto">
-    <div class="formula-howto-step"><span>1</span><div><strong>Choisis ton village</strong><p>Les formules individuelles et le Pack complet concernent un seul village.</p></div></div>
-    <div class="formula-howto-step"><span>2</span><div><strong>Choisis ton aventure</strong><p>Du parcours découverte au défi extrême, chaque niveau a son contenu.</p></div></div>
-    <div class="formula-howto-step"><span>3</span><div><strong>Joue et collectionne</strong><p>Résous les énigmes, gagne des étoiles et débloque tes récompenses.</p></div></div>
-  </div>
-
-  <div class="formula-group-title">
-    <h4>Les 7 niveaux pour un village</h4>
-    <p>Chaque formule ci-dessous donne accès à un parcours dans le village sélectionné.</p>
-  </div>
+  <h3>Mes formules</h3>
+  <p class="formula-intro">Choisis ton aventure : chaque formule propose une expérience différente, avec ses énigmes et ses récompenses.</p>
   <div class="formula-grid">
     <article class="formula-card">
       <div class="formula-visual child"><img src="images/image-03.jpg" alt="Photo réaliste du parcours child" loading="lazy"></div>
@@ -538,56 +537,11 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
         <p class="formula-reward"><strong>Bonus :</strong> badge Légende des villages, collection complète des récompenses et accès à l'aventure secrète bonus.</p>
         <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
-
-  </div>
-
-  <div class="formula-group-title formula-group-title-packs">
-    <h4>Envie de découvrir plusieurs villages ?</h4>
-    <p>Les packs multi-villages permettent de choisir plusieurs communes parmi les aventures disponibles.</p>
-  </div>
-  <div class="formula-grid formula-grid-travel">
-    <article class="formula-card formula-card-travel">
-      <div class="formula-visual travel-two" role="img" aria-label="Deux villages à découvrir">
-        <span aria-hidden="true">🧭 🏡 🏡</span><strong>PACK VOYAGEUR</strong><small>2 villages au choix</small>
-      </div>
-      <div class="formula-body">
-        <span class="formula-price">Tarif à définir</span>
-        <h4>Pack Voyageur — 2 villages</h4>
-        <p class="formula-lead"><strong>Deux villages à explorer</strong> · Une formule pour varier les découvertes.</p>
-        <p>Choisis deux villages parmi ceux dont les aventures sont disponibles et profite des parcours proposés dans chacun d’eux.</p>
-        <h5>Ce que comprend le pack</h5>
-        <ul><li>Le choix de 2 villages disponibles</li><li>Les formules accessibles dans ces villages</li><li>Les énigmes et les découvertes de chaque parcours</li><li>Les étoiles et récompenses liées à ta progression</li></ul>
-        <p class="formula-example"><strong>Exemple :</strong> sélectionne Humbert et un deuxième village disponible pour partir dans deux aventures différentes.</p>
-        <p class="formula-safety">Le choix des villages dépend des parcours effectivement publiés. Le tarif sera confirmé avant l’ouverture des ventes.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
-      </div>
-    </article>
-
-    <article class="formula-card formula-card-travel">
-      <div class="formula-visual travel-three" role="img" aria-label="Trois villages à découvrir">
-        <span aria-hidden="true">🧭 🏡 🏡 🏡</span><strong>PACK GRAND VOYAGEUR</strong><small>3 villages au choix</small>
-      </div>
-      <div class="formula-body">
-        <span class="formula-price">Tarif à définir</span>
-        <h4>Pack Grand Voyageur — 3 villages</h4>
-        <p class="formula-lead"><strong>Trois villages à découvrir</strong> · Encore plus de patrimoine et d’énigmes.</p>
-        <p>Choisis trois villages parmi les aventures disponibles et découvre leurs histoires, leurs lieux remarquables et leurs secrets.</p>
-        <h5>Ce que comprend le pack</h5>
-        <ul><li>Le choix de 3 villages disponibles</li><li>Les formules accessibles dans ces villages</li><li>Les énigmes et les parcours de chaque commune</li><li>Les étoiles et récompenses liées à ta progression</li></ul>
-        <p class="formula-example"><strong>Exemple :</strong> compose ton itinéraire avec trois villages que tu as envie de visiter.</p>
-        <p class="formula-safety">Le choix des villages dépend des parcours effectivement publiés. Le tarif sera confirmé avant l’ouverture des ventes.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
-      </div>
-    </article>
-  </div>
-
-  <div class="formula-note">
-    <strong>À retenir :</strong> le Pack complet à 9,99 € regroupe les 5 formules payantes d’un seul village. Les packs Voyageur et Grand Voyageur concernent plusieurs villages.
   </div>
   <p class="formula-safety">⏱️ Les durées sont indicatives. Les distances seront ajoutées lorsque chaque parcours et ses étapes GPS seront définis.</p>
   <p id="formula-status" class="status" aria-live="polite"></p>
 </section>
-
+    
     <section class="dash-section hidden" id="dash-help">
       <h3>❔ Centre d’aide</h3>
       <p>Voici les réponses aux questions les plus fréquentes.</p>
