@@ -169,13 +169,27 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 @media(max-width:560px){.home-hero{min-height:440px;padding:18px}.home-hero-copy{padding:21px 18px}.home-formula-grid{grid-template-columns:1fr}.home-promises{gap:15px}.home-promise{font-size:14px}}
 
 
-/* Décoration Halloween temporaire — ne modifie pas la mise en page */
-.halloween-deco{position:fixed;inset:0;z-index:20;pointer-events:none;overflow:hidden;display:none}
-.halloween-bats{position:absolute;top:12px;left:0;width:100%;display:flex;justify-content:space-around;gap:24px;font-size:clamp(20px,3vw,34px);opacity:.88;filter:drop-shadow(0 2px 3px #0005);animation:halloween-drift 5s ease-in-out infinite alternate}
-.halloween-pumpkin{position:fixed;right:16px;bottom:14px;font-size:clamp(30px,4vw,48px);filter:drop-shadow(0 3px 4px #0005);animation:halloween-bob 3s ease-in-out infinite}
-@keyframes halloween-drift{from{transform:translateX(-8px)}to{transform:translateX(8px)}}
-@keyframes halloween-bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-7px) rotate(4deg)}}
-@media(prefers-reduced-motion:reduce){.halloween-bats,.halloween-pumpkin{animation:none}}
+/* Décor réaliste Halloween — superposé sans modifier le thème du site */
+.halloween-realistic-frame{
+  position:fixed;
+  inset:0;
+  z-index:40;
+  pointer-events:none;
+  background-image:url("images/halloween-decor.png");
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size:100% 100%;
+  opacity:.96;
+}
+@media(max-width:700px){
+  .halloween-realistic-frame{
+    background-size:100% 100%;
+    opacity:.82;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .halloween-realistic-frame{transition:none}
+}
 
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -183,18 +197,16 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 </head>
 <body>
 
-<!-- Décoration Halloween temporaire : visible le 31 octobre et le 1er novembre -->
-<div class="halloween-deco" id="halloween-deco" aria-hidden="true">
-  <div class="halloween-bats"><span>🦇</span><span>🕸️</span><span>🦇</span><span>🕷️</span><span>🦇</span></div>
-  <div class="halloween-pumpkin">🎃</div>
-</div>
+<!-- Décor réaliste Halloween : actif le 31 octobre et le 1er novembre -->
+<div class="halloween-realistic-frame" id="halloween-realistic-frame" aria-hidden="true"></div>
 <script>
 (function(){
-  const now = new Date();
-  const isHalloweenWindow = (now.getMonth() === 9 && now.getDate() === 31) ||
-                            (now.getMonth() === 10 && now.getDate() === 1);
-  const decoration = document.getElementById("halloween-deco");
-  if (decoration && isHalloweenWindow) decoration.style.display = "block";
+  const today = new Date();
+  const halloweenPeriod =
+    (today.getMonth() === 9 && today.getDate() === 31) ||
+    (today.getMonth() === 10 && today.getDate() === 1);
+  const frame = document.getElementById("halloween-realistic-frame");
+  if (frame && !halloweenPeriod) frame.style.display = "none";
 })();
 </script>
 
