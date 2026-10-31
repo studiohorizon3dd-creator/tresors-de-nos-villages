@@ -842,11 +842,11 @@ body.halloween-accueil .home-hero{
         </div>
         <p id="admin-players-status" class="status" role="status" aria-live="polite">Chargement des joueurs…</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0">
-          <input id="admin-players-search" type="search" placeholder="Rechercher un pseudo ou identifiant…" aria-label="Rechercher un joueur" style="flex:1;min-width:220px;padding:11px 13px;border:1px solid #d4c49c;border-radius:9px;background:#fffefa">
+          <input id="admin-players-search" type="search" placeholder="Rechercher un nom, un e-mail ou un identifiant…" aria-label="Rechercher un joueur" style="flex:1;min-width:220px;padding:11px 13px;border:1px solid #d4c49c;border-radius:9px;background:#fffefa">
           <span id="admin-players-count" class="admin-updated">0 joueur</span>
         </div>
         <div id="admin-players-list" class="admin-recent-list" aria-live="polite"><p>Les joueurs apparaîtront ici.</p></div>
-        <p class="admin-footnote">Cette liste affiche les profils explorateurs créés sur le site. Elle ne représente pas nécessairement tous les comptes Neon Auth. Les adresses e-mail ne sont pas fournies par cette route.</p>
+        <p class="admin-footnote">Cette liste affiche les comptes enregistrés dans Neon Auth. Les statistiques de jeu sont associées lorsqu’un profil explorateur existe.</p>
       </div>
 
       <div id="admin-placeholder-view" class="admin-subview" hidden>
@@ -1249,7 +1249,7 @@ window.adminLoadPlayers = async function(){
   const count=document.getElementById("admin-players-count");
   const search=document.getElementById("admin-players-search");
   if(!status || !list) return;
-  status.textContent="Chargement des profils explorateurs…";
+  status.textContent="Chargement des comptes Neon…";
   list.replaceChildren();
   try{
     const query=encodeURIComponent(search?.value?.trim() || "");
@@ -1265,7 +1265,7 @@ window.adminLoadPlayers = async function(){
       table.style.cssText="width:100%;border-collapse:collapse;min-width:560px;font-size:13px";
       const thead=document.createElement("thead");
       const header=document.createElement("tr");
-      ["Pseudo","Identifiant","Aventures terminées","Formules actives","Classement","Dernière activité"].forEach(label=>{
+      ["Nom","Adresse e-mail","Inscription","Aventures terminées","Formules actives","Classement"].forEach(label=>{
         const th=document.createElement("th"); th.textContent=label;
         th.style.cssText="text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";
         header.appendChild(th);
@@ -1274,14 +1274,24 @@ window.adminLoadPlayers = async function(){
       const tbody=document.createElement("tbody");
       for(const player of players){
         const tr=document.createElement("tr");
-        const values=[player.pseudo || "Sans pseudo",player.user_id || "—",String(player.completed_adventures ?? 0),String(player.active_formulas ?? 0),player.leaderboard_opt_in ? "Oui" : "Non",player.updated_at ? new Date(player.updated_at).toLocaleString("fr-FR") : "—"];
+        const registered = player.registered_at
+          ? new Date(player.registered_at).toLocaleDateString("fr-FR")
+          : "—";
+        const values=[
+          player.name || player.pseudo || "Sans nom",
+          player.email || "—",
+          registered,
+          String(player.completed_adventures ?? 0),
+          String(player.active_formulas ?? 0),
+          player.leaderboard_opt_in ? "Oui" : "Non"
+        ];
         values.forEach(value=>{const td=document.createElement("td");td.textContent=value;td.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;overflow-wrap:anywhere";tr.appendChild(td);});
         tbody.appendChild(tr);
       }
       table.appendChild(tbody);
       const wrapper=document.createElement("div"); wrapper.style.overflowX="auto"; wrapper.appendChild(table); list.appendChild(wrapper);
     }
-    status.textContent="Liste des profils chargée.";
+    status.textContent="Liste des comptes Neon chargée.";
   }catch(error){
     status.textContent=error.message || "Impossible de charger les joueurs.";
     const help=document.createElement("p"); help.textContent="Vérifie que la nouvelle route /api/admin/players est bien déployée sur Render."; list.appendChild(help);
