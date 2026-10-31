@@ -1229,6 +1229,14 @@ function adminComingSoon(name){
   const text=document.getElementById("admin-placeholder-text"); if(text) text.textContent="Cette rubrique sera développée et reliée au serveur dans une prochaine étape. Aucune donnée existante n'est modifiée.";
 }
 
+// Les boutons HTML utilisent onclick : ces fonctions doivent être exposées sur window,
+// car elles sont déclarées dans un script module.
+window.adminShowHome = adminShowHome;
+window.adminShowAnalytics = adminShowAnalytics;
+window.adminOpenSupport = adminOpenSupport;
+window.adminOpenAdventures = adminOpenAdventures;
+window.adminComingSoon = adminComingSoon;
+
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
   const supportArea = document.getElementById("admin-support-area");
