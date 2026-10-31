@@ -783,7 +783,7 @@ body.halloween-accueil .home-hero{
       <div class="admin-nav-label">GESTION</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
-      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Gestion des joueurs')"><span>♙</span> Joueurs & administrateurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Gestion des villages')"><span>⌖</span> Villages</button>
       <div class="admin-nav-label">SUIVI</div>
       <button class="admin-nav-item" type="button" onclick="adminShowAnalytics()"><span>▥</span> Statistiques</button>
@@ -819,7 +819,7 @@ body.halloween-accueil .home-hero{
           <button type="button" class="admin-shortcut" onclick="adminOpenSupport()"><span class="admin-shortcut-icon">✉</span><span><strong>Support des joueurs</strong><small>Lire et traiter les demandes d'aide</small></span><b>→</b></button>
           <button type="button" class="admin-shortcut" onclick="adminOpenAdventures()"><span class="admin-shortcut-icon">🧩</span><span><strong>Aventures & énigmes</strong><small>Accéder à la gestion des parcours</small></span><b>→</b></button>
           <button type="button" class="admin-shortcut" onclick="adminShowAnalytics()"><span class="admin-shortcut-icon">▥</span><span><strong>Statistiques détaillées</strong><small>Consulter les visites récentes</small></span><b>→</b></button>
-          <button type="button" class="admin-shortcut" onclick="adminComingSoon('Gestion des joueurs')"><span class="admin-shortcut-icon">♙</span><span><strong>Joueurs & administrateurs</strong><small>Gestion des membres — à connecter</small></span><b>→</b></button>
+          <button type="button" class="admin-shortcut" onclick="adminOpenPlayers()"><span class="admin-shortcut-icon">♙</span><span><strong>Joueurs & administrateurs</strong><small>Consulter les profils des explorateurs</small></span><b>→</b></button>
         </div>
 
         <div class="admin-bottom-grid">
@@ -833,6 +833,20 @@ body.halloween-accueil .home-hero{
         <p id="analytics-status" class="status" role="status" aria-live="polite">Préparation du chargement des statistiques…</p>
         <div id="analytics-recent" class="admin-recent-list"><p>Les dernières visites apparaîtront ici.</p></div>
         <p class="admin-footnote">Les visiteurs anonymes sont comptés sans nom ni adresse e-mail. Un visiteur est considéré actif s'il a consulté le site au cours des 5 dernières minutes.</p>
+      </div>
+
+      <div id="admin-players-view" class="admin-subview" hidden>
+        <div class="admin-section-heading">
+          <div><h3>Joueurs & explorateurs</h3><p>Profils connus de Trésors de nos Villages</p></div>
+          <button type="button" class="admin-secondary-btn" onclick="adminLoadPlayers()">↻ Actualiser</button>
+        </div>
+        <p id="admin-players-status" class="status" role="status" aria-live="polite">Chargement des joueurs…</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0">
+          <input id="admin-players-search" type="search" placeholder="Rechercher un pseudo ou identifiant…" aria-label="Rechercher un joueur" style="flex:1;min-width:220px;padding:11px 13px;border:1px solid #d4c49c;border-radius:9px;background:#fffefa">
+          <span id="admin-players-count" class="admin-updated">0 joueur</span>
+        </div>
+        <div id="admin-players-list" class="admin-recent-list" aria-live="polite"><p>Les joueurs apparaîtront ici.</p></div>
+        <p class="admin-footnote">Cette liste affiche les profils explorateurs créés sur le site. Elle ne représente pas nécessairement tous les comptes Neon Auth. Les adresses e-mail ne sont pas fournies par cette route.</p>
       </div>
 
       <div id="admin-placeholder-view" class="admin-subview" hidden>
@@ -1198,13 +1212,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -1224,6 +1238,57 @@ async function adminOpenSupport(){
   }
 }
 function adminOpenAdventures(){adminSetView("admin-adventures-view","Aventures & énigmes");}
+async function adminOpenPlayers(){
+  adminSetView("admin-players-view","Joueurs & administrateurs");
+  await window.adminLoadPlayers();
+}
+window.adminOpenPlayers = adminOpenPlayers;
+window.adminLoadPlayers = async function(){
+  const status=document.getElementById("admin-players-status");
+  const list=document.getElementById("admin-players-list");
+  const count=document.getElementById("admin-players-count");
+  const search=document.getElementById("admin-players-search");
+  if(!status || !list) return;
+  status.textContent="Chargement des profils explorateurs…";
+  list.replaceChildren();
+  try{
+    const query=encodeURIComponent(search?.value?.trim() || "");
+    const data=await adminApi(`/api/admin/players${query ? `?search=${query}` : ""}`);
+    const players=Array.isArray(data.players) ? data.players : [];
+    if(count) count.textContent=`${players.length} joueur${players.length>1?"s":""}`;
+    if(!players.length){
+      const empty=document.createElement("p");
+      empty.textContent="Aucun profil explorateur trouvé.";
+      list.appendChild(empty);
+    }else{
+      const table=document.createElement("table");
+      table.style.cssText="width:100%;border-collapse:collapse;min-width:560px;font-size:13px";
+      const thead=document.createElement("thead");
+      const header=document.createElement("tr");
+      ["Pseudo","Identifiant","Aventures terminées","Formules actives","Classement","Dernière activité"].forEach(label=>{
+        const th=document.createElement("th"); th.textContent=label;
+        th.style.cssText="text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";
+        header.appendChild(th);
+      });
+      thead.appendChild(header); table.appendChild(thead);
+      const tbody=document.createElement("tbody");
+      for(const player of players){
+        const tr=document.createElement("tr");
+        const values=[player.pseudo || "Sans pseudo",player.user_id || "—",String(player.completed_adventures ?? 0),String(player.active_formulas ?? 0),player.leaderboard_opt_in ? "Oui" : "Non",player.updated_at ? new Date(player.updated_at).toLocaleString("fr-FR") : "—"];
+        values.forEach(value=>{const td=document.createElement("td");td.textContent=value;td.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;overflow-wrap:anywhere";tr.appendChild(td);});
+        tbody.appendChild(tr);
+      }
+      table.appendChild(tbody);
+      const wrapper=document.createElement("div"); wrapper.style.overflowX="auto"; wrapper.appendChild(table); list.appendChild(wrapper);
+    }
+    status.textContent="Liste des profils chargée.";
+  }catch(error){
+    status.textContent=error.message || "Impossible de charger les joueurs.";
+    const help=document.createElement("p"); help.textContent="Vérifie que la nouvelle route /api/admin/players est bien déployée sur Render."; list.appendChild(help);
+    if(count) count.textContent="—";
+  }
+};
+
 function adminComingSoon(name){
   adminSetView("admin-placeholder-view",name);
   const title=document.getElementById("admin-placeholder-title"); if(title) title.textContent=name+" — en préparation";
@@ -2310,6 +2375,13 @@ window.loadSiteAnalytics = async function() {
   }
 };
 
+
+const adminPlayersSearch = document.getElementById("admin-players-search");
+if(adminPlayersSearch){
+  adminPlayersSearch.addEventListener("keydown", event=>{
+    if(event.key==="Enter") window.adminLoadPlayers();
+  });
+}
 </script>
 </body>
 </html>
