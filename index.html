@@ -912,18 +912,21 @@ const auth = createAuthClient(AUTH_URL);
     const user = result?.data?.user ?? session?.user;
 
    if (user) {
-  showDashboard(
-    user.name || "explorateur",
-    user.email || ""
-  );
-}
+    showDashboard(
+      user.name || "explorateur",
+      user.email || ""
+    );
+    window.loadExplorerProfile?.();
+    window.loadLeaderboard?.();
+  }
   } catch (error) {
     console.error("Restauration de session :", error);
   }
 }
 
-// restoreLogin(); 
-console.log("Restauration de session lancée");
+// Restaure automatiquement la session Neon après actualisation de la page.
+restoreLogin();
+console.log("Restauration automatique de session activée");
 const form = document.getElementById("signup-form");
 const status = document.getElementById("auth-status");
 const loginBtn = document.getElementById("login-btn");
