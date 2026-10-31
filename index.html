@@ -275,7 +275,14 @@ body.halloween-accueil .home-hero{
 .tester-panel{max-width:850px;margin:20px auto;background:#fffaf0;border:1px solid #d7ad45;border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:0 8px 22px #18332612}
 .tester-panel h3{color:#123d2b;margin-top:0}.tester-panel label{display:block;font-weight:700;margin:12px 0 6px}.tester-panel textarea{width:100%;min-height:120px;padding:12px;border:1px solid #d4c49c;border-radius:9px;font:inherit}.tester-status{padding:12px 14px;border-radius:9px;background:#f1ead6;line-height:1.55;margin:12px 0}.tester-table-wrap{overflow-x:auto}
 
-</style>
+
+/* Respecter l'attribut hidden même si les styles des menus utilisent display:flex */
+#dashboard .nav-btn[hidden],
+#dashboard [hidden],
+#dashboard .tester-home-card[hidden] {
+  display: none !important;
+}
+\n</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
