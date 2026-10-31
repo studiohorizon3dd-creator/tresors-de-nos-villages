@@ -245,6 +245,7 @@ body.halloween-accueil .home-hero{
 @media(max-width:1050px){.admin-workspace{grid-template-columns:205px minmax(0,1fr)}.admin-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.admin-workspace{display:block;margin:-24px -16px;min-height:0}.admin-sidebar{padding:12px;display:block}.admin-brand{flex-direction:row;justify-content:center;padding:4px 4px 12px;margin-bottom:8px}.admin-brand-mark{width:34px;height:34px;font-size:20px}.admin-brand small{display:none}.admin-nav-label{display:none}.admin-nav-item{display:inline-flex;width:auto;padding:9px;margin:2px;font-size:11px}.admin-sidebar-bottom{display:none}.admin-main{padding:17px 13px 25px}.admin-topbar{align-items:flex-start;flex-direction:column}.admin-welcome{padding:20px}.admin-shortcut-grid,.admin-bottom-grid{grid-template-columns:1fr}}
 @media(max-width:420px){.admin-metric-grid{grid-template-columns:1fr 1fr}.admin-metric{padding:12px}.admin-metric strong{font-size:24px}.admin-nav-item{font-size:10px;padding:8px}}
+@media(max-width:650px){#admin-village-form{grid-template-columns:1fr!important}#admin-village-form label[style*="grid-column:1/-1"]{grid-column:1!important}}
 
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -784,7 +785,7 @@ body.halloween-accueil .home-hero{
       <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
-      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Gestion des villages')"><span>⌖</span> Villages</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
       <div class="admin-nav-label">SUIVI</div>
       <button class="admin-nav-item" type="button" onclick="adminShowAnalytics()"><span>▥</span> Statistiques</button>
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules et paiements')"><span>€</span> Formules & paiements</button>
@@ -847,6 +848,50 @@ body.halloween-accueil .home-hero{
         </div>
         <div id="admin-players-list" class="admin-recent-list" aria-live="polite"><p>Les joueurs apparaîtront ici.</p></div>
         <p class="admin-footnote">Cette liste affiche les comptes enregistrés dans Neon Auth. Les statistiques de jeu sont associées lorsqu’un profil explorateur existe.</p>
+      </div>
+
+      <div id="admin-villages-view" class="admin-subview" hidden>
+        <div class="admin-section-heading">
+          <div><h3>Gestion des villages</h3><p>Préparer les communes et suivre leur confirmation avant toute publication.</p></div>
+          <button type="button" class="admin-secondary-btn" onclick="adminLoadVillages()">↻ Actualiser</button>
+        </div>
+        <div class="admin-info-panel" style="margin-bottom:16px">
+          <strong>Important :</strong> un village en attente ou en préparation n'est pas annoncé comme disponible aux visiteurs.
+          Humbert est enregistré en attente de confirmation. Aucun autre village n'est ajouté automatiquement.
+        </div>
+        <p id="admin-villages-status" class="status" role="status" aria-live="polite">Chargement des villages…</p>
+        <div id="admin-villages-list" class="admin-recent-list" aria-live="polite"><p>Les villages apparaîtront ici.</p></div>
+        <div class="admin-info-panel" style="margin-top:18px">
+          <h3 id="admin-village-form-title">Ajouter un village</h3>
+          <form id="admin-village-form" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px">
+            <input type="hidden" id="admin-village-id">
+            <label style="display:grid;gap:6px">Nom du village
+              <input id="admin-village-name" required maxlength="150" placeholder="Ex. Humbert" style="padding:11px;border:1px solid #d4c49c;border-radius:9px">
+            </label>
+            <label style="display:grid;gap:6px">Identifiant (sans espace)
+              <input id="admin-village-slug" required maxlength="100" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="ex. humbert" style="padding:11px;border:1px solid #d4c49c;border-radius:9px">
+            </label>
+            <label style="display:grid;gap:6px">Code postal
+              <input id="admin-village-postal" maxlength="10" placeholder="Ex. 62650" style="padding:11px;border:1px solid #d4c49c;border-radius:9px">
+            </label>
+            <label style="display:grid;gap:6px">Statut
+              <select id="admin-village-status" required style="padding:11px;border:1px solid #d4c49c;border-radius:9px;background:#fff">
+                <option value="pending_confirmation">En attente de confirmation</option>
+                <option value="preparing">En préparation</option>
+                <option value="available">Disponible</option>
+                <option value="inactive">Désactivé</option>
+              </select>
+            </label>
+            <label style="grid-column:1/-1;display:grid;gap:6px">Description
+              <textarea id="admin-village-description" maxlength="3000" rows="3" placeholder="Informations internes sur la préparation du village…" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></textarea>
+            </label>
+            <div style="grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap">
+              <button type="submit" class="admin-secondary-btn" id="admin-village-save">Enregistrer le village</button>
+              <button type="button" class="admin-secondary-btn" onclick="adminResetVillageForm()">Annuler</button>
+            </div>
+          </form>
+        </div>
+        <p class="admin-footnote">Les modifications sont enregistrées dans Neon. Cette rubrique ne modifie pas les formules, les paiements, les énigmes ni les pages publiques.</p>
       </div>
 
       <div id="admin-placeholder-view" class="admin-subview" hidden>
@@ -1212,13 +1257,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-villages-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-villages-view"?"adminOpenVillages":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -1298,6 +1343,140 @@ window.adminLoadPlayers = async function(){
     if(count) count.textContent="—";
   }
 };
+
+const ADMIN_VILLAGE_STATUSES = {
+  pending_confirmation: "En attente de confirmation",
+  preparing: "En préparation",
+  available: "Disponible",
+  inactive: "Désactivé"
+};
+
+function adminVillageCell(value) {
+  const cell = document.createElement("td");
+  cell.textContent = value == null || value === "" ? "—" : String(value);
+  cell.style.cssText = "padding:11px 9px;border-bottom:1px solid #eee8d9;vertical-align:top";
+  return cell;
+}
+
+function adminResetVillageForm() {
+  const form = document.getElementById("admin-village-form");
+  if (form) form.reset();
+  const id = document.getElementById("admin-village-id");
+  if (id) id.value = "";
+  const title = document.getElementById("admin-village-form-title");
+  if (title) title.textContent = "Ajouter un village";
+  const save = document.getElementById("admin-village-save");
+  if (save) save.textContent = "Enregistrer le village";
+}
+
+function adminEditVillage(village) {
+  document.getElementById("admin-village-id").value = village.id;
+  document.getElementById("admin-village-name").value = village.name || "";
+  document.getElementById("admin-village-slug").value = village.slug || "";
+  document.getElementById("admin-village-postal").value = village.postal_code || "";
+  document.getElementById("admin-village-status").value = village.status || "pending_confirmation";
+  document.getElementById("admin-village-description").value = village.description || "";
+  document.getElementById("admin-village-form-title").textContent = "Modifier " + (village.name || "le village");
+  document.getElementById("admin-village-save").textContent = "Enregistrer les modifications";
+  document.getElementById("admin-village-form").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+window.adminResetVillageForm = adminResetVillageForm;
+window.adminOpenVillages = async function() {
+  adminSetView("admin-villages-view", "Gestion des villages");
+  await window.adminLoadVillages();
+};
+
+window.adminLoadVillages = async function() {
+  const status = document.getElementById("admin-villages-status");
+  const list = document.getElementById("admin-villages-list");
+  if (!status || !list) return;
+  status.textContent = "Chargement des villages…";
+  list.replaceChildren();
+  try {
+    const data = await adminApi("/api/admin/villages");
+    const villages = Array.isArray(data.villages) ? data.villages : [];
+    if (!villages.length) {
+      list.textContent = "Aucun village enregistré.";
+      status.textContent = "Liste chargée.";
+      return;
+    }
+    const table = document.createElement("table");
+    table.style.cssText = "width:100%;border-collapse:collapse;min-width:680px;font-size:13px";
+    const head = document.createElement("thead");
+    const header = document.createElement("tr");
+    ["Village", "Code postal", "Statut", "Description", "Action"].forEach(label => {
+      const th = document.createElement("th");
+      th.textContent = label;
+      th.style.cssText = "text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";
+      header.appendChild(th);
+    });
+    head.appendChild(header);
+    table.appendChild(head);
+    const body = document.createElement("tbody");
+    for (const village of villages) {
+      const tr = document.createElement("tr");
+      tr.append(
+        adminVillageCell(village.name),
+        adminVillageCell(village.postal_code),
+        adminVillageCell(ADMIN_VILLAGE_STATUSES[village.status] || village.status),
+        adminVillageCell(village.description)
+      );
+      const actionCell = adminVillageCell("");
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.className = "admin-secondary-btn";
+      edit.textContent = "Modifier";
+      edit.addEventListener("click", () => adminEditVillage(village));
+      actionCell.appendChild(edit);
+      tr.appendChild(actionCell);
+      body.appendChild(tr);
+    }
+    table.appendChild(body);
+    const wrapper = document.createElement("div");
+    wrapper.style.overflowX = "auto";
+    wrapper.appendChild(table);
+    list.appendChild(wrapper);
+    status.textContent = `${villages.length} village${villages.length > 1 ? "s" : ""} chargé${villages.length > 1 ? "s" : ""}.`;
+  } catch (error) {
+    status.textContent = error.message || "Impossible de charger les villages.";
+    const help = document.createElement("p");
+    help.textContent = "Vérifie que le serveur Render est bien déployé et que tu es connectée avec le compte administrateur.";
+    list.appendChild(help);
+  }
+};
+
+const adminVillageForm = document.getElementById("admin-village-form");
+if (adminVillageForm) {
+  adminVillageForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    const status = document.getElementById("admin-villages-status");
+    const save = document.getElementById("admin-village-save");
+    const id = document.getElementById("admin-village-id").value;
+    const payload = {
+      name: document.getElementById("admin-village-name").value.trim(),
+      slug: document.getElementById("admin-village-slug").value.trim().toLowerCase(),
+      postal_code: document.getElementById("admin-village-postal").value.trim(),
+      status: document.getElementById("admin-village-status").value,
+      description: document.getElementById("admin-village-description").value.trim()
+    };
+    save.disabled = true;
+    status.textContent = "Enregistrement…";
+    try {
+      await adminApi(id ? `/api/admin/villages/${encodeURIComponent(id)}` : "/api/admin/villages", {
+        method: id ? "PATCH" : "POST",
+        body: JSON.stringify(payload)
+      });
+      status.textContent = id ? "Village modifié avec succès." : "Village ajouté avec succès.";
+      adminResetVillageForm();
+      await window.adminLoadVillages();
+    } catch (error) {
+      status.textContent = error.message || "Impossible d’enregistrer le village.";
+    } finally {
+      save.disabled = false;
+    }
+  });
+}
 
 function adminComingSoon(name){
   adminSetView("admin-placeholder-view",name);
