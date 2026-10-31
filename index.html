@@ -186,6 +186,66 @@ body.halloween-accueil .home-hero{
   }
 }
 
+
+
+/* ===== Administration : console de pilotage ===== */
+.admin-workspace{display:grid;grid-template-columns:238px minmax(0,1fr);min-height:850px;margin:-28px -30px;background:#f4f1e8;border-radius:16px;overflow:hidden;color:#1d3328;font-family:Arial,sans-serif}
+.admin-sidebar{background:#082d22;color:#f7f0dc;padding:25px 15px;display:flex;flex-direction:column;gap:5px}
+.admin-brand{text-align:center;padding:5px 8px 28px;border-bottom:1px solid #ffffff20;margin-bottom:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.admin-brand-mark{width:48px;height:48px;border:2px solid #d7ad45;border-radius:15px;display:grid;place-items:center;color:#e7c46d;font-size:28px}
+.admin-brand strong{font-family:Georgia,serif;font-size:17px;line-height:1.25}
+.admin-brand small,.admin-nav-label,.admin-kicker{font-size:10px;letter-spacing:1.5px;font-weight:800;color:#b9c7b7}
+.admin-nav-label{padding:15px 12px 5px;color:#9eae9f}
+.admin-nav-item{border:0;background:transparent;color:#e9eadb;border-radius:9px;text-align:left;padding:12px 13px;font-size:13px;display:flex;align-items:center;gap:12px}
+.admin-nav-item span{width:20px;text-align:center;font-size:17px;color:#e5c36e}
+.admin-nav-item:hover,.admin-nav-item.active{background:#174b37;color:#fff}
+.admin-sidebar-bottom{margin-top:auto;padding:18px 10px 4px;border-top:1px solid #ffffff20;font-size:12px;color:#c9d1c4}
+.admin-online-dot,.admin-status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#65bd80;margin-right:7px}
+.admin-sidebar-bottom button{display:block;margin-top:15px;border:1px solid #b79a51;background:transparent;color:#fff0c4;border-radius:8px;padding:9px 12px;width:100%}
+.admin-main{min-width:0;padding:27px clamp(16px,3vw,34px) 38px}
+.admin-topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid #ded9ca;padding-bottom:19px;margin-bottom:22px}
+.admin-topbar h2{font: bold 27px Georgia,serif;margin:5px 0 0;color:#123b2b}
+.admin-kicker{color:#8a783e}
+.admin-top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.admin-secure-pill{font-size:11px;color:#286342;background:#e5efe4;padding:8px 11px;border-radius:20px}
+.admin-refresh,.admin-secondary-btn{border:1px solid #c9ae65;background:#fffaf0;color:#244b36;border-radius:9px;padding:10px 14px;font-weight:700}
+.admin-welcome{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:25px 28px;border-radius:15px;background:linear-gradient(115deg,#0a3929,#1b6042);color:#fff5d9;box-shadow:0 8px 20px #153a2a18}
+.admin-welcome h3{font: bold clamp(21px,2.6vw,29px) Georgia,serif;margin:8px 0}
+.admin-welcome p{margin:0;line-height:1.5;color:#e5e8d8;font-size:13px}
+.admin-welcome .admin-kicker{color:#e6c875}
+.admin-welcome-icon{font-size:48px}
+.admin-section-heading{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:27px 0 14px}
+.admin-section-heading h3,.admin-info-panel h3{font: bold 19px Georgia,serif;margin:0 0 5px;color:#183d2c}
+.admin-section-heading p{margin:0;color:#6c756b;font-size:12px}
+.admin-updated{font-size:11px;color:#55775d;background:#e8eee4;padding:7px 10px;border-radius:20px}
+.admin-metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.admin-metric{background:#fffdf7;border:1px solid #e5ddc8;border-radius:12px;padding:16px;box-shadow:0 4px 12px #243b2910;min-width:0}
+.admin-metric-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#edf1e7;color:#28583d;font-size:18px;margin-bottom:13px}
+.admin-metric-label{display:block;font-size:12px;color:#687267;min-height:30px}
+.admin-metric strong{display:block;font: bold 29px Georgia,serif;color:#153d2c;margin:3px 0}
+.admin-metric small{font-size:10px;color:#8a9085}
+.admin-shortcut-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.admin-shortcut{display:flex;align-items:center;gap:13px;text-align:left;padding:15px;background:#fffdf7;border:1px solid #e5ddc8;border-radius:12px;color:#203b2d}
+.admin-shortcut:hover{border-color:#c5a24b;transform:translateY(-1px)}
+.admin-shortcut-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:11px;background:#edf1e7;color:#27583c;font-size:20px;flex:none}
+.admin-shortcut span:nth-child(2){display:flex;flex-direction:column;gap:4px;min-width:0}
+.admin-shortcut strong{font-size:13px}
+.admin-shortcut small{font-size:11px;color:#737c70}
+.admin-shortcut b{margin-left:auto;color:#a4873d;font-size:20px}
+.admin-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.admin-info-panel{background:#fffdf7;border:1px solid #e5ddc8;border-radius:12px;padding:18px;line-height:1.55;font-size:12px;color:#647064}
+.admin-info-panel p{margin:9px 0}
+.admin-subview{margin-top:8px}
+.admin-recent-list{background:#fffdf7;border:1px solid #e5ddc8;border-radius:12px;padding:15px;overflow:auto}
+.admin-footnote{font-size:11px;color:#7a8177;line-height:1.5}
+.admin-placeholder{margin:30px auto;max-width:520px;text-align:center;padding:45px 25px;background:#fffdf7;border:1px dashed #cdbb8a;border-radius:16px}
+.admin-placeholder>span{font-size:40px}
+.admin-placeholder h3{font: bold 22px Georgia,serif;color:#153d2c}
+.admin-placeholder p{font-size:13px;line-height:1.6;color:#687267}
+@media(max-width:1050px){.admin-workspace{grid-template-columns:205px minmax(0,1fr)}.admin-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.admin-workspace{display:block;margin:-24px -16px;min-height:0}.admin-sidebar{padding:12px;display:block}.admin-brand{flex-direction:row;justify-content:center;padding:4px 4px 12px;margin-bottom:8px}.admin-brand-mark{width:34px;height:34px;font-size:20px}.admin-brand small{display:none}.admin-nav-label{display:none}.admin-nav-item{display:inline-flex;width:auto;padding:9px;margin:2px;font-size:11px}.admin-sidebar-bottom{display:none}.admin-main{padding:17px 13px 25px}.admin-topbar{align-items:flex-start;flex-direction:column}.admin-welcome{padding:20px}.admin-shortcut-grid,.admin-bottom-grid{grid-template-columns:1fr}}
+@media(max-width:420px){.admin-metric-grid{grid-template-columns:1fr 1fr}.admin-metric{padding:12px}.admin-metric strong{font-size:24px}.admin-nav-item{font-size:10px;padding:8px}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -711,51 +771,84 @@ body.halloween-accueil .home-hero{
 
 
 <section class="dash-section hidden" id="dash-admin-info">
-  <h3>⚙ Administration du site</h3>
-  <p>Cet espace est réservé à la gestion du projet : aventures, énigmes, indices, coordonnées GPS et demandes d’aide.</p>
+  <div class="admin-workspace">
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <span class="admin-brand-mark">✥</span>
+        <strong>Trésors de nos Villages</strong>
+        <small>ESPACE ADMINISTRATION</small>
+      </div>
+      <div class="admin-nav-label">PILOTAGE</div>
+      <button class="admin-nav-item active" type="button" onclick="adminShowHome()"><span>▦</span> Tableau de bord</button>
+      <div class="admin-nav-label">GESTION</div>
+      <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Gestion des joueurs')"><span>♙</span> Joueurs & administrateurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Gestion des villages')"><span>⌖</span> Villages</button>
+      <div class="admin-nav-label">SUIVI</div>
+      <button class="admin-nav-item" type="button" onclick="adminShowAnalytics()"><span>▥</span> Statistiques</button>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules et paiements')"><span>€</span> Formules & paiements</button>
+      <div class="admin-sidebar-bottom">
+        <span class="admin-online-dot"></span> Espace sécurisé
+        <button type="button" onclick="returnHome()">↩ Retour au site</button>
+      </div>
+    </aside>
 
-  <div class="feature-grid">
-    <button type="button" class="feature" onclick="showDashSection('dash-admin-enigmes')">
-      <div class="feature-icon">🧩</div>
-      <h3>Énigmes</h3>
-      <p>Corriger les questions et les indices.</p>
-    </button>
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <div><span class="admin-kicker">CENTRE DE PILOTAGE</span><h2 id="admin-page-title">Tableau de bord</h2></div>
+        <div class="admin-top-actions"><span class="admin-secure-pill">● Administration active</span><button type="button" class="admin-refresh" onclick="loadSiteAnalytics()">↻ Actualiser</button></div>
+      </header>
 
-    <button type="button" class="feature" onclick="showDashSection('dash-admin-support')">
-      <div class="feature-icon">✉️</div>
-      <h3>Support</h3>
-      <p>Consulter les demandes et répondre aux joueurs.</p>
-    </button>
-  </div>
+      <div id="admin-home-view">
+        <div class="admin-welcome">
+          <div><span class="admin-kicker">BIENVENUE DANS VOTRE ESPACE</span><h3>Gardez un œil sur votre aventure.</h3><p>Retrouvez les informations essentielles et accédez rapidement à la gestion du projet.</p></div>
+          <div class="admin-welcome-icon">🌿</div>
+        </div>
 
+        <div class="admin-section-heading"><div><h3>Vue d'ensemble</h3><p>Indicateurs actuellement disponibles sur le serveur</p></div><span class="admin-updated">Données en direct</span></div>
+        <div class="admin-metric-grid">
+          <article class="admin-metric"><span class="admin-metric-icon">👁</span><span class="admin-metric-label">Visiteurs actifs</span><strong id="analytics-active">—</strong><small>Sur les 5 dernières minutes</small></article>
+          <article class="admin-metric"><span class="admin-metric-icon">♙</span><span class="admin-metric-label">Explorateurs connectés</span><strong id="analytics-members">—</strong><small>Visiteurs identifiés</small></article>
+          <article class="admin-metric"><span class="admin-metric-icon">◌</span><span class="admin-metric-label">Visiteurs anonymes</span><strong id="analytics-anonymous">—</strong><small>Sans compte connecté</small></article>
+          <article class="admin-metric"><span class="admin-metric-icon">▤</span><span class="admin-metric-label">Visites sur 24 h</span><strong id="analytics-24h">—</strong><small>Depuis les dernières 24 heures</small></article>
+        </div>
 
-  <div class="feature" style="margin:18px 0;">
-    <h3>📊 Statistiques du site</h3>
-    <p>Visiteurs actifs (5 dernières minutes), visiteurs anonymes et explorateurs connectés.</p>
-    <button type="button" class="primary-btn" onclick="loadSiteAnalytics()">Actualiser les statistiques</button>
-    <p id="analytics-status" role="status" aria-live="polite">Les statistiques se chargent après validation de l'accès administrateur.</p>
-    <div class="feature-grid" id="analytics-counters">
-      <article class="feature"><h4>Visiteurs actifs</h4><p id="analytics-active">—</p></article>
-      <article class="feature"><h4>Explorateurs connectés</h4><p id="analytics-members">—</p></article>
-      <article class="feature"><h4>Visiteurs anonymes</h4><p id="analytics-anonymous">—</p></article>
-      <article class="feature"><h4>Visites sur 24 h</h4><p id="analytics-24h">—</p></article>
+        <div class="admin-section-heading"><div><h3>Accès rapides</h3><p>Les outils principaux de votre administration</p></div></div>
+        <div class="admin-shortcut-grid">
+          <button type="button" class="admin-shortcut" onclick="adminOpenSupport()"><span class="admin-shortcut-icon">✉</span><span><strong>Support des joueurs</strong><small>Lire et traiter les demandes d'aide</small></span><b>→</b></button>
+          <button type="button" class="admin-shortcut" onclick="adminOpenAdventures()"><span class="admin-shortcut-icon">🧩</span><span><strong>Aventures & énigmes</strong><small>Accéder à la gestion des parcours</small></span><b>→</b></button>
+          <button type="button" class="admin-shortcut" onclick="adminShowAnalytics()"><span class="admin-shortcut-icon">▥</span><span><strong>Statistiques détaillées</strong><small>Consulter les visites récentes</small></span><b>→</b></button>
+          <button type="button" class="admin-shortcut" onclick="adminComingSoon('Gestion des joueurs')"><span class="admin-shortcut-icon">♙</span><span><strong>Joueurs & administrateurs</strong><small>Gestion des membres — à connecter</small></span><b>→</b></button>
+        </div>
+
+        <div class="admin-bottom-grid">
+          <article class="admin-info-panel"><h3>État du projet</h3><p><span class="admin-status-dot"></span> Serveur d'administration connecté</p><p>Les outils sont ajoutés progressivement. Les rubriques non encore reliées à une API sont signalées comme étant en préparation.</p></article>
+          <article class="admin-info-panel"><h3>Actions de test</h3><p>Tester le parcours sans modifier les données des joueurs.</p><button type="button" class="admin-secondary-btn" onclick="activerModeTestAventure()">🧪 Tester l'aventure</button><p id="admin-test-status" class="status" role="status" aria-live="polite"></p></article>
+        </div>
+      </div>
+
+      <div id="admin-analytics-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>Statistiques du site</h3><p>Fréquentation et visiteurs récents</p></div></div>
+        <div id="analytics-recent" class="admin-recent-list"><p>Chargement des dernières visites…</p></div>
+        <p class="admin-footnote">Les visiteurs anonymes sont comptés sans nom ni adresse e-mail. Un visiteur est considéré actif s'il a consulté le site au cours des 5 dernières minutes.</p>
+      </div>
+
+      <div id="admin-placeholder-view" class="admin-subview" hidden>
+        <div class="admin-placeholder"><span>🛠️</span><h3 id="admin-placeholder-title">Rubrique en préparation</h3><p id="admin-placeholder-text">Cette partie sera connectée au serveur dans une prochaine étape. Les données ne sont pas encore disponibles.</p></div>
+      </div>
+
+      <div id="admin-adventures-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>Aventures & énigmes</h3><p>Gestion des parcours enregistrés sur le serveur</p></div></div>
+        <div class="admin-info-panel"><p>Le serveur dispose déjà de routes sécurisées pour lister et créer des aventures, consulter et ajouter des étapes, et supprimer une aventure.</p><p>L'interface complète de gestion sera construite dans une prochaine étape, sans toucher aux parcours existants.</p><button type="button" class="admin-secondary-btn" onclick="adminComingSoon('Éditeur des aventures')">Préparer l'éditeur</button></div>
+      </div>
+
+      <div id="admin-support-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>Demandes d'aide des joueurs</h3><p>Répondre aux joueurs et suivre les demandes</p></div></div>
+        <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
+        <div id="admin-support-area"><div id="admin-support-list"></div></div>
+      </div>
     </div>
-    <h4>Dernières visites</h4>
-    <div id="analytics-recent"><p>Aucune donnée chargée.</p></div>
-    <p style="font-size:0.85rem;">Les visiteurs anonymes sont comptés sans nom ni adresse e-mail. Un visiteur est considéré actif s'il a consulté le site au cours des 5 dernières minutes.</p>
-  </div>
-
-  <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
-
-  <button type="button" onclick="activerModeTestAventure()">
-    🧪 Tester l’aventure
-  </button>
-  <p id="admin-test-status" role="status" aria-live="polite"></p>
-
-  <div id="admin-support-area" hidden>
-    <h3>Demandes d’aide des joueurs</h3>
-    <p>Les demandes sont chargées depuis le serveur sécurisé.</p>
-    <div id="admin-support-list"></div>
   </div>
 </section>
     
@@ -1103,6 +1196,26 @@ window.saveLeaderboardPreference = async function(enabled) {
   }
 };
 
+function adminSetView(view, title) {
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view"].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.hidden=true;
+  });
+  const target=document.getElementById(view); if(target) target.hidden=false;
+  const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
+  document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":"adminComingSoon"));
+  if(active) active.classList.add("active");
+}
+function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
+function adminShowAnalytics(){adminSetView("admin-analytics-view","Statistiques");window.loadSiteAnalytics?.();}
+function adminOpenSupport(){adminSetView("admin-support-view","Support des joueurs");window.openAdminPanel?.();}
+function adminOpenAdventures(){adminSetView("admin-adventures-view","Aventures & énigmes");}
+function adminComingSoon(name){
+  adminSetView("admin-placeholder-view",name);
+  const title=document.getElementById("admin-placeholder-title"); if(title) title.textContent=name+" — en préparation";
+  const text=document.getElementById("admin-placeholder-text"); if(text) text.textContent="Cette rubrique sera développée et reliée au serveur dans une prochaine étape. Aucune donnée existante n'est modifiée.";
+}
+
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
   const supportArea = document.getElementById("admin-support-area");
@@ -1112,6 +1225,7 @@ window.openAdminPanel = async function() {
     await adminApi("/api/admin/me");
     window.setAdminAccessGranted(true);
     window.showDashSection("dash-admin-info");
+    adminShowHome();
     statusEl.textContent = "Accès administrateur confirmé.";
     const result = await adminApi("/api/admin/support");
     const list = document.getElementById("admin-support-list");
