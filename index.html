@@ -247,6 +247,11 @@ body.halloween-accueil .home-hero{
 @media(max-width:420px){.admin-metric-grid{grid-template-columns:1fr 1fr}.admin-metric{padding:12px}.admin-metric strong{font-size:24px}.admin-nav-item{font-size:10px;padding:8px}}
 @media(max-width:650px){#admin-village-form{grid-template-columns:1fr!important}#admin-village-form label[style*="grid-column:1/-1"]{grid-column:1!important}}
 
+
+/* Espace de candidature testeur */
+.tester-panel{max-width:850px;margin:20px auto;background:#fffaf0;border:1px solid #d7ad45;border-radius:18px;padding:clamp(18px,3vw,30px);box-shadow:0 8px 22px #18332612}
+.tester-panel h3{color:#123d2b;margin-top:0}.tester-panel label{display:block;font-weight:700;margin:12px 0 6px}.tester-panel textarea{width:100%;min-height:120px;padding:12px;border:1px solid #d4c49c;border-radius:9px;font:inherit}.tester-status{padding:12px 14px;border-radius:9px;background:#f1ead6;line-height:1.55;margin:12px 0}.tester-table-wrap{overflow-x:auto}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -346,6 +351,7 @@ body.halloween-accueil .home-hero{
     <nav class="nav-list" aria-label="Menu explorateur">
       <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
       <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
+      <button class="nav-btn" onclick="showDashSection('dash-testers')">🧪 &nbsp; Devenir testeur</button>
       <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
       <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
       <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
@@ -510,6 +516,24 @@ body.halloween-accueil .home-hero{
     <button class="primary-btn" type="button" onclick="ouvrirPropositionVillage()">Proposer mon village</button>
   </div>
   <p style="font-size:12px;color:#697467;margin-top:14px">Les repères indiquent le centre des villages, pas les étapes précises des parcours.</p>
+</section>
+
+<section class="dash-section hidden" id="dash-testers">
+  <h3>🧪 Devenir testeur</h3>
+  <p>Tu souhaites aider à tester Trésors de nos Villages avant son ouverture ? Dépose ta demande avec ton compte actuel. Tu n’as pas besoin de créer un deuxième compte.</p>
+  <div class="tester-panel">
+    <div id="tester-current-status" class="tester-status" role="status" aria-live="polite">Vérification de ta demande…</div>
+    <form id="tester-application-form">
+      <label for="tester-motivation">Pourquoi souhaites-tu devenir testeur ? (facultatif)</label>
+      <textarea id="tester-motivation" maxlength="1000" placeholder="Explique en quelques mots ce qui te motive…"></textarea>
+      <label style="display:flex;align-items:flex-start;gap:10px;font-weight:normal;line-height:1.5">
+        <input type="checkbox" id="tester-adult-confirmation" required style="margin-top:4px;flex:0 0 auto">
+        <span>Je confirme que cette demande est faite par un adulte ou avec l’accord de son parent / responsable légal.</span>
+      </label>
+      <button type="submit" class="primary-btn" id="tester-submit">Envoyer ma demande</button>
+    </form>
+    <p style="font-size:12px;color:#697467;line-height:1.5">L’envoi d’une demande ne donne pas automatiquement accès aux tests. La validation est faite par l’administration. Si la demande concerne un mineur, elle doit être effectuée avec son parent ou responsable légal.</p>
+  </div>
 </section>
 
 <section class="dash-section hidden" id="dash-adventures">
@@ -785,6 +809,7 @@ body.halloween-accueil .home-hero{
       <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
       <div class="admin-nav-label">SUIVI</div>
       <button class="admin-nav-item" type="button" onclick="adminShowAnalytics()"><span>▥</span> Statistiques</button>
@@ -848,6 +873,16 @@ body.halloween-accueil .home-hero{
         </div>
         <div id="admin-players-list" class="admin-recent-list" aria-live="polite"><p>Les joueurs apparaîtront ici.</p></div>
         <p class="admin-footnote">Cette liste affiche les comptes enregistrés dans Neon Auth. Les statistiques de jeu sont associées lorsqu’un profil explorateur existe.</p>
+      </div>
+
+      <div id="admin-testers-view" class="admin-subview" hidden>
+        <div class="admin-section-heading">
+          <div><h3>Demandes pour devenir testeur</h3><p>Consulte les candidatures et valide les personnes qui participeront aux essais.</p></div>
+          <button type="button" class="admin-secondary-btn" onclick="adminLoadTesters()">↻ Actualiser</button>
+        </div>
+        <p id="admin-testers-status" class="status" role="status" aria-live="polite">Chargement des demandes…</p>
+        <div id="admin-testers-list" class="admin-recent-list tester-table-wrap" aria-live="polite"><p>Les demandes apparaîtront ici.</p></div>
+        <p class="admin-footnote">Les demandes sont liées au compte Neon existant. Accepter une demande enregistre le statut testeur ; cela ne modifie pas les formules, les paiements ni les aventures publiques.</p>
       </div>
 
       <div id="admin-villages-view" class="admin-subview" hidden>
@@ -1257,13 +1292,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-villages-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-villages-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-villages-view"?"adminOpenVillages":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-villages-view"?"adminOpenVillages":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -1342,6 +1377,94 @@ window.adminLoadPlayers = async function(){
     const help=document.createElement("p"); help.textContent="Vérifie que la nouvelle route /api/admin/players est bien déployée sur Render."; list.appendChild(help);
     if(count) count.textContent="—";
   }
+};
+
+// ===== Demandes testeurs : un seul compte Neon, validation par l'administration =====
+const testerForm = document.getElementById("tester-application-form");
+window.loadTesterApplication = async function(){
+  const status = document.getElementById("tester-current-status");
+  const motivation = document.getElementById("tester-motivation");
+  const checkbox = document.getElementById("tester-adult-confirmation");
+  const submit = document.getElementById("tester-submit");
+  if(!status || !submit) return;
+  status.textContent = "Vérification de ta demande…";
+  try{
+    const data = await profileApi("/api/testers/me");
+    const app = data.application;
+    if(!app){
+      status.textContent = "Tu n’as pas encore envoyé de demande. Tu peux remplir le formulaire ci-dessous.";
+      submit.disabled = false;
+      if(motivation) motivation.disabled = false;
+      if(checkbox) checkbox.disabled = false;
+      return;
+    }
+    if(motivation) motivation.value = app.motivation || "";
+    if(checkbox) checkbox.checked = app.adult_confirmation === true;
+    const labels = {pending:"Demande envoyée : elle est en attente de validation. Tu recevras une réponse lorsque l’administration aura étudié ta candidature.",accepted:"Bonne nouvelle ! Ta demande a été acceptée. Tu fais partie des testeurs.",rejected:"Ta demande n’a pas été retenue pour le moment. Tu peux contacter l’administration si tu souhaites en discuter."};
+    status.textContent = labels[app.status] || "Statut de la demande : " + app.status;
+    submit.disabled = app.status === "pending" || app.status === "accepted";
+    submit.textContent = app.status === "pending" ? "Demande en attente" : app.status === "accepted" ? "Demande acceptée" : "Renvoyer une demande";
+    if(motivation) motivation.disabled = app.status === "pending" || app.status === "accepted";
+    if(checkbox) checkbox.disabled = app.status === "pending" || app.status === "accepted";
+  }catch(error){
+    status.textContent = error.message || "Impossible de vérifier ta demande. Connecte-toi puis réessaie.";
+  }
+};
+if(testerForm){
+  testerForm.addEventListener("submit", async event=>{
+    event.preventDefault();
+    const status = document.getElementById("tester-current-status");
+    const submit = document.getElementById("tester-submit");
+    const motivation = document.getElementById("tester-motivation").value.trim();
+    const adultConfirmation = document.getElementById("tester-adult-confirmation").checked;
+    submit.disabled = true;
+    status.textContent = "Envoi de ta demande…";
+    try{
+      await profileApi("/api/testers/apply", {method:"POST",body:JSON.stringify({motivation,adult_confirmation:adultConfirmation})});
+      status.textContent = "Ta demande a bien été envoyée. Elle est maintenant en attente de validation.";
+      await window.loadTesterApplication();
+    }catch(error){
+      status.textContent = error.message || "Impossible d’envoyer ta demande.";
+      submit.disabled = false;
+    }
+  });
+}
+
+window.adminOpenTesters = async function(){
+  adminSetView("admin-testers-view","Demandes testeurs");
+  await window.adminLoadTesters();
+};
+window.adminLoadTesters = async function(){
+  const status = document.getElementById("admin-testers-status");
+  const list = document.getElementById("admin-testers-list");
+  if(!status || !list) return;
+  status.textContent = "Chargement des demandes…";
+  list.replaceChildren();
+  try{
+    const data = await adminApi("/api/admin/testers");
+    const apps = Array.isArray(data.applications) ? data.applications : [];
+    if(!apps.length){ list.textContent = "Aucune demande de testeur pour le moment."; status.textContent = "Liste chargée."; return; }
+    const table = document.createElement("table");
+    table.style.cssText = "width:100%;min-width:760px;border-collapse:collapse;font-size:13px";
+    const head = document.createElement("thead"); const hr = document.createElement("tr");
+    ["Nom","E-mail","Motivation","Date","Statut","Action"].forEach(label=>{const th=document.createElement("th");th.textContent=label;th.style.cssText="text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";hr.appendChild(th);});
+    head.appendChild(hr);table.appendChild(head);
+    const body = document.createElement("tbody");
+    for(const app of apps){
+      const tr=document.createElement("tr");
+      const date=app.submitted_at?new Date(app.submitted_at).toLocaleDateString("fr-FR"):"—";
+      const vals=[app.name||"Compte utilisateur",app.email||"—",app.motivation||"—",date,({pending:"En attente",accepted:"Acceptée",rejected:"Refusée"})[app.status]||app.status];
+      vals.forEach(value=>{const td=document.createElement("td");td.textContent=String(value);td.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;vertical-align:top;overflow-wrap:anywhere;max-width:240px";tr.appendChild(td);});
+      const actions=document.createElement("td");actions.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;white-space:nowrap";
+      const makeButton=(label,statusValue)=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.style.cssText="margin:2px;padding:7px 9px;border:1px solid #c9ae65;border-radius:7px;background:#fffaf0;color:#244b36;cursor:pointer";b.addEventListener("click",async()=>{b.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(app.id)}`,{method:"PATCH",body:JSON.stringify({status:statusValue})});await window.adminLoadTesters();}catch(error){status.textContent=error.message||"Mise à jour impossible.";b.disabled=false;}});return b;};
+      if(app.status!=="accepted") actions.appendChild(makeButton("Accepter","accepted"));
+      if(app.status!=="rejected") actions.appendChild(makeButton("Refuser","rejected"));
+      if(app.status!=="pending") actions.appendChild(makeButton("Remettre en attente","pending"));
+      tr.appendChild(actions);body.appendChild(tr);
+    }
+    table.appendChild(body);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
+    status.textContent=`${apps.length} demande${apps.length>1?"s":""} chargée${apps.length>1?"s":""}.`;
+  }catch(error){status.textContent=error.message||"Impossible de charger les demandes.";list.textContent="Vérifie que la route /api/admin/testers est déployée et que la table SQL a été créée.";}
 };
 
 const ADMIN_VILLAGE_STATUSES = {
@@ -1631,7 +1754,7 @@ function showDashSection(id){
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
-  "dash-home", "dash-profile", "dash-adventures", "dash-village-map", "dash-badges",
+  "dash-home", "dash-profile", "dash-testers", "dash-adventures", "dash-village-map", "dash-badges",
   "dash-stars", "dash-formulas", "dash-help", "dash-news", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
@@ -1645,6 +1768,7 @@ function showDashSection(id){
   selected.classList.remove("hidden");
   if(id === "dash-village-map") actualiserCarteVillages();
   if(id === "dash-profile") window.loadExplorerProfile?.();
+  if(id === "dash-testers") window.loadTesterApplication?.();
   document.querySelectorAll("#dashboard .nav-btn").forEach(btn=>btn.classList.remove("active"));
   const clickedButton = Array.from(document.querySelectorAll("#dashboard .nav-btn"))
     .find(btn => (btn.getAttribute("onclick") || "").includes("'" + id + "'"));
