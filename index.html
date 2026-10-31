@@ -156,6 +156,18 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 .village-proposal-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:22px;background:#062c20;color:#fff0b5;border:1px solid #d7ad45;border-radius:18px;margin-top:26px}.village-proposal-banner h3{margin:0 0 8px;color:#fff0b5}.village-proposal-banner p{margin:0;color:#f6edcf;line-height:1.5}
 @media(max-width:650px){.village-proposal-banner{align-items:stretch}.village-proposal-banner .primary-btn{width:100%}}
 
+
+/* Nouvelle page d'accueil immersive */
+.home-hero{position:relative;min-height:430px;padding:48px clamp(18px,4vw,56px);display:flex;align-items:center;background:linear-gradient(90deg,rgba(2,28,20,.82),rgba(2,28,20,.38) 56%,rgba(2,28,20,.08)),url("images/accueil-aventure.jpg") center/cover no-repeat;color:#fff7dc}
+.home-hero-copy{max-width:620px;padding:26px 30px;background:rgba(4,38,27,.78);border:1px solid #d7ad45;border-radius:18px;box-shadow:0 12px 34px #0005;backdrop-filter:blur(2px)}
+.home-hero-copy .eyebrow{color:#f1ce70}.home-hero-copy h1{font-size:clamp(34px,4.2vw,58px);line-height:1.04;margin:0 0 14px;color:#fff2c6}.home-hero-copy p{font-size:clamp(17px,2vw,21px);line-height:1.55;margin:0;color:#fff9e8}
+.home-hero-copy .gold-line{margin:16px 0}.home-hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.home-hero-actions .primary-btn{padding:13px 23px}.home-secondary-btn{border:1px solid #f0d27a;border-radius:999px;background:#fff4d9;color:#173c2a;padding:13px 22px;font-weight:bold}
+.home-promises{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:20px clamp(16px,4vw,48px);background:#0a3828;color:#fff2c9}.home-promise{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;font-weight:bold;line-height:1.35}.home-promise span{font-size:26px}
+.home-formulas{padding:42px clamp(16px,4vw,48px);background:#f7efdD}.home-formula-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}.home-formula{background:#fffaf0;border:1px solid #e4ca83;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px #263b2512}.home-formula-top{padding:17px 18px 9px;display:flex;align-items:center;gap:12px}.home-formula-icon{width:48px;height:48px;flex:0 0 48px;border-radius:50%;display:grid;place-items:center;background:#073523;border:2px solid #d7ad45;font-size:24px}.home-formula h3{font-size:20px;margin:0;color:#123d2b}.home-formula p{padding:0 18px 18px;margin:0;line-height:1.55;color:#4b594d}.home-formula-foot{text-align:center;margin-top:24px;color:#5d6758;line-height:1.6}
+.home-how{padding:38px clamp(16px,4vw,48px);background:#fffaf0}.home-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:22px}.home-step{text-align:center;padding:18px 12px;border:1px solid #ead7a7;border-radius:14px;background:#fff}.home-step strong{display:block;font-size:28px;margin-bottom:8px;color:#987321}.home-step p{margin:0;line-height:1.45}
+@media(max-width:900px){.home-formula-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.home-promises{grid-template-columns:repeat(2,minmax(0,1fr))}.home-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.home-hero{min-height:440px;padding:18px}.home-hero-copy{padding:21px 18px}.home-formula-grid{grid-template-columns:1fr}.home-promises{gap:15px}.home-promise{font-size:14px}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -174,28 +186,53 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <div class="sidebar-note">Explorez · Observez<br>Réfléchissez · Trouvez !</div>
   </aside>
   <div class="content">
-    <header class="hero" id="accueil">
-      <div class="hero-copy">
-        <p class="eyebrow">Bienvenue dans</p>
+    <header class="home-hero" id="accueil">
+      <div class="home-hero-copy">
+        <p class="eyebrow">Bienvenue dans votre prochaine aventure</p>
         <h1>Trésors de nos Villages</h1>
         <div class="gold-line"></div>
-        <p>Explorez les villages, résolvez les énigmes et collectionnez les étoiles !</p>
+        <p><strong>Et si votre village cachait un trésor ?</strong><br>Explorez des lieux, résolvez des énigmes et découvrez les petites histoires qui rendent chaque village unique.</p>
+        <div class="home-hero-actions">
+          <button class="primary-btn" type="button" onclick="showAccount()">Découvrir les aventures&nbsp; →</button>
+          <button class="home-secondary-btn" type="button" onclick="goTo('formules-public')">Voir les formules</button>
+        </div>
       </div>
     </header>
-    <section class="section" id="concept">
-      <h2 class="section-title">Comment fonctionne l’aventure ?</h2>
-      <p class="section-intro">Partez à la découverte du patrimoine, ouvrez l’œil et avancez à votre rythme. Chaque bonne réponse vous rapproche de votre prochain badge.</p>
-      <div class="feature-grid">
-        <article class="feature"><div class="feature-icon">🏡</div><h3>1. Explorez</h3><p>Découvrez le patrimoine et les histoires de nos villages.</p></article>
-        <article class="feature"><div class="feature-icon">🔎</div><h3>2. Résolvez les énigmes</h3><p>Observez les indices, réfléchissez et trouvez les réponses.</p></article>
-        <article class="feature"><div class="feature-icon">⭐</div><h3>3. Collectionnez les étoiles</h3><p>Progressez à votre rythme et débloquez des badges.</p></article>
+    <div class="home-promises" aria-label="Les points forts de l'aventure">
+      <div class="home-promise"><span>🗺️</span> Des villages à explorer</div>
+      <div class="home-promise"><span>🔎</span> Des énigmes à résoudre</div>
+      <div class="home-promise"><span>⭐</span> Des étoiles à collectionner</div>
+      <div class="home-promise"><span>👨‍👩‍👧‍👦</span> Une aventure pour tous</div>
+    </div>
+    <section class="home-formulas" id="formules-public">
+      <h2 class="section-title">Choisissez votre façon de partir à l'aventure</h2>
+      <p class="section-intro">En solo, en famille ou entre amis, il existe une formule pour chaque envie. Découvrez les univers et choisissez celui qui vous ressemble.</p>
+      <div class="home-formula-grid">
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🧒</div><h3>Mode Enfant</h3></div><p>Des jeux d'observation, des devinettes et des découvertes pour apprendre en s'amusant.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">👨‍👩‍👧</div><h3>Mode Famille</h3></div><p>Une aventure à partager, où petits et grands mettent leurs idées en commun.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🌿</div><h3>Mode Facile</h3></div><p>Une première exploration tranquille, avec des indices accessibles et des énigmes simples.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🧩</div><h3>Mode Moyen</h3></div><p>Des défis qui demandent réflexion, observation et un peu de logique.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🔥</div><h3>Mode Extrême</h3></div><p>Un grand défi pour les explorateurs qui aiment se creuser les méninges.</p></article>
+        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🌙</div><h3>Mode Nuit</h3></div><p>Une ambiance mystérieuse, des histoires et des énigmes pour changer de décor.</p></article>
+      </div>
+      <p class="home-formula-foot">Chaque formule possède son ambiance, ses défis et ses récompenses. Les détails se découvrent dans votre espace aventurier.</p>
+      <div class="cta-wrap" style="padding:20px 0 0"><button class="primary-btn" type="button" onclick="showAccount()">Je découvre mon aventure&nbsp; →</button></div>
+    </section>
+    <section class="home-how" id="concept">
+      <h2 class="section-title">Comment fonctionne l'aventure ?</h2>
+      <p class="section-intro">Quelques étapes simples pour transformer une balade en chasse au trésor.</p>
+      <div class="home-steps">
+        <article class="home-step"><strong>🗺️ 1</strong><p>Choisissez une aventure</p></article>
+        <article class="home-step"><strong>🧭 2</strong><p>Suivez les indications et les indices</p></article>
+        <article class="home-step"><strong>🔎 3</strong><p>Résolvez les énigmes sur le terrain</p></article>
+        <article class="home-step"><strong>⭐ 4</strong><p>Gagnez des étoiles et des badges</p></article>
       </div>
     </section>
     <section class="section" id="villages-public">
-      <h2 class="section-title">Une aventure près de chez vous</h2>
-      <p class="section-intro">Commencez avec notre première aventure à Humbert, dans le Pas-de-Calais. Les indices apparaissent seulement dans le jeu.</p>
+      <h2 class="section-title">Des aventures au cœur de nos villages</h2>
+      <p class="section-intro">Le projet se construit avec les communes pour proposer des parcours de découverte et mettre en valeur le patrimoine local. Les villages et aventures disponibles seront annoncés ici au fur et à mesure de leur confirmation.</p>
     </section>
-    <div class="cta-wrap"><button class="primary-btn" onclick="showAccount()">✥ &nbsp; Commencer l’aventure &nbsp; →</button></div>
+    <div class="cta-wrap"><button class="primary-btn" type="button" onclick="showAccount()">Créer mon compte / Me connecter&nbsp; →</button></div>
     <section class="account-area" id="account-area">
       <div class="account-card" id="account-card">
         <h2>♙ Mon compte</h2>
@@ -798,29 +835,7 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
   <p id="feedbackSalleDesFetes" class="feedback" aria-live="polite"></p>
 </article>
 
-<!-- INDICE 6 : LE BANC DES VOYAGEURS -->
-<article class="riddle" id="indiceBancVoyageurs" style="display:none;">
-  <div class="big">🪑</div>
-  <h3>Indice 6 — Le banc des voyageurs</h3>
-  <p>Bravo ! La salle des fêtes est derrière toi. Pour la prochaine étape, cherche un petit abri en bois où les promeneurs peuvent faire une pause et s’asseoir. Ouvre le GPS pour rejoindre le banc des voyageurs !</p>
-  <button type="button" onclick="ouvrirGPSBancVoyageurs()">📍 Me guider vers le banc</button>
-  <button type="button" onclick="verifierArriveeBancVoyageurs()">📍 Je suis arrivé au banc</button>
-  <button type="button" onclick="simulerArriveeBancVoyageurs()">🧪 Simuler mon arrivée au banc</button>
-  <p id="statutGPSBancVoyageurs" class="feedback" aria-live="polite"></p>
-</article>
-
-<!-- ENIGME 6 : LE BANC -->
-<article class="riddle" id="carteEnigmeBancVoyageurs" style="display:none;">
-  <div class="big">🔎</div>
-  <h3>Énigme 6 — La pause des voyageurs</h3>
-  <p>Observe l’abri et trouve l’objet qui permet aux promeneurs de s’asseoir pour se reposer.</p>
-  <label for="reponseBancVoyageurs">Quel est cet objet ?</label>
-  <input id="reponseBancVoyageurs" type="text" placeholder="Ta réponse" autocomplete="off">
-  <button type="button" onclick="verifierBancVoyageurs()">Valider ma réponse</button>
-  <p id="feedbackBancVoyageurs" class="feedback" aria-live="polite"></p>
-</article>
-
-    </div><p>Les réponses validées donnent une étoile chacune. Le compteur est conservé dans ce navigateur.</p><button class="small-btn" onclick="showDashSection('dash-home')">Retour au tableau de bord</button></section>
+    </div><p>Les réponses validées donnent une étoile chacune. Le compteur est conservé dans ce navigateur. Le compteur est conservé dans ce navigateur.</p><button class="small-btn" onclick="showDashSection('dash-home')">Retour au tableau de bord</button></section>
   </div>
 </section>
 
@@ -1643,75 +1658,15 @@ function verifierSalleDesFetes() {
   if (!champ || !retour) return;
   const reponse = normaliserReponseHumbert(champ.value);
   if (reponse === "SALLE DES FETES" || reponse === "LA SALLE DES FETES") {
-    retour.textContent = "🎉 Bravo ! Tu as trouvé la salle des fêtes et gagné une étoile ! ⭐ La dernière étape t’attend au banc des voyageurs.";
+    retour.textContent = "🎉 Bravo ! Tu as trouvé la salle des fêtes et gagné une étoile ! ⭐ Tu as terminé cette partie du parcours de Humbert !";
     retour.style.color = "green";
     localStorage.setItem("salleDesFetesValidee", "true");
     ajouterEtoileHumbert("salle_des_fetes");
-    const indice = document.getElementById("indiceBancVoyageurs");
-    if (indice) {
-      indice.style.display = "block";
-      indice.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  } else {
-    retour.textContent = "🔎 Pas tout à fait. Pense au lieu où les habitants se réunissent pour les fêtes et les repas.";
-    retour.style.color = "red";
-  }
-}
-
-
-// Étape 6 : banc des voyageurs à Humbert.
-function ouvrirGPSBancVoyageurs() {
-  window.open("https://www.google.com/maps/dir/?api=1&destination=50.506349%2C1.910030&travelmode=walking", "_blank", "noopener");
-}
-
-function afficherEnigmeBancVoyageurs() {
-  const enigme = document.getElementById("carteEnigmeBancVoyageurs");
-  if (enigme) {
-    enigme.style.display = "block";
-    enigme.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-}
-
-function simulerArriveeBancVoyageurs() {
-  if (!adminAccessGranted || localStorage.getItem("modeTestAventure") !== "true") {
-    alert("Le mode test administrateur n’est pas activé.");
-    return;
-  }
-  const statut = document.getElementById("statutGPSBancVoyageurs");
-  if (statut) statut.textContent = "🧪 Arrivée au banc des voyageurs simulée !";
-  afficherEnigmeBancVoyageurs();
-}
-
-function verifierArriveeBancVoyageurs() {
-  const statut = document.getElementById("statutGPSBancVoyageurs");
-  if (!statut) return;
-  if (!navigator.geolocation) { statut.textContent = "La localisation n’est pas disponible."; return; }
-  statut.textContent = "Recherche de ta position près du banc des voyageurs…";
-  navigator.geolocation.getCurrentPosition(position => {
-    const distance = distanceMetres(position.coords.latitude, position.coords.longitude, 50.506349, 1.910030);
-    if (distance <= 100) {
-      statut.textContent = "🎉 Tu es arrivé près du banc des voyageurs ! Résous la dernière énigme.";
-      afficherEnigmeBancVoyageurs();
-    } else {
-      statut.textContent = "Tu es à environ " + Math.round(distance) + " mètres du banc. Rapproche-toi puis réessaie.";
-    }
-  }, () => { statut.textContent = "Impossible de trouver ta position. Vérifie le GPS puis réessaie."; }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
-}
-
-function verifierBancVoyageurs() {
-  const champ = document.getElementById("reponseBancVoyageurs");
-  const retour = document.getElementById("feedbackBancVoyageurs");
-  if (!champ || !retour) return;
-  const reponse = normaliserReponseHumbert(champ.value);
-  if (["BANC", "UN BANC", "LE BANC"].includes(reponse)) {
-    retour.textContent = "🎉 Bravo ! Tu as trouvé le banc des voyageurs et gagné une étoile ! ⭐ Tu as terminé le parcours de Humbert !";
-    retour.style.color = "green";
-    localStorage.setItem("bancVoyageursValide", "true");
-    ajouterEtoileHumbert("banc_voyageurs");
+    // Le tampon Humbert est délivré à la validation de la dernière énigme.
     localStorage.setItem("humbertTamponObtenu", "true");
     actualiserPasseport();
   } else {
-    retour.textContent = "🔎 Pas tout à fait. Cherche l’endroit où l’on s’assoit pour se reposer.";
+    retour.textContent = "🔎 Pas tout à fait. Pense au lieu où les habitants se réunissent pour les fêtes et les repas.";
     retour.style.color = "red";
   }
 }
@@ -2023,11 +1978,7 @@ Object.assign(window, {
   checkAnswer,
   chooseFormulaFromMenu,
   verifierArriveeMairie,
-  verifierArriveeEglise,
-  ouvrirGPSBancVoyageurs,
-  verifierArriveeBancVoyageurs,
-  simulerArriveeBancVoyageurs,
-  verifierBancVoyageurs
+  verifierArriveeEglise
 });
 </script>
 </body>
