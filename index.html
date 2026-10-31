@@ -169,33 +169,34 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 @media(max-width:560px){.home-hero{min-height:440px;padding:18px}.home-hero-copy{padding:21px 18px}.home-formula-grid{grid-template-columns:1fr}.home-promises{gap:15px}.home-promise{font-size:14px}}
 
 
-/* Décor Halloween discret : uniquement dans les coins droits, menus dégagés */
-.halloween-corner{
+/* Ambiance Halloween réaliste : identité vert et or conservée */
+body.halloween-active .home-hero{
+  background-image:
+    linear-gradient(90deg,rgba(3,38,26,.84),rgba(3,38,26,.48) 45%,rgba(3,20,18,.08)),
+    url("images/halloween-village-hero.jpg");
+  background-position:center right;
+  background-size:cover;
+}
+.halloween-edge{
   position:fixed;
   z-index:4;
   pointer-events:none;
   background-repeat:no-repeat;
   background-size:contain;
 }
-.halloween-corner-top{
-  top:0;
-  right:0;
-  width:min(190px,18vw);
-  height:145px;
-  background-image:url("images/halloween-coin-haut.png");
+.halloween-edge-top{
+  top:0;right:0;width:min(150px,14vw);height:135px;
+  background-image:url("images/halloween-right-top.png");
   background-position:top right;
 }
-.halloween-corner-bottom{
-  right:0;
-  bottom:0;
-  width:min(220px,20vw);
-  height:155px;
-  background-image:url("images/halloween-coin-bas.png");
+.halloween-edge-bottom{
+  right:0;bottom:0;width:min(170px,16vw);height:145px;
+  background-image:url("images/halloween-right-bottom.png");
   background-position:bottom right;
 }
 @media(max-width:700px){
-  .halloween-corner-top{width:112px;height:90px}
-  .halloween-corner-bottom{width:132px;height:100px}
+  .halloween-edge-top{width:86px;height:80px}
+  .halloween-edge-bottom{width:100px;height:90px}
 }
 
 </style>
@@ -204,17 +205,18 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 </head>
 <body>
 
-<!-- Petites décorations Halloween dans les coins droits uniquement -->
-<div class="halloween-corner halloween-corner-top" id="halloween-top" aria-hidden="true"></div>
-<div class="halloween-corner halloween-corner-bottom" id="halloween-bottom" aria-hidden="true"></div>
+<!-- Décor saisonnier Halloween : uniquement dans les coins droits -->
+<div class="halloween-edge halloween-edge-top" id="halloween-edge-top" aria-hidden="true"></div>
+<div class="halloween-edge halloween-edge-bottom" id="halloween-edge-bottom" aria-hidden="true"></div>
 <script>
 (function(){
   const d = new Date();
   const active = (d.getMonth() === 9 && d.getDate() === 31) ||
                  (d.getMonth() === 10 && d.getDate() === 1);
-  if (!active) {
-    document.getElementById("halloween-top")?.remove();
-    document.getElementById("halloween-bottom")?.remove();
+  if (active) document.body.classList.add("halloween-active");
+  else {
+    document.getElementById("halloween-edge-top")?.remove();
+    document.getElementById("halloween-edge-bottom")?.remove();
   }
 })();
 </script>
