@@ -1208,7 +1208,20 @@ function adminSetView(view, title) {
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
 function adminShowAnalytics(){adminSetView("admin-analytics-view","Statistiques");window.loadSiteAnalytics?.();}
-function adminOpenSupport(){adminSetView("admin-support-view","Support des joueurs");window.openAdminPanel?.();}
+async function adminOpenSupport(){
+  adminSetView("admin-support-view","Support des joueurs");
+  try {
+    await window.openAdminPanel?.();
+    // openAdminPanel vérifie les droits et charge les demandes.
+    // On réaffiche ensuite la rubrique Support, car la vérification ramène au tableau de bord.
+    if (window.adminAccessGranted !== false) {
+      adminSetView("admin-support-view","Support des joueurs");
+    }
+  } catch (error) {
+    const status = document.getElementById("admin-panel-status");
+    if (status) status.textContent = error.message || "Impossible de charger le support.";
+  }
+}
 function adminOpenAdventures(){adminSetView("admin-adventures-view","Aventures & énigmes");}
 function adminComingSoon(name){
   adminSetView("admin-placeholder-view",name);
