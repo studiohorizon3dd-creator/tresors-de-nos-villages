@@ -169,26 +169,33 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 @media(max-width:560px){.home-hero{min-height:440px;padding:18px}.home-hero-copy{padding:21px 18px}.home-formula-grid{grid-template-columns:1fr}.home-promises{gap:15px}.home-promise{font-size:14px}}
 
 
-/* Décor réaliste Halloween — superposé sans modifier le thème du site */
-.halloween-realistic-frame{
+/* Décor Halloween discret : uniquement dans les coins droits, menus dégagés */
+.halloween-corner{
   position:fixed;
-  inset:0;
-  z-index:40;
+  z-index:4;
   pointer-events:none;
-  background-image:url("images/halloween-decor.png");
   background-repeat:no-repeat;
-  background-position:center center;
-  background-size:100% 100%;
-  opacity:.96;
+  background-size:contain;
+}
+.halloween-corner-top{
+  top:0;
+  right:0;
+  width:min(190px,18vw);
+  height:145px;
+  background-image:url("images/halloween-coin-haut.png");
+  background-position:top right;
+}
+.halloween-corner-bottom{
+  right:0;
+  bottom:0;
+  width:min(220px,20vw);
+  height:155px;
+  background-image:url("images/halloween-coin-bas.png");
+  background-position:bottom right;
 }
 @media(max-width:700px){
-  .halloween-realistic-frame{
-    background-size:100% 100%;
-    opacity:.82;
-  }
-}
-@media(prefers-reduced-motion:reduce){
-  .halloween-realistic-frame{transition:none}
+  .halloween-corner-top{width:112px;height:90px}
+  .halloween-corner-bottom{width:132px;height:100px}
 }
 
 </style>
@@ -197,16 +204,18 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 </head>
 <body>
 
-<!-- Décor réaliste Halloween : actif le 31 octobre et le 1er novembre -->
-<div class="halloween-realistic-frame" id="halloween-realistic-frame" aria-hidden="true"></div>
+<!-- Petites décorations Halloween dans les coins droits uniquement -->
+<div class="halloween-corner halloween-corner-top" id="halloween-top" aria-hidden="true"></div>
+<div class="halloween-corner halloween-corner-bottom" id="halloween-bottom" aria-hidden="true"></div>
 <script>
 (function(){
-  const today = new Date();
-  const halloweenPeriod =
-    (today.getMonth() === 9 && today.getDate() === 31) ||
-    (today.getMonth() === 10 && today.getDate() === 1);
-  const frame = document.getElementById("halloween-realistic-frame");
-  if (frame && !halloweenPeriod) frame.style.display = "none";
+  const d = new Date();
+  const active = (d.getMonth() === 9 && d.getDate() === 31) ||
+                 (d.getMonth() === 10 && d.getDate() === 1);
+  if (!active) {
+    document.getElementById("halloween-top")?.remove();
+    document.getElementById("halloween-bottom")?.remove();
+  }
 })();
 </script>
 
