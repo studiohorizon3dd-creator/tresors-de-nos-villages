@@ -442,7 +442,17 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
     <section class="dash-section hidden" id="dash-stars"><h3>Mes étoiles</h3><p id="stars-summary">⭐ 0 / 10</p></section>
     <section class="dash-section hidden" id="dash-formulas">
   <h3>Mes formules</h3>
-  <p class="formula-intro">Choisis ton aventure : chaque formule propose une expérience différente, avec ses énigmes et ses récompenses.</p>
+  <p class="formula-intro">Commence par choisir ton village. Ensuite, sélectionne la formule que tu souhaites découvrir dans ce village.</p>
+  <div class="feature" style="text-align:left;margin:0 0 24px;padding:20px">
+    <h4 style="margin:0 0 8px;color:#123e2d;font-size:20px">🏡 1. Choisis ton village</h4>
+    <label for="selected-village" style="display:block;font-weight:bold;margin:10px 0 7px">Village de ton aventure</label>
+    <select id="selected-village" onchange="selectAdventureVillage(this.value)" style="width:100%;max-width:460px;padding:12px;border:1px solid #d4c49c;border-radius:10px;background:#fffefa;color:#183326;font:16px Georgia,serif">
+      <option value="humbert">Humbert — première aventure</option>
+      <option value="sempy" disabled>Sempy — parcours en préparation</option>
+    </select>
+    <p id="selected-village-status" class="status" aria-live="polite" style="margin-bottom:0">Village sélectionné : Humbert.</p>
+  </div>
+  <h4 style="font-size:20px;color:#123e2d;margin:0 0 14px">2. Choisis ta formule pour ce village</h4>
   <div class="formula-grid">
     <article class="formula-card">
       <div class="formula-visual child"><img src="images/image-03.jpg" alt="Photo réaliste du parcours child" loading="lazy"></div>
@@ -536,6 +546,40 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
         <p class="formula-example"><strong>Ton avantage :</strong> 14,95 € en achetant les 5 formules séparément, au lieu de 9,99 € avec le pack. Tu économises 4,96 €.</p>
         <p class="formula-reward"><strong>Bonus :</strong> badge Légende des villages, collection complète des récompenses et accès à l'aventure secrète bonus.</p>
         <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+    </article>
+    <article class="formula-card formula-card-pack">
+      <div class="formula-visual pack" role="img" aria-label="Carte et deux villages à découvrir">
+        <span aria-hidden="true">🧭</span>
+        <strong>PACK VOYAGEUR</strong>
+        <small>2 villages · 2 découvertes</small>
+      </div>
+      <div class="formula-body">
+        <span class="formula-price pack-price">Tarif à définir</span>
+        <h4>9. Pack Voyageur</h4>
+        <p class="formula-lead"><strong>Choisis 2 villages</strong> · Deux aventures à collectionner.</p>
+        <p>Compose ton voyage en sélectionnant deux communes parmi les villages qui proposeront une aventure.</p>
+        <h5>Le pack comprend</h5>
+        <ul><li>Le choix de 2 villages</li><li>Les formules disponibles dans chacun des villages sélectionnés</li><li>Deux tampons à ajouter à ton passeport de voyageur</li></ul>
+        <p class="formula-reward"><strong>Objectif :</strong> découvrir plusieurs communes et enrichir ton passeport.</p>
+        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
+      </div>
+    </article>
+    <article class="formula-card formula-card-pack">
+      <div class="formula-visual pack" role="img" aria-label="Carte et trois villages à découvrir">
+        <span aria-hidden="true">🗺️</span>
+        <strong>PACK GRAND VOYAGEUR</strong>
+        <small>3 villages · 3 découvertes</small>
+      </div>
+      <div class="formula-body">
+        <span class="formula-price pack-price">Tarif à définir</span>
+        <h4>10. Pack Grand Voyageur</h4>
+        <p class="formula-lead"><strong>Choisis 3 villages</strong> · Le grand circuit des explorateurs.</p>
+        <p>Prépare un parcours de découverte à travers trois communes participantes.</p>
+        <h5>Le pack comprend</h5>
+        <ul><li>Le choix de 3 villages</li><li>Les formules disponibles dans chacun des villages sélectionnés</li><li>Trois tampons à collectionner dans ton passeport</li></ul>
+        <p class="formula-reward"><strong>Objectif :</strong> partir à la découverte de trois villages et compléter ta collection.</p>
+        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
+      </div>
     </article>
   </div>
   <p class="formula-safety">⏱️ Les durées sont indicatives. Les distances seront ajoutées lorsque chaque parcours et ses étapes GPS seront définis.</p>
@@ -1207,8 +1251,22 @@ function openAdventure(){
   if(formula!=="facile"){alert("Cette formule nécessite un paiement. Le paiement en ligne n’est pas encore disponible.");showDashSection("dash-formulas");return;}
   showDashSection("dash-game");
 }
+function selectAdventureVillage(village){
+  const status = document.getElementById("selected-village-status");
+  if(village !== "humbert"){
+    if(status) status.textContent = "Ce village n’a pas encore de parcours disponible.";
+    return;
+  }
+  localStorage.setItem("villageTresorsSelectionne", village);
+  if(status) status.textContent = "Village sélectionné : Humbert. Choisis maintenant ta formule.";
+}
 function chooseFormula(level){
   const status=document.getElementById("formula-status");
+  const village = localStorage.getItem("villageTresorsSelectionne") || document.getElementById("selected-village")?.value || "humbert";
+  if(village !== "humbert"){
+    status.textContent = "Le parcours de ce village n’est pas encore disponible.";
+    return;
+  }
   if(level!=="facile"){status.textContent="Le paiement en ligne n’est pas encore disponible. La formule n’a pas été activée.";return;}
   localStorage.setItem("formuleTresors","facile");
   status.textContent="Formule Facile activée ! Tu peux commencer l’aventure.";
@@ -1967,6 +2025,11 @@ window.addEventListener("load", () => {
 
 function chooseFormulaFromMenu() {
   showDashSection("dash-formulas");
+  const village = localStorage.getItem("villageTresorsSelectionne") || "humbert";
+  const select = document.getElementById("selected-village");
+  if(select) select.value = village;
+  const status = document.getElementById("selected-village-status");
+  if(status) status.textContent = "Village sélectionné : " + (village === "humbert" ? "Humbert." : village + ".");
 }
 
 Object.assign(window, {
