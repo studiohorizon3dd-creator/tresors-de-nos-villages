@@ -590,36 +590,44 @@ body.halloween-accueil .home-hero{
 <section class="dash-section hidden" id="dash-tester-space">
   <div class="tester-space-header">
     <p class="eyebrow">ACCÈS RÉSERVÉ AUX TESTEURS VALIDÉS</p>
-    <h3>🔐 Espace testeurs</h3>
-    <p>Bienvenue dans les coulisses de Trésors de nos Villages ! Merci de nous aider à améliorer les aventures avant leur ouverture.</p>
+    <h3>🔐 Mon espace testeur</h3>
+    <p>Retrouve ici uniquement les villages et niveaux que l’administration t’a confiés.</p>
     <span class="tester-official-badge">🧪 Testeur officiel</span>
   </div>
-  <div class="tester-space-grid">
-    <article class="tester-space-card">
-      <div class="feature-icon">🗺️</div>
-      <h4>Parcours à tester</h4>
-      <p>Les parcours seront affichés ici dès qu’une session de test sera ouverte et que les autorisations nécessaires seront confirmées.</p>
-      <span class="tester-space-tag">Aucun parcours ouvert pour le moment</span>
-    </article>
-    <article class="tester-space-card">
-      <div class="feature-icon">🧩</div>
-      <h4>Missions de test</h4>
-      <ul>
-        <li>Vérifier que les énigmes sont compréhensibles.</li>
-        <li>Signaler les indices difficiles ou ambigus.</li>
-        <li>Vérifier le bon fonctionnement de la carte et du GPS.</li>
-        <li>Donner son avis sur la durée et la difficulté du parcours.</li>
-      </ul>
-      <span class="tester-space-tag">Consignes communiquées au lancement des tests</span>
-    </article>
-    <article class="tester-space-card">
-      <div class="feature-icon">💬</div>
-      <h4>Retours et problèmes</h4>
-      <p>Lorsqu’une session sera ouverte, tu pourras transmettre tes observations à l’équipe depuis les consignes de cette session.</p>
-      <span class="tester-space-tag">Outil de retour à venir</span>
-    </article>
+  <p id="tester-space-status" class="status" role="status" aria-live="polite">Chargement de tes autorisations…</p>
+  <div class="tester-space-card" style="margin:14px 0">
+    <h4>🗺️ Mes parcours autorisés</h4>
+    <div id="tester-space-access-list"><p>Chargement…</p></div>
   </div>
-  <p class="tester-space-note">Cet espace est réservé aux comptes dont la candidature a été acceptée. L’accès testeur ne donne pas automatiquement accès aux aventures payantes ni aux données des autres joueurs.</p>
+  <div class="tester-space-card" style="margin:14px 0">
+    <h4>💬 Envoyer un retour de test</h4>
+    <p>Choisis l’un de tes accès, puis explique le problème rencontré ou ton idée d’amélioration.</p>
+    <form id="tester-feedback-form" style="display:grid;gap:10px">
+      <label>Village et niveau autorisés
+        <select id="tester-feedback-access" required style="display:block;width:100%;padding:11px;border:1px solid #d4c49c;border-radius:9px;background:white"><option value="">Chargement des accès…</option></select>
+      </label>
+      <label>Type de retour
+        <select id="tester-feedback-category" required style="display:block;width:100%;padding:11px;border:1px solid #d4c49c;border-radius:9px;background:white">
+          <option value="bug">🐞 Signaler un bug</option><option value="idee">💡 Proposer une idée</option><option value="experience">⭐ Donner mon avis</option><option value="autre">📝 Autre remarque</option>
+        </select>
+      </label>
+      <label>Ton message
+        <textarea id="tester-feedback-message" required minlength="5" maxlength="3000" rows="4" placeholder="Décris ce que tu as remarqué…" style="width:100%;padding:11px;border:1px solid #d4c49c;border-radius:9px"></textarea>
+      </label>
+      <button type="submit" class="primary-btn" id="tester-feedback-submit">Envoyer mon retour</button>
+      <p id="tester-feedback-form-status" class="status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+  <div class="tester-space-card" style="margin:14px 0">
+    <h4>📋 Mes retours précédents</h4>
+    <p>Seuls tes propres messages apparaissent dans cette liste.</p>
+    <div id="tester-feedback-history"><p>Chargement…</p></div>
+  </div>
+  <div class="tester-space-card" style="margin:14px 0">
+    <h4>🧩 Les points à vérifier</h4>
+    <ul><li>Les énigmes sont-elles compréhensibles ?</li><li>Les indices et les réponses fonctionnent-ils ?</li><li>La carte et la validation GPS fonctionnent-elles à l’arrivée ?</li><li>Le parcours est-il agréable et adapté à son niveau ?</li></ul>
+  </div>
+  <p class="tester-space-note">Ton espace est personnel. Les autres testeurs ne peuvent pas consulter tes accès ni tes retours. L’accès testeur ne donne pas automatiquement accès aux aventures payantes.</p>
 </section>
 
 <section class="dash-section hidden" id="dash-adventures">
@@ -1543,6 +1551,75 @@ if(testerForm){
   });
 }
 
+// ===== Espace personnel du testeur =====
+const testerFeedbackForm = document.getElementById("tester-feedback-form");
+const testerFormulaLabels = {enfant:"Enfant",facile:"Facile",famille:"Famille",moyen:"Moyen",difficile:"Difficile",extreme:"Extrême",nuit:"Nuit"};
+window.loadTesterSpace = async function(){
+  const status=document.getElementById("tester-space-status");
+  const accessList=document.getElementById("tester-space-access-list");
+  const accessSelect=document.getElementById("tester-feedback-access");
+  const history=document.getElementById("tester-feedback-history");
+  if(!status||!accessList||!accessSelect||!history)return;
+  status.textContent="Chargement de tes autorisations…";
+  accessList.replaceChildren();history.replaceChildren();accessSelect.replaceChildren();
+  try{
+    const [accessData,feedbackData]=await Promise.all([
+      profileApi("/api/testers/access"),
+      profileApi("/api/testers/feedback/mine")
+    ]);
+    const access=Array.isArray(accessData.access)?accessData.access:[];
+    if(!access.length){
+      accessList.textContent="Aucun village ou niveau ne t’a encore été attribué. Reviens consulter cet espace lorsque l’administration aura préparé ton accès.";
+      const option=document.createElement("option");option.value="";option.textContent="Aucun accès disponible";accessSelect.appendChild(option);
+      accessSelect.disabled=true;
+      if(testerFeedbackForm){testerFeedbackForm.querySelectorAll("input,select,textarea,button").forEach(el=>{if(el.id!=="tester-feedback-category")el.disabled=true;});}
+    }else{
+      accessSelect.disabled=false;
+      if(testerFeedbackForm){testerFeedbackForm.querySelectorAll("input,textarea,button").forEach(el=>el.disabled=false);}
+      access.forEach(item=>{
+        const label=`${item.village_name||item.village_slug} — ${testerFormulaLabels[item.formula]||item.formula}`;
+        const row=document.createElement("div");row.style.cssText="padding:10px;margin:7px 0;border:1px solid #e4dcc8;border-radius:9px;background:#fffefa";
+        const strong=document.createElement("strong");strong.textContent="🗺️ "+label;row.appendChild(strong);accessList.appendChild(row);
+        const option=document.createElement("option");option.value=JSON.stringify({village:item.village_slug,formula:item.formula});option.textContent=label;accessSelect.appendChild(option);
+      });
+    }
+    const feedback=Array.isArray(feedbackData.feedback)?feedbackData.feedback:[];
+    if(!feedback.length){history.textContent="Tu n’as pas encore envoyé de retour.";}
+    else feedback.forEach(item=>{
+      const card=document.createElement("article");card.style.cssText="padding:12px;margin:8px 0;border:1px solid #e4dcc8;border-radius:9px;background:#fffefa";
+      const title=document.createElement("strong");title.textContent=`${item.village_slug} — ${testerFormulaLabels[item.formula]||item.formula}`;
+      const meta=document.createElement("p");meta.style.cssText="font-size:12px;color:#687366;margin:5px 0";meta.textContent=`${({bug:"Bug",idee:"Idée",experience:"Avis",autre:"Autre"})[item.category]||item.category} · ${{nouveau:"Nouveau",en_cours:"En cours",traite:"Traité"}[item.status]||item.status} · ${item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"Date inconnue"}`;
+      const message=document.createElement("p");message.style.cssText="white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0";message.textContent=item.message;
+      card.append(title,meta,message);history.appendChild(card);
+    });
+    status.textContent=`Espace chargé : ${access.length} accès autorisé${access.length>1?"s":""}.`;
+  }catch(error){
+    status.textContent=error.message||"Impossible de charger ton espace testeur.";
+    accessList.textContent="Vérifie que le serveur testeurs est déployé et que les tables SQL sont installées dans Neon.";
+    const option=document.createElement("option");option.value="";option.textContent="Chargement impossible";accessSelect.appendChild(option);
+    history.textContent="Historique indisponible pour le moment.";
+  }
+};
+if(testerFeedbackForm){
+  testerFeedbackForm.addEventListener("submit",async event=>{
+    event.preventDefault();
+    const status=document.getElementById("tester-feedback-form-status");
+    const submit=document.getElementById("tester-feedback-submit");
+    const selected=document.getElementById("tester-feedback-access").value;
+    const message=document.getElementById("tester-feedback-message").value.trim();
+    if(!selected){status.textContent="Aucun accès disponible pour envoyer un retour.";return;}
+    let target;try{target=JSON.parse(selected);}catch{status.textContent="Sélection invalide.";return;}
+    submit.disabled=true;status.textContent="Envoi de ton retour…";
+    try{
+      await profileApi("/api/testers/feedback",{method:"POST",body:JSON.stringify({village:target.village,formula:target.formula,category:document.getElementById("tester-feedback-category").value,message})});
+      document.getElementById("tester-feedback-message").value="";
+      status.textContent="Merci ! Ton retour a bien été envoyé à l’administration.";
+      await window.loadTesterSpace();
+    }catch(error){status.textContent=error.message||"Impossible d’envoyer ton retour.";}
+    finally{submit.disabled=false;}
+  });
+}
+
 window.adminOpenTesters = async function(){
   adminSetView("admin-testers-view","Demandes testeurs");
   await window.adminLoadTesters();
@@ -1959,6 +2036,7 @@ function showDashSection(id){
   if(id === "dash-village-map") actualiserCarteVillages();
   if(id === "dash-profile") window.loadExplorerProfile?.();
   if(id === "dash-testers") window.loadTesterApplication?.();
+  if(id === "dash-tester-space") window.loadTesterSpace?.();
   document.querySelectorAll("#dashboard .nav-btn").forEach(btn=>btn.classList.remove("active"));
   const clickedButton = Array.from(document.querySelectorAll("#dashboard .nav-btn"))
     .find(btn => (btn.getAttribute("onclick") || "").includes("'" + id + "'"));
