@@ -2791,23 +2791,28 @@ function showAccount(){
   document.getElementById("account-area").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function showDashboard(name, email){
-  document.getElementById("landing").style.display="none";
-  document.getElementById("dashboard").style.display="block";
+  const landing = document.getElementById("landing");
+  const dashboard = document.getElementById("dashboard");
+  if(landing) landing.style.display = "none";
+  if(dashboard) dashboard.style.display = "block";
 
-  document.getElementById("profile-text").textContent =
-    "Bienvenue " + (name || "explorateur") + " !";
+  // Certains éléments de l'ancien profil ne sont plus présents dans la nouvelle maquette.
+  // Leur absence ne doit jamais interrompre la restauration de session ni le contrôle admin.
+  const profileText = document.getElementById("profile-text");
+  if(profileText) profileText.textContent = "Bienvenue " + (name || "explorateur") + " !";
 
-  document.getElementById("player-firstname").textContent =
-    name || "Non renseigné";
+  const firstName = document.getElementById("player-firstname");
+  if(firstName) firstName.textContent = name || "Non renseigné";
 
-  document.getElementById("player-email").textContent =
-    email || "Non renseignée";
+  const playerEmail = document.getElementById("player-email");
+  if(playerEmail) playerEmail.textContent = email || "Non renseignée";
 
-  document.getElementById("player-account-status").textContent =
-    "Compte connecté";
+  const accountStatus = document.getElementById("player-account-status");
+  if(accountStatus) accountStatus.textContent = "Compte connecté";
 
-  refreshProgress();
+  try { refreshProgress(); } catch(error) { console.warn("Actualisation du profil :", error); }
   window.loadTesterApplication?.();
+  // Toujours lancer la vérification des droits, même si un bloc du profil manque.
   window.checkAdminAccess?.();
   window.scrollTo({top:0,behavior:"smooth"});
 }
