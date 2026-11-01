@@ -659,6 +659,21 @@ body.halloween-accueil .home-hero{
     <div id="tester-space-missions"><p>Chargement de tes missions…</p></div>
   </div>
   <div class="tester-space-card" style="margin:14px 0">
+    <h4>🏁 Validation de mon niveau</h4>
+    <p>Lorsque tu as terminé toutes les étapes du parcours, envoie ton bilan à l’administration. Elle décidera si le niveau est validé ou s’il doit être corrigé.</p>
+    <form id="tester-level-review-form" style="display:grid;gap:10px">
+      <label>Village et niveau terminé
+        <select id="tester-level-review-access" required style="display:block;width:100%;padding:11px;border:1px solid #d4c49c;border-radius:9px;background:white"><option value="">Chargement des missions…</option></select>
+      </label>
+      <label>Ton bilan de fin de test (facultatif)
+        <textarea id="tester-level-review-report" maxlength="3000" rows="4" placeholder="Explique comment s’est passé le parcours, les difficultés rencontrées et ce qui pourrait être amélioré…" style="width:100%;padding:11px;border:1px solid #d4c49c;border-radius:9px"></textarea>
+      </label>
+      <button type="submit" class="primary-btn" id="tester-level-review-submit">Demander la validation</button>
+      <p id="tester-level-review-status" class="status" role="status" aria-live="polite"></p>
+    </form>
+    <div id="tester-level-review-history"><p>Ton historique de validation apparaîtra ici.</p></div>
+  </div>
+  <div class="tester-space-card" style="margin:14px 0">
     <h4>🗺️ Mes parcours autorisés</h4>
     <div id="tester-space-access-list"><p>Chargement…</p></div>
   </div>
@@ -959,6 +974,7 @@ body.halloween-accueil .home-hero{
       <div class="admin-nav-label">GESTION DES MEMBRES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des actualités</button>
       <div class="admin-nav-label">GESTION COMMERCIALE</div>
@@ -1034,7 +1050,19 @@ body.halloween-accueil .home-hero{
         </div>
         <p id="admin-testers-status" class="status" role="status" aria-live="polite">Chargement des demandes…</p>
         <div id="admin-testers-list" class="admin-recent-list tester-table-wrap" aria-live="polite"><p>Les demandes apparaîtront ici.</p></div>
-        <div class="admin-section-heading" style="margin-top:28px"><div><h3>Retours des testeurs</h3><p>Les retours restent privés et ne sont visibles que par l’administration.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterFeedback()">↻ Actualiser les retours</button></div>
+      </div>
+
+      <div id="admin-tester-management-view" class="admin-subview" hidden>
+        <div class="admin-section-heading">
+          <div><h3>Gestion des testeurs</h3><p>Retrouve les testeurs acceptés, leurs accès aux villages et niveaux, puis leurs retours.</p></div>
+          <button type="button" class="admin-secondary-btn" onclick="adminLoadTesterDirectory()">↻ Actualiser</button>
+        </div>
+        <p id="admin-tester-directory-status" class="status" role="status" aria-live="polite">Chargement des testeurs validés…</p>
+        <div id="admin-tester-directory-list" class="admin-recent-list tester-table-wrap"><p>Les testeurs validés apparaîtront ici.</p></div>
+        <div class="admin-section-heading" style="margin-top:28px"><div><h3>🏁 Validation des niveaux</h3><p>Examine les bilans de fin de parcours et décide si le niveau est validé ou à corriger.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterLevelReviews()">↻ Actualiser les validations</button></div>
+        <p id="admin-tester-reviews-status" class="status" role="status" aria-live="polite">Les demandes de validation apparaîtront ici.</p>
+        <div id="admin-tester-reviews-list" class="admin-recent-list tester-table-wrap"><p>Aucune demande chargée.</p></div>
+        <div class="admin-section-heading" style="margin-top:28px"><div><h3>Retours et réponses</h3><p>Lis les retours, réponds au testeur et mets à jour le suivi.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterFeedback()">↻ Actualiser les retours</button></div>
         <p id="admin-tester-feedback-status" class="status" role="status" aria-live="polite">Les retours seront chargés ici.</p>
         <div id="admin-tester-feedback-list" class="admin-recent-list tester-table-wrap"><p>Aucun retour chargé.</p></div>
         <p class="admin-footnote">Les accès testeurs sont indépendants des achats. Un testeur ne voit que les villages et niveaux qui lui sont attribués.</p>
@@ -1528,13 +1556,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-villages-view","admin-levels-view","admin-news-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-levels-view","admin-news-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-villages-view"?"adminOpenVillages":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -1692,10 +1720,11 @@ window.loadTesterSpace = async function(){
   status.textContent="Chargement de tes autorisations…";
   accessList.replaceChildren();history.replaceChildren();accessSelect.replaceChildren();
   try{
-    const [accessData,feedbackData,missionData]=await Promise.all([
+    const [accessData,feedbackData,missionData,reviewData]=await Promise.all([
       profileApi("/api/testers/access"),
       profileApi("/api/testers/feedback/mine"),
-      profileApi("/api/testers/missions")
+      profileApi("/api/testers/missions"),
+      profileApi("/api/testers/level-reviews/mine")
     ]);
     const access=Array.isArray(accessData.access)?accessData.access:[];
     const missionsBox=document.getElementById("tester-space-missions");
@@ -1733,6 +1762,18 @@ window.loadTesterSpace = async function(){
         const option=document.createElement("option");option.value=JSON.stringify({village:item.village_slug,formula:item.formula});option.textContent=label;accessSelect.appendChild(option);
       });
     }
+    const reviewSelect=document.getElementById("tester-level-review-access");
+    if(reviewSelect){
+      reviewSelect.replaceChildren();
+      const reviewMissions=Array.isArray(missionData.missions)?missionData.missions:[];
+      const reviewable=reviewMissions.filter(m=>m.adventure_id && m.completed && m.level_key==="facile");
+      if(!reviewable.length){const o=document.createElement("option");o.value="";o.textContent="Termine d’abord les 10 étoiles du niveau Facile";reviewSelect.appendChild(o);reviewSelect.disabled=true;}
+      else{reviewSelect.disabled=false;reviewable.forEach(m=>{const o=document.createElement("option");o.value=JSON.stringify({village:m.village_slug,formula:m.level_key});o.textContent=(m.village_name||m.village_slug)+" — Facile";reviewSelect.appendChild(o);});}
+    }
+    const reviewHistory=document.getElementById("tester-level-review-history");
+    if(reviewHistory){reviewHistory.replaceChildren();const reviews=Array.isArray(reviewData.reviews)?reviewData.reviews:[];
+      if(!reviews.length){reviewHistory.textContent="Aucune demande de validation envoyée pour le moment.";}
+      reviews.forEach(item=>{const card=document.createElement("article");card.style.cssText="padding:10px;margin:7px 0;background:#fffefa;border:1px solid #e4dcc8;border-radius:9px";const h=document.createElement("strong");h.textContent=(item.village_name||item.village_slug)+" — "+(testerFormulaLabels[item.formula]||item.formula);const m=document.createElement("p");m.style.cssText="font-size:12px;color:#687366;margin:5px 0";m.textContent=({en_attente:"En attente de décision",valide:"Niveau validé",a_corriger:"À corriger — tu peux recommencer"}[item.status]||item.status)+" · "+(item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"Date inconnue");card.append(h,m);if(item.admin_note){const n=document.createElement("p");n.style.cssText="white-space:pre-wrap;margin:6px 0";n.textContent="Message de l’administration : "+item.admin_note;card.appendChild(n);}reviewHistory.appendChild(card);});}
     const feedback=Array.isArray(feedbackData.feedback)?feedbackData.feedback:[];
     if(!feedback.length){history.textContent="Tu n’as pas encore envoyé de retour.";}
     else feedback.forEach(item=>{
@@ -1772,6 +1813,41 @@ if(testerFeedbackForm){
     finally{submit.disabled=false;}
   });
 }
+
+const testerLevelReviewForm=document.getElementById("tester-level-review-form");
+if(testerLevelReviewForm){testerLevelReviewForm.addEventListener("submit",async event=>{
+  event.preventDefault();const status=document.getElementById("tester-level-review-status");const submit=document.getElementById("tester-level-review-submit");
+  const selected=document.getElementById("tester-level-review-access").value;let target;
+  try{target=JSON.parse(selected);}catch{status.textContent="Aucun niveau Facile terminé n’est disponible pour validation.";return;}
+  submit.disabled=true;status.textContent="Envoi de ton bilan…";
+  try{await profileApi("/api/testers/level-review",{method:"POST",body:JSON.stringify({village:target.village,formula:target.formula,report:document.getElementById("tester-level-review-report").value.trim()})});
+    document.getElementById("tester-level-review-report").value="";status.textContent="Ta demande de validation a bien été envoyée.";await window.loadTesterSpace();
+  }catch(error){status.textContent=error.message||"Impossible d’envoyer la demande.";}finally{submit.disabled=false;}
+});}
+
+window.adminLoadTesterLevelReviews=async function(){
+  const status=document.getElementById("admin-tester-reviews-status");const list=document.getElementById("admin-tester-reviews-list");if(!status||!list)return;
+  status.textContent="Chargement des bilans…";list.replaceChildren();
+  try{const data=await adminApi("/api/admin/tester-level-reviews");const reviews=Array.isArray(data.reviews)?data.reviews:[];
+    if(!reviews.length){list.textContent="Aucune demande de validation pour le moment.";status.textContent="Liste chargée.";return;}
+    reviews.forEach(item=>{const card=document.createElement("article");card.style.cssText="padding:14px;margin:9px 0;background:#fffefa;border:1px solid #e4dcc8;border-radius:10px";
+      const heading=document.createElement("strong");heading.textContent=(item.tester_name||item.tester_email||"Testeur")+" — "+(item.village_name||item.village_slug)+" / "+(TESTER_FORMULAS.find(x=>x[0]===item.formula)?.[1]||item.formula);
+      const meta=document.createElement("p");meta.style.cssText="font-size:12px;color:#687366;margin:5px 0";meta.textContent=({en_attente:"En attente",valide:"Validé",a_corriger:"À corriger"}[item.status]||item.status)+" · "+(item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"Date inconnue");
+      const report=document.createElement("p");report.style.cssText="white-space:pre-wrap;margin:8px 0";report.textContent=item.report||"Aucun bilan complémentaire.";
+      card.append(heading,meta,report);
+      if(item.status==="en_attente"){
+        const note=document.createElement("textarea");note.rows=3;note.maxLength=3000;note.placeholder="Message au testeur (obligatoire en cas de correction)…";note.style.cssText="display:block;width:100%;box-sizing:border-box;margin:8px 0;padding:10px;border:1px solid #d4c49c;border-radius:8px";
+        const actions=document.createElement("div");actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
+        const approve=document.createElement("button");approve.type="button";approve.className="small-btn";approve.textContent="Accepter et valider";
+        const correct=document.createElement("button");correct.type="button";correct.className="admin-secondary-btn";correct.textContent="Demander une correction";
+        approve.addEventListener("click",()=>saveDecision("valide",approve));correct.addEventListener("click",()=>{if(!note.value.trim()){alert("Ajoute une explication pour que le testeur sache quoi corriger.");note.focus();return;}saveDecision("a_corriger",correct);});
+        async function saveDecision(decision,button){button.disabled=true;try{await adminApi(`/api/admin/tester-level-reviews/${encodeURIComponent(item.id)}`,{method:"PATCH",body:JSON.stringify({status:decision,admin_note:note.value.trim()})});await window.adminLoadTesterLevelReviews();}catch(e){alert(e.message||"Impossible d’enregistrer la décision.");button.disabled=false;}}
+        actions.append(approve,correct);card.append(note,actions);
+      }else if(item.admin_note){const noteText=document.createElement("p");noteText.style.cssText="white-space:pre-wrap;margin:8px 0";noteText.textContent="Décision / consigne : "+item.admin_note;card.appendChild(noteText);}
+      list.appendChild(card);
+    });status.textContent=reviews.length+" demande(s) chargée(s).";
+  }catch(error){status.textContent=error.message||"Impossible de charger les demandes.";list.textContent="Vérifie que la route /api/admin/tester-level-reviews est déployée et que la table SQL est créée dans Neon.";}
+};
 
 window.adminOpenTesters = async function(){
   adminSetView("admin-testers-view","Demandes testeurs");
@@ -1818,7 +1894,6 @@ window.adminLoadTesters = async function(){
       table.appendChild(body);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
       status.textContent=`${apps.length} demande${apps.length>1?"s":""} chargée${apps.length>1?"s":""}.`;
     }
-    await window.adminLoadTesterFeedback();
   }catch(error){status.textContent=error.message||"Impossible de charger les demandes.";list.textContent="Vérifie que les routes testeurs sont déployées et que les tables SQL ont été créées dans Neon.";}
 };
 
@@ -1826,6 +1901,33 @@ const TESTER_FORMULAS = [
   ["enfant","Enfant"],["facile","Facile"],["famille","Famille"],["moyen","Moyen"],
   ["difficile","Difficile"],["extreme","Extrême"],["nuit","Nuit"]
 ];
+window.adminOpenTesterManagement = async function(){
+  adminSetView("admin-tester-management-view","Gestion des testeurs");
+  await Promise.all([window.adminLoadTesterDirectory(), window.adminLoadTesterFeedback(), window.adminLoadTesterLevelReviews()]);
+};
+window.adminLoadTesterDirectory = async function(){
+  const status=document.getElementById("admin-tester-directory-status");
+  const list=document.getElementById("admin-tester-directory-list");
+  if(!status||!list)return;
+  status.textContent="Chargement des testeurs validés…";list.replaceChildren();
+  try{
+    const [data,villageData]=await Promise.all([adminApi("/api/admin/testers"),adminApi("/api/admin/villages")]);
+    const accepted=(Array.isArray(data.applications)?data.applications:[]).filter(x=>x.status==="accepted");
+    const villages=Array.isArray(villageData.villages)?villageData.villages:[];
+    if(!accepted.length){list.textContent="Aucun testeur validé pour le moment. Accepte d’abord une demande dans « Demandes testeurs ».";status.textContent="0 testeur validé.";return;}
+    accepted.forEach(app=>{
+      const card=document.createElement("article");card.style.cssText="padding:14px;margin:10px 0;background:#fffefa;border:1px solid #e4dcc8;border-radius:11px";
+      const title=document.createElement("strong");title.textContent=app.name||app.email||"Testeur";
+      const email=document.createElement("p");email.style.cssText="margin:4px 0 10px;color:#687366;font-size:13px";email.textContent=app.email||"Adresse e-mail non disponible";
+      const info=document.createElement("p");info.style.cssText="margin:0 0 10px;font-size:13px";info.textContent="Compte testeur validé · Identifiant : "+(app.user_id||"non disponible");
+      const host=document.createElement("div");
+      const button=document.createElement("button");button.type="button";button.className="admin-secondary-btn";button.textContent="Gérer ses villages et niveaux";
+      button.addEventListener("click",()=>adminShowTesterAccess(app.user_id,app.name||app.email||"ce testeur",villages,host));
+      card.append(title,email,info,button,host);list.appendChild(card);
+    });
+    status.textContent=accepted.length+" testeur"+(accepted.length>1?"s":"")+" validé"+(accepted.length>1?"s":"")+". Choisis une personne pour lui attribuer ses parcours.";
+  }catch(error){status.textContent=error.message||"Impossible de charger les testeurs.";list.textContent="Vérifie que /api/admin/testers et /api/admin/villages sont disponibles.";}
+};
 window.adminShowTesterAccess = async function(userId, testerName, villages, host){
   let panel=host.querySelector(".tester-access-editor");
   if(panel){panel.remove();return;}
