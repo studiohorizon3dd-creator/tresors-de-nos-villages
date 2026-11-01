@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#062c20">
@@ -539,10 +540,10 @@ body.halloween-accueil .home-hero{
       <div class="account-card" id="account-card">
         <h2>♙ Mon compte</h2>
         <p>Créez votre compte ou connectez-vous pour commencer l’aventure.</p>
-        <form id="signup-form">
+        <form id="signup-form" method="post" action="" onsubmit="event.preventDefault(); return false;">
           <label for="name">Ton prénom</label><input id="name" name="name" autocomplete="name" required>
           <label for="email">Ton adresse e-mail</label><input id="email" name="email" type="email" autocomplete="email" required>
-          <label for="password">Mot de passe</label><input id="password" name="password" type="password" minlength="8" autocomplete="new-password" required>
+          <label for="password">Mot de passe</label><input id="password" name="password" type="password" minlength="8" autocomplete="current-password" required>
           <button class="create-btn" type="submit">Créer mon compte</button>
         </form>
         <button class="login-btn" id="login-btn" type="button">J’ai déjà un compte</button>
@@ -1706,6 +1707,20 @@ body.halloween-accueil .home-hero{
   </div>
 </section>
 
+<script>
+// Sécurité : retire immédiatement les éventuels identifiants présents dans l'URL.
+(() => {
+  try {
+    const url = new URL(window.location.href);
+    let changed = false;
+    for (const key of ["password", "email", "name", "token", "access_token", "refresh_token"]) {
+      if (url.searchParams.has(key)) { url.searchParams.delete(key); changed = true; }
+    }
+    if (changed) window.history.replaceState({}, document.title, url.pathname + url.search + url.hash);
+  } catch (_) { /* Ne bloque jamais le chargement du site. */ }
+})();
+</script>
+
 <script type="module">
 import { createAuthClient } from "https://esm.sh/@neondatabase/auth";
 const AUTH_URL = "https://ep-proud-rain-b9nldnf8.neonauth.c-7.eu-central-1.aws.neon.tech/neondb/auth";
@@ -1735,6 +1750,8 @@ const auth = createAuthClient(AUTH_URL);
 restoreLogin();
 console.log("Restauration automatique de session activée");
 const form = document.getElementById("signup-form");
+// Défense supplémentaire : aucune soumission HTML native des champs d'identification.
+form?.addEventListener("submit", (event) => event.preventDefault(), { capture: true });
 const status = document.getElementById("auth-status");
 const loginBtn = document.getElementById("login-btn");
 
