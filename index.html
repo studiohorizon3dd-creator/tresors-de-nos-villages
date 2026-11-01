@@ -1056,6 +1056,7 @@ body.halloween-accueil .home-hero{
           <h4 style="margin-top:0">Créer une aventure</h4>
           <form id="admin-adventure-create-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
             <label>Village<select id="admin-adventure-village" required style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"><option value="">Chargement…</option></select></label>
+            <label>Niveau<select id="admin-adventure-level" required style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"><option value="">Choisir un village d’abord…</option></select></label>
             <label>Nom du parcours<input id="admin-adventure-title" required maxlength="150" placeholder="Ex. Le mystère du vieux village" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></label>
             <label style="grid-column:1/-1">Description<textarea id="admin-adventure-description" rows="2" maxlength="3000" placeholder="Présentation du parcours…" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></textarea></label>
             <div style="grid-column:1/-1"><button class="admin-secondary-btn" type="submit">Créer en brouillon</button></div>
@@ -1970,27 +1971,36 @@ window.adminLoadAdventures = async function(){
     const villages=Array.isArray(villageData.villages)?villageData.villages:[];
     villageSelect.replaceChildren();
     const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choisir un village…";villageSelect.appendChild(placeholder);
-    villages.forEach(v=>{const o=document.createElement("option");o.value=v.name;o.textContent=v.name;villageSelect.appendChild(o);});
+    villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;villageSelect.appendChild(o);});
+    villageSelect.onchange=()=>window.adminLoadAdventureLevels();
     const adventures=Array.isArray(adventureData.adventures)?adventureData.adventures:[];
     if(!adventures.length){list.textContent="Aucun parcours enregistré pour le moment. Tu peux créer le premier ci-dessus.";}
     adventures.forEach(a=>{
       const card=document.createElement("div");card.style.cssText="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid #e8e1d2";
-      const info=document.createElement("div");const title=document.createElement("strong");title.textContent=a.title;const meta=document.createElement("p");meta.style.cssText="margin:4px 0;color:#66736a;font-size:13px";meta.textContent=`${a.village} · ${a.is_published?"Publié":"Brouillon"}`;info.append(title,meta);
+      const info=document.createElement("div");const title=document.createElement("strong");title.textContent=a.title;const meta=document.createElement("p");meta.style.cssText="margin:4px 0;color:#66736a;font-size:13px";meta.textContent=`${a.village} · ${a.level_key||"Niveau non défini"} · ${a.is_published?"Publié":"Brouillon"}`;info.append(title,meta);
       const btn=document.createElement("button");btn.type="button";btn.className="admin-secondary-btn";btn.textContent="Gérer les étapes";btn.addEventListener("click",()=>window.adminLoadAdventureSteps(a.id,a.title));card.append(info,btn);list.appendChild(card);
     });
     status.textContent=`${adventures.length} parcours enregistré${adventures.length>1?"s":""}. Les nouveaux parcours sont créés sans publication.`;
   }catch(e){status.textContent=e.message||"Impossible de charger les aventures.";list.textContent="Vérifie la connexion au serveur et les droits administrateur.";}
 };
+window.adminLoadAdventureLevels=async function(){
+  const village=document.getElementById("admin-adventure-village").value, levelSelect=document.getElementById("admin-adventure-level");
+  levelSelect.replaceChildren(); const first=document.createElement("option");first.value="";first.textContent="Choisir un niveau…";levelSelect.appendChild(first);
+  if(!village)return;
+  try{const data=await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);(data.levels||[]).filter(x=>x.status!=="desactive").forEach(x=>{const o=document.createElement("option");o.value=x.level_key;o.textContent=`${x.display_name} — ${x.riddle_count} énigmes / ${x.star_count} étoiles`;levelSelect.appendChild(o);});}
+  catch(e){const o=document.createElement("option");o.value="";o.textContent="Impossible de charger les niveaux";levelSelect.appendChild(o);}
+};
 document.getElementById("admin-adventure-create-form")?.addEventListener("submit",async e=>{
   e.preventDefault();const status=document.getElementById("admin-adventures-status"),btn=e.currentTarget.querySelector('button[type="submit"]');
-  const village=document.getElementById("admin-adventure-village").value,title=document.getElementById("admin-adventure-title").value.trim(),description=document.getElementById("admin-adventure-description").value.trim();
-  if(!village){status.textContent="Choisis d'abord un village.";return;}
-  btn.disabled=true;try{const result=await adminApi("/api/admin/adventures",{method:"POST",body:JSON.stringify({village,title,description})});document.getElementById("admin-adventure-title").value="";document.getElementById("admin-adventure-description").value="";status.textContent=`Parcours « ${result.adventure.title} » créé en brouillon.`;await window.adminLoadAdventures();if(result.adventure?.id)await window.adminLoadAdventureSteps(result.adventure.id,result.adventure.title);}catch(err){status.textContent=err.message||"Impossible de créer le parcours.";}finally{btn.disabled=false;}
+  const villageSlug=document.getElementById("admin-adventure-village").value,village=document.getElementById("admin-adventure-village").selectedOptions[0]?.textContent||"",levelKey=document.getElementById("admin-adventure-level").value,title=document.getElementById("admin-adventure-title").value.trim(),description=document.getElementById("admin-adventure-description").value.trim();
+  if(!villageSlug||!levelKey){status.textContent="Choisis d'abord un village et un niveau.";return;}
+  btn.disabled=true;try{const result=await adminApi("/api/admin/adventures",{method:"POST",body:JSON.stringify({village,village_slug:villageSlug,level_key:levelKey,title,description})});document.getElementById("admin-adventure-title").value="";document.getElementById("admin-adventure-description").value="";status.textContent=`Parcours « ${result.adventure.title} » créé en brouillon.`;await window.adminLoadAdventures();if(result.adventure?.id)await window.adminLoadAdventureSteps(result.adventure.id,result.adventure.title);}catch(err){status.textContent=err.message||"Impossible de créer le parcours.";}finally{btn.disabled=false;}
 });
 window.adminLoadAdventureSteps=async function(id,title){
   const panel=document.getElementById("admin-adventure-steps-panel"),list=document.getElementById("admin-adventure-steps-list"),heading=document.getElementById("admin-adventure-steps-title");
   window.adminSelectedAdventureId=id;panel.hidden=false;heading.textContent=`Étapes — ${title}`;list.textContent="Chargement…";
   try{const data=await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps`),steps=Array.isArray(data.steps)?data.steps:[];list.replaceChildren();
+    if(data.level?.riddle_count){const info=document.createElement("p");info.textContent=`Niveau ${data.level.level_key} : ${steps.length}/${data.level.riddle_count} étapes prévues · ${data.level.star_count} étoiles`;info.style.cssText="font-weight:600;color:#52634f";list.appendChild(info);document.getElementById("admin-step-number").max=String(data.level.riddle_count);document.getElementById("admin-step-form-note")?.remove();}
     if(!steps.length)list.textContent="Aucune étape pour le moment. Tu peux ajouter les lieux ci-dessous.";
     steps.forEach(step=>{const row=document.createElement("p");row.style.cssText="padding:8px;border-bottom:1px solid #eee8d9;margin:0";row.textContent=`Étape ${step.step_number} — ${step.place_name}${step.latitude!=null&&step.longitude!=null?` · GPS ${step.latitude}, ${step.longitude}`:" · GPS à renseigner"}`;list.appendChild(row);});
     const next=Math.max(0,...steps.map(x=>Number(x.step_number)||0))+1;document.getElementById("admin-step-number").value=String(next);
