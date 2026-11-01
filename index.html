@@ -19,6 +19,18 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #d7ad
 .brand-name{text-align:center;font-size:27px;font-weight:bold;line-height:1.05;margin:8px 0 30px}
 .nav-btn{display:block;width:100%;border:0;border-radius:12px;background:transparent;color:#fff4cf;text-align:left;padding:14px 15px;margin:4px 0;font-size:17px}
 .nav-btn:hover,.nav-btn.active{background:#656321}
+/* Menu latéral organisé en catégories repliables */
+.nav-accordion{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:7px;}
+.nav-category{border-bottom:1px solid rgba(255,244,207,.18);padding:2px 0 7px;}
+.nav-category>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-radius:10px;color:#ffe49b;font-weight:700;font-size:14px;letter-spacing:1px;user-select:none;}
+.nav-category>summary::-webkit-details-marker{display:none;}
+.nav-category>summary:hover,.nav-category[open]>summary{background:rgba(255,228,155,.12);}
+.nav-arrow{font-size:20px;transition:transform .18s ease;}
+.nav-category[open] .nav-arrow{transform:rotate(180deg);}
+.nav-submenu{padding:2px 0 3px 8px;}
+.nav-submenu .nav-btn{font-size:15px;padding:11px 12px;margin:2px 0;}
+.nav-bottom-links{margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,244,207,.2);}
+
 .sidebar-note{margin-top:auto;text-align:center;color:#c9c39b;font-size:13px;line-height:1.6}
 .content {
   margin-left: 245px;
@@ -309,6 +321,8 @@ body.halloween-accueil .home-hero{
 .support-admin-send { background:#174b37 !important; color:#fff !important; }
 @media(max-width:700px){.support-admin-table{min-width:760px}.support-admin-reply{min-width:230px}}
 
+
+@media(max-width:900px){.nav-list.nav-accordion{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start}.nav-accordion .nav-btn{width:100%;text-align:left}.nav-category{width:100%}.nav-bottom-links{width:100%}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -405,20 +419,38 @@ body.halloween-accueil .home-hero{
 <section class="dashboard" id="dashboard">
   <aside class="sidebar">
     <div class="brand-mark">✥</div><div class="brand-name">Trésors<br>de nos Villages</div>
-    <nav class="nav-list" aria-label="Menu explorateur">
-      <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
-      <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
-      <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
-      <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
-      <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
-      <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
-      <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
-      <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
-      <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
-      <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
-      <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
-      <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" hidden>⚙ &nbsp; Administration</button>
-      <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
+    <nav class="nav-list nav-accordion" aria-label="Menu explorateur">
+      <details class="nav-category"><summary>EXPLORER <span class="nav-arrow">⌄</span></summary>
+        <div class="nav-submenu">
+          <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
+          <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
+        </div>
+      </details>
+      <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
+        <div class="nav-submenu">
+          <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
+          <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
+          <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
+        </div>
+      </details>
+      <details class="nav-category"><summary>COMMUNAUTÉ <span class="nav-arrow">⌄</span></summary>
+        <div class="nav-submenu">
+          <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
+          <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
+        </div>
+      </details>
+      <details class="nav-category"><summary>INFORMATIONS <span class="nav-arrow">⌄</span></summary>
+        <div class="nav-submenu">
+          <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
+          <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
+          <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
+          <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
+        </div>
+      </details>
+      <div class="nav-bottom-links">
+        <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" hidden>⚙ &nbsp; Administration</button>
+        <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
+      </div>
     </nav>
     <div class="sidebar-note">Bonne exploration !</div>
   </aside>
