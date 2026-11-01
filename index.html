@@ -1101,6 +1101,22 @@ body.halloween-accueil .home-hero{
           </form>
         </div>
         <div class="admin-info-panel" style="margin-bottom:16px"><h4 style="margin-top:0">Parcours enregistrés</h4><div id="admin-adventures-list">Chargement…</div></div>
+        <div class="admin-info-panel" id="admin-adventure-edit-panel" hidden style="margin-bottom:16px">
+          <h4 style="margin-top:0">Modifier l’aventure</h4>
+          <form id="admin-adventure-edit-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+            <input id="admin-adventure-edit-id" type="hidden">
+            <label>Titre de l’aventure<input id="admin-adventure-edit-title" required maxlength="150" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></label>
+            <label>Village<input id="admin-adventure-edit-village" required maxlength="150" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></label>
+            <label style="grid-column:1/-1">Description<textarea id="admin-adventure-edit-description" rows="3" maxlength="3000" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></textarea></label>
+            <label>Statut de l’aventure<select id="admin-adventure-edit-status-select" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px">
+              <option value="en_creation">En cours de création</option><option value="a_valider">À valider</option><option value="en_attente">En attente</option><option value="en_travaux">En travaux</option><option value="mise_a_jour">Mise à jour</option><option value="en_ligne">En ligne</option><option value="suspendue">Suspendue</option>
+            </select></label>
+            <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer</button><button class="admin-secondary-btn" id="admin-adventure-edit-cancel" type="button">Annuler</button></div>
+          </form>
+          <p style="font-size:12px;color:#66736a;margin-bottom:0">« Valider » confirme le contenu sans le publier. « Mettre en ligne » reste une action distincte.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="admin-secondary-btn" id="admin-adventure-validate" type="button">Valider</button><button class="admin-secondary-btn" id="admin-adventure-publish" type="button">Mettre en ligne</button></div>
+          <p id="admin-adventure-edit-message" class="status" role="status" aria-live="polite"></p>
+        </div>
         <div class="admin-info-panel" id="admin-adventure-steps-panel" hidden>
           <h4 id="admin-adventure-steps-title" style="margin-top:0">Étapes du parcours</h4>
           <p>Tu peux préparer les lieux et les coordonnées GPS. Les champs énigme, réponse et indice restent facultatifs tant que tu n'as pas écrit tes énigmes.</p>
@@ -2016,6 +2032,7 @@ window.adminLoadVillageLevels = async function(){
 };
 
 window.adminSelectedAdventureId = null;
+const ADVENTURE_STATUS_LABELS={en_creation:"En cours de création",a_valider:"À valider",en_attente:"En attente",en_travaux:"En travaux",mise_a_jour:"Mise à jour",en_ligne:"En ligne",suspendue:"Suspendue"};
 window.adminLoadAdventures = async function(){
   const status=document.getElementById("admin-adventures-status"), list=document.getElementById("admin-adventures-list"), villageSelect=document.getElementById("admin-adventure-village");
   if(!status||!list||!villageSelect)return;
@@ -2028,15 +2045,53 @@ window.adminLoadAdventures = async function(){
     villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;villageSelect.appendChild(o);});
     villageSelect.onchange=()=>window.adminLoadAdventureLevels();
     const adventures=Array.isArray(adventureData.adventures)?adventureData.adventures:[];
-    if(!adventures.length){list.textContent="Aucun parcours enregistré pour le moment. Tu peux créer le premier ci-dessus.";}
+    if(!adventures.length)list.textContent="Aucun parcours enregistré pour le moment. Tu peux créer le premier ci-dessus.";
     adventures.forEach(a=>{
-      const card=document.createElement("div");card.style.cssText="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid #e8e1d2";
-      const info=document.createElement("div");const title=document.createElement("strong");title.textContent=a.title;const meta=document.createElement("p");meta.style.cssText="margin:4px 0;color:#66736a;font-size:13px";meta.textContent=`${a.village} · ${a.level_key||"Niveau non défini"} · ${a.is_published?"Publié":"Brouillon"}`;info.append(title,meta);
-      const btn=document.createElement("button");btn.type="button";btn.className="admin-secondary-btn";btn.textContent="Gérer les étapes";btn.addEventListener("click",()=>window.adminLoadAdventureSteps(a.id,a.title));card.append(info,btn);list.appendChild(card);
+      const card=document.createElement("div");card.style.cssText="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:14px 0;border-bottom:1px solid #e8e1d2";
+      const info=document.createElement("div");const title=document.createElement("strong");title.textContent=a.title;
+      const meta=document.createElement("p");meta.style.cssText="margin:5px 0;color:#66736a;font-size:13px";
+      meta.textContent=`${a.village} · ${a.level_key||"Niveau non défini"} · Statut : ${ADVENTURE_STATUS_LABELS[a.status]||"En cours de création"} · ${a.is_validated?"Validée":"Non validée"} · ${a.is_published?"En ligne":"Non publiée"}`;info.append(title,meta);
+      const actions=document.createElement("div");actions.style.cssText="display:flex;gap:7px;flex-wrap:wrap";
+      const edit=document.createElement("button");edit.type="button";edit.className="admin-secondary-btn";edit.textContent="Modifier";edit.addEventListener("click",()=>window.adminEditAdventure(a));
+      const steps=document.createElement("button");steps.type="button";steps.className="admin-secondary-btn";steps.textContent="Gérer les énigmes";steps.addEventListener("click",()=>window.adminLoadAdventureSteps(a.id,a.title));
+      const validate=document.createElement("button");validate.type="button";validate.className="admin-secondary-btn";validate.textContent=a.is_validated?"Validée":"Valider";validate.disabled=!!a.is_validated;validate.addEventListener("click",()=>window.adminAdventureAction(a.id,"validate"));
+      const publish=document.createElement("button");publish.type="button";publish.className="admin-secondary-btn";publish.textContent=a.is_published?"En ligne":"Mettre en ligne";publish.disabled=!!a.is_published||!a.is_validated;publish.addEventListener("click",()=>window.adminAdventureAction(a.id,"publish"));
+      actions.append(edit,steps,validate,publish);card.append(info,actions);list.appendChild(card);
     });
-    status.textContent=`${adventures.length} parcours enregistré${adventures.length>1?"s":""}. Les nouveaux parcours sont créés sans publication.`;
+    status.textContent=`${adventures.length} aventure${adventures.length>1?"s":""}. La validation et la mise en ligne sont deux actions séparées.`;
   }catch(e){status.textContent=e.message||"Impossible de charger les aventures.";list.textContent="Vérifie la connexion au serveur et les droits administrateur.";}
 };
+window.adminEditAdventure=function(a){
+  const panel=document.getElementById("admin-adventure-edit-panel");panel.hidden=false;
+  document.getElementById("admin-adventure-edit-id").value=a.id;
+  document.getElementById("admin-adventure-edit-title").value=a.title||"";
+  document.getElementById("admin-adventure-edit-village").value=a.village||"";
+  document.getElementById("admin-adventure-edit-description").value=a.description||"";
+  document.getElementById("admin-adventure-edit-status-select").value=ADVENTURE_STATUS_LABELS[a.status]?a.status:"en_creation";
+  document.getElementById("admin-adventure-edit-status-select").dataset.validated=String(!!a.is_validated);
+  document.getElementById("admin-adventure-edit-status-select").dataset.published=String(!!a.is_published);
+  document.getElementById("admin-adventure-edit-status-select").dataset.villageSlug=a.village_slug||"";
+  document.getElementById("admin-adventure-edit-status-select").dataset.levelKey=a.level_key||"";
+  document.getElementById("admin-adventure-edit-status-select").dataset.id=a.id;
+  document.getElementById("admin-adventure-validate").disabled=!!a.is_validated;
+  document.getElementById("admin-adventure-publish").disabled=!!a.is_published||!a.is_validated;
+  document.getElementById("admin-adventure-edit-message").textContent="";
+  panel.scrollIntoView({behavior:"smooth",block:"start"});
+};
+window.adminAdventureAction=async function(id,action){
+  const msg=document.getElementById("admin-adventure-edit-message");if(msg)msg.textContent="Traitement…";
+  try{await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/${action}`,{method:"POST",body:JSON.stringify({})});if(msg)msg.textContent=action==="validate"?"Aventure validée. Elle n’est pas publiée automatiquement.":"Aventure mise en ligne.";await window.adminLoadAdventures();
+    const editId=document.getElementById("admin-adventure-edit-id")?.value;if(editId&&String(editId)===String(id)){const d=await adminApi("/api/admin/adventures");const updated=(d.adventures||[]).find(x=>String(x.id)===String(id));if(updated)window.adminEditAdventure(updated);}
+  }catch(e){if(msg)msg.textContent=e.message||"Action impossible.";else alert(e.message||"Action impossible.");}
+};
+document.getElementById("admin-adventure-edit-form")?.addEventListener("submit",async e=>{
+  e.preventDefault();const id=document.getElementById("admin-adventure-edit-id").value,msg=document.getElementById("admin-adventure-edit-message"),btn=e.currentTarget.querySelector('button[type="submit"]');
+  const payload={title:document.getElementById("admin-adventure-edit-title").value.trim(),village:document.getElementById("admin-adventure-edit-village").value.trim(),description:document.getElementById("admin-adventure-edit-description").value.trim(),status:document.getElementById("admin-adventure-edit-status-select").value};
+  btn.disabled=true;try{await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}`,{method:"PATCH",body:JSON.stringify(payload)});msg.textContent="Modifications enregistrées.";await window.adminLoadAdventures();}catch(err){msg.textContent=err.message||"Impossible d’enregistrer l’aventure.";}finally{btn.disabled=false;}
+});
+document.getElementById("admin-adventure-edit-cancel")?.addEventListener("click",()=>{document.getElementById("admin-adventure-edit-panel").hidden=true;});
+document.getElementById("admin-adventure-validate")?.addEventListener("click",()=>window.adminAdventureAction(document.getElementById("admin-adventure-edit-id").value,"validate"));
+document.getElementById("admin-adventure-publish")?.addEventListener("click",()=>window.adminAdventureAction(document.getElementById("admin-adventure-edit-id").value,"publish"));
 window.adminLoadAdventureLevels=async function(){
   const village=document.getElementById("admin-adventure-village").value, levelSelect=document.getElementById("admin-adventure-level");
   levelSelect.replaceChildren(); const first=document.createElement("option");first.value="";first.textContent="Choisir un niveau…";levelSelect.appendChild(first);
