@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -211,6 +210,14 @@ body.halloween-accueil .home-hero{
 }
 
 
+
+
+  /* Joueurs & explorateurs — présentation inspirée de la maquette, sans retirer les fonctions existantes */
+  .players-hero{display:flex;align-items:center;gap:18px;min-height:96px;padding:15px 22px;border-radius:16px;color:#fff5d9;background:linear-gradient(90deg,rgba(4,43,31,.98),rgba(4,53,37,.82) 55%,rgba(4,53,37,.35)),url('images/admin-dashboard-banner.jpg') center 48%/cover;border:1px solid #d7ad45;box-shadow:0 7px 18px #173b2818}
+  .players-hero-icon{font-size:45px;flex:none}.players-hero h3{font:700 clamp(23px,3vw,34px) Georgia,serif;color:#fff2cb;margin:0 0 5px}.players-hero p{font:13px/1.5 Arial,sans-serif;margin:0;color:#fff8e6}.players-hero-art{margin-left:auto;font-size:38px;white-space:nowrap}
+  .players-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:12px 0 14px}.players-metric{min-width:0;display:flex;align-items:center;gap:11px;padding:12px;background:linear-gradient(145deg,#fffefa,#f8f4e9);border:1px solid #e5dcc8;border-radius:14px;box-shadow:0 4px 12px #243b2910}.players-metric>span{width:46px;height:46px;display:grid;place-items:center;flex:none;border-radius:50%;background:#eaf2e3;font-size:23px}.players-metric:nth-child(2)>span,.players-metric:nth-child(5)>span{background:#fff1cb}.players-metric small{display:block;font:700 11px Arial,sans-serif;color:#425340}.players-metric strong{display:block;font:700 25px Georgia,serif;color:#102f21;margin-top:2px;overflow-wrap:anywhere}.players-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0 14px}.players-tab{min-width:0;padding:12px 7px;border:1px solid #e5dcc8;border-radius:11px;background:#fffdf7;color:#1d3c2b;font:700 13px Georgia,serif;box-shadow:0 3px 9px #263b2510}.players-tab.active{background:linear-gradient(120deg,#07512f,#08713f);border-color:#d7ad45;color:#fff6dc}.players-toolbar{display:grid;grid-template-columns:minmax(220px,1.7fr) repeat(3,minmax(130px,.8fr)) auto auto;gap:9px;align-items:center;margin:12px 0}.players-toolbar input,.players-toolbar select,.players-pagination select{min-width:0;padding:10px 11px;border:1px solid #dfd2b4;border-radius:9px;background:#fffefa;color:#263b2c;font:12px Arial,sans-serif}.players-count{padding:9px 12px;border-radius:22px;background:#e8f2e4;color:#245b38;font:700 11px Arial,sans-serif;white-space:nowrap}.players-content-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(260px,.75fr);gap:12px;align-items:start}.players-main-panel,.players-side-card{background:#fffdf7;border:1px solid #e6dcc7;border-radius:15px;box-shadow:0 4px 13px #263b250c;min-width:0}.players-main-panel{padding:13px}.players-panel-title{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:2px 4px 11px}.players-panel-title h4,.players-side-card h4{font:700 18px Georgia,serif;color:#153d2c;margin:0}.players-panel-title span{font:11px Arial,sans-serif;color:#788071}.players-list-wrap{overflow:auto}.players-table{width:100%;min-width:680px;border-collapse:collapse;font:12px Arial,sans-serif}.players-table th{padding:11px 9px;text-align:left;background:#07512f;color:#fff8e5;white-space:nowrap}.players-table th:first-child{border-radius:9px 0 0 9px}.players-table th:last-child{border-radius:0 9px 9px 0}.players-table td{padding:9px 8px;border-bottom:1px solid #eee8d9;color:#24392d;vertical-align:middle}.players-table tbody tr{cursor:pointer}.players-table tbody tr:hover td{background:#f6f1e3}.players-table tbody tr.selected td{background:#e3f2e4}.players-name-cell{font-weight:700;white-space:nowrap}.players-avatar{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;margin-right:7px;background:#e6eddb;color:#1a5537;font-weight:700}.players-pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#ecebe6;color:#555b51;font-size:10px;font-weight:700;white-space:nowrap}.players-pill.good{background:#e2f3df;color:#24643a}.players-pill.gold{background:#fff0c4;color:#795615}.players-view-btn{border:1px solid #d7bd78;border-radius:7px;background:#fffaf0;color:#174b35;padding:6px 9px;font-weight:700}.players-side-column{display:grid;gap:10px}.players-side-card{padding:15px}.players-side-card h4{margin-bottom:12px}.players-side-card p{font:12px/1.55 Arial,sans-serif;color:#6a7568;margin:6px 0}.players-detail-name{font:700 20px Georgia,serif;color:#123d2b}.players-detail-line{font:12px/1.7 Arial,sans-serif;color:#425342;overflow-wrap:anywhere}.players-detail-stats{display:grid;gap:8px}.players-detail-stats div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #eee8d9;font:12px Arial,sans-serif}.players-pagination{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:13px 2px 2px;font:12px Arial,sans-serif}.players-pagination label{margin-left:auto;display:flex;align-items:center;gap:6px}.players-pagination button:disabled{opacity:.45;cursor:not-allowed}.players-empty{padding:25px;text-align:center;color:#687267;font:13px Arial,sans-serif}.players-stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.players-stat-box{padding:14px;background:#f7f3e8;border:1px solid #e8dec8;border-radius:10px}.players-stat-box strong{display:block;font:700 24px Georgia,serif;color:#174b35}.players-stat-box small{font:11px Arial,sans-serif;color:#647064}
+  @media(max-width:1100px){.players-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.players-toolbar{grid-template-columns:repeat(3,minmax(0,1fr))}.players-toolbar input{grid-column:span 2}.players-content-grid{grid-template-columns:1fr}}
+  @media(max-width:700px){.players-hero{padding:14px}.players-hero-art{display:none}.players-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.players-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.players-toolbar{grid-template-columns:1fr 1fr}.players-toolbar input{grid-column:1/-1}.players-toolbar .admin-secondary-btn{grid-column:1/-1}.players-panel-title{align-items:flex-start;flex-direction:column}.players-pagination label{margin-left:0}}
 
 /* ===== Administration : console de pilotage ===== */
 .admin-workspace{display:grid;grid-template-columns:238px minmax(0,1fr);min-height:850px;margin:-28px -30px;background:#f4f1e8;border-radius:16px;overflow:hidden;color:#1d3328;font-family:Arial,sans-serif}
@@ -1187,17 +1194,47 @@ body.halloween-accueil .home-hero{
       </div>
 
       <div id="admin-players-view" class="admin-subview" hidden>
-        <div class="admin-section-heading">
-          <div><h3>Joueurs & explorateurs</h3><p>Profils connus de Trésors de nos Villages</p></div>
+        <section class="players-hero">
+          <div class="players-hero-icon">👥</div>
+          <div><h3>Joueurs & explorateurs</h3><p>Suivez les comptes, les aventures et la progression de vos explorateurs.</p></div>
+          <div class="players-hero-art" aria-hidden="true">🗺️ 🧭</div>
+        </section>
+        <div class="players-metrics" aria-live="polite">
+          <article class="players-metric"><span>👥</span><div><small>Joueurs inscrits</small><strong id="players-total">—</strong></div></article>
+          <article class="players-metric"><span>🏕️</span><div><small>Explorateurs classés</small><strong id="players-ranked">—</strong></div></article>
+          <article class="players-metric"><span>🧭</span><div><small>Aventures terminées</small><strong id="players-completed">—</strong></div></article>
+          <article class="players-metric"><span>💳</span><div><small>Joueurs avec formule active</small><strong id="players-formulas">—</strong></div></article>
+          <article class="players-metric players-top-metric"><span>🏆</span><div><small>Top explorateur</small><strong id="players-top">—</strong></div></article>
+        </div>
+        <nav class="players-tabs" aria-label="Rubriques joueurs">
+          <button type="button" class="players-tab active" data-players-tab="list">☷ &nbsp; Liste des joueurs</button>
+          <button type="button" class="players-tab" data-players-tab="ranking">🏆 &nbsp; Classement</button>
+          <button type="button" class="players-tab" data-players-tab="stats">▥ &nbsp; Statistiques joueurs</button>
+          <button type="button" class="players-tab" data-players-tab="formulas">▣ &nbsp; Formules & abonnements</button>
+          <button type="button" class="players-tab" data-players-tab="activity">◷ &nbsp; Activité récente</button>
+        </nav>
+        <div class="players-toolbar">
+          <input id="admin-players-search" type="search" placeholder="⌕  Rechercher un nom, un e-mail ou un identifiant…" aria-label="Rechercher un joueur">
+          <select id="players-filter-status" aria-label="Filtrer par statut"><option value="all">Tous les statuts</option><option value="verified">E-mail vérifié</option><option value="unverified">E-mail non vérifié</option></select>
+          <select id="players-filter-formula" aria-label="Filtrer par formule"><option value="all">Toutes les formules</option><option value="active">Formule active</option><option value="none">Aucune formule</option></select>
+          <select id="players-filter-ranking" aria-label="Filtrer par classement"><option value="all">Tous les classements</option><option value="yes">Classés</option><option value="no">Non classés</option></select>
+          <span id="admin-players-count" class="players-count">Chargement…</span>
           <button type="button" class="admin-secondary-btn" onclick="adminLoadPlayers()">↻ Actualiser</button>
         </div>
-        <p id="admin-players-status" class="status" role="status" aria-live="polite">Chargement des joueurs…</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0">
-          <input id="admin-players-search" type="search" placeholder="Rechercher un nom, un e-mail ou un identifiant…" aria-label="Rechercher un joueur" style="flex:1;min-width:220px;padding:11px 13px;border:1px solid #d4c49c;border-radius:9px;background:#fffefa">
-          <span id="admin-players-count" class="admin-updated">0 joueur</span>
+        <p id="admin-players-status" class="status" role="status" aria-live="polite">Chargement des comptes…</p>
+        <div class="players-content-grid">
+          <section class="players-main-panel">
+            <div class="players-panel-title"><h4 id="players-panel-heading">Liste des joueurs</h4><span id="players-panel-subtitle">Comptes enregistrés dans Neon Auth</span></div>
+            <div id="admin-players-list" class="players-list-wrap" aria-live="polite"><p>Les joueurs apparaîtront ici.</p></div>
+            <div class="players-pagination"><button type="button" id="players-prev" class="admin-secondary-btn">‹ Précédent</button><span id="players-page-label">Page 1</span><button type="button" id="players-next" class="admin-secondary-btn">Suivant ›</button><label>Afficher <select id="players-page-size"><option>10</option><option>20</option><option>50</option></select> par page</label></div>
+          </section>
+          <aside class="players-side-column">
+            <section class="players-side-card"><h4>♟ Fiche du joueur</h4><div id="players-detail"><p>Sélectionnez un joueur dans la liste pour consulter les informations disponibles.</p></div></section>
+            <section class="players-side-card"><h4>📈 Progression du joueur</h4><div id="players-progress"><p>Les statistiques du joueur sélectionné apparaîtront ici.</p></div></section>
+            <section class="players-side-card"><h4>▣ Historique des formules</h4><div id="players-formula-history"><p>Les détails d'achat et les dates d'activation ne sont pas fournis par l'API actuelle.</p></div></section>
+          </aside>
         </div>
-        <div id="admin-players-list" class="admin-recent-list" aria-live="polite"><p>Les joueurs apparaîtront ici.</p></div>
-        <p class="admin-footnote">Cette liste affiche les comptes enregistrés dans Neon Auth. Les statistiques de jeu sont associées lorsqu’un profil explorateur existe.</p>
+        <p class="admin-footnote">Les données affichées proviennent de la route sécurisée /api/admin/players. Les actions de modification/suppression, l'historique détaillé des paiements et les dernières connexions ne sont pas disponibles dans l'API actuelle : aucun faux bouton ni aucune donnée fictive ne sont ajoutés.</p>
       </div>
 
       <div id="admin-testers-view" class="admin-subview" hidden>
@@ -1876,67 +1913,98 @@ async function adminOpenAdventures(){
   adminSetView("admin-adventures-view","Aventures & énigmes");
   await window.adminLoadAdventures();
 }
+let adminPlayersCache=[];
+let adminPlayersSelectedId=null;
+let adminPlayersPage=1;
+let adminPlayersTab="list";
 async function adminOpenPlayers(){
   adminSetView("admin-players-view","Joueurs & administrateurs");
   await window.adminLoadPlayers();
 }
-window.adminOpenPlayers = adminOpenPlayers;
-window.adminLoadPlayers = async function(){
-  const status=document.getElementById("admin-players-status");
+window.adminOpenPlayers=adminOpenPlayers;
+function playersFiltered(){
+  const status=document.getElementById("players-filter-status")?.value||"all";
+  const formula=document.getElementById("players-filter-formula")?.value||"all";
+  const ranking=document.getElementById("players-filter-ranking")?.value||"all";
+  let rows=[...adminPlayersCache];
+  if(status==="verified")rows=rows.filter(p=>p.email_verified===true);
+  if(status==="unverified")rows=rows.filter(p=>p.email_verified!==true);
+  if(formula==="active")rows=rows.filter(p=>Number(p.active_formulas)>0);
+  if(formula==="none")rows=rows.filter(p=>Number(p.active_formulas||0)===0);
+  if(ranking==="yes")rows=rows.filter(p=>p.leaderboard_opt_in===true);
+  if(ranking==="no")rows=rows.filter(p=>p.leaderboard_opt_in!==true);
+  if(adminPlayersTab==="ranking")rows=rows.filter(p=>p.leaderboard_opt_in===true).sort((a,b)=>Number(b.completed_adventures||0)-Number(a.completed_adventures||0));
+  if(adminPlayersTab==="formulas")rows=rows.filter(p=>Number(p.active_formulas)>0).sort((a,b)=>Number(b.active_formulas||0)-Number(a.active_formulas||0));
+  return rows;
+}
+function renderPlayersDetail(player){
+  const detail=document.getElementById("players-detail"),progress=document.getElementById("players-progress"),history=document.getElementById("players-formula-history");
+  if(!player){detail.innerHTML="<p>Sélectionnez un joueur dans la liste pour consulter les informations disponibles.</p>";progress.innerHTML="<p>Aucune fiche sélectionnée.</p>";history.innerHTML="<p>Aucune formule active renseignée.</p>";return;}
+  const safe=v=>String(v??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const registered=player.registered_at?new Date(player.registered_at).toLocaleDateString("fr-FR"):"—";
+  detail.innerHTML=`<div class="players-detail-name">${safe(player.pseudo||player.name||"Explorateur")}</div><div class="players-detail-line">✉ ${safe(player.email||"E-mail non disponible")}</div><div class="players-detail-line">▦ Inscrit le : ${safe(registered)}</div><div class="players-detail-line">${player.email_verified===true?"🟢 E-mail vérifié":"🟠 E-mail non vérifié"}</div><div class="players-detail-line">${player.leaderboard_opt_in?"🏆 Classé : Oui":"🏅 Classé : Non"}</div><div class="players-detail-line">Identifiant : ${safe(player.user_id||"—")}</div>`;
+  progress.innerHTML=`<div class="players-detail-stats"><div><span>🏕 Aventures terminées</span><strong>${Number(player.completed_adventures||0)}</strong></div><div><span>💳 Formules actives</span><strong>${Number(player.active_formulas||0)}</strong></div><div><span>🏆 Participation au classement</span><strong>${player.leaderboard_opt_in?"Oui":"Non"}</strong></div></div>`;
+  history.innerHTML=Number(player.active_formulas)>0?`<div class="players-detail-line"><span class="players-pill gold">${Number(player.active_formulas)} formule(s) active(s)</span></div><p>Le détail des achats, des dates et des abonnements nécessite une route serveur dédiée.</p>`:"<p>Aucune formule active signalée par l'API.</p>";
+}
+function renderPlayersList(){
+  const list=document.getElementById("admin-players-list"),count=document.getElementById("admin-players-count"),label=document.getElementById("players-page-label");
+  if(!list)return;
+  const rows=playersFiltered();
+  if(count)count.textContent=`${rows.length} joueur${rows.length>1?"s":""}`;
+  const size=Number(document.getElementById("players-page-size")?.value||10),pages=Math.max(1,Math.ceil(rows.length/size));
+  adminPlayersPage=Math.min(adminPlayersPage,pages);
+  const start=(adminPlayersPage-1)*size,visible=rows.slice(start,start+size);
+  if(label)label.textContent=`Page ${adminPlayersPage} / ${pages}`;
+  const prev=document.getElementById("players-prev"),next=document.getElementById("players-next");if(prev)prev.disabled=adminPlayersPage<=1;if(next)next.disabled=adminPlayersPage>=pages;
+  if(!visible.length){list.innerHTML='<div class="players-empty">Aucun joueur ne correspond à ces filtres.</div>';return;}
+  const table=document.createElement("table");table.className="players-table";
+  const thead=document.createElement("thead");thead.innerHTML="<tr><th>Joueur</th><th>E-mail</th><th>Inscription</th><th>Aventures</th><th>Formule active</th><th>Classement</th><th>Action</th></tr>";table.appendChild(thead);
+  const tbody=document.createElement("tbody");
+  visible.forEach((p,i)=>{
+    const tr=document.createElement("tr");tr.dataset.playerId=String(p.user_id||i);if(String(p.user_id||i)===String(adminPlayersSelectedId))tr.classList.add("selected");
+    const name=p.pseudo||p.name||"Explorateur",date=p.registered_at?new Date(p.registered_at).toLocaleDateString("fr-FR"):"—";
+    const values=[`<span class="players-avatar">${String(name).trim().charAt(0).toUpperCase()||"?"}</span>${name.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}`,p.email||"—",date,String(Number(p.completed_adventures||0)),Number(p.active_formulas)>0?`<span class="players-pill gold">${Number(p.active_formulas)} active(s)</span>`:'<span class="players-pill">Aucune</span>',p.leaderboard_opt_in?'<span class="players-pill good">Oui</span>':'<span class="players-pill">Non</span>'];
+    values.forEach((v,j)=>{const td=document.createElement("td");if(j===0)td.className="players-name-cell";td.innerHTML=v;tr.appendChild(td);});
+    const action=document.createElement("td"),button=document.createElement("button");button.type="button";button.className="players-view-btn";button.textContent="◉ Voir";button.addEventListener("click",e=>{e.stopPropagation();selectPlayer(p);});action.appendChild(button);tr.appendChild(action);tr.addEventListener("click",()=>selectPlayer(p));tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);list.replaceChildren(table);
+}
+function selectPlayer(player){adminPlayersSelectedId=player.user_id;renderPlayersDetail(player);renderPlayersList();}
+function renderPlayersTab(){
+  const heading=document.getElementById("players-panel-heading"),subtitle=document.getElementById("players-panel-subtitle"),statusFilter=document.getElementById("players-filter-status"),formulaFilter=document.getElementById("players-filter-formula"),rankFilter=document.getElementById("players-filter-ranking");
+  const titles={list:["Liste des joueurs","Comptes enregistrés dans Neon Auth"],ranking:["Classement des explorateurs","Joueurs ayant choisi d'apparaître dans le classement"],stats:["Statistiques joueurs","Indicateurs calculés à partir des comptes chargés"],formulas:["Formules & abonnements","Nombre de formules actives retourné par le serveur"],activity:["Activité récente","Aucune donnée de dernière connexion n'est fournie actuellement"]};
+  if(heading)heading.textContent=titles[adminPlayersTab][0];if(subtitle)subtitle.textContent=titles[adminPlayersTab][1];
+  [statusFilter,formulaFilter,rankFilter].forEach(el=>{if(el)el.disabled=adminPlayersTab!=="list";});
   const list=document.getElementById("admin-players-list");
-  const count=document.getElementById("admin-players-count");
-  const search=document.getElementById("admin-players-search");
-  if(!status || !list) return;
+  if(adminPlayersTab==="stats"){
+    const total=adminPlayersCache.length,ranked=adminPlayersCache.filter(p=>p.leaderboard_opt_in).length,completed=adminPlayersCache.reduce((n,p)=>n+Number(p.completed_adventures||0),0),formulas=adminPlayersCache.filter(p=>Number(p.active_formulas)>0).length,verified=adminPlayersCache.filter(p=>p.email_verified===true).length;
+    list.innerHTML=`<div class="players-stats-grid"><div class="players-stat-box"><strong>${total}</strong><small>Comptes inscrits</small></div><div class="players-stat-box"><strong>${ranked}</strong><small>Explorateurs classés</small></div><div class="players-stat-box"><strong>${completed}</strong><small>Aventures terminées cumulées</small></div><div class="players-stat-box"><strong>${formulas}</strong><small>Comptes avec formule active</small></div><div class="players-stat-box"><strong>${verified}</strong><small>E-mails vérifiés</small></div></div>`;
+  }else if(adminPlayersTab==="activity"){
+    list.innerHTML='<div class="players-empty">L’API actuelle ne transmet pas la dernière connexion ni un journal des actions des joueurs. Cette rubrique restera vide jusqu’à l’ajout d’une source d’activité fiable.</div>';
+  }else renderPlayersList();
+}
+window.adminLoadPlayers=async function(){
+  const status=document.getElementById("admin-players-status");if(!status)return;
   status.textContent="Chargement des comptes Neon…";
-  list.replaceChildren();
   try{
-    const query=encodeURIComponent(search?.value?.trim() || "");
-    const data=await adminApi(`/api/admin/players${query ? `?search=${query}` : ""}`);
-    const players=Array.isArray(data.players) ? data.players : [];
-    if(count) count.textContent=`${players.length} joueur${players.length>1?"s":""}`;
-    if(!players.length){
-      const empty=document.createElement("p");
-      empty.textContent="Aucun profil explorateur trouvé.";
-      list.appendChild(empty);
-    }else{
-      const table=document.createElement("table");
-      table.style.cssText="width:100%;border-collapse:collapse;min-width:560px;font-size:13px";
-      const thead=document.createElement("thead");
-      const header=document.createElement("tr");
-      ["Nom","Adresse e-mail","Inscription","Aventures terminées","Formules actives","Classement"].forEach(label=>{
-        const th=document.createElement("th"); th.textContent=label;
-        th.style.cssText="text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";
-        header.appendChild(th);
-      });
-      thead.appendChild(header); table.appendChild(thead);
-      const tbody=document.createElement("tbody");
-      for(const player of players){
-        const tr=document.createElement("tr");
-        const registered = player.registered_at
-          ? new Date(player.registered_at).toLocaleDateString("fr-FR")
-          : "—";
-        const values=[
-          player.name || player.pseudo || "Sans nom",
-          player.email || "—",
-          registered,
-          String(player.completed_adventures ?? 0),
-          String(player.active_formulas ?? 0),
-          player.leaderboard_opt_in ? "Oui" : "Non"
-        ];
-        values.forEach(value=>{const td=document.createElement("td");td.textContent=value;td.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;overflow-wrap:anywhere";tr.appendChild(td);});
-        tbody.appendChild(tr);
-      }
-      table.appendChild(tbody);
-      const wrapper=document.createElement("div"); wrapper.style.overflowX="auto"; wrapper.appendChild(table); list.appendChild(wrapper);
-    }
-    status.textContent="Liste des comptes Neon chargée.";
-  }catch(error){
-    status.textContent=error.message || "Impossible de charger les joueurs.";
-    const help=document.createElement("p"); help.textContent="Vérifie que la nouvelle route /api/admin/players est bien déployée sur Render."; list.appendChild(help);
-    if(count) count.textContent="—";
-  }
+    const search=document.getElementById("admin-players-search");const query=encodeURIComponent(search?.value?.trim()||"");
+    const data=await adminApi(`/api/admin/players${query?`?search=${query}`:""}`);
+    adminPlayersCache=Array.isArray(data.players)?data.players:[];
+    const ranked=adminPlayersCache.filter(p=>p.leaderboard_opt_in===true);
+    const totalCompleted=adminPlayersCache.reduce((n,p)=>n+Number(p.completed_adventures||0),0);
+    const withFormula=adminPlayersCache.filter(p=>Number(p.active_formulas)>0).length;
+    const top=[...ranked].sort((a,b)=>Number(b.completed_adventures||0)-Number(a.completed_adventures||0))[0];
+    document.getElementById("players-total").textContent=String(data.count??adminPlayersCache.length);
+    document.getElementById("players-ranked").textContent=String(ranked.length);
+    document.getElementById("players-completed").textContent=String(totalCompleted);
+    document.getElementById("players-formulas").textContent=String(withFormula);
+    document.getElementById("players-top").textContent=top?(top.pseudo||top.name||"Explorateur"):"—";
+    if(!adminPlayersSelectedId&&adminPlayersCache.length)selectPlayer(adminPlayersCache[0]);
+    else {const selected=adminPlayersCache.find(p=>String(p.user_id)===String(adminPlayersSelectedId));if(selected)renderPlayersDetail(selected);else renderPlayersDetail(null);}
+    renderPlayersTab();
+    status.textContent=`${adminPlayersCache.length} compte(s) chargé(s) depuis Neon Auth.`;
+  }catch(error){status.textContent=error.message||"Impossible de charger les joueurs.";const list=document.getElementById("admin-players-list");if(list)list.innerHTML='<div class="players-empty">Impossible de charger la liste. Vérifiez la connexion et la route sécurisée /api/admin/players.</div>';document.getElementById("admin-players-count").textContent="—";}
 };
-
 // ===== Demandes testeurs : un seul compte Neon, validation par l'administration =====
 const testerForm = document.getElementById("tester-application-form");
 window.loadTesterApplication = async function(){
@@ -3916,12 +3984,12 @@ window.loadSiteAnalytics = async function() {
 };
 
 
-const adminPlayersSearch = document.getElementById("admin-players-search");
-if(adminPlayersSearch){
-  adminPlayersSearch.addEventListener("keydown", event=>{
-    if(event.key==="Enter") window.adminLoadPlayers();
-  });
-}
+const adminPlayersSearch=document.getElementById("admin-players-search");
+if(adminPlayersSearch)adminPlayersSearch.addEventListener("keydown",event=>{if(event.key==="Enter"){adminPlayersPage=1;window.adminLoadPlayers();}});
+document.querySelectorAll("[data-players-tab]").forEach(button=>button.addEventListener("click",()=>{adminPlayersTab=button.dataset.playersTab;adminPlayersPage=1;document.querySelectorAll("[data-players-tab]").forEach(b=>b.classList.toggle("active",b===button));renderPlayersTab();}));
+["players-filter-status","players-filter-formula","players-filter-ranking","players-page-size"].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener("change",()=>{adminPlayersPage=1;renderPlayersTab();});});
+document.getElementById("players-prev")?.addEventListener("click",()=>{adminPlayersPage=Math.max(1,adminPlayersPage-1);renderPlayersList();});
+document.getElementById("players-next")?.addEventListener("click",()=>{adminPlayersPage++;renderPlayersList();});
 </script>
 <script>
 (async function loadPublicPuzzle(){
@@ -3958,4 +4026,3 @@ if(adminPlayersSearch){
 
 </body>
 </html>
-```
