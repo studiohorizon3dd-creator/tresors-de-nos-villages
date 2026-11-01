@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -295,7 +294,7 @@ body.halloween-accueil .home-hero{
   display: none !important;
 }
 \n
-/* Tableau du support administrateur */
+/* SUPPORT ADMIN TABLE */
 /* À ajouter dans le <style> principal de index.html */
 #admin-support-list { width:100%; }
 .support-admin-scroll { width:100%; overflow-x:auto; border:1px solid #e2d7bc; border-radius:13px; background:#fffdf7; }
@@ -836,18 +835,8 @@ body.halloween-accueil .home-hero{
 <section class="dash-section hidden" id="dash-news">
   <h3>📰 Actualités</h3>
   <p>Retrouve ici les nouvelles de Trésors de nos Villages et les prochains parcours à découvrir.</p>
-  <article class="feature" style="margin:18px 0">
-    <p class="eyebrow">Le projet</p>
-    <h3>Bienvenue sur Trésors de nos Villages !</h3>
-    <p>Le site évolue pour vous faire découvrir les villages autrement, grâce à des parcours, des indices et des énigmes à résoudre.</p>
-    <p class="status">Première aventure : Humbert, dans le Pas-de-Calais.</p>
-  </article>
-  <article class="feature" style="margin:18px 0">
-    <p class="eyebrow">Prochainement</p>
-    <h3>De nouveaux villages en préparation</h3>
-    <p>D’autres communes pourront bientôt rejoindre la carte. Les parcours seront annoncés ici lorsqu’ils seront prêts.</p>
-    <p class="status">Reviens consulter cette page pour suivre les nouveautés !</p>
-  </article>
+  <p id="public-news-status" class="status" role="status" aria-live="polite">Chargement des actualités…</p>
+  <div id="public-news-list" aria-live="polite"></div>
 </section>
 
 <section class="dash-section hidden" id="dash-town-contact">
@@ -924,6 +913,7 @@ body.halloween-accueil .home-hero{
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des actualités</button>
       <div class="admin-nav-label">GESTION COMMERCIALE</div>
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')"><span>€</span> Formules & paiements</button>
       <div class="admin-nav-label">SUIVI DU SITE</div>
@@ -1103,6 +1093,19 @@ body.halloween-accueil .home-hero{
         <div class="admin-section-heading"><div><h3>Demandes d'aide des joueurs</h3><p>Répondre aux joueurs et suivre les demandes</p></div></div>
         <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
         <div id="admin-support-area"><div id="admin-support-list"></div></div>
+      </div>
+      <div id="admin-news-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>Gestion des actualités</h3><p>Rédiger, modifier, publier ou archiver les annonces.</p></div></div>
+        <p id="admin-news-status" class="status" role="status" aria-live="polite"></p>
+        <form id="admin-news-form" class="feature" style="display:grid;gap:12px">
+          <input id="admin-news-id" type="hidden">
+          <label>Titre<input id="admin-news-title" maxlength="180" required style="display:block;width:100%;padding:12px"></label>
+          <label>Rubrique<input id="admin-news-category" maxlength="80" value="Actualité" style="display:block;width:100%;padding:12px"></label>
+          <label>Texte<textarea id="admin-news-body" maxlength="12000" required rows="9" style="display:block;width:100%;padding:13px;min-height:220px;font:15px/1.6 Arial,sans-serif"></textarea></label>
+          <label><input id="admin-news-publish" type="checkbox"> Publier immédiatement</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer l'actualité</button><button class="admin-secondary-btn" type="button" onclick="adminNewsReset()">Nouvelle actualité</button></div>
+        </form>
+        <div id="admin-news-list"></div>
       </div>
     </div>
   </div>
@@ -1462,13 +1465,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-villages-view","admin-levels-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-villages-view","admin-levels-view","admin-news-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-villages-view"?"adminOpenVillages":view==="admin-levels-view"?"adminOpenLevels":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-villages-view"?"adminOpenVillages":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -2071,8 +2074,7 @@ function renderAdminSupportTable(requests, statusEl, list){
   for(const request of requests){
     const tr=document.createElement('tr');
     const who=document.createElement('td');const subject=document.createElement('strong');subject.textContent=request.subject||'Demande';
-    const user=document.createElement('div');user.textContent=request.user_name||request.user_email||`Compte ${request.user_id||'joueur'}`;
-    who.append(subject,user);
+    const user=document.createElement('div');user.textContent=request.user_name||request.user_email||`Compte ${request.user_id||'joueur'}`;who.append(subject,user);
     const message=document.createElement('td');message.className='support-admin-message';message.textContent=request.message||'';
     const date=document.createElement('td');date.textContent=request.created_at?new Date(request.created_at).toLocaleString('fr-FR'):'—';
     const replyCell=document.createElement('td');const reply=document.createElement('textarea');reply.className='support-admin-reply';reply.placeholder='Écris ta réponse au joueur ici…';reply.setAttribute('aria-label',`Réponse à ${request.subject||'la demande'}`);replyCell.append(reply);
@@ -2087,6 +2089,33 @@ function renderAdminSupportTable(requests, statusEl, list){
   }
   table.append(tbody);wrap.append(table);list.append(wrap);
 }
+
+function adminOpenNews(){adminSetView('admin-news-view','Gestion des actualités');adminLoadNews();}
+window.adminOpenNews=adminOpenNews;
+function adminNewsReset(){document.getElementById('admin-news-form')?.reset();document.getElementById('admin-news-id').value='';document.getElementById('admin-news-category').value='Actualité';}
+window.adminNewsReset=adminNewsReset;
+async function adminLoadNews(){
+  const status=document.getElementById('admin-news-status'),list=document.getElementById('admin-news-list');if(!status||!list)return;
+  status.textContent='Chargement des actualités…';list.replaceChildren();
+  try{const data=await adminApi('/api/admin/news');for(const item of (data.news||[])){
+    const card=document.createElement('article');card.className='feature';card.style.margin='14px 0';
+    const heading=document.createElement('h4');heading.textContent=item.title;
+    const meta=document.createElement('p');meta.textContent=`${item.category} · ${item.archived_at?'Archivée':item.is_published?'Publiée':'Brouillon'}`;
+    const preview=document.createElement('p');preview.textContent=item.body.length>260?item.body.slice(0,260)+'…':item.body;
+    const edit=document.createElement('button');edit.type='button';edit.className='admin-secondary-btn';edit.textContent='Modifier';edit.addEventListener('click',()=>{document.getElementById('admin-news-id').value=item.id;document.getElementById('admin-news-title').value=item.title;document.getElementById('admin-news-category').value=item.category||'Actualité';document.getElementById('admin-news-body').value=item.body;document.getElementById('admin-news-publish').checked=!!item.is_published;document.getElementById('admin-news-form').scrollIntoView({behavior:'smooth',block:'start'});});
+    const archive=document.createElement('button');archive.type='button';archive.className='admin-secondary-btn';archive.textContent=item.archived_at?'Restaurer':'Archiver';archive.addEventListener('click',async()=>{archive.disabled=true;try{await adminApi(`/api/admin/news/${encodeURIComponent(item.id)}/archive`,{method:'PATCH',body:JSON.stringify({archived:!item.archived_at})});await adminLoadNews();}catch(e){status.textContent=e.message;archive.disabled=false;}});
+    card.append(heading,meta,preview,edit,archive);list.append(card);
+  }status.textContent=`${(data.news||[]).length} actualité(s) chargée(s).`;
+  }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
+}
+window.adminLoadNews=adminLoadNews;
+document.getElementById('admin-news-form')?.addEventListener('submit',async event=>{event.preventDefault();const status=document.getElementById('admin-news-status'),id=document.getElementById('admin-news-id').value;const payload={title:document.getElementById('admin-news-title').value,category:document.getElementById('admin-news-category').value,body:document.getElementById('admin-news-body').value,is_published:document.getElementById('admin-news-publish').checked};try{await adminApi(id?`/api/admin/news/${encodeURIComponent(id)}`:'/api/admin/news',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});adminNewsReset();status.textContent='Actualité enregistrée.';await adminLoadNews();}catch(e){status.textContent=e.message||'Impossible d’enregistrer cette actualité.';}});
+
+window.loadPublicNews=async function(){
+ const status=document.getElementById('public-news-status'),list=document.getElementById('public-news-list');if(!status||!list)return;status.textContent='Chargement des actualités…';list.replaceChildren();
+ try{const response=await fetch(`${API_BASE}/api/news`);const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Impossible de charger les actualités.');const items=Array.isArray(data.news)?data.news:[];if(!items.length){status.textContent='Aucune actualité pour le moment.';return;}for(const item of items){const card=document.createElement('article');card.className='feature';card.style.margin='18px 0';const eyebrow=document.createElement('p');eyebrow.className='eyebrow';eyebrow.textContent=item.category||'Actualité';const title=document.createElement('h3');title.textContent=item.title;const body=document.createElement('p');body.style.whiteSpace='pre-wrap';body.textContent=item.body;card.append(eyebrow,title,body);list.append(card);}status.textContent=`${items.length} actualité(s).`;
+ }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
+};
 
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
@@ -2289,6 +2318,7 @@ function showDashSection(id){
   const selected = document.getElementById(id);
   if(!selected){console.warn("Rubrique introuvable :", id);return;}
   selected.classList.remove("hidden");
+  if(id === "dash-news") window.loadPublicNews?.();
   if(id === "dash-adventures") window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
   if(id === "dash-profile") window.loadExplorerProfile?.();
@@ -3223,4 +3253,3 @@ if(adminPlayersSearch){
 </script>
 </body>
 </html>
-```
