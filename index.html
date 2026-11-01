@@ -331,15 +331,16 @@ body.halloween-accueil .home-hero{
 
 @media(max-width:900px){.nav-list.nav-accordion{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start}.nav-accordion .nav-btn{width:100%;text-align:left}.nav-category{width:100%}.nav-bottom-links{width:100%}}
 
-/* Carte puzzle des villages — première version visuelle */
-.puzzle-section{padding:42px 28px;margin:28px 0;background:linear-gradient(145deg,#fbf2dc,#efe2c5);border:1px solid #d7c79f;border-radius:22px;box-shadow:0 12px 34px rgba(45,54,35,.10)}
-.puzzle-head{text-align:center;max-width:760px;margin:0 auto 24px}.puzzle-head .eyebrow{color:#77752b;font-weight:bold;letter-spacing:1.5px}.puzzle-head h2{color:#174b35;font-size:clamp(26px,4vw,38px);margin:8px 0}.puzzle-head p{color:#59675a;line-height:1.6}
-.puzzle-progress{display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 24px}.puzzle-progress strong{font-size:22px;color:#174b35}.puzzle-progress span{color:#657164}
-.puzzle-board{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:9px;max-width:850px;margin:0 auto;padding:16px;background:#e6dcc4;border:1px solid #c7b991;border-radius:18px;box-shadow:inset 0 2px 10px rgba(63,55,36,.10)}
-.puzzle-piece{position:relative;min-height:130px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:14px 8px;color:#777d78;background:linear-gradient(145deg,#d5d6d0,#bfc3bd);border:2px solid #aeb4ad;border-radius:18px;filter:grayscale(1);box-shadow:inset 0 2px 7px rgba(255,255,255,.55),0 3px 7px rgba(50,50,40,.10);clip-path:polygon(0 0,40% 0,48% 7%,56% 0,100% 0,100% 42%,93% 50%,100% 58%,100% 100%,58% 100%,50% 93%,42% 100%,0 100%,0 58%,7% 50%,0 42%)}
-.puzzle-piece strong{font-size:17px;color:#59615b}.puzzle-piece small{margin-top:6px;font-size:11px;letter-spacing:.8px;text-transform:uppercase}.puzzle-piece.mystery{border:2px dashed #9c874c;background:linear-gradient(145deg,#e8e0c9,#c9c1ad);color:#8c7740}.puzzle-piece.mystery strong{color:#78652e}.puzzle-piece .piece-question{font-size:27px;margin-bottom:4px;color:#8a784b}
-.puzzle-countdown{max-width:850px;margin:18px auto 0;padding:20px;text-align:center;border-radius:16px;background:#174b35;color:#fbf2dc}.puzzle-countdown strong{display:block;font-size:21px;color:#f3d78e;margin-bottom:7px}.puzzle-countdown p{margin:0;color:#f8efd9;line-height:1.5}.puzzle-note{max-width:850px;margin:12px auto 0;text-align:center;color:#687365;font-size:12px}
-@media(max-width:650px){.puzzle-section{padding:28px 14px}.puzzle-board{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:9px}.puzzle-piece{min-height:112px}.puzzle-piece:last-child{grid-column:1/-1}}
+/* Carte puzzle illustrée — ambiance carte au trésor */
+.puzzle-section{padding:34px clamp(12px,3vw,30px);margin:28px 0;background:linear-gradient(145deg,#f4e7c8,#e3d1a7);border:1px solid #b99b5c;border-radius:22px;box-shadow:0 14px 34px rgba(35,39,25,.18)}
+.puzzle-head{text-align:center;max-width:780px;margin:0 auto 18px}.puzzle-head .eyebrow{color:#80601d;font-weight:bold;letter-spacing:2px}.puzzle-head h2{color:#174b35;font-size:clamp(26px,4vw,38px);margin:8px 0}.puzzle-head p{color:#4e5949;line-height:1.6}
+.puzzle-progress{display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 18px}.puzzle-progress strong{font-size:22px;color:#174b35}.puzzle-progress span{color:#657164}
+.puzzle-map-frame{position:relative;max-width:1100px;margin:0 auto;overflow:hidden;border:7px solid #60472b;border-radius:18px;background:#66724a;box-shadow:inset 0 0 0 2px #e7c66e,0 10px 24px #392b1d55}
+.puzzle-map-frame:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;border:1px solid #f1d88c;border-radius:10px;box-shadow:inset 0 0 35px #21170b99}
+.puzzle-map-svg{display:block;width:100%;height:auto;min-height:300px;background:#78845c}
+.puzzle-terrain{fill:#78845c}.puzzle-hill{fill:#89936a;opacity:.65}.puzzle-road{fill:none;stroke:#e6d8ae;stroke-width:8;stroke-linecap:round;opacity:.85}.puzzle-road-edge{fill:none;stroke:#7c6947;stroke-width:11;stroke-linecap:round;opacity:.55}.puzzle-water{fill:none;stroke:#7da8a0;stroke-width:12;opacity:.9}.puzzle-village-label{font: bold 20px Georgia,serif;fill:#fff6dc;paint-order:stroke;stroke:#243523;stroke-width:5px;stroke-linejoin:round}.puzzle-small-label{font:15px Georgia,serif;fill:#f6e9c7;paint-order:stroke;stroke:#34412d;stroke-width:4px;stroke-linejoin:round}.puzzle-piece-shape{fill:#aeb2aa;fill-opacity:.88;stroke:#e4e0cf;stroke-width:5;stroke-linejoin:round;filter:drop-shadow(2px 5px 4px #20251b88);transition:fill .8s,fill-opacity .8s,filter .8s}.puzzle-piece-shape.revealed{fill:#d6a83e;fill-opacity:.83;stroke:#ffe08a;filter:drop-shadow(0 0 12px #ffdb65)}.puzzle-piece-shape.preparing{fill:#d4a13c;fill-opacity:.95;stroke:#fff0ad;stroke-width:7;stroke-dasharray:13 7;animation:puzzleGlow 1.8s ease-in-out infinite alternate}.puzzle-piece-label{font:bold 21px Georgia,serif;fill:#343b32;text-anchor:middle;paint-order:stroke;stroke:#e5e0d2;stroke-width:4px;stroke-linejoin:round;pointer-events:none}.puzzle-piece-label.revealed{fill:#173b2a;stroke:#f7d879}.puzzle-legend{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:14px auto 0;color:#4d513e;font-size:13px}.puzzle-legend span{display:flex;align-items:center;gap:6px}.puzzle-legend i{width:16px;height:16px;border:1px solid #6b6d60;border-radius:4px;display:inline-block}.puzzle-legend .legend-grey{background:#aeb2aa}.puzzle-legend .legend-gold{background:#d6a83e}.puzzle-countdown{max-width:1000px;margin:18px auto 0;padding:20px;text-align:center;border:2px solid #d6ad52;border-radius:14px;background:linear-gradient(120deg,#062c20,#174b35);color:#fbf2dc;box-shadow:0 8px 20px #382a1850}.puzzle-countdown strong{display:block;font-size:clamp(20px,3vw,27px);color:#f3d78e;margin-bottom:7px}.puzzle-countdown p{margin:0;color:#f8efd9;line-height:1.5}.puzzle-note{max-width:1000px;margin:12px auto 0;text-align:center;color:#5e624e;font-size:12px}
+@keyframes puzzleGlow{from{filter:drop-shadow(0 0 4px #e7bf59)}to{filter:drop-shadow(0 0 18px #ffe18a)}}
+@media(max-width:650px){.puzzle-section{padding:24px 10px}.puzzle-map-frame{border-width:4px}.puzzle-map-svg{min-height:240px}.puzzle-village-label{font-size:24px}.puzzle-small-label{font-size:18px}.puzzle-piece-label{font-size:25px}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -412,22 +413,37 @@ body.halloween-accueil .home-hero{
       </div>
     </section>
     <section class="puzzle-section" id="carte-puzzle-public" aria-labelledby="puzzle-public-title">
-  <div class="puzzle-head">
-    <p class="eyebrow">LA CHASSE AUX PIÈCES</p>
-    <h2 id="puzzle-public-title">🧩 La carte aux pièces mystères</h2>
-    <p>Le puzzle de nos villages va se construire petit à petit. Les pièces encore mystérieuses restent grisées ; tu découvriras les prochaines révélations au fil de l’aventure.</p>
-  </div>
-  <div class="puzzle-progress"><strong id="puzzle-found-count">0 / 5 pièces découvertes</strong><span>· Le puzzle commence dans le Pas-de-Calais</span></div>
-  <div class="puzzle-board" role="img" aria-label="Aperçu des pièces du puzzle autour de Humbert, Sempy et les villages voisins">
-    <div class="puzzle-piece"><strong>Humbert</strong><small>Pièce mystère</small></div>
-    <div class="puzzle-piece"><strong>Sempy</strong><small>Pièce mystère</small></div>
-    <div class="puzzle-piece"><strong>Bimont</strong><small>Pièce mystère</small></div>
-    <div class="puzzle-piece"><strong>Alette</strong><small>Pièce mystère</small></div>
-    <div class="puzzle-piece mystery"><span class="piece-question">?</span><strong>Prochaine pièce</strong><small>En préparation</small></div>
-  </div>
-  <div class="puzzle-countdown"><strong>La prochaine pièce se prépare…</strong><p>Le village sera annoncé lorsque le compte à rebours sera lancé par l’administration.</p></div>
-  <p class="puzzle-note">Carte évolutive : les pièces seront révélées progressivement. Les emplacements illustrés seront ajustés sur la carte géographique définitive.</p>
-</section>
+      <div class="puzzle-head">
+        <p class="eyebrow">LA CHASSE AUX PIÈCES</p>
+        <h2 id="puzzle-public-title">🧩 La carte aux pièces mystères</h2>
+        <p>Le secteur se dévoile petit à petit. Les pièces encore inconnues restent grises ; le jour de la révélation, la pièce du village choisi prend ses couleurs !</p>
+      </div>
+      <div class="puzzle-progress"><strong id="puzzle-found-count">0 / 5 pièces découvertes</strong><span>· Première zone : autour de Humbert, dans le Pas-de-Calais</span></div>
+      <div class="puzzle-map-frame" role="img" aria-label="Carte illustrée en puzzle du secteur de Humbert, Sempy, Bimont et des villages voisins">
+        <svg class="puzzle-map-svg" viewBox="0 0 1000 590" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <pattern id="puzzleHatch" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M0 18 Q9 5 18 18 T36 18" fill="none" stroke="#a5a77a" stroke-width="2" opacity=".35"/></pattern>
+            <linearGradient id="puzzleMapShade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#89936a"/><stop offset="1" stop-color="#586947"/></linearGradient>
+          </defs>
+          <rect width="1000" height="590" fill="url(#puzzleMapShade)"/><rect width="1000" height="590" fill="url(#puzzleHatch)"/>
+          <path class="puzzle-hill" d="M0 90 Q160 15 300 100 T600 75 T1000 110 V0 H0Z"/><path class="puzzle-hill" d="M0 470 Q180 390 340 485 T700 460 T1000 500 V590 H0Z"/>
+          <path class="puzzle-water" d="M40 0 Q90 100 55 190 T100 360 T55 590"/><path class="puzzle-water" d="M860 0 Q820 110 875 220 T830 420 T900 590"/>
+          <path class="puzzle-road-edge" d="M-20 390 Q180 330 280 260 T520 240 T1020 90 M120 -20 Q210 130 350 180 T600 330 T900 620 M-20 150 Q180 180 330 310 T650 440 T1020 500"/>
+          <path class="puzzle-road" d="M-20 390 Q180 330 280 260 T520 240 T1020 90 M120 -20 Q210 130 350 180 T600 330 T900 620 M-20 150 Q180 180 330 310 T650 440 T1020 500"/>
+          <g id="puzzle-piece-humbert"><path class="puzzle-piece-shape" d="M45 35 H315 Q350 35 350 70 V135 Q385 145 350 165 V270 H250 Q235 305 215 270 H45 Q20 270 20 245 V165 Q-15 145 20 135 V70 Q20 35 45 35Z"/><text class="puzzle-piece-label" x="185" y="165">Humbert</text></g>
+          <g id="puzzle-piece-sempy"><path class="puzzle-piece-shape" d="M390 35 H650 Q685 35 685 70 V135 Q720 150 685 165 V270 H575 Q560 305 540 270 H390 Q365 270 365 245 V165 Q330 150 365 135 V70 Q365 35 390 35Z"/><text class="puzzle-piece-label" x="525" y="165">Sempy</text></g>
+          <g id="puzzle-piece-bimont"><path class="puzzle-piece-shape" d="M730 35 H955 Q980 35 980 60 V135 Q1015 150 980 165 V245 Q980 270 955 270 H835 Q820 305 800 270 H730 Q705 270 705 245 V165 Q670 150 705 135 V60 Q705 35 730 35Z"/><text class="puzzle-piece-label" x="845" y="165">Bimont</text></g>
+          <g id="puzzle-piece-alette"><path class="puzzle-piece-shape" d="M45 330 H315 Q350 330 350 365 V430 Q385 445 350 460 V520 Q350 555 315 555 H210 Q195 585 175 555 H45 Q20 555 20 530 V460 Q-15 445 20 430 V365 Q20 330 45 330Z"/><text class="puzzle-piece-label" x="185" y="460">Alette</text></g>
+          <g id="puzzle-piece-next"><path class="puzzle-piece-shape preparing" d="M430 330 H700 Q735 330 735 365 V430 Q770 445 735 460 V520 Q735 555 700 555 H585 Q570 585 550 555 H430 Q405 555 405 530 V460 Q370 445 405 430 V365 Q405 330 430 330Z"/><text class="puzzle-piece-label" x="570" y="445">Pièce mystère</text></g>
+          <g class="puzzle-small-label"><text x="75" y="300">Clenleu</text><text x="390" y="300">Bimont</text><text x="760" y="300">Avesnes</text><text x="780" y="555">Embry</text><text x="300" y="555">Saint-Denœux</text><text x="900" y="350">Hesmond</text><text x="65" y="575">Enquin-sur-Baillons</text></g>
+          <g fill="#f4d47b" stroke="#473c25" stroke-width="3"><circle cx="185" cy="215" r="7"/><circle cx="525" cy="215" r="7"/><circle cx="845" cy="215" r="7"/><circle cx="185" cy="500" r="7"/></g>
+          <g font-family="Georgia,serif" font-weight="bold" fill="#fff0b5" stroke="#3c2d1a" stroke-width="5" paint-order="stroke"><text x="24" y="28" font-size="19">SECTEUR DU PAS-DE-CALAIS</text><text x="790" y="575" font-size="16">ZONE ÉVOLUTIVE</text></g>
+        </svg>
+      </div>
+      <div class="puzzle-legend"><span><i class="legend-grey"></i> Pièce mystère</span><span><i class="legend-gold"></i> Pièce découverte</span></div>
+      <div class="puzzle-countdown"><strong>La prochaine pièce se prépare…</strong><p>Le village sera annoncé lorsque le compte à rebours sera lancé par l’administration.</p></div>
+      <p class="puzzle-note">Carte illustrée de présentation : les limites et positions seront affinées au fil de l’agrandissement de la zone.</p>
+    </section>
 
 <section class="section" id="villages-public">
       <h2 class="section-title">Des aventures au cœur de nos villages</h2>
@@ -3608,11 +3624,33 @@ if(adminPlayersSearch){
 </script>
 <script>
 (async function loadPublicPuzzle(){
-  try { const response=await fetch("https://tresors-de-nos-villages-serveur.onrender.com/api/puzzle"); if(!response.ok)return; const data=await response.json(); const pieces=Array.isArray(data.pieces)?data.pieces:[];
-    const revealed=pieces.filter(p=>p.status==="revealed"); const count=document.getElementById("puzzle-found-count"); if(count)count.textContent=`${revealed.length} / ${Math.max(5,pieces.length)} pièces découvertes`;
-    const board=document.querySelector("#carte-puzzle-public .puzzle-board"); if(!board||!pieces.length)return; board.replaceChildren();
-    const ordered=[...revealed,...pieces.filter(p=>p.status!=="revealed")]; ordered.forEach(piece=>{const el=document.createElement("div");el.className="puzzle-piece"+(piece.status==="revealed"?" revealed":""); if(piece.status==="revealed"){el.style.filter="none";el.style.background="linear-gradient(145deg,#d7ad45,#b68a2d)";el.style.color="#173e2d";} const name=document.createElement("strong");name.textContent=piece.status==="revealed"?piece.village_name:"Pièce mystère";el.appendChild(name);const small=document.createElement("small");small.textContent=piece.status==="revealed"?"Découverte":piece.status==="preparing"?"En préparation":"À découvrir";el.appendChild(small);board.appendChild(el);});
-    const next=pieces.find(p=>p.status==="preparing"); const banner=document.querySelector("#carte-puzzle-public .puzzle-countdown"); if(next&&banner){banner.querySelector("strong").textContent="Prochaine pièce en préparation : "+next.village_name;banner.querySelector("p").textContent=next.reveal_at?"Révélation prévue le "+new Date(next.reveal_at).toLocaleString("fr-FR"):"La date de révélation sera annoncée prochainement.";}
+  const ids={"humbert":"puzzle-piece-humbert","sempy":"puzzle-piece-sempy","bimont":"puzzle-piece-bimont","alette":"puzzle-piece-alette"};
+  try {
+    const response=await fetch("https://tresors-de-nos-villages-serveur.onrender.com/api/puzzle");
+    if(!response.ok)return;
+    const data=await response.json();
+    const pieces=Array.isArray(data.pieces)?data.pieces:[];
+    const revealed=pieces.filter(p=>p.status==="revealed");
+    const count=document.getElementById("puzzle-found-count");
+    if(count)count.textContent=`${revealed.length} / ${Math.max(5,pieces.length)} pièces découvertes`;
+    pieces.forEach(piece=>{
+      const key=String(piece.village_name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+      const group=document.getElementById(ids[key]);
+      if(!group)return;
+      const shape=group.querySelector(".puzzle-piece-shape");
+      const label=group.querySelector(".puzzle-piece-label");
+      if(piece.status==="revealed"){
+        shape.classList.add("revealed");label.classList.add("revealed");label.textContent=piece.village_name;
+      } else if(piece.status==="preparing"){
+        shape.classList.add("preparing");label.textContent="En préparation";
+      }
+    });
+    const next=pieces.find(p=>p.status==="preparing");
+    const banner=document.querySelector("#carte-puzzle-public .puzzle-countdown");
+    if(next&&banner){
+      banner.querySelector("strong").textContent="Prochaine pièce en préparation…";
+      banner.querySelector("p").textContent=next.reveal_at?"Révélation prévue le "+new Date(next.reveal_at).toLocaleString("fr-FR"):"Le village sera annoncé prochainement.";
+    }
   } catch(e){console.warn("Carte puzzle indisponible",e);}
 })();
 </script>
