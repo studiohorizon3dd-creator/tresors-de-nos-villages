@@ -377,6 +377,65 @@ body.halloween-accueil .home-hero{
 @media(max-width:1050px){.admin-adventure-layout{grid-template-columns:1fr}.admin-adventure-tips{order:2}.admin-adventure-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.admin-adventure-card{grid-template-columns:100px minmax(0,1fr)}.admin-adventure-thumb{width:100px;height:82px}.admin-adventure-actions{grid-column:1/-1;justify-content:flex-start}}
 @media(max-width:600px){.admin-adventure-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-adventure-create-grid{grid-template-columns:1fr}.admin-adventure-create-grid .wide{grid-column:1}.admin-wizard-step{font-size:10px}.admin-adventure-card{grid-template-columns:1fr}.admin-adventure-thumb{width:100%;height:120px}.admin-adventure-actions button{flex:1;min-width:70px}.admin-adventure-hero{padding:18px}.admin-adventure-hero .hero-symbol{font-size:34px}}
 
+
+/* Gestion des villages — tableau de pilotage */
+.village-admin-shell{font-family:Arial,sans-serif;color:#1c3528}
+.village-admin-banner{min-height:116px;border-radius:17px;padding:22px 26px;display:flex;align-items:center;justify-content:space-between;gap:20px;color:#fff8e5;background:linear-gradient(100deg,#052f21 0%,#0b4b31 55%,#174c32 100%);overflow:hidden;position:relative}
+.village-admin-banner:after{content:"";position:absolute;inset:0 0 0 48%;background:radial-gradient(ellipse at 70% 50%,#c6a54a35,transparent 65%);pointer-events:none}
+.village-admin-banner-copy,.village-admin-banner-art{position:relative;z-index:1}
+.village-admin-banner h3{font:700 clamp(25px,3vw,36px) Georgia,serif;margin:4px 0 5px;color:#fff3d4}
+.village-admin-banner p{margin:0;font-size:14px;color:#f1e8cf}
+.village-admin-eyebrow{font-size:10px;letter-spacing:2px;color:#e8c76f;font-weight:800}
+.village-admin-banner-art{font-size:52px;white-space:nowrap;filter:drop-shadow(0 4px 5px #001a10)}
+.village-stat-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:13px 0}
+.village-stat{display:flex;align-items:center;gap:10px;min-width:0;padding:12px 10px;background:#fffdf7;border:1px solid #e9dfc9;border-radius:12px;box-shadow:0 4px 10px #203b2910}
+.village-stat-icon{width:37px;height:37px;flex:0 0 37px;display:grid;place-items:center;border-radius:50%;background:#e5f0e5;color:#17633d;font-size:19px;font-weight:bold}
+.village-stat-icon.pending{background:#fff0d2;color:#c27a0b}.village-stat-icon.works{background:#fff0d9;color:#a36c18}.village-stat-icon.available{background:#e0f1dc;color:#237340}.village-stat-icon.suspended{background:#ffe1df;color:#bd3029}.village-stat-icon.update{background:#e1eff8;color:#28749a}
+.village-stat small{display:block;font-size:11px;color:#697366;white-space:nowrap}.village-stat strong{display:block;font:700 23px Georgia,serif;color:#153d2b;margin-top:2px}
+.village-admin-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin:12px 0 14px}
+.village-admin-tabs button{border:1px solid #e8dfcc;background:#fffdf7;border-radius:11px;padding:12px 8px;color:#284735;font-weight:700;box-shadow:0 3px 8px #1b38240d}
+.village-admin-tabs button.active{background:#08602f;color:white;border-color:#08602f}
+.village-admin-tabs b{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 5px;border-radius:50%;background:#f2b323;color:#2c321d;font-size:11px}
+.village-admin-columns{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(240px,.85fr);gap:14px;align-items:start}
+.village-admin-main,.village-admin-side{display:grid;gap:14px;min-width:0}
+.village-panel{background:#fffdf7;border:1px solid #e8dfcc;border-radius:15px;padding:16px;box-shadow:0 5px 14px #1b38240c;min-width:0}
+.village-panel-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.village-panel-heading h4,.village-panel>h4{font:700 19px Georgia,serif;color:#123d2b;margin:0 0 4px}
+.village-panel-heading p{margin:0;color:#778071;font-size:11px}
+.village-list-tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.village-list-tools input,.village-list-tools select{min-width:0;padding:10px 12px;border:1px solid #dfd2b5;border-radius:9px;background:#fff;color:#34483a;font:13px Arial,sans-serif}
+.village-list-tools input{flex:1 1 190px}.village-list-tools select{flex:0 1 170px}
+.village-view-toggle{border:1px solid #d6b75d;border-radius:8px;background:#0b7540;color:#fff;padding:8px 12px}
+.village-table-wrap{overflow:auto}
+.village-table{width:100%;min-width:690px;border-collapse:collapse;font:12px Arial,sans-serif}
+.village-table th{background:#07502f;color:#fff;padding:11px 9px;text-align:left;white-space:nowrap}
+.village-table td{padding:9px;border-bottom:1px solid #eee7d9;vertical-align:middle}
+.village-table tr:hover td{background:#fff9e9}
+.village-name-cell{display:flex;align-items:center;gap:9px;font-weight:700;color:#243d2e}
+.village-thumb{width:44px;height:34px;flex:0 0 44px;border-radius:7px;object-fit:cover;background:#e5eadc;display:grid;place-items:center;font-size:19px}
+.village-status-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.village-status-pill.pending_confirmation{background:#fff0ca;color:#925a0a}.village-status-pill.in_progress{background:#dceefa;color:#17618c}.village-status-pill.available{background:#e0f1dc;color:#22663a}.village-status-pill.suspended{background:#ffe1df;color:#a72d2b}.village-status-pill.updating{background:#eee4ff;color:#6740a2}
+.village-action-btn{border:1px solid #d6b75d;background:#fffaf0;color:#244b36;border-radius:8px;padding:7px 9px;margin:1px}
+.village-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px 13px;margin-top:14px}
+.village-form label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#31503b;min-width:0}
+.village-form label em{color:#b83b2c;font-style:normal}
+.village-form input,.village-form select,.village-form textarea{width:100%;min-width:0;padding:11px 12px;border:1px solid #dfd2b5;border-radius:9px;background:#fff;color:#283b2e;font:13px Arial,sans-serif}
+.village-form textarea{resize:vertical}.village-form .wide{grid-column:1/-1}
+.village-form-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.village-map-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;color:#536353;margin:12px 0}
+.village-mini-map{height:205px;border-radius:11px;background:linear-gradient(145deg,#eaf3d9,#d5e7c4);overflow:hidden;position:relative}
+.village-map-placeholder{height:100%;display:grid;place-content:center;text-align:center;color:#55734e;font-size:14px;line-height:2}
+.village-map-link{width:100%;border:1px solid #27834d;background:#fffdf7;color:#175b36;border-radius:9px;padding:10px;font-weight:700}
+.village-info-panel{background:linear-gradient(145deg,#fffdf7,#f4efdF)}
+.village-info-panel h4{font:700 18px Georgia,serif;color:#17452f;margin:0 0 8px}.village-info-panel p{font-size:12px;line-height:1.6;color:#4f5d50;margin:0}
+.village-full-map-canvas{height:440px;border-radius:12px;border:1px solid #d9cfb7;background:#edf3e7}
+.village-stat-details{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.village-stat-details div{padding:14px;border-radius:10px;background:#f5f1e5;border:1px solid #e8dfcc}
+.village-stat-details strong{display:block;font:700 24px Georgia,serif;color:#145333}.village-admin-status{font-size:12px;color:#536353}
+@media(max-width:1100px){.village-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.village-admin-columns{grid-template-columns:1fr}.village-admin-side{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.village-admin-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.village-admin-tabs button:last-child{grid-column:1/-1}.village-form{grid-template-columns:repeat(2,minmax(0,1fr))}.village-admin-side{grid-template-columns:1fr}.village-admin-banner-art{font-size:35px}.village-panel{padding:12px}}
+@media(max-width:430px){.village-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.village-form{grid-template-columns:1fr}.village-form .wide{grid-column:1}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1193,49 +1252,102 @@ body.halloween-accueil .home-hero{
         </div>
       </div>
       <div id="admin-villages-view" class="admin-subview" hidden>
-        <div class="admin-section-heading">
-          <div><h3>Gestion des villages</h3><p>Préparer les communes et suivre leur confirmation avant toute publication.</p></div>
-          <button type="button" class="admin-secondary-btn" onclick="adminLoadVillages()">↻ Actualiser</button>
-        </div>
-        <div class="admin-info-panel" style="margin-bottom:16px">
-          <strong>Important :</strong> un village en attente ou en préparation n'est pas annoncé comme disponible aux visiteurs.
-          Humbert est enregistré en attente de confirmation. Aucun autre village n'est ajouté automatiquement.
-        </div>
-        <p id="admin-villages-status" class="status" role="status" aria-live="polite">Chargement des villages…</p>
-        <div id="admin-villages-list" class="admin-recent-list" aria-live="polite"><p>Les villages apparaîtront ici.</p></div>
-        <div class="admin-info-panel" style="margin-top:18px">
-          <h3 id="admin-village-form-title">Ajouter un village</h3>
-          <form id="admin-village-form" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px">
-            <input type="hidden" id="admin-village-id">
-            <label style="display:grid;gap:6px">Nom du village
-              <input id="admin-village-name" required maxlength="150" placeholder="Ex. Humbert" style="padding:11px;border:1px solid #d4c49c;border-radius:9px">
-            </label>
-            <label style="display:grid;gap:6px">Identifiant (sans espace)
-              <input id="admin-village-slug" required maxlength="100" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="ex. humbert" style="padding:11px;border:1px solid #d4c49c;border-radius:9px">
-            </label>
-            <label style="display:grid;gap:6px">Code postal
-              <input id="admin-village-postal" maxlength="10" placeholder="Ex. 62650" style="padding:11px;border:1px solid #d4c49c;border-radius:9px">
-            </label>
-            <label style="display:grid;gap:6px">Statut
-              <select id="admin-village-status" required style="padding:11px;border:1px solid #d4c49c;border-radius:9px;background:#fff">
-                <option value="pending_confirmation">En attente de confirmation</option>
-                <option value="preparing">En préparation</option>
-                <option value="available">Disponible</option>
-                <option value="inactive">Désactivé</option>
-              </select>
-            </label>
-            <label style="grid-column:1/-1;display:grid;gap:6px">Description
-              <textarea id="admin-village-description" maxlength="3000" rows="3" placeholder="Informations internes sur la préparation du village…" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></textarea>
-            </label>
-            <div style="grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap">
-              <button type="submit" class="admin-secondary-btn" id="admin-village-save">Enregistrer le village</button>
-              <button type="button" class="admin-secondary-btn" onclick="adminResetVillageForm()">Annuler</button>
+        <section class="village-admin-shell">
+          <header class="village-admin-banner">
+            <div class="village-admin-banner-copy">
+              <span class="village-admin-eyebrow">ESPACE ADMINISTRATION</span>
+              <h3>Gestion des villages</h3>
+              <p>Ajoutez, suivez et gérez vos villages partenaires.</p>
             </div>
-          </form>
-        </div>
-        <p class="admin-footnote">Les modifications sont enregistrées dans Neon. Cette rubrique ne modifie pas les formules, les paiements, les énigmes ni les pages publiques.</p>
-      </div>
+            <div class="village-admin-banner-art" aria-hidden="true">🗺️ 🧭</div>
+          </header>
 
+          <div class="village-stat-grid" id="admin-village-stats">
+            <article class="village-stat"><span class="village-stat-icon">📍</span><div><small>Villages total</small><strong id="village-stat-total">—</strong></div></article>
+            <article class="village-stat"><span class="village-stat-icon pending">⌛</span><div><small>En attente</small><strong id="village-stat-pending">—</strong></div></article>
+            <article class="village-stat"><span class="village-stat-icon works">🛠️</span><div><small>En travaux</small><strong id="village-stat-works">—</strong></div></article>
+            <article class="village-stat"><span class="village-stat-icon available">✓</span><div><small>Disponibles</small><strong id="village-stat-available">—</strong></div></article>
+            <article class="village-stat"><span class="village-stat-icon suspended">Ⅱ</span><div><small>Suspendus</small><strong id="village-stat-suspended">—</strong></div></article>
+            <article class="village-stat"><span class="village-stat-icon update">↻</span><div><small>Mise à jour</small><strong id="village-stat-update">—</strong></div></article>
+          </div>
+
+          <nav class="village-admin-tabs" aria-label="Rubriques de gestion des villages">
+            <button type="button" class="active" data-village-tab="list" onclick="adminVillageTab('list')">☷ Liste des villages</button>
+            <button type="button" data-village-tab="add" onclick="adminVillageTab('add')">＋ Ajouter un village</button>
+            <button type="button" data-village-tab="pending" onclick="adminVillageTab('pending')">▤ Demandes en attente <b id="village-pending-count">0</b></button>
+            <button type="button" data-village-tab="map" onclick="adminVillageTab('map')">◧ Carte des villages</button>
+            <button type="button" data-village-tab="stats" onclick="adminVillageTab('stats')">▥ Statistiques</button>
+          </nav>
+
+          <div class="village-admin-columns">
+            <div class="village-admin-main">
+              <section class="village-panel" id="village-panel-list">
+                <div class="village-panel-heading">
+                  <div><h4>♟ Villages enregistrés (<span id="village-list-count">0</span>)</h4><p>Retrouvez et modifiez les informations de chaque commune.</p></div>
+                  <button type="button" class="admin-secondary-btn" onclick="adminLoadVillages()">↻ Actualiser</button>
+                </div>
+                <div class="village-list-tools">
+                  <input id="admin-village-search" type="search" placeholder="⌕ Rechercher un village…" oninput="adminRenderVillages()">
+                  <select id="admin-village-filter" onchange="adminRenderVillages()" aria-label="Filtrer par statut">
+                    <option value="">Tous les statuts</option>
+                    <option value="pending_confirmation">En attente</option><option value="in_progress">En travaux</option>
+                    <option value="available">Disponible</option><option value="suspended">Suspendu</option><option value="updating">Mise à jour</option>
+                  </select>
+                  <button type="button" class="village-view-toggle active" aria-label="Vue liste">☷</button>
+                </div>
+                <p id="admin-villages-status" class="status" role="status" aria-live="polite">Chargement des villages…</p>
+                <div id="admin-villages-list" class="village-table-wrap" aria-live="polite"><p>Les villages apparaîtront ici.</p></div>
+              </section>
+
+              <section class="village-panel" id="village-panel-add">
+                <div class="village-panel-heading"><div><h4 id="admin-village-form-title">＋ Ajouter un nouveau village</h4><p>Complétez les informations de votre commune partenaire.</p></div></div>
+                <form id="admin-village-form" class="village-form">
+                  <input type="hidden" id="admin-village-id">
+                  <label>Nom du village <em>*</em><input id="admin-village-name" required maxlength="150" placeholder="Ex. Humbert"></label>
+                  <label>Identifiant (sans espace) <em>*</em><input id="admin-village-slug" required maxlength="100" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="ex. humbert"></label>
+                  <label>Code postal<input id="admin-village-postal" maxlength="10" placeholder="Ex. 62650"></label>
+                  <label>Statut <em>*</em><select id="admin-village-status" required>
+                    <option value="pending_confirmation">⌛ En attente de confirmation</option>
+                    <option value="in_progress">🛠️ En travaux</option>
+                    <option value="available">✓ Disponible</option>
+                    <option value="suspended">Ⅱ Suspendu</option>
+                    <option value="updating">↻ Mise à jour</option>
+                  </select></label>
+                  <label class="wide">Description<textarea id="admin-village-description" maxlength="3000" rows="3" placeholder="Informations sur la préparation du village…"></textarea></label>
+                  <label>Latitude GPS<input id="admin-village-latitude" type="number" step="any" min="-90" max="90" placeholder="Ex. 50.506349"></label>
+                  <label>Longitude GPS<input id="admin-village-longitude" type="number" step="any" min="-180" max="180" placeholder="Ex. 1.910030"></label>
+                  <label class="wide">Photo du village (URL, facultatif)<input id="admin-village-photo" type="url" maxlength="1000" placeholder="https://…"></label>
+                  <div class="village-form-actions wide"><button type="button" class="admin-secondary-btn" onclick="adminResetVillageForm()">Annuler</button><button type="submit" class="admin-primary-btn" id="admin-village-save">▣ Enregistrer le village</button></div>
+                </form>
+              </section>
+
+              <section class="village-panel" id="village-panel-stats" hidden>
+                <h4>▥ Statistiques des villages</h4><div id="admin-village-stat-details" class="village-stat-details"></div>
+              </section>
+            </div>
+
+            <aside class="village-admin-side">
+              <section class="village-panel">
+                <div class="village-panel-heading"><h4>◧ Carte des villages</h4></div>
+                <div id="admin-villages-mini-map" class="village-mini-map"><div class="village-map-placeholder">📍<br>Ajoutez les coordonnées GPS d’un village pour le voir apparaître ici.</div></div>
+                <div class="village-map-legend"><span>🟢 Disponible</span><span>🟠 En attente</span><span>🔵 En travaux</span><span>🔴 Suspendu</span></div>
+                <button type="button" class="village-map-link" onclick="adminVillageTab('map')">◧ Voir la carte complète →</button>
+              </section>
+              <section class="village-panel village-info-panel">
+                <h4>ⓘ Informations</h4>
+                <p>Gérez les villages partenaires, suivez leur statut et préparez leur mise en ligne. Un village en attente n’est pas visible comme disponible par les joueurs.</p>
+              </section>
+            </aside>
+          </div>
+
+          <section class="village-panel village-full-map" id="village-panel-map" hidden>
+            <div class="village-panel-heading"><div><h4>◧ Carte complète des villages</h4><p>Les marqueurs apparaissent lorsque des coordonnées GPS sont renseignées.</p></div></div>
+            <div id="admin-villages-full-map" class="village-full-map-canvas"></div>
+          </section>
+          <p class="village-admin-status" id="admin-villages-status-bottom"></p>
+          <p class="admin-footnote">Les informations sont enregistrées dans Neon. Humbert reste en attente de confirmation de la mairie.</p>
+        </section>
+      </div>
       <div id="admin-placeholder-view" class="admin-subview" hidden>
         <div class="admin-placeholder"><span>🛠️</span><h3 id="admin-placeholder-title">Rubrique en préparation</h3><p id="admin-placeholder-text">Cette partie sera connectée au serveur dans une prochaine étape. Les données ne sont pas encore disponibles.</p></div>
       </div>
@@ -2155,156 +2267,130 @@ window.adminLoadTesterFeedback = async function(){
 };
 
 const ADMIN_VILLAGE_STATUSES = {
-  pending_confirmation: "En attente de confirmation",
-  preparing: "En préparation",
+  pending_confirmation: "En attente",
+  in_progress: "En travaux",
   available: "Disponible",
-  inactive: "Désactivé"
+  suspended: "Suspendu",
+  updating: "Mise à jour"
 };
+let ADMIN_VILLAGES_CACHE = [];
+let ADMIN_VILLAGE_MAPS = { mini: null, full: null };
 
 function adminVillageCell(value) {
-  const cell = document.createElement("td");
-  cell.textContent = value == null || value === "" ? "—" : String(value);
-  cell.style.cssText = "padding:11px 9px;border-bottom:1px solid #eee8d9;vertical-align:top";
+  const cell=document.createElement("td");
+  cell.textContent=value==null||value===""?"—":String(value);
   return cell;
 }
-
-function adminResetVillageForm() {
-  const form = document.getElementById("admin-village-form");
-  if (form) form.reset();
-  const id = document.getElementById("admin-village-id");
-  if (id) id.value = "";
-  const title = document.getElementById("admin-village-form-title");
-  if (title) title.textContent = "Ajouter un village";
-  const save = document.getElementById("admin-village-save");
-  if (save) save.textContent = "Enregistrer le village";
+function adminResetVillageForm(){
+  const form=document.getElementById("admin-village-form");if(form)form.reset();
+  document.getElementById("admin-village-id").value="";
+  document.getElementById("admin-village-form-title").textContent="＋ Ajouter un nouveau village";
+  document.getElementById("admin-village-save").textContent="▣ Enregistrer le village";
 }
-
-function adminEditVillage(village) {
-  document.getElementById("admin-village-id").value = village.id;
-  document.getElementById("admin-village-name").value = village.name || "";
-  document.getElementById("admin-village-slug").value = village.slug || "";
-  document.getElementById("admin-village-postal").value = village.postal_code || "";
-  document.getElementById("admin-village-status").value = village.status || "pending_confirmation";
-  document.getElementById("admin-village-description").value = village.description || "";
-  document.getElementById("admin-village-form-title").textContent = "Modifier " + (village.name || "le village");
-  document.getElementById("admin-village-save").textContent = "Enregistrer les modifications";
-  document.getElementById("admin-village-form").scrollIntoView({ behavior: "smooth", block: "center" });
+function adminEditVillage(v){
+  document.getElementById("admin-village-id").value=v.id;
+  document.getElementById("admin-village-name").value=v.name||"";
+  document.getElementById("admin-village-slug").value=v.slug||"";
+  document.getElementById("admin-village-postal").value=v.postal_code||"";
+  document.getElementById("admin-village-status").value=v.status||"pending_confirmation";
+  document.getElementById("admin-village-description").value=v.description||"";
+  document.getElementById("admin-village-latitude").value=v.latitude??"";
+  document.getElementById("admin-village-longitude").value=v.longitude??"";
+  document.getElementById("admin-village-photo").value=v.photo_url||"";
+  document.getElementById("admin-village-form-title").textContent="Modifier "+(v.name||"le village");
+  document.getElementById("admin-village-save").textContent="Enregistrer les modifications";
+  adminVillageTab("add");
+  document.getElementById("admin-village-form").scrollIntoView({behavior:"smooth",block:"center"});
 }
-
-window.adminResetVillageForm = adminResetVillageForm;
-window.adminOpenPuzzle = async function(){ adminSetView("admin-puzzle-view","Carte puzzle"); await window.adminLoadPuzzle(); };
-window.adminLoadPuzzle = async function(){
-  const status=document.getElementById("admin-puzzle-status"), list=document.getElementById("admin-puzzle-list"); if(!status||!list)return;
-  status.textContent="Chargement des pièces…"; list.replaceChildren();
-  try { const data=await adminApi("/api/admin/puzzle"); const pieces=Array.isArray(data.pieces)?data.pieces:[];
-    if(!pieces.length){list.textContent="Aucune pièce préparée pour le moment.";} else pieces.forEach(piece=>{
-      const card=document.createElement("div"); card.className="admin-info-panel"; card.style.marginBottom="10px";
-      const title=document.createElement("strong"); title.textContent=piece.village_name; card.appendChild(title);
-      const info=document.createElement("p"); info.textContent="Statut : "+({preparing:"En préparation",hidden:"Mystère",revealed:"Révélée"}[piece.status]||piece.status)+(piece.reveal_at?" · Révélation prévue : "+new Date(piece.reveal_at).toLocaleString("fr-FR"):""); card.appendChild(info);
-      const actions=document.createElement("div"); actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
-      [["Révéler la pièce","revealed"],["Remettre en mystère","hidden"],["En préparation","preparing"]].forEach(([label,value])=>{const b=document.createElement("button");b.type="button";b.className="admin-secondary-btn";b.textContent=label;b.addEventListener("click",async()=>{try{await adminApi(`/api/admin/puzzle/${piece.id}`,{method:"PATCH",body:JSON.stringify({status:value})});await window.adminLoadPuzzle();}catch(e){status.textContent=e.message||"Erreur de mise à jour.";}});actions.appendChild(b);});
-      card.appendChild(actions); list.appendChild(card);
-    }); status.textContent=pieces.length+" pièce(s) enregistrée(s).";
-  } catch(e){status.textContent=e.message||"Impossible de charger la carte puzzle.";}
+window.adminResetVillageForm=adminResetVillageForm;
+window.adminVillageTab=function(tab){
+  document.querySelectorAll("[data-village-tab]").forEach(b=>b.classList.toggle("active",b.dataset.villageTab===tab));
+  const showList = tab==="list" || tab==="pending";
+  const showAdd = tab==="add";
+  const showStats = tab==="stats";
+  const showMap = tab==="map";
+  document.getElementById("village-panel-list").hidden=!showList;
+  document.getElementById("village-panel-add").hidden=!showAdd;
+  document.getElementById("village-panel-stats").hidden=!showStats;
+  document.getElementById("village-panel-map").hidden=!showMap;
+  const main=document.querySelector(".village-admin-main"),side=document.querySelector(".village-admin-side");
+  if(main)main.hidden=showMap;if(side)side.hidden=showMap;
+  if(tab==="pending"){document.getElementById("admin-village-filter").value="pending_confirmation";adminRenderVillages();}
+  if(tab==="list"){document.getElementById("admin-village-filter").value="";adminRenderVillages();}
+  if(tab==="add")document.getElementById("village-panel-add").scrollIntoView({behavior:"smooth",block:"start"});
+  if(tab==="map"){setTimeout(()=>adminRenderVillageMap("admin-villages-full-map","full"),120);}
+  if(tab==="stats")adminRenderVillageStats();
 };
-const puzzleAdminForm=document.getElementById("admin-puzzle-form");
-if(puzzleAdminForm) puzzleAdminForm.addEventListener("submit",async event=>{event.preventDefault();const status=document.getElementById("admin-puzzle-status"),button=document.getElementById("admin-puzzle-save");button.disabled=true;status.textContent="Enregistrement…";try{const village_name=document.getElementById("admin-puzzle-village").value.trim();const raw=document.getElementById("admin-puzzle-date").value;await adminApi("/api/admin/puzzle",{method:"POST",body:JSON.stringify({village_name,reveal_at:raw?new Date(raw).toISOString():null})});puzzleAdminForm.reset();status.textContent="Pièce préparée.";await window.adminLoadPuzzle();}catch(e){status.textContent=e.message||"Impossible de préparer la pièce.";}finally{button.disabled=false;}});
-
-window.adminOpenVillages = async function() {
-  adminSetView("admin-villages-view", "Gestion des villages");
-  await window.adminLoadVillages();
-};
-
-window.adminLoadVillages = async function() {
-  const status = document.getElementById("admin-villages-status");
-  const list = document.getElementById("admin-villages-list");
-  if (!status || !list) return;
-  status.textContent = "Chargement des villages…";
+function adminRenderVillageStats(){
+  const el=document.getElementById("admin-village-stat-details");if(!el)return;el.replaceChildren();
+  const counts={total:ADMIN_VILLAGES_CACHE.length,pending:0,works:0,available:0,suspended:0,updating:0};
+  ADMIN_VILLAGES_CACHE.forEach(v=>{const key={pending_confirmation:"pending",in_progress:"works",available:"available",suspended:"suspended",updating:"updating"}[v.status];if(key)counts[key]++;});
+  [["Total des villages",counts.total],["En attente",counts.pending],["En travaux",counts.works],["Disponibles",counts.available],["Suspendus",counts.suspended],["Mises à jour",counts.updating]].forEach(([label,n])=>{const d=document.createElement("div"),s=document.createElement("strong"),t=document.createElement("span");s.textContent=n;t.textContent=label;d.append(s,t);el.append(d);});
+}
+function adminUpdateVillageCounters(villages){
+  const count={total:villages.length,pending:0,works:0,available:0,suspended:0,update:0};
+  villages.forEach(v=>{const k={pending_confirmation:"pending",in_progress:"works",available:"available",suspended:"suspended",updating:"update"}[v.status];if(k)count[k]++;});
+  Object.entries({total:"total",pending:"pending",works:"works",available:"available",suspended:"suspended",update:"update"}).forEach(([id,key])=>{const el=document.getElementById("village-stat-"+id);if(el)el.textContent=count[key];});
+  const pending=document.getElementById("village-pending-count");if(pending)pending.textContent=count.pending;
+  const total=document.getElementById("village-list-count");if(total)total.textContent=villages.length;
+}
+window.adminRenderVillages=function(){
+  const list=document.getElementById("admin-villages-list");if(!list)return;
+  const q=(document.getElementById("admin-village-search")?.value||"").trim().toLocaleLowerCase("fr");
+  const filter=document.getElementById("admin-village-filter")?.value||"";
+  const villages=ADMIN_VILLAGES_CACHE.filter(v=>(!filter||v.status===filter)&&(!q||[v.name,v.postal_code,v.description].some(x=>String(x||"").toLocaleLowerCase("fr").includes(q))));
   list.replaceChildren();
-  try {
-    const data = await adminApi("/api/admin/villages");
-    const villages = Array.isArray(data.villages) ? data.villages : [];
-    if (!villages.length) {
-      list.textContent = "Aucun village enregistré.";
-      status.textContent = "Liste chargée.";
-      return;
-    }
-    const table = document.createElement("table");
-    table.style.cssText = "width:100%;border-collapse:collapse;min-width:680px;font-size:13px";
-    const head = document.createElement("thead");
-    const header = document.createElement("tr");
-    ["Village", "Code postal", "Statut", "Description", "Action"].forEach(label => {
-      const th = document.createElement("th");
-      th.textContent = label;
-      th.style.cssText = "text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";
-      header.appendChild(th);
-    });
-    head.appendChild(header);
-    table.appendChild(head);
-    const body = document.createElement("tbody");
-    for (const village of villages) {
-      const tr = document.createElement("tr");
-      tr.append(
-        adminVillageCell(village.name),
-        adminVillageCell(village.postal_code),
-        adminVillageCell(ADMIN_VILLAGE_STATUSES[village.status] || village.status),
-        adminVillageCell(village.description)
-      );
-      const actionCell = adminVillageCell("");
-      const edit = document.createElement("button");
-      edit.type = "button";
-      edit.className = "admin-secondary-btn";
-      edit.textContent = "Modifier";
-      edit.addEventListener("click", () => adminEditVillage(village));
-      actionCell.appendChild(edit);
-      tr.appendChild(actionCell);
-      body.appendChild(tr);
-    }
-    table.appendChild(body);
-    const wrapper = document.createElement("div");
-    wrapper.style.overflowX = "auto";
-    wrapper.appendChild(table);
-    list.appendChild(wrapper);
-    status.textContent = `${villages.length} village${villages.length > 1 ? "s" : ""} chargé${villages.length > 1 ? "s" : ""}.`;
-  } catch (error) {
-    status.textContent = error.message || "Impossible de charger les villages.";
-    const help = document.createElement("p");
-    help.textContent = "Vérifie que le serveur Render est bien déployé et que tu es connectée avec le compte administrateur.";
-    list.appendChild(help);
-  }
-};
-
-const adminVillageForm = document.getElementById("admin-village-form");
-if (adminVillageForm) {
-  adminVillageForm.addEventListener("submit", async event => {
-    event.preventDefault();
-    const status = document.getElementById("admin-villages-status");
-    const save = document.getElementById("admin-village-save");
-    const id = document.getElementById("admin-village-id").value;
-    const payload = {
-      name: document.getElementById("admin-village-name").value.trim(),
-      slug: document.getElementById("admin-village-slug").value.trim().toLowerCase(),
-      postal_code: document.getElementById("admin-village-postal").value.trim(),
-      status: document.getElementById("admin-village-status").value,
-      description: document.getElementById("admin-village-description").value.trim()
-    };
-    save.disabled = true;
-    status.textContent = "Enregistrement…";
-    try {
-      await adminApi(id ? `/api/admin/villages/${encodeURIComponent(id)}` : "/api/admin/villages", {
-        method: id ? "PATCH" : "POST",
-        body: JSON.stringify(payload)
-      });
-      status.textContent = id ? "Village modifié avec succès." : "Village ajouté avec succès.";
-      adminResetVillageForm();
-      await window.adminLoadVillages();
-    } catch (error) {
-      status.textContent = error.message || "Impossible d’enregistrer le village.";
-    } finally {
-      save.disabled = false;
-    }
+  if(!villages.length){const p=document.createElement("p");p.textContent="Aucun village ne correspond à la recherche.";list.append(p);return;}
+  const table=document.createElement("table");table.className="village-table";
+  const thead=document.createElement("thead"),hr=document.createElement("tr");
+  ["Village","Code postal","Statut","Description","Dernière mise à jour","Actions"].forEach(x=>{const th=document.createElement("th");th.textContent=x;hr.append(th);});thead.append(hr);table.append(thead);
+  const tbody=document.createElement("tbody");
+  villages.forEach(v=>{
+    const tr=document.createElement("tr"),nameTd=document.createElement("td"),nameWrap=document.createElement("div");nameWrap.className="village-name-cell";
+    if(v.photo_url){const img=document.createElement("img");img.className="village-thumb";img.src=v.photo_url;img.alt="";img.loading="lazy";img.onerror=()=>{img.replaceWith(Object.assign(document.createElement("span"),{className:"village-thumb",textContent:"🏡"}));};nameWrap.append(img);}
+    else {const icon=document.createElement("span");icon.className="village-thumb";icon.textContent="🏡";nameWrap.append(icon);}
+    const name=document.createElement("strong");name.textContent=v.name;nameWrap.append(name);nameTd.append(nameWrap);tr.append(nameTd,adminVillageCell(v.postal_code));
+    const st=document.createElement("td"),pill=document.createElement("span");pill.className="village-status-pill "+v.status;pill.textContent=({pending_confirmation:"⌛ En attente",in_progress:"⚒ En travaux",available:"✓ Disponible",suspended:"Ⅱ Suspendu",updating:"↻ Mise à jour"})[v.status]||v.status;st.append(pill);tr.append(st,adminVillageCell(v.description));
+    const date=adminVillageCell(v.updated_at?new Date(v.updated_at).toLocaleDateString("fr-FR"):"—");tr.append(date);
+    const actions=adminVillageCell("");const edit=document.createElement("button");edit.type="button";edit.className="village-action-btn";edit.textContent="✎";edit.title="Modifier";edit.addEventListener("click",()=>adminEditVillage(v));actions.append(edit);
+    const doc=document.createElement("button");doc.type="button";doc.className="village-action-btn";doc.textContent="▤";doc.title="Voir les informations";doc.addEventListener("click",()=>{alert(v.name+"\n\n"+(v.description||"Aucune description.")+"\n\nStatut : "+(ADMIN_VILLAGE_STATUSES[v.status]||v.status));});actions.append(doc);tr.append(actions);tbody.append(tr);
   });
+  table.append(tbody);list.append(table);
+};
+function adminRenderVillageMap(containerId,kind){
+  const el=document.getElementById(containerId);if(!el)return;
+  if(!window.L){el.textContent="La carte nécessite le chargement de Leaflet.";return;}
+  if(ADMIN_VILLAGE_MAPS[kind]){ADMIN_VILLAGE_MAPS[kind].remove();ADMIN_VILLAGE_MAPS[kind]=null;}
+  const mapped=ADMIN_VILLAGES_CACHE.filter(v=>Number.isFinite(Number(v.latitude))&&Number.isFinite(Number(v.longitude))&&v.latitude!==null&&v.longitude!==null);
+  const map=L.map(el,{scrollWheelZoom:false}).setView([46.6,2.4],5);
+  ADMIN_VILLAGE_MAPS[kind]=map;
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenStreetMap"}).addTo(map);
+  const colors={available:"#238044",pending_confirmation:"#e5a000",in_progress:"#287da7",suspended:"#c63b35",updating:"#8053b8"};
+  mapped.forEach(v=>{const marker=L.circleMarker([Number(v.latitude),Number(v.longitude)],{radius:9,color:"#fff",weight:2,fillColor:colors[v.status]||"#496b4e",fillOpacity:1}).addTo(map);marker.bindPopup("<strong>"+String(v.name).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+"</strong><br>"+(ADMIN_VILLAGE_STATUSES[v.status]||v.status));});
+  if(mapped.length)map.fitBounds(L.latLngBounds(mapped.map(v=>[Number(v.latitude),Number(v.longitude)])).pad(.2));
+  else {el.innerHTML='<div class="village-map-placeholder">📍<br>Aucune coordonnée GPS renseignée pour le moment.</div>';ADMIN_VILLAGE_MAPS[kind].remove();ADMIN_VILLAGE_MAPS[kind]=null;}
 }
+window.adminOpenVillages=async function(){adminSetView("admin-villages-view","Gestion des villages");await window.adminLoadVillages();};
+window.adminLoadVillages=async function(){
+  const status=document.getElementById("admin-villages-status"),list=document.getElementById("admin-villages-list");if(!status||!list)return;
+  status.textContent="Chargement des villages…";
+  try{
+    const data=await adminApi("/api/admin/villages");ADMIN_VILLAGES_CACHE=Array.isArray(data.villages)?data.villages:[];
+    adminUpdateVillageCounters(ADMIN_VILLAGES_CACHE);window.adminRenderVillages();adminRenderVillageStats();
+    status.textContent=ADMIN_VILLAGES_CACHE.length+" village(s) enregistré(s).";
+    adminRenderVillageMap("admin-villages-mini-map","mini");
+  }catch(error){status.textContent=error.message||"Impossible de charger les villages.";list.textContent="Vérifie que Render est déployé et que tu es connectée avec le compte administrateur.";}
+};
+const adminVillageForm=document.getElementById("admin-village-form");
+if(adminVillageForm)adminVillageForm.addEventListener("submit",async event=>{
+  event.preventDefault();const status=document.getElementById("admin-villages-status"),save=document.getElementById("admin-village-save"),id=document.getElementById("admin-village-id").value;
+  const lat=document.getElementById("admin-village-latitude").value,lon=document.getElementById("admin-village-longitude").value;
+  const payload={name:document.getElementById("admin-village-name").value.trim(),slug:document.getElementById("admin-village-slug").value.trim().toLowerCase(),postal_code:document.getElementById("admin-village-postal").value.trim(),status:document.getElementById("admin-village-status").value,description:document.getElementById("admin-village-description").value.trim(),latitude:lat===""?null:Number(lat),longitude:lon===""?null:Number(lon),photo_url:document.getElementById("admin-village-photo").value.trim()};
+  save.disabled=true;status.textContent="Enregistrement…";
+  try{await adminApi(id?`/api/admin/villages/${encodeURIComponent(id)}`:"/api/admin/villages",{method:id?"PATCH":"POST",body:JSON.stringify(payload)});status.textContent=id?"Village modifié avec succès.":"Village ajouté avec succès.";adminResetVillageForm();await window.adminLoadVillages();adminVillageTab("list");}
+  catch(error){status.textContent=error.message||"Impossible d’enregistrer le village.";}
+  finally{save.disabled=false;}
+});
 
 const ADMIN_LEVEL_DEFINITIONS = [
   ["enfant","Enfant"],["facile","Facile"],["famille","Famille"],["moyen","Moyen"],
