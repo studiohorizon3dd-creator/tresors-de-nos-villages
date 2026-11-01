@@ -1226,17 +1226,29 @@ body.halloween-accueil .home-hero{
       </div>
 
       <div id="admin-levels-view" class="admin-subview" hidden>
-        <div class="admin-section-heading">
-          <div><h3>Catalogue des niveaux par village</h3><p>Modifie le nombre d’énigmes, les étoiles, le type d’accès et le statut de chaque niveau.</p></div>
-          <button type="button" class="admin-secondary-btn" onclick="adminLoadVillageLevels()">↻ Actualiser</button>
-        </div>
-        <div class="admin-info-panel" style="margin-bottom:14px">
-          <label for="admin-level-village" style="display:block;margin-bottom:7px"><strong>Choisir un village</strong></label>
-          <select id="admin-level-village" style="width:100%;max-width:420px;padding:11px;border:1px solid #d4c49c;border-radius:9px;background:#fff"><option value="">Chargement des villages…</option></select>
-          <p class="admin-footnote">Chaque village possède ses propres réglages. Enfant et Facile commencent avec 10 énigmes et 10 étoiles ; tu peux modifier ces valeurs.</p>
+        <style>
+          #admin-levels-view{color:#153b2b} .levels-hero{display:flex;align-items:center;gap:22px;min-height:86px;padding:16px 24px;border-radius:16px;background:linear-gradient(105deg,#062c20,#0b6037 56%,#174b35);color:#fff;margin-bottom:14px;overflow:hidden;position:relative}
+          .levels-hero h2{font:700 28px Georgia,serif;margin:0 0 4px}.levels-hero p{margin:0;color:#f2ead7}.levels-hero .art{margin-left:auto;font-size:50px;color:#f2d47d}
+          .levels-top{display:grid;grid-template-columns:minmax(240px,1.4fr) repeat(4,minmax(120px,.7fr));gap:10px;margin-bottom:14px;align-items:stretch}
+          .levels-box{background:#fffdf7;border:1px solid #e6dac2;border-radius:13px;padding:13px 15px;box-shadow:0 3px 10px #31250e0c;display:flex;align-items:center;gap:12px;min-width:0}
+          .levels-box .ico{font-size:27px;color:#0b6037}.levels-box small{display:block;color:#6c6659}.levels-box strong{font:700 23px Georgia,serif;color:#092f21}.levels-box select{width:100%;padding:9px;border:1px solid #d4c49c;border-radius:9px;background:white;font-weight:700}
+          .levels-layout{display:grid;grid-template-columns:minmax(0,2.15fr) minmax(275px,.9fr);gap:14px;align-items:start}.levels-panel{background:#fffdf8;border:1px solid #e6dac2;border-radius:15px;padding:14px;box-shadow:0 4px 12px #31250e0b;min-width:0}.levels-panel h3{font:700 20px Georgia,serif;margin:0 0 12px;color:#123c29}
+          .levels-table-wrap{overflow-x:auto}.levels-table{width:100%;min-width:720px;border-collapse:separate;border-spacing:0 5px;font-size:13px}.levels-table th{background:#075331;color:#fff;padding:10px;text-align:left}.levels-table th:first-child{border-radius:9px 0 0 9px}.levels-table th:last-child{border-radius:0 9px 9px 0}.levels-table td{padding:5px 6px;border-bottom:1px solid #eee5d5}.levels-table input,.levels-table select{box-sizing:border-box;padding:8px;border:1px solid #d9cbaa;border-radius:8px;background:white;max-width:100%}.levels-table .num{width:68px}.levels-table .name{width:130px}.levels-table .price{width:78px}.levels-table .drag{cursor:grab;font-size:18px;color:#153b2b}.levels-save{padding:8px 10px;border:1px solid #d7ad45;background:#fff8e8;color:#173c2c;border-radius:8px;font-weight:700;cursor:pointer;white-space:nowrap}.levels-save:disabled{opacity:.6}.levels-add{margin-top:12px;background:#086536;color:white;border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer}.levels-form{display:grid;gap:10px}.levels-form label{display:grid;gap:5px;font-size:13px;font-weight:700}.levels-form input,.levels-form select{padding:9px;border:1px solid #d4c49c;border-radius:8px;background:white;width:100%;box-sizing:border-box}.levels-form .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.levels-note{margin-top:12px;padding:12px;border:1px solid #e6dac2;border-radius:12px;background:#fff9e9;font-size:12px}
+          @media(max-width:900px){.levels-top{grid-template-columns:repeat(2,minmax(0,1fr))}.levels-layout{grid-template-columns:1fr}}@media(max-width:560px){.levels-top{grid-template-columns:1fr 1fr}.levels-hero h2{font-size:22px}.levels-form .pair{grid-template-columns:1fr}}
+        </style>
+        <div class="levels-hero"><div><h2>📊 Niveaux par village</h2><p>Configurez les formules, les prix et les difficultés de chaque village.</p></div><div class="art">🏡 🧭</div></div>
+        <div class="levels-top">
+          <div class="levels-box"><span class="ico">📍</span><div style="width:100%"><strong style="font:700 15px Arial">Choisir un village</strong><select id="admin-level-village"><option value="">Chargement des villages…</option></select></div></div>
+          <div class="levels-box"><span class="ico">▱</span><div><strong id="levels-count-active">0</strong><small>niveaux actifs</small></div></div>
+          <div class="levels-box"><span class="ico">🎁</span><div><strong id="levels-count-free">0</strong><small>gratuits</small></div></div>
+          <div class="levels-box"><span class="ico">🪙</span><div><strong id="levels-count-paid">0</strong><small>payants</small></div></div>
+          <div class="levels-box"><span class="ico">🏷️</span><div><small>Niveau le moins cher</small><strong id="levels-min-price">—</strong></div></div>
         </div>
         <p id="admin-levels-status" class="status" role="status" aria-live="polite">Choisis un village pour afficher ses niveaux.</p>
-        <div id="admin-levels-list" class="admin-recent-list"><p>Les niveaux apparaîtront ici.</p></div>
+        <div class="levels-layout">
+          <section class="levels-panel"><h3>🧩 Niveaux configurés pour <span id="levels-village-title">le village</span></h3><div class="levels-table-wrap" id="admin-levels-list"><p>Les niveaux apparaîtront ici.</p></div><button type="button" class="levels-add" onclick="document.getElementById('levels-custom-form').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('levels-custom-name').focus();">＋ Ajouter un niveau personnalisé</button></section>
+          <aside class="levels-panel"><h3>🚩 Créer un niveau</h3><form id="levels-custom-form" class="levels-form"><label>Nom du niveau *<input id="levels-custom-name" required maxlength="60" placeholder="Ex. Aventure nocturne"></label><div class="pair"><label>Nombre d’énigmes *<input id="levels-custom-riddles" type="number" min="1" max="200" value="10" required></label><label>Nombre d’étoiles *<input id="levels-custom-stars" type="number" min="0" max="1000" value="10" required></label></div><label>Type d’accès *<select id="levels-custom-access"><option value="gratuit">Gratuit</option><option value="payant" selected>Payant</option><option value="testeur">Testeur</option></select></label><label>Prix (€) *<input id="levels-custom-price" type="number" min="0" max="9999" step="0.01" value="1.99"></label><label>Statut *<select id="levels-custom-status"><option value="preparation">En préparation</option><option value="actif">Disponible</option><option value="desactive">Désactivé</option></select></label><button class="levels-add" type="submit">＋ Ajouter le niveau</button></form><div class="levels-note"><strong>ℹ️ Bon à savoir :</strong> le prix est ignoré pour les niveaux gratuits. Tu peux réorganiser l’ordre des niveaux par glisser-déposer (⠿).</div></aside>
+        </div>
       </div>
 
       <div id="admin-puzzle-view" class="admin-subview" hidden>
@@ -2478,58 +2490,27 @@ const ADMIN_LEVEL_DEFINITIONS = [
   ["enfant","Enfant"],["facile","Facile"],["famille","Famille"],["moyen","Moyen"],
   ["difficile","Difficile"],["extreme","Extrême"],["nuit","Nuit"]
 ];
+let adminLevelCache=[];
 window.adminOpenLevels = async function(){
   adminSetView("admin-levels-view","Niveaux par village");
   const select=document.getElementById("admin-level-village");
-  if(!select.dataset.loaded){
-    try{
-      const data=await adminApi("/api/admin/villages");
-      const villages=Array.isArray(data.villages)?data.villages:[];
-      select.replaceChildren();
-      const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choisir un village…";select.appendChild(placeholder);
-      villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;select.appendChild(o);});
-      select.dataset.loaded="1";
-      if(villages.length===1)select.value=villages[0].slug;
-    }catch(e){document.getElementById("admin-levels-status").textContent=e.message||"Impossible de charger les villages.";return;}
-    select.addEventListener("change",()=>window.adminLoadVillageLevels());
-  }
-  if(select.value) await window.adminLoadVillageLevels();
+  if(!select.dataset.loaded){try{const data=await adminApi("/api/admin/villages");const villages=Array.isArray(data.villages)?data.villages:[];select.replaceChildren();const ph=document.createElement("option");ph.value="";ph.textContent="Choisir un village…";select.appendChild(ph);villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;select.appendChild(o);});select.dataset.loaded="1";if(villages.length===1)select.value=villages[0].slug;select.addEventListener("change",()=>window.adminLoadVillageLevels());}catch(e){document.getElementById("admin-levels-status").textContent=e.message||"Impossible de charger les villages.";return;}}
+  if(select.value)await window.adminLoadVillageLevels();
 };
+function adminLevelSlug(name){return name.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40);}
+function adminRenderLevelStats(levels){const active=levels.filter(x=>x.status==="actif"),free=levels.filter(x=>x.access_type==="gratuit"),paid=levels.filter(x=>x.access_type==="payant"&&Number(x.price_eur)>0);document.getElementById("levels-count-active").textContent=active.length;document.getElementById("levels-count-free").textContent=free.length;document.getElementById("levels-count-paid").textContent=paid.length;const min=paid.length?Math.min(...paid.map(x=>Number(x.price_eur)||0)):null;document.getElementById("levels-min-price").textContent=min===null?"—":min.toLocaleString("fr-FR",{style:"currency",currency:"EUR"});}
 window.adminLoadVillageLevels = async function(){
-  const select=document.getElementById("admin-level-village"), status=document.getElementById("admin-levels-status"), list=document.getElementById("admin-levels-list");
-  if(!select||!status||!list)return;
-  const village=select.value;
-  if(!village){status.textContent="Choisis un village pour gérer ses niveaux.";list.textContent="Aucun village sélectionné.";return;}
-  status.textContent="Chargement des niveaux…";list.replaceChildren();
-  try{
-    const data=await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);
-    const existing=new Map((Array.isArray(data.levels)?data.levels:[]).map(x=>[x.level_key,x]));
-    const table=document.createElement("table");table.style.cssText="width:100%;min-width:780px;border-collapse:collapse;font-size:13px";
-    const thead=document.createElement("thead"),hr=document.createElement("tr");
-    ["Niveau","Énigmes","Étoiles","Accès","Statut","Action"].forEach(t=>{const th=document.createElement("th");th.textContent=t;th.style.cssText="text-align:left;padding:10px;border-bottom:1px solid #ded9ca;color:#244b36";hr.appendChild(th);});thead.appendChild(hr);table.appendChild(thead);
-    const tbody=document.createElement("tbody");
-    for(const [key,label] of ADMIN_LEVEL_DEFINITIONS){
-      const saved=existing.get(key)||{};const tr=document.createElement("tr");
-      const nameCell=document.createElement("td");nameCell.style.cssText="padding:10px;border-bottom:1px solid #eee8d9;min-width:120px";
-      const name=document.createElement("input");name.value=saved.display_name||label;name.maxLength=60;name.setAttribute("aria-label",`Nom du niveau ${label}`);name.style.cssText="width:100%;padding:8px;border:1px solid #d4c49c;border-radius:7px";nameCell.appendChild(name);tr.appendChild(nameCell);
-      const makeNumber=(value,min,max,aria)=>{const input=document.createElement("input");input.type="number";input.min=String(min);input.max=String(max);input.step="1";input.value=String(value);input.setAttribute("aria-label",aria);input.style.cssText="width:82px;padding:8px;border:1px solid #d4c49c;border-radius:7px";return input;};
-      const riddles=makeNumber(saved.riddle_count??10,1,200,"Nombre d’énigmes"),stars=makeNumber(saved.star_count??10,0,1000,"Nombre d’étoiles");
-      for(const input of [riddles,stars]){const td=document.createElement("td");td.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";td.appendChild(input);tr.appendChild(td);}
-      const access=document.createElement("select");[["gratuit","Gratuit"],["payant","Payant"],["testeur","Testeur"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;access.appendChild(o);});access.value=saved.access_type||"gratuit";
-      const statusSelect=document.createElement("select");[["preparation","En préparation"],["actif","Actif"],["desactive","Désactivé"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;statusSelect.appendChild(o);});statusSelect.value=saved.status||"preparation";
-      for(const sel of [access,statusSelect]){sel.style.cssText="max-width:130px;padding:8px;border:1px solid #d4c49c;border-radius:7px;background:#fff";const td=document.createElement("td");td.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";td.appendChild(sel);tr.appendChild(td);}
-      const actionCell=document.createElement("td");actionCell.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";
-      const save=document.createElement("button");save.type="button";save.textContent="Enregistrer";save.className="admin-secondary-btn";save.addEventListener("click",async()=>{
-        save.disabled=true;save.textContent="Enregistrement…";
-        try{await adminApi("/api/admin/village-levels",{method:"PUT",body:JSON.stringify({village_slug:village,level_key:key,display_name:name.value.trim(),riddle_count:Number(riddles.value),star_count:Number(stars.value),access_type:access.value,status:statusSelect.value})});save.textContent="Enregistré ✓";status.textContent=`Niveau ${name.value.trim()} enregistré pour ${select.options[select.selectedIndex].text}.`;}
-        catch(e){alert(e.message||"Impossible d’enregistrer ce niveau.");save.textContent="Enregistrer";}
-        finally{save.disabled=false;}
-      });actionCell.appendChild(save);tr.appendChild(actionCell);tbody.appendChild(tr);
-    }
-    table.appendChild(tbody);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
-    status.textContent=`${ADMIN_LEVEL_DEFINITIONS.length} niveaux prêts à être configurés pour ${select.options[select.selectedIndex].text}.`;
-  }catch(e){status.textContent=e.message||"Impossible de charger les niveaux.";list.textContent="Vérifie que la table village_level_settings existe dans Neon et que le serveur correspondant est déployé.";}
+ const select=document.getElementById("admin-level-village"),status=document.getElementById("admin-levels-status"),list=document.getElementById("admin-levels-list");if(!select||!status||!list)return;const village=select.value;if(!village){status.textContent="Choisis un village pour gérer ses niveaux.";list.textContent="Aucun village sélectionné.";return;}status.textContent="Chargement des niveaux…";list.replaceChildren();
+ try{const data=await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);const existing=Array.isArray(data.levels)?data.levels:[];const map=new Map(existing.map(x=>[x.level_key,x]));adminLevelCache=ADMIN_LEVEL_DEFINITIONS.map(([key,label],i)=>map.get(key)||{level_key:key,display_name:label,riddle_count:key==="moyen"?15:key==="difficile"?20:key==="extreme"?25:10,star_count:key==="moyen"?15:key==="difficile"?20:key==="extreme"?25:10,access_type:["moyen","difficile","extreme","nuit"].includes(key)?"payant":"gratuit",price_eur:["moyen","difficile","extreme","nuit"].includes(key)?({moyen:1.99,difficile:2.99,extreme:3.99,nuit:4.99}[key]):0,status:key==="facile"?"actif":"preparation",sort_order:i});
+ existing.filter(x=>!ADMIN_LEVEL_DEFINITIONS.some(([k])=>k===x.level_key)).forEach(x=>adminLevelCache.push(x));adminLevelCache.sort((a,b)=>(Number(a.sort_order)||0)-(Number(b.sort_order)||0));document.getElementById("levels-village-title").textContent=select.options[select.selectedIndex].text;adminRenderLevelStats(adminLevelCache);
+ const table=document.createElement("table");table.className="levels-table";table.innerHTML="<thead><tr><th>↕</th><th>Niveau</th><th>Énigmes</th><th>Étoiles</th><th>Accès</th><th>Prix (€)</th><th>Statut</th><th>Actions</th></tr></thead>";const tbody=document.createElement("tbody");
+ adminLevelCache.forEach((item,index)=>{const tr=document.createElement("tr");tr.draggable=true;tr.dataset.index=String(index);tr.innerHTML=`<td class="drag" title="Glisser pour réorganiser">⠿</td><td><input class="name" aria-label="Nom du niveau" maxlength="60"></td><td><input class="num" type="number" min="1" max="200" aria-label="Nombre d’énigmes"></td><td><input class="num" type="number" min="0" max="1000" aria-label="Nombre d’étoiles"></td><td><select aria-label="Type d’accès"><option value="gratuit">Gratuit</option><option value="payant">Payant</option><option value="testeur">Testeur</option></select></td><td><input class="price" type="number" min="0" max="9999" step="0.01" aria-label="Prix en euros"></td><td><select aria-label="Statut"><option value="preparation">✏️ En préparation</option><option value="actif">🟢 Disponible</option><option value="desactive">Désactivé</option></select></td><td><button type="button" class="levels-save">💾 Enregistrer</button></td>`;
+ const inputs=tr.querySelectorAll("input,select");inputs[0].value=item.display_name||"";inputs[1].value=item.riddle_count??10;inputs[2].value=item.star_count??10;inputs[3].value=item.access_type||"gratuit";inputs[4].value=Number(item.price_eur)||0;inputs[5].value=item.status||"preparation";
+ tr.querySelector("button").addEventListener("click",async()=>{const [name,riddles,stars,access,price,st]=tr.querySelectorAll("input,select");const key=item.level_key||adminLevelSlug(name.value);if(!key){status.textContent="Le nom du niveau doit contenir des lettres ou des chiffres.";return;}const btn=tr.querySelector("button");btn.disabled=true;try{const saved=await adminApi("/api/admin/village-levels",{method:"PUT",body:JSON.stringify({village_slug:village,level_key:key,display_name:name.value.trim(),riddle_count:Number(riddles.value),star_count:Number(stars.value),access_type:access.value,status:st.value,price_eur:access.value==="payant"?Number(price.value):0,sort_order:Array.from(tbody.children).indexOf(tr)})});item.level_key=key;item.price_eur=saved.level?.price_eur??Number(price.value);status.textContent=`Niveau ${name.value.trim()} enregistré.`;adminRenderLevelStats(adminLevelCache);}catch(e){status.textContent=e.message||"Impossible d’enregistrer ce niveau.";}finally{btn.disabled=false;}});
+ tr.addEventListener("dragstart",e=>{tr.classList.add("dragging");e.dataTransfer.setData("text/plain",tr.dataset.index);});tr.addEventListener("dragend",()=>{tr.classList.remove("dragging");});tr.addEventListener("dragover",e=>e.preventDefault());tr.addEventListener("drop",e=>{e.preventDefault();const from=Number(e.dataTransfer.getData("text/plain")),to=Array.from(tbody.children).indexOf(tr);if(from===to||!Number.isInteger(from))return;const moving=tbody.children[from];tbody.insertBefore(moving,from<to?tr.nextSibling:tr);});tbody.appendChild(tr);});table.appendChild(tbody);list.appendChild(table);status.textContent=`${adminLevelCache.length} niveaux configurés pour ${select.options[select.selectedIndex].text}. Enregistre chaque ligne après modification.`;
+ }catch(e){status.textContent=e.message||"Impossible de charger les niveaux.";list.textContent="Vérifie que la table village_level_settings existe dans Neon.";}
 };
+const levelsCustomForm=document.getElementById("levels-custom-form");if(levelsCustomForm)levelsCustomForm.addEventListener("submit",async e=>{e.preventDefault();const village=document.getElementById("admin-level-village").value,status=document.getElementById("admin-levels-status"),name=document.getElementById("levels-custom-name").value.trim(),key=adminLevelSlug(name);if(!village){status.textContent="Choisis d’abord un village.";return;}if(!key){status.textContent="Nom de niveau invalide.";return;}if(adminLevelCache.some(x=>x.level_key===key)){status.textContent="Ce niveau existe déjà pour ce village.";return;}const payload={village_slug:village,level_key:key,display_name:name,riddle_count:Number(document.getElementById("levels-custom-riddles").value),star_count:Number(document.getElementById("levels-custom-stars").value),access_type:document.getElementById("levels-custom-access").value,price_eur:Number(document.getElementById("levels-custom-price").value),status:document.getElementById("levels-custom-status").value,sort_order:adminLevelCache.length};try{await adminApi("/api/admin/village-levels",{method:"PUT",body:JSON.stringify(payload)});levelsCustomForm.reset();document.getElementById("levels-custom-riddles").value=10;document.getElementById("levels-custom-stars").value=10;document.getElementById("levels-custom-price").value="1.99";status.textContent="Niveau personnalisé ajouté.";await window.adminLoadVillageLevels();}catch(err){status.textContent=err.message||"Impossible d’ajouter le niveau.";}});
 
 window.adminSelectedAdventureId = null;
 const ADVENTURE_STATUS_LABELS={en_creation:"En cours de création",a_valider:"À valider",en_attente:"En attente",en_travaux:"En travaux",mise_a_jour:"Mise à jour",en_ligne:"En ligne",suspendue:"Suspendue"};
