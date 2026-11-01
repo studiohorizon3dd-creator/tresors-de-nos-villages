@@ -455,7 +455,7 @@ body.halloween-accueil .home-hero{
 
 /* ===== STATUT DU SITE ===== */
 .site-status-banner{display:none;margin:14px 0 18px;padding:15px 18px;border:1px solid #d8b45e;border-radius:14px;background:linear-gradient(110deg,#fff5d8,#fffdf5);color:#173d2c;box-shadow:0 5px 15px #6a4b1712}
-.site-status-banner.is-visible{display:flex;align-items:center;gap:13px}
+.site-status-banner.is-visible{display:flex!important;align-items:center;gap:13px}
 .site-status-banner .status-symbol{font-size:25px;flex:0 0 auto}
 .site-status-banner strong{display:block;font:700 17px Georgia,serif;margin-bottom:3px}
 .site-status-banner p{margin:0;line-height:1.5}
@@ -2848,23 +2848,47 @@ window.saveSiteStatus=async function(){
   finally{if(button)button.disabled=false;}
 };
 async function loadPublicSiteStatus(){
+  const banner=document.getElementById("public-site-status-banner");
+  if(!banner) return;
   try{
-    const response=await fetch(`${API_BASE}/api/site-status`,{cache:"no-store"});
-    if(!response.ok)return;
-    const data=await response.json();
-    const banner=document.getElementById("public-site-status-banner");
-    if(!banner)return;
-    const show=data.banner_enabled===true && data.status!=="online";
-    banner.classList.toggle("is-visible",show);
-    if(show){
-      const meta=SITE_STATUS_META[data.status]||SITE_STATUS_META.online;
-      document.getElementById("public-site-status-icon").textContent=meta.icon;
-      document.getElementById("public-site-status-title").textContent=meta.title;
-      document.getElementById("public-site-status-message").textContent=data.message||meta.message;
+    const response=await fetch(`${API_BASE}/api/site-status?ts=${Date.now()}`,{
+      method:"GET",
+      cache:"no-store",
+      headers:{"Accept":"application/json"}
+    });
+    if(!response.ok){
+      console.warn("Statut public : réponse serveur",response.status);
+      return;
     }
-  }catch(error){console.warn("Statut public indisponible :",error.message);}
+    const payload=await response.json();
+    const data=payload.site_status||payload.status_settings||payload;
+    const status=String(data.status||"online").toLowerCase();
+    const enabled=data.banner_enabled===true || data.banner_enabled===1 || data.banner_enabled==="true";
+    const show=enabled && status!=="online";
+    banner.classList.toggle("is-visible",show);
+    banner.style.display=show?"flex":"none";
+    if(!show) return;
+    const meta=SITE_STATUS_META[status]||SITE_STATUS_META.online;
+    const icon=document.getElementById("public-site-status-icon");
+    const title=document.getElementById("public-site-status-title");
+    const message=document.getElementById("public-site-status-message");
+    if(icon) icon.textContent=meta.icon;
+    if(title) title.textContent=meta.title;
+    if(message) message.textContent=(data.message||"").trim()||meta.message;
+  }catch(error){
+    console.warn("Statut public indisponible :",error.message);
+  }
 }
 window.loadPublicSiteStatus=loadPublicSiteStatus;
+
+// Recharge le statut après le chargement complet de la page et au retour
+// depuis un autre onglet, afin que le bandeau ne dépende pas de l'ouverture de l'administration.
+if(document.readyState==="loading"){
+  document.addEventListener("DOMContentLoaded",()=>loadPublicSiteStatus(),{once:true});
+}else{
+  loadPublicSiteStatus();
+}
+window.addEventListener("pageshow",()=>loadPublicSiteStatus());
 
 function adminComingSoon(name){
   adminSetView("admin-placeholder-view",name);
@@ -2880,7 +2904,6 @@ window.adminOpenSupport = adminOpenSupport;
 window.adminOpenAdventures = adminOpenAdventures;
 window.adminComingSoon = adminComingSoon;
 window.adminOpenSiteStatus = window.adminOpenSiteStatus;
-loadPublicSiteStatus();
 
 function renderAdminSupportTable(requests, statusEl, list){
   list.replaceChildren();
