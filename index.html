@@ -20,20 +20,6 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #d7ad
 .brand-name{text-align:center;font-size:27px;font-weight:bold;line-height:1.05;margin:8px 0 30px}
 .nav-btn{display:block;width:100%;border:0;border-radius:12px;background:transparent;color:#fff4cf;text-align:left;padding:14px 15px;margin:4px 0;font-size:17px}
 .nav-btn:hover,.nav-btn.active{background:#656321}
-
-.nav-list{display:flex;flex-direction:column;gap:5px;overflow-y:auto;min-height:0;padding-right:2px}
-.nav-group{border-bottom:1px solid rgba(255,240,181,.12);padding-bottom:4px}
-.nav-group-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;border:0;border-radius:10px;background:transparent;color:#ffe8a6;text-align:left;padding:12px 13px;font-size:16px;font-weight:bold}
-.nav-group-toggle:hover,.nav-group-toggle[aria-expanded="true"]{background:rgba(255,240,181,.08)}
-.nav-chevron{transition:transform .18s ease;font-size:19px}
-.nav-group-toggle[aria-expanded="false"] .nav-chevron{transform:rotate(-90deg)}
-.nav-submenu{padding:0 0 5px 9px}
-.nav-submenu[hidden]{display:none!important}
-.nav-submenu .nav-btn{font-size:15px;padding:11px 12px;margin:2px 0}
-.nav-bottom-actions{margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,240,181,.18)}
-.nav-bottom-actions .nav-btn{font-size:15px}
-@media(max-width:800px){.nav-list{display:block;max-height:none;overflow:visible}.nav-group{display:inline-block;vertical-align:top;width:100%;max-width:360px}.nav-bottom-actions{margin-top:8px;border-top:0}.nav-group-toggle{font-size:14px}.nav-submenu .nav-btn{font-size:13px}}
-
 .sidebar-note{margin-top:auto;text-align:center;color:#c9c39b;font-size:13px;line-height:1.6}
 .content {
   margin-left: 245px;
@@ -308,7 +294,23 @@ body.halloween-accueil .home-hero{
 #dashboard .tester-home-card[hidden] {
   display: none !important;
 }
-\n</style>
+\n
+/* Tableau du support administrateur */
+/* À ajouter dans le <style> principal de index.html */
+#admin-support-list { width:100%; }
+.support-admin-scroll { width:100%; overflow-x:auto; border:1px solid #e2d7bc; border-radius:13px; background:#fffdf7; }
+.support-admin-table { width:100%; min-width:900px; border-collapse:collapse; font:14px Arial,sans-serif; }
+.support-admin-table th { position:sticky; top:0; background:#eee8d6; color:#173e2d; text-align:left; padding:14px 12px; }
+.support-admin-table td { padding:14px 12px; border-top:1px solid #eee7d8; vertical-align:top; }
+.support-admin-table tr:hover td { background:#fbf7ec; }
+.support-admin-message { white-space:pre-wrap; overflow-wrap:anywhere; min-width:220px; max-width:390px; line-height:1.55; }
+.support-admin-reply { display:block; width:min(100%,520px); min-height:145px; padding:13px; border:1px solid #cdbb8d; border-radius:9px; font:15px/1.5 Arial,sans-serif; resize:vertical; background:#fff; color:#20392b; }
+.support-admin-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:230px; }
+.support-admin-actions select,.support-admin-actions button { padding:9px 11px; border:1px solid #c9ae65; border-radius:8px; background:#fffaf0; color:#244b36; font-weight:600; }
+.support-admin-send { background:#174b37 !important; color:#fff !important; }
+@media(max-width:700px){.support-admin-table{min-width:760px}.support-admin-reply{min-width:230px}}
+
+</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
@@ -405,41 +407,19 @@ body.halloween-accueil .home-hero{
   <aside class="sidebar">
     <div class="brand-mark">✥</div><div class="brand-name">Trésors<br>de nos Villages</div>
     <nav class="nav-list" aria-label="Menu explorateur">
-      <div class="nav-group">
-        <button class="nav-group-toggle" type="button" aria-expanded="true" aria-controls="nav-explorer" onclick="toggleNavGroup(this)"><span>🧭 &nbsp; Explorer</span><span class="nav-chevron">⌄</span></button>
-        <div class="nav-submenu" id="nav-explorer">
-          <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
-          <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
-        </div>
-      </div>
-      <div class="nav-group">
-        <button class="nav-group-toggle" type="button" aria-expanded="true" aria-controls="nav-espace" onclick="toggleNavGroup(this)"><span>👤 &nbsp; Mon espace</span><span class="nav-chevron">⌄</span></button>
-        <div class="nav-submenu" id="nav-espace">
-          <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
-          <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
-          <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
-          <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
-        </div>
-      </div>
-      <div class="nav-group">
-        <button class="nav-group-toggle" type="button" aria-expanded="true" aria-controls="nav-communaute" onclick="toggleNavGroup(this)"><span>🤝 &nbsp; Communauté</span><span class="nav-chevron">⌄</span></button>
-        <div class="nav-submenu" id="nav-communaute">
-          <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
-          <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
-        </div>
-      </div>
-      <div class="nav-group">
-        <button class="nav-group-toggle" type="button" aria-expanded="true" aria-controls="nav-informations" onclick="toggleNavGroup(this)"><span>❔ &nbsp; Informations</span><span class="nav-chevron">⌄</span></button>
-        <div class="nav-submenu" id="nav-informations">
-          <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
-          <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
-          <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
-        </div>
-      </div>
-      <div class="nav-bottom-actions">
-        <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" hidden>⚙ &nbsp; Administration</button>
-        <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
-      </div>
+      <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
+      <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
+      <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
+      <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
+      <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
+      <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
+      <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
+      <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
+      <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
+      <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
+      <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
+      <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" hidden>⚙ &nbsp; Administration</button>
+      <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
     </nav>
     <div class="sidebar-note">Bonne exploration !</div>
   </aside>
@@ -2079,6 +2059,35 @@ window.adminOpenSupport = adminOpenSupport;
 window.adminOpenAdventures = adminOpenAdventures;
 window.adminComingSoon = adminComingSoon;
 
+function renderAdminSupportTable(requests, statusEl, list){
+  list.replaceChildren();
+  if(!requests.length){list.textContent='Aucune demande d’aide pour le moment.';return;}
+  const wrap=document.createElement('div');wrap.className='support-admin-scroll';
+  const table=document.createElement('table');table.className='support-admin-table';
+  const thead=document.createElement('thead');const hr=document.createElement('tr');
+  ['Joueur / demande','Message','Date','Réponse','Suivi'].forEach(label=>{const th=document.createElement('th');th.textContent=label;hr.append(th);});
+  thead.append(hr);table.append(thead);
+  const tbody=document.createElement('tbody');
+  for(const request of requests){
+    const tr=document.createElement('tr');
+    const who=document.createElement('td');const subject=document.createElement('strong');subject.textContent=request.subject||'Demande';
+    const user=document.createElement('div');user.textContent=request.user_name||request.user_email||`Compte ${request.user_id||'joueur'}`;
+    who.append(subject,user);
+    const message=document.createElement('td');message.className='support-admin-message';message.textContent=request.message||'';
+    const date=document.createElement('td');date.textContent=request.created_at?new Date(request.created_at).toLocaleString('fr-FR'):'—';
+    const replyCell=document.createElement('td');const reply=document.createElement('textarea');reply.className='support-admin-reply';reply.placeholder='Écris ta réponse au joueur ici…';reply.setAttribute('aria-label',`Réponse à ${request.subject||'la demande'}`);replyCell.append(reply);
+    const actions=document.createElement('td');actions.className='support-admin-actions';
+    const state=document.createElement('select');state.setAttribute('aria-label','Statut de la demande');
+    for(const [value,label] of [['en_attente','En attente'],['en_cours','En cours'],['repondu','Répondu'],['ferme','Fermé']]){const option=document.createElement('option');option.value=value;option.textContent=label;option.selected=value===request.status;state.append(option);}
+    const send=document.createElement('button');send.type='button';send.className='support-admin-send';send.textContent='Envoyer la réponse';
+    send.addEventListener('click',async()=>{if(reply.value.trim().length<2){statusEl.textContent='Écris ta réponse avant de l’envoyer.';reply.focus();return;}send.disabled=true;try{await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/replies`,{method:'POST',body:JSON.stringify({message:reply.value})});statusEl.textContent='Réponse enregistrée.';await window.openAdminPanel();}catch(e){statusEl.textContent=e.message||'Envoi impossible.';send.disabled=false;}});
+    const update=document.createElement('button');update.type='button';update.textContent='Mettre à jour';
+    update.addEventListener('click',async()=>{update.disabled=true;try{await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/status`,{method:'PATCH',body:JSON.stringify({status:state.value})});statusEl.textContent='Statut mis à jour.';await window.openAdminPanel();}catch(e){statusEl.textContent=e.message||'Mise à jour impossible.';update.disabled=false;}});
+    actions.append(state,update,send);tr.append(who,message,date,replyCell,actions);tbody.append(tr);
+  }
+  table.append(tbody);wrap.append(table);list.append(wrap);
+}
+
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
   const supportArea = document.getElementById("admin-support-area");
@@ -2092,47 +2101,7 @@ window.openAdminPanel = async function() {
     statusEl.textContent = "Accès administrateur confirmé.";
     const result = await adminApi("/api/admin/support");
     const list = document.getElementById("admin-support-list");
-    list.replaceChildren();
-    if (!result.requests?.length) {
-      list.textContent = "Aucune demande d’aide pour le moment.";
-    } else {
-      for (const request of result.requests) {
-        const card = document.createElement("article");
-        card.className = "feature";
-        const title = document.createElement("h4");
-        title.textContent = `${request.subject} — ${request.status}`;
-        const message = document.createElement("p");
-        message.textContent = request.message;
-        const reply = document.createElement("textarea");
-        reply.placeholder = "Écrire une réponse au joueur…";
-        reply.setAttribute("aria-label", `Réponse à ${request.subject}`);
-        const send = document.createElement("button");
-        send.type = "button";
-        send.textContent = "Envoyer la réponse";
-        send.addEventListener("click", async () => {
-          send.disabled = true;
-          try {
-            await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/replies`, { method: "POST", body: JSON.stringify({ message: reply.value }) });
-            statusEl.textContent = "Réponse enregistrée.";
-            await window.openAdminPanel();
-          } catch (error) { statusEl.textContent = error.message; send.disabled = false; }
-        });
-        const state = document.createElement("select");
-        state.setAttribute("aria-label", `Statut de ${request.subject}`);
-        for (const [value, label] of [["en_attente","En attente"],["en_cours","En cours"],["repondu","Répondu"],["ferme","Fermé"]]) {
-          const option = document.createElement("option"); option.value = value; option.textContent = label; option.selected = value === request.status; state.append(option);
-        }
-        const update = document.createElement("button");
-        update.type = "button"; update.textContent = "Mettre à jour le statut";
-        update.addEventListener("click", async () => {
-          update.disabled = true;
-          try { await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/status`, { method: "PATCH", body: JSON.stringify({ status: state.value }) }); statusEl.textContent = "Statut mis à jour."; await window.openAdminPanel(); }
-          catch (error) { statusEl.textContent = error.message; update.disabled = false; }
-        });
-        card.append(title, message, reply, send, state, update);
-        list.append(card);
-      }
-    }
+    renderAdminSupportTable(result.requests || [], statusEl, list);
     supportArea.hidden = false;
   } catch (error) {
     window.setAdminAccessGranted(false);
@@ -2298,15 +2267,6 @@ async function validatePlayerGps(adventureId, stepId) {
     alert(error.code === 1 ? 'Autorise la géolocalisation pour valider ton arrivée.' : 'Position GPS indisponible. Réessaie dehors.');
     if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; }
   }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
-}
-
-function toggleNavGroup(button){
-  const targetId = button.getAttribute("aria-controls");
-  const submenu = document.getElementById(targetId);
-  if(!submenu) return;
-  const willOpen = button.getAttribute("aria-expanded") !== "true";
-  button.setAttribute("aria-expanded", String(willOpen));
-  submenu.hidden = !willOpen;
 }
 
 function showDashSection(id){
