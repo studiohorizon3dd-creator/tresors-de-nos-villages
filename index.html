@@ -330,6 +330,16 @@ body.halloween-accueil .home-hero{
 
 
 @media(max-width:900px){.nav-list.nav-accordion{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start}.nav-accordion .nav-btn{width:100%;text-align:left}.nav-category{width:100%}.nav-bottom-links{width:100%}}
+
+/* Carte puzzle des villages — première version visuelle */
+.puzzle-section{padding:42px 28px;margin:28px 0;background:linear-gradient(145deg,#fbf2dc,#efe2c5);border:1px solid #d7c79f;border-radius:22px;box-shadow:0 12px 34px rgba(45,54,35,.10)}
+.puzzle-head{text-align:center;max-width:760px;margin:0 auto 24px}.puzzle-head .eyebrow{color:#77752b;font-weight:bold;letter-spacing:1.5px}.puzzle-head h2{color:#174b35;font-size:clamp(26px,4vw,38px);margin:8px 0}.puzzle-head p{color:#59675a;line-height:1.6}
+.puzzle-progress{display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 24px}.puzzle-progress strong{font-size:22px;color:#174b35}.puzzle-progress span{color:#657164}
+.puzzle-board{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:9px;max-width:850px;margin:0 auto;padding:16px;background:#e6dcc4;border:1px solid #c7b991;border-radius:18px;box-shadow:inset 0 2px 10px rgba(63,55,36,.10)}
+.puzzle-piece{position:relative;min-height:130px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:14px 8px;color:#777d78;background:linear-gradient(145deg,#d5d6d0,#bfc3bd);border:2px solid #aeb4ad;border-radius:18px;filter:grayscale(1);box-shadow:inset 0 2px 7px rgba(255,255,255,.55),0 3px 7px rgba(50,50,40,.10);clip-path:polygon(0 0,40% 0,48% 7%,56% 0,100% 0,100% 42%,93% 50%,100% 58%,100% 100%,58% 100%,50% 93%,42% 100%,0 100%,0 58%,7% 50%,0 42%)}
+.puzzle-piece strong{font-size:17px;color:#59615b}.puzzle-piece small{margin-top:6px;font-size:11px;letter-spacing:.8px;text-transform:uppercase}.puzzle-piece.mystery{border:2px dashed #9c874c;background:linear-gradient(145deg,#e8e0c9,#c9c1ad);color:#8c7740}.puzzle-piece.mystery strong{color:#78652e}.puzzle-piece .piece-question{font-size:27px;margin-bottom:4px;color:#8a784b}
+.puzzle-countdown{max-width:850px;margin:18px auto 0;padding:20px;text-align:center;border-radius:16px;background:#174b35;color:#fbf2dc}.puzzle-countdown strong{display:block;font-size:21px;color:#f3d78e;margin-bottom:7px}.puzzle-countdown p{margin:0;color:#f8efd9;line-height:1.5}.puzzle-note{max-width:850px;margin:12px auto 0;text-align:center;color:#687365;font-size:12px}
+@media(max-width:650px){.puzzle-section{padding:28px 14px}.puzzle-board{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:9px}.puzzle-piece{min-height:112px}.puzzle-piece:last-child{grid-column:1/-1}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -353,6 +363,7 @@ body.halloween-accueil .home-hero{
       <button class="nav-btn active" onclick="goTo('accueil')">⌂ &nbsp; Accueil</button>
       <button class="nav-btn" onclick="goTo('concept')">♧ &nbsp; Le concept</button>
       <button class="nav-btn" onclick="goTo('villages-public')">▤ &nbsp; Les villages</button>
+      <button class="nav-btn" onclick="goTo('carte-puzzle-public')">🧩 &nbsp; Carte aux pièces mystères</button>
       <button class="nav-btn" onclick="showAccount()">♙ &nbsp; Mon compte</button>
     </nav>
     <div class="sidebar-note">Explorez · Observez<br>Réfléchissez · Trouvez !</div>
@@ -400,7 +411,25 @@ body.halloween-accueil .home-hero{
         <article class="home-step"><strong>⭐ 4</strong><p>Gagnez des étoiles et des badges</p></article>
       </div>
     </section>
-    <section class="section" id="villages-public">
+    <section class="puzzle-section" id="carte-puzzle-public" aria-labelledby="puzzle-public-title">
+  <div class="puzzle-head">
+    <p class="eyebrow">LA CHASSE AUX PIÈCES</p>
+    <h2 id="puzzle-public-title">🧩 La carte aux pièces mystères</h2>
+    <p>Le puzzle de nos villages va se construire petit à petit. Les pièces encore mystérieuses restent grisées ; tu découvriras les prochaines révélations au fil de l’aventure.</p>
+  </div>
+  <div class="puzzle-progress"><strong id="puzzle-found-count">0 / 5 pièces découvertes</strong><span>· Le puzzle commence dans le Pas-de-Calais</span></div>
+  <div class="puzzle-board" role="img" aria-label="Aperçu des pièces du puzzle autour de Humbert, Sempy et les villages voisins">
+    <div class="puzzle-piece"><strong>Humbert</strong><small>Pièce mystère</small></div>
+    <div class="puzzle-piece"><strong>Sempy</strong><small>Pièce mystère</small></div>
+    <div class="puzzle-piece"><strong>Bimont</strong><small>Pièce mystère</small></div>
+    <div class="puzzle-piece"><strong>Alette</strong><small>Pièce mystère</small></div>
+    <div class="puzzle-piece mystery"><span class="piece-question">?</span><strong>Prochaine pièce</strong><small>En préparation</small></div>
+  </div>
+  <div class="puzzle-countdown"><strong>La prochaine pièce se prépare…</strong><p>Le village sera annoncé lorsque le compte à rebours sera lancé par l’administration.</p></div>
+  <p class="puzzle-note">Carte évolutive : les pièces seront révélées progressivement. Les emplacements illustrés seront ajustés sur la carte géographique définitive.</p>
+</section>
+
+<section class="section" id="villages-public">
       <h2 class="section-title">Des aventures au cœur de nos villages</h2>
       <p class="section-intro">Le projet se construit avec les communes pour proposer des parcours de découverte et mettre en valeur le patrimoine local. Les villages et aventures disponibles seront annoncés ici au fur et à mesure de leur confirmation.</p>
     </section>
@@ -969,6 +998,7 @@ body.halloween-accueil .home-hero{
       <div class="admin-nav-label">GESTION DES AVENTURES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenPuzzle()"><span>🧩</span> Carte puzzle</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenLevels()"><span>✦</span> Niveaux par village</button>
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Mystères & événements')"><span>✨</span> Mystères & événements</button>
       <div class="admin-nav-label">GESTION DES MEMBRES</div>
@@ -1082,6 +1112,19 @@ body.halloween-accueil .home-hero{
         <div id="admin-levels-list" class="admin-recent-list"><p>Les niveaux apparaîtront ici.</p></div>
       </div>
 
+      <div id="admin-puzzle-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>Gestion de la carte puzzle</h3><p>Choisis le village de la prochaine pièce et programme sa révélation.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadPuzzle()">↻ Actualiser</button></div>
+        <div class="admin-info-panel" style="margin-bottom:16px"><strong>Fonctionnement :</strong> une pièce ajoutée commence en préparation. Tu peux la révéler le jour J ; elle apparaîtra alors en couleur sur la carte publique.</div>
+        <p id="admin-puzzle-status" class="status" role="status" aria-live="polite">Chargement…</p>
+        <div id="admin-puzzle-list" class="admin-recent-list"></div>
+        <div class="admin-info-panel" style="margin-top:18px"><h3>Préparer une nouvelle pièce</h3>
+          <form id="admin-puzzle-form" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px">
+            <label style="display:grid;gap:6px">Village à révéler<input id="admin-puzzle-village" required maxlength="150" placeholder="Ex. Humbert" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></label>
+            <label style="display:grid;gap:6px">Date et heure de révélation<input id="admin-puzzle-date" type="datetime-local" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></label>
+            <div style="grid-column:1/-1"><button id="admin-puzzle-save" class="admin-primary-btn" type="submit">Préparer la pièce</button></div>
+          </form>
+        </div>
+      </div>
       <div id="admin-villages-view" class="admin-subview" hidden>
         <div class="admin-section-heading">
           <div><h3>Gestion des villages</h3><p>Préparer les communes et suivre leur confirmation avant toute publication.</p></div>
@@ -1556,13 +1599,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-levels-view","admin-news-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -1711,6 +1754,26 @@ if(testerForm){
 // ===== Espace personnel du testeur =====
 const testerFeedbackForm = document.getElementById("tester-feedback-form");
 const testerFormulaLabels = {enfant:"Enfant",facile:"Facile",famille:"Famille",moyen:"Moyen",difficile:"Difficile",extreme:"Extrême",nuit:"Nuit"};
+function formatTesterDuration(totalSeconds){
+  const seconds=Math.max(0,Number(totalSeconds)||0);
+  const hours=Math.floor(seconds/3600),minutes=Math.floor((seconds%3600)/60),rest=seconds%60;
+  return hours>0?`${hours} h ${minutes} min ${rest} s`:`${minutes} min ${rest} s`;
+}
+function testerAutomaticReport(report){
+  if(!report)return "";
+  const lines=[
+    "BILAN AUTOMATIQUE DU TEST",
+    `Village : ${report.village||report.village_slug||"—"}`,
+    `Niveau : ${testerFormulaLabels[report.level]||report.level||"—"}`,
+    `Parcours : ${report.adventure_title||"—"}`,
+    `Durée du test : ${formatTesterDuration(report.duration_seconds)}`,
+    `Étapes validées : ${report.validated_steps||0}/${report.total_steps||0}`,
+    `Étoiles : ${report.stars_earned||0}/${report.total_stars||0}`,
+    `Validations GPS enregistrées : ${(report.gps_validations||[]).length}`,
+    `Retours envoyés pendant ce test : ${report.feedback_count||0}`
+  ];
+  return lines.join("\n")+"\n\nMon retour complémentaire : ";
+}
 window.loadTesterSpace = async function(){
   const status=document.getElementById("tester-space-status");
   const accessList=document.getElementById("tester-space-access-list");
@@ -1741,8 +1804,34 @@ window.loadTesterSpace = async function(){
         const fill=document.createElement("div");fill.style.cssText=`height:100%;width:${mission.total_steps?Math.min(100,mission.validated_steps/mission.total_steps*100):0}%;background:#28704d;border-radius:20px`;progress.appendChild(fill);
         card.append(title,detail,progress);
         if(mission.adventure_id){
-          const action=document.createElement("button");action.type="button";action.className="small-btn";action.textContent=mission.completed?"Revoir mon parcours":"Commencer / continuer le test";
-          action.addEventListener("click",()=>{showDashSection("dash-adventures");openPlayerAdventure(mission.adventure_id);});card.appendChild(action);
+          const timerInfo=document.createElement("p");timerInfo.style.cssText="font-size:13px;line-height:1.5;margin:8px 0;color:#53624f";
+          const timer=mission.timer;
+          if(timer?.ended_at){
+            timerInfo.textContent=`⏱️ Test terminé en ${formatTesterDuration(timer.duration_seconds)}. Rapport automatique enregistré.`;
+            if(timer.report_snapshot){
+              const reportButton=document.createElement("button");reportButton.type="button";reportButton.className="admin-secondary-btn";reportButton.textContent="Voir le rapport automatique";
+              reportButton.addEventListener("click",()=>{const field=document.getElementById("tester-level-review-report");if(field)field.value=testerAutomaticReport(timer.report_snapshot);document.getElementById("tester-level-review-form")?.scrollIntoView({behavior:"smooth",block:"center"});});
+              card.appendChild(reportButton);
+            }
+          }else if(timer?.started_at){
+            timerInfo.textContent="⏱️ Chronomètre en cours depuis le "+new Date(timer.started_at).toLocaleString("fr-FR")+". Il reprendra automatiquement si tu reviens plus tard.";
+          }else{
+            timerInfo.textContent="⏱️ Le chronomètre démarre lorsque tu lances cette mission.";
+          }
+          card.appendChild(timerInfo);
+          const action=document.createElement("button");action.type="button";action.className="small-btn";
+          action.textContent=mission.completed?"Revoir mon parcours":(timer?.started_at?"Reprendre le test":"Démarrer le test");
+          action.addEventListener("click",async()=>{
+            action.disabled=true;
+            try{
+              if(!mission.completed){
+                await profileApi("/api/testers/timer/start",{method:"POST",body:JSON.stringify({adventure_id:mission.adventure_id})});
+              }
+              showDashSection("dash-adventures");
+              await openPlayerAdventure(mission.adventure_id,true);
+            }catch(error){alert(error.message||"Impossible de démarrer le test.");action.disabled=false;}
+          });
+          card.appendChild(action);
         }
         missionsBox.appendChild(card);
       });
@@ -2022,6 +2111,24 @@ function adminEditVillage(village) {
 }
 
 window.adminResetVillageForm = adminResetVillageForm;
+window.adminOpenPuzzle = async function(){ adminSetView("admin-puzzle-view","Carte puzzle"); await window.adminLoadPuzzle(); };
+window.adminLoadPuzzle = async function(){
+  const status=document.getElementById("admin-puzzle-status"), list=document.getElementById("admin-puzzle-list"); if(!status||!list)return;
+  status.textContent="Chargement des pièces…"; list.replaceChildren();
+  try { const data=await adminApi("/api/admin/puzzle"); const pieces=Array.isArray(data.pieces)?data.pieces:[];
+    if(!pieces.length){list.textContent="Aucune pièce préparée pour le moment.";} else pieces.forEach(piece=>{
+      const card=document.createElement("div"); card.className="admin-info-panel"; card.style.marginBottom="10px";
+      const title=document.createElement("strong"); title.textContent=piece.village_name; card.appendChild(title);
+      const info=document.createElement("p"); info.textContent="Statut : "+({preparing:"En préparation",hidden:"Mystère",revealed:"Révélée"}[piece.status]||piece.status)+(piece.reveal_at?" · Révélation prévue : "+new Date(piece.reveal_at).toLocaleString("fr-FR"):""); card.appendChild(info);
+      const actions=document.createElement("div"); actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
+      [["Révéler la pièce","revealed"],["Remettre en mystère","hidden"],["En préparation","preparing"]].forEach(([label,value])=>{const b=document.createElement("button");b.type="button";b.className="admin-secondary-btn";b.textContent=label;b.addEventListener("click",async()=>{try{await adminApi(`/api/admin/puzzle/${piece.id}`,{method:"PATCH",body:JSON.stringify({status:value})});await window.adminLoadPuzzle();}catch(e){status.textContent=e.message||"Erreur de mise à jour.";}});actions.appendChild(b);});
+      card.appendChild(actions); list.appendChild(card);
+    }); status.textContent=pieces.length+" pièce(s) enregistrée(s).";
+  } catch(e){status.textContent=e.message||"Impossible de charger la carte puzzle.";}
+};
+const puzzleAdminForm=document.getElementById("admin-puzzle-form");
+if(puzzleAdminForm) puzzleAdminForm.addEventListener("submit",async event=>{event.preventDefault();const status=document.getElementById("admin-puzzle-status"),button=document.getElementById("admin-puzzle-save");button.disabled=true;status.textContent="Enregistrement…";try{const village_name=document.getElementById("admin-puzzle-village").value.trim();const raw=document.getElementById("admin-puzzle-date").value;await adminApi("/api/admin/puzzle",{method:"POST",body:JSON.stringify({village_name,reveal_at:raw?new Date(raw).toISOString():null})});puzzleAdminForm.reset();status.textContent="Pièce préparée.";await window.adminLoadPuzzle();}catch(e){status.textContent=e.message||"Impossible de préparer la pièce.";}finally{button.disabled=false;}});
+
 window.adminOpenVillages = async function() {
   adminSetView("admin-villages-view", "Gestion des villages");
   await window.adminLoadVillages();
@@ -2482,7 +2589,9 @@ window.loadPlayerAdventures = async function() {
   } catch (error) { status.textContent = error.message || 'Impossible de charger tes aventures.'; }
 };
 
-async function openPlayerAdventure(id) {
+window.currentAdventureIsTester = false;
+async function openPlayerAdventure(id, testerMode = false) {
+  window.currentAdventureIsTester = !!testerMode;
   const status = document.getElementById('player-adventures-status');
   const list = document.getElementById('player-adventures-list');
   const detail = document.getElementById('player-adventure-detail');
@@ -2494,6 +2603,21 @@ async function openPlayerAdventure(id) {
     ]);
     document.getElementById('player-adventure-title').textContent = data.adventure.title;
     document.getElementById('player-adventure-progress').textContent = `⭐ ${progress.stars_earned} / ${progress.total_stars} étoiles · ${progress.validated_steps} / ${progress.total_steps} étapes validées`;
+    if(testerMode && progress.completed){
+      try{
+        const timerResult=await profileApi("/api/testers/timer/finish",{method:"POST",body:JSON.stringify({adventure_id:id})});
+        const report=timerResult.report||timerResult.session?.report_snapshot;
+        const reportField=document.getElementById("tester-level-review-report");
+        if(report && reportField && !reportField.value.trim()) reportField.value=testerAutomaticReport(report);
+        const reportNote=document.createElement("p");reportNote.style.cssText="padding:11px;margin:10px 0;background:#f1ead6;border-left:3px solid #d7ad45;border-radius:7px;line-height:1.5";
+        reportNote.textContent=report?`⏱️ Test terminé en ${formatTesterDuration(report.duration_seconds)}. Le rapport automatique est prêt dans ton espace testeur.`:"Ton parcours est terminé. Tu peux préparer ton bilan dans ton espace testeur.";
+        document.getElementById("player-adventure-progress").after(reportNote);
+      }catch(timerError){
+        const timerNote=document.createElement("p");timerNote.style.cssText="color:#8a4b22;font-size:13px";
+        timerNote.textContent=timerError.message||"Le rapport automatique n’a pas pu être enregistré.";
+        document.getElementById("player-adventure-progress").after(timerNote);
+      }
+    }
     stepsBox.innerHTML = '';
     data.steps.forEach(step => {
       const article = document.createElement('article'); article.className = 'feature'; article.style.margin = '12px 0';
@@ -2521,7 +2645,7 @@ async function validatePlayerGps(adventureId, stepId) {
       await playerApi(`/api/adventures/${adventureId}/steps/${stepId}/validate-gps`, {
         method: 'POST', body: JSON.stringify({ latitude: position.coords.latitude, longitude: position.coords.longitude, accuracy: position.coords.accuracy })
       });
-      await openPlayerAdventure(adventureId);
+      await openPlayerAdventure(adventureId, window.currentAdventureIsTester);
     } catch (error) { alert(error.message || 'La validation GPS a échoué.'); if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; } }
   }, error => {
     alert(error.code === 1 ? 'Autorise la géolocalisation pour valider ton arrivée.' : 'Position GPS indisponible. Réessaie dehors.');
@@ -3482,6 +3606,17 @@ if(adminPlayersSearch){
   });
 }
 </script>
+<script>
+(async function loadPublicPuzzle(){
+  try { const response=await fetch("https://tresors-de-nos-villages-serveur.onrender.com/api/puzzle"); if(!response.ok)return; const data=await response.json(); const pieces=Array.isArray(data.pieces)?data.pieces:[];
+    const revealed=pieces.filter(p=>p.status==="revealed"); const count=document.getElementById("puzzle-found-count"); if(count)count.textContent=`${revealed.length} / ${Math.max(5,pieces.length)} pièces découvertes`;
+    const board=document.querySelector("#carte-puzzle-public .puzzle-board"); if(!board||!pieces.length)return; board.replaceChildren();
+    const ordered=[...revealed,...pieces.filter(p=>p.status!=="revealed")]; ordered.forEach(piece=>{const el=document.createElement("div");el.className="puzzle-piece"+(piece.status==="revealed"?" revealed":""); if(piece.status==="revealed"){el.style.filter="none";el.style.background="linear-gradient(145deg,#d7ad45,#b68a2d)";el.style.color="#173e2d";} const name=document.createElement("strong");name.textContent=piece.status==="revealed"?piece.village_name:"Pièce mystère";el.appendChild(name);const small=document.createElement("small");small.textContent=piece.status==="revealed"?"Découverte":piece.status==="preparing"?"En préparation":"À découvrir";el.appendChild(small);board.appendChild(el);});
+    const next=pieces.find(p=>p.status==="preparing"); const banner=document.querySelector("#carte-puzzle-public .puzzle-countdown"); if(next&&banner){banner.querySelector("strong").textContent="Prochaine pièce en préparation : "+next.village_name;banner.querySelector("p").textContent=next.reveal_at?"Révélation prévue le "+new Date(next.reveal_at).toLocaleString("fr-FR"):"La date de révélation sera annoncée prochainement.";}
+  } catch(e){console.warn("Carte puzzle indisponible",e);}
+})();
+</script>
+
 </body>
 </html>
 ```
