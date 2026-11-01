@@ -902,6 +902,7 @@ body.halloween-accueil .home-hero{
       <div class="admin-nav-label">GESTION DES AVENTURES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenLevels()"><span>✦</span> Niveaux par village</button>
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Mystères & événements')"><span>✨</span> Mystères & événements</button>
       <div class="admin-nav-label">GESTION DES MEMBRES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
@@ -984,6 +985,20 @@ body.halloween-accueil .home-hero{
         <p id="admin-tester-feedback-status" class="status" role="status" aria-live="polite">Les retours seront chargés ici.</p>
         <div id="admin-tester-feedback-list" class="admin-recent-list tester-table-wrap"><p>Aucun retour chargé.</p></div>
         <p class="admin-footnote">Les accès testeurs sont indépendants des achats. Un testeur ne voit que les villages et niveaux qui lui sont attribués.</p>
+      </div>
+
+      <div id="admin-levels-view" class="admin-subview" hidden>
+        <div class="admin-section-heading">
+          <div><h3>Catalogue des niveaux par village</h3><p>Modifie le nombre d’énigmes, les étoiles, le type d’accès et le statut de chaque niveau.</p></div>
+          <button type="button" class="admin-secondary-btn" onclick="adminLoadVillageLevels()">↻ Actualiser</button>
+        </div>
+        <div class="admin-info-panel" style="margin-bottom:14px">
+          <label for="admin-level-village" style="display:block;margin-bottom:7px"><strong>Choisir un village</strong></label>
+          <select id="admin-level-village" style="width:100%;max-width:420px;padding:11px;border:1px solid #d4c49c;border-radius:9px;background:#fff"><option value="">Chargement des villages…</option></select>
+          <p class="admin-footnote">Chaque village possède ses propres réglages. Enfant et Facile commencent avec 10 énigmes et 10 étoiles ; tu peux modifier ces valeurs.</p>
+        </div>
+        <p id="admin-levels-status" class="status" role="status" aria-live="polite">Choisis un village pour afficher ses niveaux.</p>
+        <div id="admin-levels-list" class="admin-recent-list"><p>Les niveaux apparaîtront ici.</p></div>
       </div>
 
       <div id="admin-villages-view" class="admin-subview" hidden>
@@ -1402,13 +1417,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-villages-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-villages-view","admin-levels-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-villages-view"?"adminOpenVillages":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-villages-view"?"adminOpenVillages":view==="admin-levels-view"?"adminOpenLevels":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -1859,6 +1874,63 @@ if (adminVillageForm) {
     }
   });
 }
+
+const ADMIN_LEVEL_DEFINITIONS = [
+  ["enfant","Enfant"],["facile","Facile"],["famille","Famille"],["moyen","Moyen"],
+  ["difficile","Difficile"],["extreme","Extrême"],["nuit","Nuit"]
+];
+window.adminOpenLevels = async function(){
+  adminSetView("admin-levels-view","Niveaux par village");
+  const select=document.getElementById("admin-level-village");
+  if(!select.dataset.loaded){
+    try{
+      const data=await adminApi("/api/admin/villages");
+      const villages=Array.isArray(data.villages)?data.villages:[];
+      select.replaceChildren();
+      const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choisir un village…";select.appendChild(placeholder);
+      villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;select.appendChild(o);});
+      select.dataset.loaded="1";
+      if(villages.length===1)select.value=villages[0].slug;
+    }catch(e){document.getElementById("admin-levels-status").textContent=e.message||"Impossible de charger les villages.";return;}
+    select.addEventListener("change",()=>window.adminLoadVillageLevels());
+  }
+  if(select.value) await window.adminLoadVillageLevels();
+};
+window.adminLoadVillageLevels = async function(){
+  const select=document.getElementById("admin-level-village"), status=document.getElementById("admin-levels-status"), list=document.getElementById("admin-levels-list");
+  if(!select||!status||!list)return;
+  const village=select.value;
+  if(!village){status.textContent="Choisis un village pour gérer ses niveaux.";list.textContent="Aucun village sélectionné.";return;}
+  status.textContent="Chargement des niveaux…";list.replaceChildren();
+  try{
+    const data=await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);
+    const existing=new Map((Array.isArray(data.levels)?data.levels:[]).map(x=>[x.level_key,x]));
+    const table=document.createElement("table");table.style.cssText="width:100%;min-width:780px;border-collapse:collapse;font-size:13px";
+    const thead=document.createElement("thead"),hr=document.createElement("tr");
+    ["Niveau","Énigmes","Étoiles","Accès","Statut","Action"].forEach(t=>{const th=document.createElement("th");th.textContent=t;th.style.cssText="text-align:left;padding:10px;border-bottom:1px solid #ded9ca;color:#244b36";hr.appendChild(th);});thead.appendChild(hr);table.appendChild(thead);
+    const tbody=document.createElement("tbody");
+    for(const [key,label] of ADMIN_LEVEL_DEFINITIONS){
+      const saved=existing.get(key)||{};const tr=document.createElement("tr");
+      const nameCell=document.createElement("td");nameCell.style.cssText="padding:10px;border-bottom:1px solid #eee8d9;min-width:120px";
+      const name=document.createElement("input");name.value=saved.display_name||label;name.maxLength=60;name.setAttribute("aria-label",`Nom du niveau ${label}`);name.style.cssText="width:100%;padding:8px;border:1px solid #d4c49c;border-radius:7px";nameCell.appendChild(name);tr.appendChild(nameCell);
+      const makeNumber=(value,min,max,aria)=>{const input=document.createElement("input");input.type="number";input.min=String(min);input.max=String(max);input.step="1";input.value=String(value);input.setAttribute("aria-label",aria);input.style.cssText="width:82px;padding:8px;border:1px solid #d4c49c;border-radius:7px";return input;};
+      const riddles=makeNumber(saved.riddle_count??10,1,200,"Nombre d’énigmes"),stars=makeNumber(saved.star_count??10,0,1000,"Nombre d’étoiles");
+      for(const input of [riddles,stars]){const td=document.createElement("td");td.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";td.appendChild(input);tr.appendChild(td);}
+      const access=document.createElement("select");[["gratuit","Gratuit"],["payant","Payant"],["testeur","Testeur"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;access.appendChild(o);});access.value=saved.access_type||"gratuit";
+      const statusSelect=document.createElement("select");[["preparation","En préparation"],["actif","Actif"],["desactive","Désactivé"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;statusSelect.appendChild(o);});statusSelect.value=saved.status||"preparation";
+      for(const sel of [access,statusSelect]){sel.style.cssText="max-width:130px;padding:8px;border:1px solid #d4c49c;border-radius:7px;background:#fff";const td=document.createElement("td");td.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";td.appendChild(sel);tr.appendChild(td);}
+      const actionCell=document.createElement("td");actionCell.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";
+      const save=document.createElement("button");save.type="button";save.textContent="Enregistrer";save.className="admin-secondary-btn";save.addEventListener("click",async()=>{
+        save.disabled=true;save.textContent="Enregistrement…";
+        try{await adminApi("/api/admin/village-levels",{method:"PUT",body:JSON.stringify({village_slug:village,level_key:key,display_name:name.value.trim(),riddle_count:Number(riddles.value),star_count:Number(stars.value),access_type:access.value,status:statusSelect.value})});save.textContent="Enregistré ✓";status.textContent=`Niveau ${name.value.trim()} enregistré pour ${select.options[select.selectedIndex].text}.`;}
+        catch(e){alert(e.message||"Impossible d’enregistrer ce niveau.");save.textContent="Enregistrer";}
+        finally{save.disabled=false;}
+      });actionCell.appendChild(save);tr.appendChild(actionCell);tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
+    status.textContent=`${ADMIN_LEVEL_DEFINITIONS.length} niveaux prêts à être configurés pour ${select.options[select.selectedIndex].text}.`;
+  }catch(e){status.textContent=e.message||"Impossible de charger les niveaux.";list.textContent="Vérifie que la table village_level_settings existe dans Neon et que le serveur correspondant est déployé.";}
+};
 
 function adminComingSoon(name){
   adminSetView("admin-placeholder-view",name);
