@@ -1332,6 +1332,7 @@ showDashboard(
   }
 });
 const API_BASE = "https://tresors-de-nos-villages-serveur.onrender.com";
+window.API_BASE = API_BASE; // Rend l’adresse de l’API accessible aux scripts classiques de la page.
 async function getAdminBearerToken() {
   // Neon Better Auth exposes the short-lived JWT at /token (not /get-jwt-token).
   // The browser session cookie is sent only to Neon Auth; it is never copied to Render.
