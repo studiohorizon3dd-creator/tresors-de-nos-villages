@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -1737,9 +1738,12 @@ window.loadTesterSpace = async function(){
     else feedback.forEach(item=>{
       const card=document.createElement("article");card.style.cssText="padding:12px;margin:8px 0;border:1px solid #e4dcc8;border-radius:9px;background:#fffefa";
       const title=document.createElement("strong");title.textContent=`${item.village_slug} — ${testerFormulaLabels[item.formula]||item.formula}`;
-      const meta=document.createElement("p");meta.style.cssText="font-size:12px;color:#687366;margin:5px 0";meta.textContent=`${({bug:"Bug",idee:"Idée",experience:"Avis",autre:"Autre"})[item.category]||item.category} · ${{nouveau:"Nouveau",en_cours:"En cours",traite:"Traité"}[item.status]||item.status} · ${item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"Date inconnue"}`;
+      const statusLabels={en_attente:"En attente",en_cours_etude:"En cours d’étude",corrige:"Corrigé",refuse:"Refusé"};
+      const meta=document.createElement("p");meta.style.cssText="font-size:12px;color:#687366;margin:5px 0";meta.textContent=`${({bug:"Bug",idee:"Idée",experience:"Avis",autre:"Autre"})[item.category]||item.category} · ${statusLabels[item.status]||item.status} · ${item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"Date inconnue"}`;
       const message=document.createElement("p");message.style.cssText="white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0";message.textContent=item.message;
-      card.append(title,meta,message);history.appendChild(card);
+      card.append(title,meta,message);
+      if(item.admin_response){const reply=document.createElement("div");reply.style.cssText="margin-top:10px;padding:11px;border-left:3px solid #d7ad45;background:#fbf2dc;border-radius:7px";const replyTitle=document.createElement("strong");replyTitle.textContent="Réponse de l’administration";const replyText=document.createElement("p");replyText.style.cssText="white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0 0";replyText.textContent=item.admin_response;reply.append(replyTitle,replyText);card.appendChild(reply);}
+      history.appendChild(card);
     });
     status.textContent=`Espace chargé : ${access.length} accès autorisé${access.length>1?"s":""}.`;
   }catch(error){
@@ -1866,10 +1870,13 @@ window.adminLoadTesterFeedback = async function(){
       const heading=document.createElement("strong");heading.textContent=(item.tester_name||item.tester_email||"Testeur")+" — "+(item.village_name||item.village_slug)+" / "+(TESTER_FORMULAS.find(x=>x[0]===item.formula)?.[1]||item.formula);
       const meta=document.createElement("p");meta.style.cssText="font-size:12px;color:#687366;margin:5px 0";meta.textContent=( {bug:"Bug",idee:"Idée",experience:"Expérience",autre:"Autre"}[item.category]||item.category )+" · "+(item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"date inconnue");
       const message=document.createElement("p");message.style.cssText="white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0";message.textContent=item.message;
-      const select=document.createElement("select");select.style.cssText="padding:7px;border:1px solid #c9c1aa;border-radius:7px";
-      [["nouveau","Nouveau"],["en_cours","En cours"],["traite","Traité"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;select.appendChild(o);});select.value=item.status;
-      select.addEventListener("change",async()=>{select.disabled=true;try{await adminApi(`/api/admin/tester-feedback/${encodeURIComponent(item.id)}/status`,{method:"PATCH",body:JSON.stringify({status:select.value})});}catch(e){alert(e.message||"Impossible de modifier le statut.");select.value=item.status;}finally{select.disabled=false;}});
-      card.append(heading,meta,message,select);list.appendChild(card);
+      const replyLabel=document.createElement("label");replyLabel.textContent="Réponse à envoyer au testeur";replyLabel.style.cssText="display:block;margin-top:10px;font-weight:600";
+      const reply=document.createElement("textarea");reply.rows=3;reply.maxLength=3000;reply.placeholder="Écris ici ta réponse…";reply.value=item.admin_response||"";reply.style.cssText="display:block;width:100%;box-sizing:border-box;margin:6px 0 10px;padding:10px;border:1px solid #d4c49c;border-radius:8px";replyLabel.appendChild(reply);
+      const select=document.createElement("select");select.style.cssText="padding:7px;border:1px solid #c9c1aa;border-radius:7px;margin-right:8px";
+      [["en_attente","En attente"],["en_cours_etude","En cours d’étude"],["corrige","Corrigé"],["refuse","Refusé"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;select.appendChild(o);});select.value=item.status;
+      const save=document.createElement("button");save.type="button";save.className="small-btn";save.textContent="Enregistrer le suivi";
+      save.addEventListener("click",async()=>{save.disabled=true;try{await adminApi(`/api/admin/tester-feedback/${encodeURIComponent(item.id)}`,{method:"PATCH",body:JSON.stringify({status:select.value,admin_response:reply.value})});save.textContent="Enregistré";}catch(e){alert(e.message||"Impossible d’enregistrer le suivi.");}finally{save.disabled=false;}});
+      card.append(heading,meta,message,replyLabel,select,save);list.appendChild(card);
     });
     status.textContent=`${feedback.length} retour${feedback.length>1?"s":""} chargé${feedback.length>1?"s":""}.`;
   }catch(error){status.textContent=error.message||"Impossible de charger les retours.";list.textContent="Vérifie que la route /api/admin/tester-feedback est déployée et que la table tester_feedback existe.";}
@@ -3375,3 +3382,4 @@ if(adminPlayersSearch){
 </script>
 </body>
 </html>
+```
