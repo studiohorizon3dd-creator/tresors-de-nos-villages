@@ -1193,6 +1193,13 @@ body.halloween-accueil .home-hero{
         <p class="admin-footnote">Les visiteurs anonymes sont comptés sans nom ni adresse e-mail. Un visiteur est considéré actif s'il a consulté le site au cours des 5 dernières minutes.</p>
       </div>
 
+<style>
+#admin-players-view .players-visit-box{margin-top:12px;padding:11px 12px;border:1px solid #e6dac2;border-radius:11px;background:#fff9e9;display:grid;gap:5px;color:#173c2c}
+#admin-players-view .players-visit-box strong{font-family:Georgia,serif;font-size:15px}
+#admin-players-view .players-visit-box small{font-size:11px;color:#665f51}
+#admin-players-view .players-activity-row{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px;border-bottom:1px solid #eee5d5}
+#admin-players-view .players-activity-row small{grid-column:1/-1;color:#6c6659}
+</style>
       <div id="admin-players-view" class="admin-subview" hidden>
         <section class="players-hero">
           <div class="players-hero-icon">👥</div>
@@ -1234,7 +1241,7 @@ body.halloween-accueil .home-hero{
             <section class="players-side-card"><h4>▣ Historique des formules</h4><div id="players-formula-history"><p>Les détails d'achat et les dates d'activation ne sont pas fournis par l'API actuelle.</p></div></section>
           </aside>
         </div>
-        <p class="admin-footnote">Les données affichées proviennent de la route sécurisée /api/admin/players. Les actions de modification/suppression, l'historique détaillé des paiements et les dernières connexions ne sont pas disponibles dans l'API actuelle : aucun faux bouton ni aucune donnée fictive ne sont ajoutés.</p>
+        <p class="admin-footnote">Les données affichées proviennent de la route sécurisée /api/admin/players. La fréquentation est comptée par session authentifiée, sans compter les actualisations rapprochées. Les anciennes visites ne peuvent pas être reconstituées : le compteur démarre après installation.</p>
       </div>
 
       <div id="admin-testers-view" class="admin-subview" hidden>
@@ -1717,6 +1724,7 @@ const auth = createAuthClient(AUTH_URL);
     );
     window.loadExplorerProfile?.();
     window.loadLeaderboard?.();
+    window.trackPlayerVisit?.();
   }
   } catch (error) {
     console.error("Restauration de session :", error);
@@ -1742,6 +1750,7 @@ form.addEventListener("submit", async (event) => {
     status.textContent = "Compte créé. Bienvenue dans l’aventure !";
     showDashboard(name, email);
     window.loadExplorerProfile?.();
+    window.trackPlayerVisit?.();
   } catch (error) {
     status.textContent = error.message || "Une erreur est survenue. Réessaie.";
   }
@@ -1766,6 +1775,7 @@ showDashboard(
   user?.email || email
 );
     window.loadExplorerProfile?.();
+    window.trackPlayerVisit?.();
   } catch (error) {
     status.textContent = error.message || "Impossible de se connecter.";
   }
@@ -1818,6 +1828,29 @@ async function profileApi(path, options = {}) {
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
   return data;
 }
+
+// Compte une visite authentifiée par session de navigation (nouvelle visite après 30 min d'inactivité).
+window.trackPlayerVisit = async function(){
+  try{
+    const storageKey = "tdnv_visit_session_v1";
+    const timeKey = "tdnv_visit_last_activity_v1";
+    const now = Date.now();
+    let sessionKey = sessionStorage.getItem(storageKey);
+    const lastActivity = Number(sessionStorage.getItem(timeKey) || 0);
+    if(!sessionKey || !lastActivity || now - lastActivity > 30 * 60 * 1000){
+      sessionKey = (window.crypto?.randomUUID?.() || `visit-${now}-${Math.random().toString(36).slice(2,12)}`);
+      sessionStorage.setItem(storageKey, sessionKey);
+    }
+    sessionStorage.setItem(timeKey, String(now));
+    await profileApi("/api/profile/visits/session", {
+      method: "POST",
+      body: JSON.stringify({ session_key: sessionKey })
+    });
+  }catch(error){
+    // Le suivi ne doit jamais bloquer l'accès au site si le service de statistiques est indisponible.
+    console.warn("Suivi de fréquentation indisponible :", error.message || error);
+  }
+};
 
 window.loadExplorerProfile = async function() {
   const checkbox = document.getElementById("leaderboard-opt-in");
@@ -1942,8 +1975,11 @@ function renderPlayersDetail(player){
   if(!player){detail.innerHTML="<p>Sélectionnez un joueur dans la liste pour consulter les informations disponibles.</p>";progress.innerHTML="<p>Aucune fiche sélectionnée.</p>";history.innerHTML="<p>Aucune formule active renseignée.</p>";return;}
   const safe=v=>String(v??"—").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const registered=player.registered_at?new Date(player.registered_at).toLocaleDateString("fr-FR"):"—";
-  detail.innerHTML=`<div class="players-detail-name">${safe(player.pseudo||player.name||"Explorateur")}</div><div class="players-detail-line">✉ ${safe(player.email||"E-mail non disponible")}</div><div class="players-detail-line">▦ Inscrit le : ${safe(registered)}</div><div class="players-detail-line">${player.email_verified===true?"🟢 E-mail vérifié":"🟠 E-mail non vérifié"}</div><div class="players-detail-line">${player.leaderboard_opt_in?"🏆 Classé : Oui":"🏅 Classé : Non"}</div><div class="players-detail-line">Identifiant : ${safe(player.user_id||"—")}</div>`;
-  progress.innerHTML=`<div class="players-detail-stats"><div><span>🏕 Aventures terminées</span><strong>${Number(player.completed_adventures||0)}</strong></div><div><span>💳 Formules actives</span><strong>${Number(player.active_formulas||0)}</strong></div><div><span>🏆 Participation au classement</span><strong>${player.leaderboard_opt_in?"Oui":"Non"}</strong></div></div>`;
+  const visitCount=Number(player.visit_count||0), activeDays=Number(player.active_days||0);
+  const firstVisit=player.first_visit_at?new Date(player.first_visit_at).toLocaleString("fr-FR") : "Pas encore enregistré";
+  const lastVisit=player.last_visit_at?new Date(player.last_visit_at).toLocaleString("fr-FR") : "Pas encore enregistré";
+  detail.innerHTML=`<div class="players-detail-name">${safe(player.pseudo||player.name||"Explorateur")}</div><div class="players-detail-line">✉ ${safe(player.email||"E-mail non disponible")}</div><div class="players-detail-line">▦ Inscrit le : ${safe(registered)}</div><div class="players-detail-line">${player.email_verified===true?"🟢 E-mail vérifié":"🟠 E-mail non vérifié"}</div><div class="players-detail-line">${player.leaderboard_opt_in?"🏆 Classé : Oui":"🏅 Classé : Non"}</div><div class="players-detail-line">Identifiant : ${safe(player.user_id||"—")}</div><div class="players-visit-box"><strong>👣 Fréquentation du site</strong><div><b>${visitCount}</b> visite(s) enregistrée(s)</div><small>Première visite : ${safe(firstVisit)}</small><small>Dernière visite : ${safe(lastVisit)}</small><small>Jours de présence : ${activeDays}</small></div>`;
+  progress.innerHTML=`<div class="players-detail-stats"><div><span>🏕 Aventures terminées</span><strong>${Number(player.completed_adventures||0)}</strong></div><div><span>💳 Formules actives</span><strong>${Number(player.active_formulas||0)}</strong></div><div><span>🏆 Participation au classement</span><strong>${player.leaderboard_opt_in?"Oui":"Non"}</strong></div><div><span>👣 Visites du site</span><strong>${visitCount}</strong></div></div>`;
   history.innerHTML=Number(player.active_formulas)>0?`<div class="players-detail-line"><span class="players-pill gold">${Number(player.active_formulas)} formule(s) active(s)</span></div><p>Le détail des achats, des dates et des abonnements nécessite une route serveur dédiée.</p>`:"<p>Aucune formule active signalée par l'API.</p>";
 }
 function renderPlayersList(){
@@ -1958,12 +1994,12 @@ function renderPlayersList(){
   const prev=document.getElementById("players-prev"),next=document.getElementById("players-next");if(prev)prev.disabled=adminPlayersPage<=1;if(next)next.disabled=adminPlayersPage>=pages;
   if(!visible.length){list.innerHTML='<div class="players-empty">Aucun joueur ne correspond à ces filtres.</div>';return;}
   const table=document.createElement("table");table.className="players-table";
-  const thead=document.createElement("thead");thead.innerHTML="<tr><th>Joueur</th><th>E-mail</th><th>Inscription</th><th>Aventures</th><th>Formule active</th><th>Classement</th><th>Action</th></tr>";table.appendChild(thead);
+  const thead=document.createElement("thead");thead.innerHTML="<tr><th>Joueur</th><th>E-mail</th><th>Inscription</th><th>Visites</th><th>Aventures</th><th>Formule active</th><th>Classement</th><th>Action</th></tr>";table.appendChild(thead);
   const tbody=document.createElement("tbody");
   visible.forEach((p,i)=>{
     const tr=document.createElement("tr");tr.dataset.playerId=String(p.user_id||i);if(String(p.user_id||i)===String(adminPlayersSelectedId))tr.classList.add("selected");
     const name=p.pseudo||p.name||"Explorateur",date=p.registered_at?new Date(p.registered_at).toLocaleDateString("fr-FR"):"—";
-    const values=[`<span class="players-avatar">${String(name).trim().charAt(0).toUpperCase()||"?"}</span>${name.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}`,p.email||"—",date,String(Number(p.completed_adventures||0)),Number(p.active_formulas)>0?`<span class="players-pill gold">${Number(p.active_formulas)} active(s)</span>`:'<span class="players-pill">Aucune</span>',p.leaderboard_opt_in?'<span class="players-pill good">Oui</span>':'<span class="players-pill">Non</span>'];
+    const values=[`<span class="players-avatar">${String(name).trim().charAt(0).toUpperCase()||"?"}</span>${name.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}`,p.email||"—",date,String(Number(p.visit_count||0)),String(Number(p.completed_adventures||0)),Number(p.active_formulas)>0?`<span class="players-pill gold">${Number(p.active_formulas)} active(s)</span>`:'<span class="players-pill">Aucune</span>',p.leaderboard_opt_in?'<span class="players-pill good">Oui</span>':'<span class="players-pill">Non</span>'];
     values.forEach((v,j)=>{const td=document.createElement("td");if(j===0)td.className="players-name-cell";td.innerHTML=v;tr.appendChild(td);});
     const action=document.createElement("td"),button=document.createElement("button");button.type="button";button.className="players-view-btn";button.textContent="◉ Voir";button.addEventListener("click",e=>{e.stopPropagation();selectPlayer(p);});action.appendChild(button);tr.appendChild(action);tr.addEventListener("click",()=>selectPlayer(p));tbody.appendChild(tr);
   });
@@ -1972,15 +2008,20 @@ function renderPlayersList(){
 function selectPlayer(player){adminPlayersSelectedId=player.user_id;renderPlayersDetail(player);renderPlayersList();}
 function renderPlayersTab(){
   const heading=document.getElementById("players-panel-heading"),subtitle=document.getElementById("players-panel-subtitle"),statusFilter=document.getElementById("players-filter-status"),formulaFilter=document.getElementById("players-filter-formula"),rankFilter=document.getElementById("players-filter-ranking");
-  const titles={list:["Liste des joueurs","Comptes enregistrés dans Neon Auth"],ranking:["Classement des explorateurs","Joueurs ayant choisi d'apparaître dans le classement"],stats:["Statistiques joueurs","Indicateurs calculés à partir des comptes chargés"],formulas:["Formules & abonnements","Nombre de formules actives retourné par le serveur"],activity:["Activité récente","Aucune donnée de dernière connexion n'est fournie actuellement"]};
+  const titles={list:["Liste des joueurs","Comptes enregistrés dans Neon Auth"],ranking:["Classement des explorateurs","Joueurs ayant choisi d'apparaître dans le classement"],stats:["Statistiques joueurs","Indicateurs calculés à partir des comptes chargés"],formulas:["Formules & abonnements","Nombre de formules actives retourné par le serveur"],activity:["Activité récente","Visites et dernière présence enregistrées par session"]};
   if(heading)heading.textContent=titles[adminPlayersTab][0];if(subtitle)subtitle.textContent=titles[adminPlayersTab][1];
   [statusFilter,formulaFilter,rankFilter].forEach(el=>{if(el)el.disabled=adminPlayersTab!=="list";});
   const list=document.getElementById("admin-players-list");
   if(adminPlayersTab==="stats"){
-    const total=adminPlayersCache.length,ranked=adminPlayersCache.filter(p=>p.leaderboard_opt_in).length,completed=adminPlayersCache.reduce((n,p)=>n+Number(p.completed_adventures||0),0),formulas=adminPlayersCache.filter(p=>Number(p.active_formulas)>0).length,verified=adminPlayersCache.filter(p=>p.email_verified===true).length;
-    list.innerHTML=`<div class="players-stats-grid"><div class="players-stat-box"><strong>${total}</strong><small>Comptes inscrits</small></div><div class="players-stat-box"><strong>${ranked}</strong><small>Explorateurs classés</small></div><div class="players-stat-box"><strong>${completed}</strong><small>Aventures terminées cumulées</small></div><div class="players-stat-box"><strong>${formulas}</strong><small>Comptes avec formule active</small></div><div class="players-stat-box"><strong>${verified}</strong><small>E-mails vérifiés</small></div></div>`;
+    const total=adminPlayersCache.length,ranked=adminPlayersCache.filter(p=>p.leaderboard_opt_in).length,completed=adminPlayersCache.reduce((n,p)=>n+Number(p.completed_adventures||0),0),formulas=adminPlayersCache.filter(p=>Number(p.active_formulas)>0).length,verified=adminPlayersCache.filter(p=>p.email_verified===true).length,visits=adminPlayersCache.reduce((n,p)=>n+Number(p.visit_count||0),0),visitors=adminPlayersCache.filter(p=>Number(p.visit_count||0)>0).length;
+    list.innerHTML=`<div class="players-stats-grid"><div class="players-stat-box"><strong>${total}</strong><small>Comptes inscrits</small></div><div class="players-stat-box"><strong>${ranked}</strong><small>Explorateurs classés</small></div><div class="players-stat-box"><strong>${completed}</strong><small>Aventures terminées cumulées</small></div><div class="players-stat-box"><strong>${formulas}</strong><small>Comptes avec formule active</small></div><div class="players-stat-box"><strong>${verified}</strong><small>E-mails vérifiés</small></div><div class="players-stat-box"><strong>${visits}</strong><small>Visites enregistrées</small></div><div class="players-stat-box"><strong>${visitors}</strong><small>Joueurs déjà venus</small></div></div>`;
   }else if(adminPlayersTab==="activity"){
-    list.innerHTML='<div class="players-empty">L’API actuelle ne transmet pas la dernière connexion ni un journal des actions des joueurs. Cette rubrique restera vide jusqu’à l’ajout d’une source d’activité fiable.</div>';
+    const active=[...adminPlayersCache].filter(p=>p.last_visit_at).sort((a,b)=>new Date(b.last_visit_at)-new Date(a.last_visit_at));
+    if(!active.length){list.innerHTML='<div class="players-empty">Aucune visite enregistrée pour le moment. Les visites commenceront à être comptées après installation du suivi.</div>';}
+    else{
+      const rows=active.map(p=>`<div class="players-activity-row"><strong>${String(p.pseudo||p.name||"Explorateur").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}</strong><span>${Number(p.visit_count||0)} visite(s)</span><small>Dernière visite : ${new Date(p.last_visit_at).toLocaleString("fr-FR")}</small></div>`).join("");
+      list.innerHTML=rows;
+    }
   }else renderPlayersList();
 }
 window.adminLoadPlayers=async function(){
