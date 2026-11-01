@@ -2272,44 +2272,6 @@ window.adminLoadPuzzle = async function(){
 const puzzleTable=document.getElementById("admin-puzzle-table");if(puzzleTable)puzzleTable.addEventListener("click",async event=>{const button=event.target.closest("[data-puzzle-action]");if(!button)return;button.disabled=true;try{await adminApi(`/api/admin/puzzle/${button.dataset.puzzleId}`,{method:"PATCH",body:JSON.stringify({status:button.dataset.puzzleAction})});await window.adminLoadPuzzle();}catch(e){document.getElementById("admin-puzzle-status").textContent=e.message||"Erreur de mise à jour.";}finally{button.disabled=false;}});
 const puzzleAdminForm=document.getElementById("admin-puzzle-form");
 if(puzzleAdminForm) puzzleAdminForm.addEventListener("submit",async event=>{event.preventDefault();const status=document.getElementById("admin-puzzle-status"),button=document.getElementById("admin-puzzle-save");button.disabled=true;status.textContent="Enregistrement…";try{const village_name=document.getElementById("admin-puzzle-village").value.trim();const raw=document.getElementById("admin-puzzle-date").value;await adminApi("/api/admin/puzzle",{method:"POST",body:JSON.stringify({village_name,reveal_at:raw?new Date(raw).toISOString():null})});puzzleAdminForm.reset();status.textContent="Pièce préparée.";await window.adminLoadPuzzle();}catch(e){status.textContent=e.message||"Impossible de préparer la pièce.";}finally{button.disabled=false;}});
-function adminPuzzleTab(tab){
-  document.querySelectorAll("#admin-puzzle-view .puzzle-admin-tab").forEach(btn=>btn.classList.toggle("active",btn.dataset.puzzleTab===tab));
-  document.querySelectorAll("#admin-puzzle-view .puzzle-admin-pane").forEach(pane=>pane.hidden=pane.dataset.puzzlePane!==tab);
-}
-document.querySelectorAll("#admin-puzzle-view .puzzle-admin-tab").forEach(btn=>btn.addEventListener("click",()=>adminPuzzleTab(btn.dataset.puzzleTab)));
-function puzzleAdminDate(value){return value?new Date(value).toLocaleString("fr-FR"):"—";}
-function puzzleAdminTable(pieces){
-  if(!pieces.length)return '<div class="puzzle-admin-empty">Aucune pièce enregistrée pour le moment.</div>';
-  const rows=pieces.map(p=>`<tr><td><strong>${adminEscape(p.village_name)}</strong></td><td>${p.status==='revealed'?'🟢 Révélée':p.status==='preparing'?'🟠 Planifiée':'⚪ Mystère'}</td><td>${p.found_by_name?'<span class="puzzle-admin-trophy">🏆</span>'+adminEscape(p.found_by_name):'—'}</td><td>${puzzleAdminDate(p.revealed_at||p.reveal_at)}</td><td><button type="button" class="admin-secondary-btn" data-puzzle-action="revealed" data-puzzle-id="${p.id}">Révéler</button> <button type="button" class="admin-secondary-btn" data-puzzle-action="hidden" data-puzzle-id="${p.id}">Mystère</button></td></tr>`).join('');
-  return `<table class="puzzle-admin-table"><thead><tr><th>Village</th><th>Statut</th><th>Trouvé par</th><th>Date</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-window.adminOpenPuzzle = async function(){ adminSetView("admin-puzzle-view","Carte puzzle"); adminPuzzleTab("overview"); await window.adminLoadPuzzle(); };
-window.adminLoadPuzzle = async function(){
-  const status=document.getElementById("admin-puzzle-status"); if(!status)return;
-  status.textContent="Chargement des pièces et des trouveurs…";
-  try {
-    const [data, finderData]=await Promise.all([adminApi("/api/admin/puzzle"),adminApi("/api/admin/puzzle/finders")]);
-    const pieces=Array.isArray(data.pieces)?data.pieces:[];
-    const finders=Array.isArray(finderData.finders)?finderData.finders:[];
-    const revealed=pieces.filter(p=>p.status==="revealed"), preparing=pieces.filter(p=>p.status==="preparing");
-    const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
-    put("puzzle-admin-total",pieces.length);put("puzzle-admin-revealed",revealed.length);put("puzzle-admin-preparing",preparing.length);put("puzzle-admin-finders-count",finders.length);
-    const percent=pieces.length?Math.round(revealed.length/pieces.length*100):0;
-    const bar=document.getElementById("puzzle-admin-progress-bar");if(bar)bar.style.width=percent+"%";
-    put("puzzle-admin-progress-label",`${percent} % · ${revealed.length} pièce(s) révélée(s)`);
-    const board=document.getElementById("admin-puzzle-board");if(board){board.replaceChildren();if(!pieces.length){board.innerHTML='<div class="puzzle-admin-empty">Aucune pièce préparée pour le moment.</div>';}else pieces.forEach(piece=>{const card=document.createElement("div");card.className="puzzle-admin-piece"+(piece.status==="revealed"?" revealed":"");const name=document.createElement("strong");name.className="piece-village";name.textContent=piece.village_name;card.appendChild(name);const state=document.createElement("small");state.textContent=piece.status==="revealed"?"✓ Pièce révélée":piece.status==="preparing"?"Pièce planifiée":"Pièce mystère";card.appendChild(state);if(piece.status==="revealed"&&piece.found_by_name){const winner=document.createElement("span");winner.className="piece-winner";winner.textContent="🏆 Trouvé par : "+piece.found_by_name;card.appendChild(winner);}board.appendChild(card);});}
-    const next=preparing.slice().sort((a,b)=>new Date(a.reveal_at||'2999-01-01')-new Date(b.reveal_at||'2999-01-01'))[0];const nextBox=document.getElementById("admin-puzzle-next");if(nextBox){nextBox.replaceChildren();if(next){const icon=document.createElement("span");icon.className="next-icon";icon.textContent="🧩";const detail=document.createElement("div");const strong=document.createElement("strong");strong.textContent=next.village_name;const date=document.createElement("div");date.textContent="Révélation : "+puzzleAdminDate(next.reveal_at);detail.append(strong,date);nextBox.append(icon,detail);}else nextBox.textContent="Aucune pièce programmée.";}
-    const table=document.getElementById("admin-puzzle-table");if(table)table.innerHTML=puzzleAdminTable(pieces);
-    const planning=document.getElementById("admin-puzzle-planning");if(planning)planning.innerHTML=puzzleAdminTable(preparing);
-    const history=document.getElementById("admin-puzzle-history");if(history)history.innerHTML=puzzleAdminTable(revealed.slice().sort((a,b)=>new Date(b.revealed_at||0)-new Date(a.revealed_at||0)));
-    const finderBox=document.getElementById("admin-puzzle-finders");if(finderBox){if(!finders.length)finderBox.innerHTML='<div class="puzzle-admin-empty">Aucun joueur n’a encore découvert de village. Les trouveurs apparaîtront ici après la fin d’une aventure.</div>';else finderBox.innerHTML=`<table class="puzzle-admin-table"><thead><tr><th>Classement</th><th>Joueur</th><th>Villages découverts</th><th>Récompense</th></tr></thead><tbody>${finders.map((f,i)=>`<tr><td><span class="puzzle-admin-rank">${i+1}</span></td><td><strong>${adminEscape(f.pseudo)}</strong></td><td>${Number(f.villages_count)||0}</td><td><span class="puzzle-admin-trophy">🏆</span>${Number(f.villages_count)||0} trophée(s)</td></tr>`).join('')}</tbody></table>`;}
-    status.textContent=pieces.length+" pièce(s) chargée(s) · "+finders.length+" trouveur(s).";
-  } catch(e){status.textContent=e.message||"Impossible de charger la carte puzzle.";}
-};
-const puzzleTable=document.getElementById("admin-puzzle-table");if(puzzleTable)puzzleTable.addEventListener("click",async event=>{const button=event.target.closest("[data-puzzle-action]");if(!button)return;button.disabled=true;try{await adminApi(`/api/admin/puzzle/${button.dataset.puzzleId}`,{method:"PATCH",body:JSON.stringify({status:button.dataset.puzzleAction})});await window.adminLoadPuzzle();}catch(e){document.getElementById("admin-puzzle-status").textContent=e.message||"Erreur de mise à jour.";}finally{button.disabled=false;}});
-const puzzleAdminForm=document.getElementById("admin-puzzle-form");
-if(puzzleAdminForm) puzzleAdminForm.addEventListener("submit",async event=>{event.preventDefault();const status=document.getElementById("admin-puzzle-status"),button=document.getElementById("admin-puzzle-save");button.disabled=true;status.textContent="Enregistrement…";try{const village_name=document.getElementById("admin-puzzle-village").value.trim();const raw=document.getElementById("admin-puzzle-date").value;await adminApi("/api/admin/puzzle",{method:"POST",body:JSON.stringify({village_name,reveal_at:raw?new Date(raw).toISOString():null})});puzzleAdminForm.reset();status.textContent="Pièce préparée.";await window.adminLoadPuzzle();}catch(e){status.textContent=e.message||"Impossible de préparer la pièce.";}finally{button.disabled=false;}});
-
 window.adminOpenVillages = async function() {
   adminSetView("admin-villages-view", "Gestion des villages");
   await window.adminLoadVillages();
