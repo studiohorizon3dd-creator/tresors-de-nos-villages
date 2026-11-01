@@ -644,6 +644,11 @@ body.halloween-accueil .home-hero{
   </div>
   <p id="tester-space-status" class="status" role="status" aria-live="polite">Chargement de tes autorisations…</p>
   <div class="tester-space-card" style="margin:14px 0">
+    <h4>🎯 Mes missions de test</h4>
+    <p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p>
+    <div id="tester-space-missions"><p>Chargement de tes missions…</p></div>
+  </div>
+  <div class="tester-space-card" style="margin:14px 0">
     <h4>🗺️ Mes parcours autorisés</h4>
     <div id="tester-space-access-list"><p>Chargement…</p></div>
   </div>
@@ -1677,11 +1682,32 @@ window.loadTesterSpace = async function(){
   status.textContent="Chargement de tes autorisations…";
   accessList.replaceChildren();history.replaceChildren();accessSelect.replaceChildren();
   try{
-    const [accessData,feedbackData]=await Promise.all([
+    const [accessData,feedbackData,missionData]=await Promise.all([
       profileApi("/api/testers/access"),
-      profileApi("/api/testers/feedback/mine")
+      profileApi("/api/testers/feedback/mine"),
+      profileApi("/api/testers/missions")
     ]);
     const access=Array.isArray(accessData.access)?accessData.access:[];
+    const missionsBox=document.getElementById("tester-space-missions");
+    if(missionsBox){
+      missionsBox.replaceChildren();
+      const missions=Array.isArray(missionData.missions)?missionData.missions:[];
+      if(!missions.length){missionsBox.textContent="Aucune mission attribuée pour le moment. L’administration pourra t’en confier une dès que ton accès sera prêt.";}
+      missions.forEach(mission=>{
+        const card=document.createElement("article");card.style.cssText="padding:14px;margin:9px 0;border:1px solid #e4dcc8;border-radius:11px;background:#fffefa";
+        const title=document.createElement("strong");title.textContent=`${mission.village_name||mission.village_slug} — ${testerFormulaLabels[mission.level_key]||mission.level_name||mission.level_key}`;
+        const detail=document.createElement("p");detail.style.cssText="margin:7px 0;color:#53624f;font-size:13px";
+        detail.textContent=mission.adventure_id?`${mission.title} · ${mission.validated_steps}/${mission.total_steps} étapes validées · ${mission.total_stars} étoiles possibles · ${mission.state}`:"Parcours en préparation : ta mission est attribuée, mais le parcours n'est pas encore créé.";
+        const progress=document.createElement("div");progress.style.cssText="height:9px;background:#eee8d9;border-radius:20px;overflow:hidden;margin:10px 0";
+        const fill=document.createElement("div");fill.style.cssText=`height:100%;width:${mission.total_steps?Math.min(100,mission.validated_steps/mission.total_steps*100):0}%;background:#28704d;border-radius:20px`;progress.appendChild(fill);
+        card.append(title,detail,progress);
+        if(mission.adventure_id){
+          const action=document.createElement("button");action.type="button";action.className="small-btn";action.textContent=mission.completed?"Revoir mon parcours":"Commencer / continuer le test";
+          action.addEventListener("click",()=>{showDashSection("dash-adventures");openPlayerAdventure(mission.adventure_id);});card.appendChild(action);
+        }
+        missionsBox.appendChild(card);
+      });
+    }
     if(!access.length){
       accessList.textContent="Aucun village ou niveau ne t’a encore été attribué. Reviens consulter cet espace lorsque l’administration aura préparé ton accès.";
       const option=document.createElement("option");option.value="";option.textContent="Aucun accès disponible";accessSelect.appendChild(option);
