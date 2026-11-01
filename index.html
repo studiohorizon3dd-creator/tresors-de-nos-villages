@@ -2234,8 +2234,32 @@ async function openPlayerAdventure(id) {
       const heading = document.createElement('h4'); heading.textContent = `Étape ${step.step_number} — ${step.place_name}`; article.appendChild(heading);
       const state = document.createElement('p'); state.textContent = step.validated ? '✅ Arrivée validée' : '📍 Rends-toi sur place pour découvrir l’énigme.'; article.appendChild(state);
       if (step.validated) {
+        if (step.photo_url) {
+          const photo = document.createElement('img');
+          photo.src = step.photo_url; photo.alt = `Photo de ${step.place_name}`;
+          photo.loading = 'lazy'; photo.style.cssText = 'display:block;width:100%;max-height:280px;object-fit:cover;border-radius:12px;margin:10px 0;';
+          article.appendChild(photo);
+        }
         const riddle = document.createElement('p'); riddle.textContent = step.riddle || 'Aucune énigme renseignée.'; article.appendChild(riddle);
         if (step.hint) { const hint = document.createElement('p'); hint.textContent = `Indice : ${step.hint}`; article.appendChild(hint); }
+        if (step.answered) {
+          const done = document.createElement('p'); done.textContent = '⭐ Bonne réponse ! Étoile gagnée.'; article.appendChild(done);
+        } else if (step.riddle) {
+          const answerLabel = document.createElement('label'); answerLabel.textContent = 'Ta réponse';
+          const answerInput = document.createElement('input'); answerInput.type = 'text'; answerInput.maxLength = 500;
+          answerInput.placeholder = 'Écris ta réponse'; answerInput.autocomplete = 'off';
+          answerInput.style.cssText = 'display:block;width:100%;padding:10px;margin:8px 0;';
+          const answerButton = document.createElement('button'); answerButton.type = 'button'; answerButton.className = 'small-btn'; answerButton.textContent = 'Valider ma réponse';
+          const feedback = document.createElement('p'); feedback.setAttribute('aria-live','polite');
+          answerButton.addEventListener('click', async () => {
+            answerButton.disabled = true; feedback.textContent = 'Vérification…';
+            try {
+              await playerApi(`/api/adventures/${id}/steps/${step.id}/answer`, { method:'POST', body:JSON.stringify({ answer: answerInput.value }) });
+              await openPlayerAdventure(id);
+            } catch (error) { feedback.textContent = error.message || 'Réponse incorrecte. Réessaie.'; answerButton.disabled = false; }
+          });
+          answerLabel.appendChild(answerInput); article.append(answerLabel, answerButton, feedback);
+        }
       } else {
         const button = document.createElement('button'); button.type = 'button'; button.className = 'small-btn'; button.textContent = '📍 Valider mon arrivée';
         button.addEventListener('click', () => validatePlayerGps(id, step.id)); article.appendChild(button);
