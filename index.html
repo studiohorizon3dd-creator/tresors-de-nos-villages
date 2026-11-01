@@ -972,7 +972,10 @@ body.halloween-accueil .home-hero{
         </div>
         <p id="admin-testers-status" class="status" role="status" aria-live="polite">Chargement des demandes…</p>
         <div id="admin-testers-list" class="admin-recent-list tester-table-wrap" aria-live="polite"><p>Les demandes apparaîtront ici.</p></div>
-        <p class="admin-footnote">Les demandes sont liées au compte Neon existant. Accepter une demande enregistre le statut testeur ; cela ne modifie pas les formules, les paiements ni les aventures publiques.</p>
+        <div class="admin-section-heading" style="margin-top:28px"><div><h3>Retours des testeurs</h3><p>Les retours restent privés et ne sont visibles que par l’administration.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterFeedback()">↻ Actualiser les retours</button></div>
+        <p id="admin-tester-feedback-status" class="status" role="status" aria-live="polite">Les retours seront chargés ici.</p>
+        <div id="admin-tester-feedback-list" class="admin-recent-list tester-table-wrap"><p>Aucun retour chargé.</p></div>
+        <p class="admin-footnote">Les accès testeurs sont indépendants des achats. Un testeur ne voit que les villages et niveaux qui lui sont attribués.</p>
       </div>
 
       <div id="admin-villages-view" class="admin-subview" hidden>
@@ -1551,30 +1554,99 @@ window.adminLoadTesters = async function(){
   status.textContent = "Chargement des demandes…";
   list.replaceChildren();
   try{
-    const data = await adminApi("/api/admin/testers");
+    const [data, villageData] = await Promise.all([
+      adminApi("/api/admin/testers"),
+      adminApi("/api/admin/villages")
+    ]);
     const apps = Array.isArray(data.applications) ? data.applications : [];
-    if(!apps.length){ list.textContent = "Aucune demande de testeur pour le moment."; status.textContent = "Liste chargée."; return; }
-    const table = document.createElement("table");
-    table.style.cssText = "width:100%;min-width:760px;border-collapse:collapse;font-size:13px";
-    const head = document.createElement("thead"); const hr = document.createElement("tr");
-    ["Nom","E-mail","Motivation","Date","Statut","Action"].forEach(label=>{const th=document.createElement("th");th.textContent=label;th.style.cssText="text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";hr.appendChild(th);});
-    head.appendChild(hr);table.appendChild(head);
-    const body = document.createElement("tbody");
-    for(const app of apps){
-      const tr=document.createElement("tr");
-      const date=app.submitted_at?new Date(app.submitted_at).toLocaleDateString("fr-FR"):"—";
-      const vals=[app.name||"Compte utilisateur",app.email||"—",app.motivation||"—",date,({pending:"En attente",accepted:"Acceptée",rejected:"Refusée"})[app.status]||app.status];
-      vals.forEach(value=>{const td=document.createElement("td");td.textContent=String(value);td.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;vertical-align:top;overflow-wrap:anywhere;max-width:240px";tr.appendChild(td);});
-      const actions=document.createElement("td");actions.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;white-space:nowrap";
-      const makeButton=(label,statusValue)=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.style.cssText="margin:2px;padding:7px 9px;border:1px solid #c9ae65;border-radius:7px;background:#fffaf0;color:#244b36;cursor:pointer";b.addEventListener("click",async()=>{b.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(app.id)}`,{method:"PATCH",body:JSON.stringify({status:statusValue})});await window.adminLoadTesters();}catch(error){status.textContent=error.message||"Mise à jour impossible.";b.disabled=false;}});return b;};
-      if(app.status!=="accepted") actions.appendChild(makeButton("Accepter","accepted"));
-      if(app.status!=="rejected") actions.appendChild(makeButton("Refuser","rejected"));
-      if(app.status!=="pending") actions.appendChild(makeButton("Remettre en attente","pending"));
-      tr.appendChild(actions);body.appendChild(tr);
+    const villages = Array.isArray(villageData.villages) ? villageData.villages : [];
+    if(!apps.length){ list.textContent = "Aucune demande de testeur pour le moment."; status.textContent = "Liste chargée."; }
+    else {
+      const table = document.createElement("table");
+      table.style.cssText = "width:100%;min-width:760px;border-collapse:collapse;font-size:13px";
+      const head = document.createElement("thead"); const hr = document.createElement("tr");
+      ["Nom","E-mail","Motivation","Date","Statut","Actions / accès"].forEach(label=>{const th=document.createElement("th");th.textContent=label;th.style.cssText="text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";hr.appendChild(th);});
+      head.appendChild(hr);table.appendChild(head);
+      const body = document.createElement("tbody");
+      for(const app of apps){
+        const tr=document.createElement("tr");
+        const date=app.submitted_at?new Date(app.submitted_at).toLocaleDateString("fr-FR"):"—";
+        const vals=[app.name||"Compte utilisateur",app.email||"—",app.motivation||"—",date,({pending:"En attente",accepted:"Acceptée",rejected:"Refusée"})[app.status]||app.status];
+        vals.forEach(value=>{const td=document.createElement("td");td.textContent=String(value);td.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;vertical-align:top;overflow-wrap:anywhere;max-width:240px";tr.appendChild(td);});
+        const actions=document.createElement("td");actions.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;min-width:230px";
+        const makeButton=(label,statusValue)=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.style.cssText="margin:2px;padding:7px 9px;border:1px solid #c9ae65;border-radius:7px;background:#fffaf0;color:#244b36;cursor:pointer";b.addEventListener("click",async()=>{b.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(app.id)}`,{method:"PATCH",body:JSON.stringify({status:statusValue})});await window.adminLoadTesters();}catch(error){status.textContent=error.message||"Mise à jour impossible.";b.disabled=false;}});return b;};
+        if(app.status!=="accepted") actions.appendChild(makeButton("Accepter","accepted"));
+        if(app.status!=="rejected") actions.appendChild(makeButton("Refuser","rejected"));
+        if(app.status!=="pending") actions.appendChild(makeButton("Remettre en attente","pending"));
+        if(app.status==="accepted"){
+          const accessBtn=document.createElement("button");accessBtn.type="button";accessBtn.textContent="Gérer les accès";accessBtn.style.cssText="display:block;margin:5px 2px;padding:7px 9px;border:1px solid #8da58e;border-radius:7px;background:#edf4eb;color:#244b36;cursor:pointer";
+          accessBtn.addEventListener("click",()=>adminShowTesterAccess(app.user_id, app.name||app.email||"ce testeur", villages, actions));
+          actions.appendChild(accessBtn);
+        }
+        tr.appendChild(actions);body.appendChild(tr);
+      }
+      table.appendChild(body);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
+      status.textContent=`${apps.length} demande${apps.length>1?"s":""} chargée${apps.length>1?"s":""}.`;
     }
-    table.appendChild(body);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
-    status.textContent=`${apps.length} demande${apps.length>1?"s":""} chargée${apps.length>1?"s":""}.`;
-  }catch(error){status.textContent=error.message||"Impossible de charger les demandes.";list.textContent="Vérifie que la route /api/admin/testers est déployée et que la table SQL a été créée.";}
+    await window.adminLoadTesterFeedback();
+  }catch(error){status.textContent=error.message||"Impossible de charger les demandes.";list.textContent="Vérifie que les routes testeurs sont déployées et que les tables SQL ont été créées dans Neon.";}
+};
+
+const TESTER_FORMULAS = [
+  ["enfant","Enfant"],["facile","Facile"],["famille","Famille"],["moyen","Moyen"],
+  ["difficile","Difficile"],["extreme","Extrême"],["nuit","Nuit"]
+];
+window.adminShowTesterAccess = async function(userId, testerName, villages, host){
+  let panel=host.querySelector(".tester-access-editor");
+  if(panel){panel.remove();return;}
+  panel=document.createElement("div");panel.className="tester-access-editor";panel.style.cssText="margin-top:10px;padding:12px;background:#f7f4e9;border:1px solid #d8c99f;border-radius:10px;min-width:260px";
+  const title=document.createElement("strong");title.textContent="Accès de : "+testerName;panel.appendChild(title);
+  const villageSelect=document.createElement("select");villageSelect.style.cssText="display:block;width:100%;margin:9px 0;padding:8px;border:1px solid #c9c1aa;border-radius:7px";
+  villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name+" ("+v.slug+")";villageSelect.appendChild(o);});
+  const levelSelect=document.createElement("select");levelSelect.style.cssText=villageSelect.style.cssText;
+  TESTER_FORMULAS.forEach(([value,label])=>{const o=document.createElement("option");o.value=value;o.textContent=label;levelSelect.appendChild(o);});
+  const assign=document.createElement("button");assign.type="button";assign.textContent="+ Attribuer ce niveau";assign.style.cssText="padding:8px 10px;border:0;border-radius:7px;background:#214b36;color:white;cursor:pointer";
+  const accessList=document.createElement("div");accessList.style.cssText="margin-top:12px;font-size:12px";
+  const note=document.createElement("p");note.style.cssText="font-size:11px;color:#596454";note.textContent="Un accès autorise uniquement ce village et ce niveau. Il ne donne pas accès aux autres profils.";
+  panel.append(villageSelect,levelSelect,assign,accessList,note);host.appendChild(panel);
+  const refresh=async()=>{
+    const result=await adminApi(`/api/admin/testers/${encodeURIComponent(userId)}/access`);
+    accessList.replaceChildren();
+    const entries=Array.isArray(result.access)?result.access:[];
+    if(!entries.length){accessList.textContent="Aucun accès attribué.";return;}
+    entries.forEach(item=>{
+      const row=document.createElement("div");row.style.cssText="display:flex;gap:8px;align-items:center;justify-content:space-between;padding:6px 0;border-top:1px solid #e4dcc8";
+      const label=document.createElement("span");label.textContent=(item.village_name||item.village_slug)+" — "+(TESTER_FORMULAS.find(x=>x[0]===item.formula)?.[1]||item.formula);
+      const remove=document.createElement("button");remove.type="button";remove.textContent="Retirer";remove.style.cssText="padding:5px 7px;border:1px solid #c88;border-radius:6px;background:#fff;color:#933;cursor:pointer";
+      remove.addEventListener("click",async()=>{remove.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(userId)}/access`,{method:"PUT",body:JSON.stringify({village:item.village_slug,formula:item.formula,enabled:false})});await refresh();}catch(e){remove.disabled=false;alert(e.message||"Impossible de retirer cet accès.");}});
+      row.append(label,remove);accessList.appendChild(row);
+    });
+  };
+  assign.addEventListener("click",async()=>{if(!villageSelect.value){alert("Ajoute d’abord un village dans la gestion des villages.");return;}assign.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(userId)}/access`,{method:"PUT",body:JSON.stringify({village:villageSelect.value,formula:levelSelect.value,enabled:true})});await refresh();}catch(e){alert(e.message||"Impossible d’attribuer cet accès.");}finally{assign.disabled=false;}});
+  try{await refresh();}catch(e){accessList.textContent=e.message||"Impossible de charger les accès.";}
+};
+
+window.adminLoadTesterFeedback = async function(){
+  const status=document.getElementById("admin-tester-feedback-status");
+  const list=document.getElementById("admin-tester-feedback-list");
+  if(!status||!list)return;
+  status.textContent="Chargement des retours…";list.replaceChildren();
+  try{
+    const data=await adminApi("/api/admin/tester-feedback");
+    const feedback=Array.isArray(data.feedback)?data.feedback:[];
+    if(!feedback.length){list.textContent="Aucun retour de test pour le moment.";status.textContent="Liste chargée.";return;}
+    feedback.forEach(item=>{
+      const card=document.createElement("article");card.style.cssText="padding:14px;margin:9px 0;background:#fffefa;border:1px solid #e4dcc8;border-radius:10px";
+      const heading=document.createElement("strong");heading.textContent=(item.tester_name||item.tester_email||"Testeur")+" — "+(item.village_name||item.village_slug)+" / "+(TESTER_FORMULAS.find(x=>x[0]===item.formula)?.[1]||item.formula);
+      const meta=document.createElement("p");meta.style.cssText="font-size:12px;color:#687366;margin:5px 0";meta.textContent=( {bug:"Bug",idee:"Idée",experience:"Expérience",autre:"Autre"}[item.category]||item.category )+" · "+(item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"date inconnue");
+      const message=document.createElement("p");message.style.cssText="white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0";message.textContent=item.message;
+      const select=document.createElement("select");select.style.cssText="padding:7px;border:1px solid #c9c1aa;border-radius:7px";
+      [["nouveau","Nouveau"],["en_cours","En cours"],["traite","Traité"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;select.appendChild(o);});select.value=item.status;
+      select.addEventListener("change",async()=>{select.disabled=true;try{await adminApi(`/api/admin/tester-feedback/${encodeURIComponent(item.id)}/status`,{method:"PATCH",body:JSON.stringify({status:select.value})});}catch(e){alert(e.message||"Impossible de modifier le statut.");select.value=item.status;}finally{select.disabled=false;}});
+      card.append(heading,meta,message,select);list.appendChild(card);
+    });
+    status.textContent=`${feedback.length} retour${feedback.length>1?"s":""} chargé${feedback.length>1?"s":""}.`;
+  }catch(error){status.textContent=error.message||"Impossible de charger les retours.";list.textContent="Vérifie que la route /api/admin/tester-feedback est déployée et que la table tester_feedback existe.";}
 };
 
 const ADMIN_VILLAGE_STATUSES = {
