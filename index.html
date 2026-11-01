@@ -632,15 +632,14 @@ body.halloween-accueil .home-hero{
 
 <section class="dash-section hidden" id="dash-adventures">
   <h3>Mes aventures</h3>
-
-  <div class="feature-grid">
-    <article class="feature">
-      <div class="feature-icon">🗺️</div>
-      <h3>Nos aventures arrivent bientôt !</h3>
-      <p>De nouvelles aventures se préparent pour vous faire découvrir le patrimoine, les histoires et les secrets de nos villages.</p>
-      <p>Nos parcours sont en préparation. Nous vous donnerons rendez-vous dès que les autorisations nécessaires seront confirmées.</p>
-      <p><strong>Merci pour votre patience et à très bientôt ! 🌱</strong></p>
-    </article>
+  <p>Choisis une aventure à laquelle tu as accès. Ton arrivée sera vérifiée grâce au GPS.</p>
+  <p id="player-adventures-status" role="status" aria-live="polite">Chargement de tes aventures…</p>
+  <div id="player-adventures-list" class="feature-grid"></div>
+  <div id="player-adventure-detail" class="feature" style="display:none;text-align:left;margin-top:20px">
+    <button type="button" class="small-btn" onclick="loadPlayerAdventures()">← Retour aux aventures</button>
+    <h3 id="player-adventure-title"></h3>
+    <p id="player-adventure-progress"></p>
+    <div id="player-adventure-steps"></div>
   </div>
 </section>
 
@@ -2165,6 +2164,88 @@ function ouvrirPropositionVillage(){
   if(commune) commune.focus({preventScroll:true});
 }
 
+async function playerApi(path, options = {}) {
+  const token = await getAdminBearerToken();
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json', ...(options.headers || {}) }
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
+  return data;
+}
+
+window.loadPlayerAdventures = async function() {
+  const status = document.getElementById('player-adventures-status');
+  const list = document.getElementById('player-adventures-list');
+  const detail = document.getElementById('player-adventure-detail');
+  if (!status || !list) return;
+  detail.style.display = 'none'; list.innerHTML = ''; status.textContent = 'Chargement de tes aventures…';
+  try {
+    const data = await playerApi('/api/adventures');
+    if (!data.adventures?.length) {
+      status.textContent = 'Aucune aventure ne t’est encore attribuée. Vérifie tes formules ou tes accès testeur.';
+      return;
+    }
+    status.textContent = `${data.adventures.length} aventure(s) disponible(s).`;
+    data.adventures.forEach(adventure => {
+      const card = document.createElement('article'); card.className = 'feature';
+      const title = document.createElement('h3'); title.textContent = adventure.title;
+      const info = document.createElement('p'); info.textContent = `${adventure.village_slug} · ${adventure.level_name} · ${adventure.total_steps} étapes · ${adventure.total_stars} étoiles`;
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'small-btn'; button.textContent = 'Ouvrir l’aventure';
+      button.addEventListener('click', () => openPlayerAdventure(adventure.id));
+      card.append(title, info, button); list.appendChild(card);
+    });
+  } catch (error) { status.textContent = error.message || 'Impossible de charger tes aventures.'; }
+};
+
+async function openPlayerAdventure(id) {
+  const status = document.getElementById('player-adventures-status');
+  const list = document.getElementById('player-adventures-list');
+  const detail = document.getElementById('player-adventure-detail');
+  const stepsBox = document.getElementById('player-adventure-steps');
+  try {
+    status.textContent = 'Ouverture de l’aventure…';
+    const [data, progress] = await Promise.all([
+      playerApi(`/api/adventures/${id}/steps`), playerApi(`/api/adventures/${id}/progress`)
+    ]);
+    document.getElementById('player-adventure-title').textContent = data.adventure.title;
+    document.getElementById('player-adventure-progress').textContent = `⭐ ${progress.stars_earned} / ${progress.total_stars} étoiles · ${progress.validated_steps} / ${progress.total_steps} étapes validées`;
+    stepsBox.innerHTML = '';
+    data.steps.forEach(step => {
+      const article = document.createElement('article'); article.className = 'feature'; article.style.margin = '12px 0';
+      const heading = document.createElement('h4'); heading.textContent = `Étape ${step.step_number} — ${step.place_name}`; article.appendChild(heading);
+      const state = document.createElement('p'); state.textContent = step.validated ? '✅ Arrivée validée' : '📍 Rends-toi sur place pour découvrir l’énigme.'; article.appendChild(state);
+      if (step.validated) {
+        const riddle = document.createElement('p'); riddle.textContent = step.riddle || 'Aucune énigme renseignée.'; article.appendChild(riddle);
+        if (step.hint) { const hint = document.createElement('p'); hint.textContent = `Indice : ${step.hint}`; article.appendChild(hint); }
+      } else {
+        const button = document.createElement('button'); button.type = 'button'; button.className = 'small-btn'; button.textContent = '📍 Valider mon arrivée';
+        button.addEventListener('click', () => validatePlayerGps(id, step.id)); article.appendChild(button);
+      }
+      stepsBox.appendChild(article);
+    });
+    list.style.display = 'none'; detail.style.display = 'block'; status.textContent = '';
+  } catch (error) { status.textContent = error.message || 'Impossible d’ouvrir cette aventure.'; }
+}
+
+async function validatePlayerGps(adventureId, stepId) {
+  if (!navigator.geolocation) { alert('La géolocalisation n’est pas disponible sur cet appareil.'); return; }
+  const button = [...document.querySelectorAll('#player-adventure-steps button')].find(b => b.textContent.includes('Valider mon arrivée'));
+  if (button) { button.disabled = true; button.textContent = 'Localisation en cours…'; }
+  navigator.geolocation.getCurrentPosition(async position => {
+    try {
+      await playerApi(`/api/adventures/${adventureId}/steps/${stepId}/validate-gps`, {
+        method: 'POST', body: JSON.stringify({ latitude: position.coords.latitude, longitude: position.coords.longitude, accuracy: position.coords.accuracy })
+      });
+      await openPlayerAdventure(adventureId);
+    } catch (error) { alert(error.message || 'La validation GPS a échoué.'); if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; } }
+  }, error => {
+    alert(error.code === 1 ? 'Autorise la géolocalisation pour valider ton arrivée.' : 'Position GPS indisponible. Réessaie dehors.');
+    if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; }
+  }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+}
+
 function showDashSection(id){
   if(id === "dash-admin-info" && !adminAccessGranted){
     if(window.openAdminPanel) window.openAdminPanel();
@@ -2185,6 +2266,7 @@ function showDashSection(id){
   const selected = document.getElementById(id);
   if(!selected){console.warn("Rubrique introuvable :", id);return;}
   selected.classList.remove("hidden");
+  if(id === "dash-adventures") window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
   if(id === "dash-profile") window.loadExplorerProfile?.();
   if(id === "dash-testers") window.loadTesterApplication?.();
