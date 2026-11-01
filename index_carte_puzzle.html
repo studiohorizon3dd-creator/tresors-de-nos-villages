@@ -998,6 +998,7 @@ body.halloween-accueil .home-hero{
       <div class="admin-nav-label">GESTION DES AVENTURES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenPuzzle()"><span>🧩</span> Carte puzzle</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenLevels()"><span>✦</span> Niveaux par village</button>
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Mystères & événements')"><span>✨</span> Mystères & événements</button>
       <div class="admin-nav-label">GESTION DES MEMBRES</div>
@@ -1111,6 +1112,19 @@ body.halloween-accueil .home-hero{
         <div id="admin-levels-list" class="admin-recent-list"><p>Les niveaux apparaîtront ici.</p></div>
       </div>
 
+      <div id="admin-puzzle-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>Gestion de la carte puzzle</h3><p>Choisis le village de la prochaine pièce et programme sa révélation.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadPuzzle()">↻ Actualiser</button></div>
+        <div class="admin-info-panel" style="margin-bottom:16px"><strong>Fonctionnement :</strong> une pièce ajoutée commence en préparation. Tu peux la révéler le jour J ; elle apparaîtra alors en couleur sur la carte publique.</div>
+        <p id="admin-puzzle-status" class="status" role="status" aria-live="polite">Chargement…</p>
+        <div id="admin-puzzle-list" class="admin-recent-list"></div>
+        <div class="admin-info-panel" style="margin-top:18px"><h3>Préparer une nouvelle pièce</h3>
+          <form id="admin-puzzle-form" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px">
+            <label style="display:grid;gap:6px">Village à révéler<input id="admin-puzzle-village" required maxlength="150" placeholder="Ex. Humbert" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></label>
+            <label style="display:grid;gap:6px">Date et heure de révélation<input id="admin-puzzle-date" type="datetime-local" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></label>
+            <div style="grid-column:1/-1"><button id="admin-puzzle-save" class="admin-primary-btn" type="submit">Préparer la pièce</button></div>
+          </form>
+        </div>
+      </div>
       <div id="admin-villages-view" class="admin-subview" hidden>
         <div class="admin-section-heading">
           <div><h3>Gestion des villages</h3><p>Préparer les communes et suivre leur confirmation avant toute publication.</p></div>
@@ -1585,13 +1599,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-levels-view","admin-news-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -2097,6 +2111,24 @@ function adminEditVillage(village) {
 }
 
 window.adminResetVillageForm = adminResetVillageForm;
+window.adminOpenPuzzle = async function(){ adminSetView("admin-puzzle-view","Carte puzzle"); await window.adminLoadPuzzle(); };
+window.adminLoadPuzzle = async function(){
+  const status=document.getElementById("admin-puzzle-status"), list=document.getElementById("admin-puzzle-list"); if(!status||!list)return;
+  status.textContent="Chargement des pièces…"; list.replaceChildren();
+  try { const data=await adminApi("/api/admin/puzzle"); const pieces=Array.isArray(data.pieces)?data.pieces:[];
+    if(!pieces.length){list.textContent="Aucune pièce préparée pour le moment.";} else pieces.forEach(piece=>{
+      const card=document.createElement("div"); card.className="admin-info-panel"; card.style.marginBottom="10px";
+      const title=document.createElement("strong"); title.textContent=piece.village_name; card.appendChild(title);
+      const info=document.createElement("p"); info.textContent="Statut : "+({preparing:"En préparation",hidden:"Mystère",revealed:"Révélée"}[piece.status]||piece.status)+(piece.reveal_at?" · Révélation prévue : "+new Date(piece.reveal_at).toLocaleString("fr-FR"):""); card.appendChild(info);
+      const actions=document.createElement("div"); actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
+      [["Révéler la pièce","revealed"],["Remettre en mystère","hidden"],["En préparation","preparing"]].forEach(([label,value])=>{const b=document.createElement("button");b.type="button";b.className="admin-secondary-btn";b.textContent=label;b.addEventListener("click",async()=>{try{await adminApi(`/api/admin/puzzle/${piece.id}`,{method:"PATCH",body:JSON.stringify({status:value})});await window.adminLoadPuzzle();}catch(e){status.textContent=e.message||"Erreur de mise à jour.";}});actions.appendChild(b);});
+      card.appendChild(actions); list.appendChild(card);
+    }); status.textContent=pieces.length+" pièce(s) enregistrée(s).";
+  } catch(e){status.textContent=e.message||"Impossible de charger la carte puzzle.";}
+};
+const puzzleAdminForm=document.getElementById("admin-puzzle-form");
+if(puzzleAdminForm) puzzleAdminForm.addEventListener("submit",async event=>{event.preventDefault();const status=document.getElementById("admin-puzzle-status"),button=document.getElementById("admin-puzzle-save");button.disabled=true;status.textContent="Enregistrement…";try{const village_name=document.getElementById("admin-puzzle-village").value.trim();const raw=document.getElementById("admin-puzzle-date").value;await adminApi("/api/admin/puzzle",{method:"POST",body:JSON.stringify({village_name,reveal_at:raw?new Date(raw).toISOString():null})});puzzleAdminForm.reset();status.textContent="Pièce préparée.";await window.adminLoadPuzzle();}catch(e){status.textContent=e.message||"Impossible de préparer la pièce.";}finally{button.disabled=false;}});
+
 window.adminOpenVillages = async function() {
   adminSetView("admin-villages-view", "Gestion des villages");
   await window.adminLoadVillages();
@@ -3574,6 +3606,17 @@ if(adminPlayersSearch){
   });
 }
 </script>
+<script>
+(async function loadPublicPuzzle(){
+  try { const response=await fetch("https://tresors-de-nos-villages-serveur.onrender.com/api/puzzle"); if(!response.ok)return; const data=await response.json(); const pieces=Array.isArray(data.pieces)?data.pieces:[];
+    const revealed=pieces.filter(p=>p.status==="revealed"); const count=document.getElementById("puzzle-found-count"); if(count)count.textContent=`${revealed.length} / ${Math.max(5,pieces.length)} pièces découvertes`;
+    const board=document.querySelector("#carte-puzzle-public .puzzle-board"); if(!board||!pieces.length)return; board.replaceChildren();
+    const ordered=[...revealed,...pieces.filter(p=>p.status!=="revealed")]; ordered.forEach(piece=>{const el=document.createElement("div");el.className="puzzle-piece"+(piece.status==="revealed"?" revealed":""); if(piece.status==="revealed"){el.style.filter="none";el.style.background="linear-gradient(145deg,#d7ad45,#b68a2d)";el.style.color="#173e2d";} const name=document.createElement("strong");name.textContent=piece.status==="revealed"?piece.village_name:"Pièce mystère";el.appendChild(name);const small=document.createElement("small");small.textContent=piece.status==="revealed"?"Découverte":piece.status==="preparing"?"En préparation":"À découvrir";el.appendChild(small);board.appendChild(el);});
+    const next=pieces.find(p=>p.status==="preparing"); const banner=document.querySelector("#carte-puzzle-public .puzzle-countdown"); if(next&&banner){banner.querySelector("strong").textContent="Prochaine pièce en préparation : "+next.village_name;banner.querySelector("p").textContent=next.reveal_at?"Révélation prévue le "+new Date(next.reveal_at).toLocaleString("fr-FR"):"La date de révélation sera annoncée prochainement.";}
+  } catch(e){console.warn("Carte puzzle indisponible",e);}
+})();
+</script>
+
 </body>
 </html>
 ```
