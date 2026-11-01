@@ -281,6 +281,12 @@ body.halloween-accueil .home-hero{
 .tester-home-status{font-size:12px;color:#64705f}
 .tester-home-card .primary-btn{white-space:nowrap}
 @media(max-width:650px){.tester-home-card{margin:16px;padding:17px}.tester-home-card .primary-btn{width:100%}}
+
+/* Visuel d'accueil de l'espace testeur */
+.tester-space-banner-wrap{margin:0 0 18px;overflow:hidden;border:1px solid #d7ad45;border-radius:18px;box-shadow:0 8px 24px rgba(35,54,39,.12);background:#062c20}
+.tester-space-banner{display:block;width:100%;height:auto;max-height:440px;object-fit:cover;object-position:center}
+@media(max-width:650px){.tester-space-banner-wrap{border-radius:12px}.tester-space-banner{max-height:260px;object-fit:contain}}
+
 /* Espace privé des testeurs */
 .tester-space-header{background:linear-gradient(135deg,#173f31,#285b43);color:#fffaf0;border:1px solid #c9ae65;border-radius:18px;padding:25px;margin-bottom:20px;box-shadow:0 10px 26px rgba(35,54,39,.10)}
 .tester-space-header .eyebrow{font-size:11px;letter-spacing:1.5px;font-weight:700;color:#f0d58b;margin:0 0 8px}
@@ -636,6 +642,9 @@ body.halloween-accueil .home-hero{
 </section>
 
 <section class="dash-section hidden" id="dash-tester-space">
+  <div class="tester-space-banner-wrap">
+    <img class="tester-space-banner" src="assets/espace-testeur.png" alt="Espace Testeur de Trésors de nos Villages : tester les parcours, signaler les bugs, donner des retours et proposer des idées">
+  </div>
   <div class="tester-space-header">
     <p class="eyebrow">ACCÈS RÉSERVÉ AUX TESTEURS VALIDÉS</p>
     <h3>🔐 Mon espace testeur</h3>
