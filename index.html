@@ -1073,7 +1073,7 @@ body.halloween-accueil .home-hero{
             <label>Nom du lieu<input id="admin-step-place" required maxlength="200" placeholder="Ex. Place du village" style="display:block;width:100%;padding:9px"></label>
             <label>Latitude<input id="admin-step-lat" type="number" step="any" min="-90" max="90" placeholder="50.000000" style="display:block;width:100%;padding:9px"></label>
             <label>Longitude<input id="admin-step-lon" type="number" step="any" min="-180" max="180" placeholder="1.000000" style="display:block;width:100%;padding:9px"></label>
-            <label style="grid-column:1/-1">Photo de l’étape (lien HTTPS)<input id="admin-step-photo" type="url" maxlength="2000" placeholder="https://…" style="display:block;width:100%;padding:9px"></label>
+            <label style="grid-column:1/-1">Photo de l’étape<input id="admin-step-photo-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:block;width:100%;padding:9px"><small>JPG, PNG ou WEBP · 8 Mo maximum</small><input id="admin-step-photo" type="hidden"></label><div id="admin-step-photo-preview" style="grid-column:1/-1"></div>
             <label style="grid-column:1/-1">Énigme (facultatif)<textarea id="admin-step-riddle" rows="2" style="display:block;width:100%;padding:9px"></textarea></label>
             <label>Réponse (facultatif)<input id="admin-step-answer" maxlength="500" style="display:block;width:100%;padding:9px"></label>
             <label>Indice (facultatif)<input id="admin-step-hint" maxlength="1000" style="display:block;width:100%;padding:9px"></label>
@@ -2008,10 +2008,24 @@ window.adminLoadAdventureSteps=async function(id,title){
     const next=Math.max(0,...steps.map(x=>Number(x.step_number)||0))+1;document.getElementById("admin-step-number").value=String(next);
   }catch(e){list.textContent=e.message||"Impossible de charger les étapes.";}
 };
+document.getElementById("admin-step-photo-file")?.addEventListener("change",e=>{const box=document.getElementById("admin-step-photo-preview");box.replaceChildren();const file=e.target.files?.[0];if(!file)return;const img=document.createElement("img");img.alt="Aperçu de la photo choisie";img.src=URL.createObjectURL(file);img.style.cssText="max-width:240px;max-height:160px;object-fit:cover;border-radius:10px";box.appendChild(img);});
 document.getElementById("admin-adventure-step-form")?.addEventListener("submit",async e=>{
   e.preventDefault();const id=window.adminSelectedAdventureId;if(!id){alert("Choisis d'abord un parcours.");return;}const form=e.currentTarget,btn=form.querySelector('button[type="submit"]');btn.disabled=true;
-  const payload={step_number:Number(document.getElementById("admin-step-number").value),place_name:document.getElementById("admin-step-place").value.trim(),latitude:document.getElementById("admin-step-lat").value||null,longitude:document.getElementById("admin-step-lon").value||null,riddle:document.getElementById("admin-step-riddle").value.trim(),answer:document.getElementById("admin-step-answer").value.trim(),hint:document.getElementById("admin-step-hint").value.trim(),photo_url:document.getElementById("admin-step-photo").value.trim()};
-  try{await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps`,{method:"POST",body:JSON.stringify(payload)});document.getElementById("admin-step-place").value="";document.getElementById("admin-step-lat").value="";document.getElementById("admin-step-lon").value="";document.getElementById("admin-step-riddle").value="";document.getElementById("admin-step-answer").value="";document.getElementById("admin-step-hint").value="";document.getElementById("admin-step-photo").value="";const title=document.getElementById("admin-adventure-steps-title").textContent.replace("Étapes — ","");await window.adminLoadAdventureSteps(id,title);document.getElementById("admin-adventures-status").textContent="Étape enregistrée.";}catch(err){alert(err.message||"Impossible d'ajouter l'étape.");}finally{btn.disabled=false;}
+  try{
+    const photoInput=document.getElementById("admin-step-photo-file");
+    const photoFile=photoInput?.files?.[0];
+    let photoUrl=document.getElementById("admin-step-photo").value.trim();
+    if(photoFile){
+      if(!["image/jpeg","image/png","image/webp"].includes(photoFile.type))throw new Error("Choisis une image JPG, PNG ou WEBP.");
+      if(photoFile.size>8*1024*1024)throw new Error("La photo ne doit pas dépasser 8 Mo.");
+      const signed=await adminApi("/api/admin/cloudinary/signature",{method:"POST",body:JSON.stringify({})});
+      const formData=new FormData();formData.append("file",photoFile);formData.append("api_key",signed.api_key);formData.append("timestamp",String(signed.timestamp));formData.append("folder",signed.folder);formData.append("signature",signed.signature);
+      const upload=await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloud_name)}/image/upload`,{method:"POST",body:formData});
+      const uploaded=await upload.json().catch(()=>({}));if(!upload.ok||!uploaded.secure_url)throw new Error(uploaded.error?.message||"L’envoi de la photo a échoué.");photoUrl=uploaded.secure_url;
+    }
+    const payload={step_number:Number(document.getElementById("admin-step-number").value),place_name:document.getElementById("admin-step-place").value.trim(),latitude:document.getElementById("admin-step-lat").value||null,longitude:document.getElementById("admin-step-lon").value||null,riddle:document.getElementById("admin-step-riddle").value.trim(),answer:document.getElementById("admin-step-answer").value.trim(),hint:document.getElementById("admin-step-hint").value.trim(),photo_url:photoUrl};
+    await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps`,{method:"POST",body:JSON.stringify(payload)});document.getElementById("admin-step-place").value="";document.getElementById("admin-step-lat").value="";document.getElementById("admin-step-lon").value="";document.getElementById("admin-step-riddle").value="";document.getElementById("admin-step-answer").value="";document.getElementById("admin-step-hint").value="";document.getElementById("admin-step-photo").value="";if(photoInput)photoInput.value="";document.getElementById("admin-step-photo-preview")?.replaceChildren();const title=document.getElementById("admin-adventure-steps-title").textContent.replace("Étapes — ","");await window.adminLoadAdventureSteps(id,title);document.getElementById("admin-adventures-status").textContent="Étape enregistrée.";
+  }catch(err){alert(err.message||"Impossible d'ajouter l'étape.");}finally{btn.disabled=false;}
 });
 
 function adminComingSoon(name){
