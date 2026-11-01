@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -339,6 +338,8 @@ body.halloween-accueil .home-hero{
 .puzzle-map-frame:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;border:1px solid #f1d88c;border-radius:10px;box-shadow:inset 0 0 35px #21170b99}
 .puzzle-map-image{display:block;width:100%;height:auto;aspect-ratio:1536 / 1024;object-fit:cover;background:#78845c}
 .puzzle-terrain{fill:#78845c}.puzzle-hill{fill:#89936a;opacity:.65}.puzzle-road{fill:none;stroke:#e6d8ae;stroke-width:8;stroke-linecap:round;opacity:.85}.puzzle-road-edge{fill:none;stroke:#7c6947;stroke-width:11;stroke-linecap:round;opacity:.55}.puzzle-water{fill:none;stroke:#7da8a0;stroke-width:12;opacity:.9}.puzzle-village-label{font: bold 20px Georgia,serif;fill:#fff6dc;paint-order:stroke;stroke:#243523;stroke-width:5px;stroke-linejoin:round}.puzzle-small-label{font:15px Georgia,serif;fill:#f6e9c7;paint-order:stroke;stroke:#34412d;stroke-width:4px;stroke-linejoin:round}.puzzle-piece-shape{fill:#aeb2aa;fill-opacity:.88;stroke:#e4e0cf;stroke-width:5;stroke-linejoin:round;filter:drop-shadow(2px 5px 4px #20251b88);transition:fill .8s,fill-opacity .8s,filter .8s}.puzzle-piece-shape.revealed{fill:#d6a83e;fill-opacity:.83;stroke:#ffe08a;filter:drop-shadow(0 0 12px #ffdb65)}.puzzle-piece-shape.preparing{fill:#d4a13c;fill-opacity:.95;stroke:#fff0ad;stroke-width:7;stroke-dasharray:13 7;animation:puzzleGlow 1.8s ease-in-out infinite alternate}.puzzle-piece-label{font:bold 21px Georgia,serif;fill:#343b32;text-anchor:middle;paint-order:stroke;stroke:#e5e0d2;stroke-width:4px;stroke-linejoin:round;pointer-events:none}.puzzle-piece-label.revealed{fill:#173b2a;stroke:#f7d879}.puzzle-legend{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin:14px auto 0;color:#4d513e;font-size:13px}.puzzle-legend span{display:flex;align-items:center;gap:6px}.puzzle-legend i{width:16px;height:16px;border:1px solid #6b6d60;border-radius:4px;display:inline-block}.puzzle-legend .legend-grey{background:#aeb2aa}.puzzle-legend .legend-gold{background:#d6a83e}.puzzle-countdown{max-width:1000px;margin:18px auto 0;padding:20px;text-align:center;border:2px solid #d6ad52;border-radius:14px;background:linear-gradient(120deg,#062c20,#174b35);color:#fbf2dc;box-shadow:0 8px 20px #382a1850}.puzzle-countdown strong{display:block;font-size:clamp(20px,3vw,27px);color:#f3d78e;margin-bottom:7px}.puzzle-countdown p{margin:0;color:#f8efd9;line-height:1.5}.puzzle-note{max-width:1000px;margin:12px auto 0;text-align:center;color:#5e624e;font-size:12px}
+.personal-puzzle-map{max-width:1100px;margin:18px auto}
+.personal-puzzle-map .puzzle-map-image{border-radius:10px}
 @keyframes puzzleGlow{from{filter:drop-shadow(0 0 4px #e7bf59)}to{filter:drop-shadow(0 0 18px #ffe18a)}}
 @media(max-width:650px){.puzzle-section{padding:24px 10px}.puzzle-map-frame{border-width:4px}.puzzle-map-image{min-height:220px}.puzzle-village-label{font-size:24px}.puzzle-small-label{font-size:18px}.puzzle-piece-label{font-size:25px}}
 </style>
@@ -458,6 +459,7 @@ body.halloween-accueil .home-hero{
         <div class="nav-submenu">
           <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
           <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
+          <button class="nav-btn" onclick="showDashSection('dash-puzzle-map')">🧩 &nbsp; Carte aux pièces mystères</button>
         </div>
       </details>
       <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
@@ -465,6 +467,7 @@ body.halloween-accueil .home-hero{
           <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
           <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
           <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
+          <button class="nav-btn" onclick="showDashSection('dash-my-puzzle-progress')">🗺️ &nbsp; Ma progression sur la carte</button>
         </div>
       </details>
       <details class="nav-category"><summary>COMMUNAUTÉ <span class="nav-arrow">⌄</span></summary>
@@ -649,6 +652,32 @@ body.halloween-accueil .home-hero{
     <button class="primary-btn" type="button" onclick="ouvrirPropositionVillage()">Proposer mon village</button>
   </div>
   <p style="font-size:12px;color:#697467;margin-top:14px">Les repères indiquent le centre des villages, pas les étapes précises des parcours.</p>
+</section>
+
+<section class="dash-section hidden" id="dash-puzzle-map">
+  <h3>🧩 La carte aux pièces mystères</h3>
+  <p>Découvre les pièces qui seront révélées progressivement dans le Pas-de-Calais.</p>
+  <div class="puzzle-map-frame">
+    <img class="puzzle-map-image" src="images/carte-puzzle-pas-de-calais.png" alt="Carte puzzle des villages du Pas-de-Calais">
+  </div>
+  <p class="puzzle-note">Les pièces restent grises jusqu'à leur révélation officielle.</p>
+  <button class="small-btn" type="button" onclick="showDashSection('dash-my-puzzle-progress')">Voir ma progression personnelle</button>
+</section>
+
+<section class="dash-section hidden" id="dash-my-puzzle-progress">
+  <h3>🗺️ Ma progression sur la carte</h3>
+  <p>Retrouve ici les villages que tu as personnellement découverts au fil de tes aventures.</p>
+  <div class="puzzle-map-frame">
+    <img class="puzzle-map-image" src="images/carte-puzzle-pas-de-calais.png" alt="Carte de progression personnelle">
+  </div>
+  <div class="map-village-list" id="my-puzzle-village-list">
+    <article class="map-village-card">
+      <strong>🏡 Humbert</strong>
+      <span id="my-puzzle-humbert-status">Statut : pas encore visité</span>
+      <p style="font-size:14px;margin:8px 0">Termine l'aventure de Humbert pour enregistrer ta découverte ici.</p>
+    </article>
+  </div>
+  <p class="puzzle-note">Ta progression est personnelle et liée à ton compte sur cet appareil.</p>
 </section>
 
 <section class="dash-section hidden" id="dash-testers">
@@ -2659,7 +2688,7 @@ function showDashSection(id){
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
-  "dash-home", "dash-profile", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-badges",
+  "dash-home", "dash-profile", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges",
   "dash-stars", "dash-formulas", "dash-help", "dash-news", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
@@ -2674,6 +2703,7 @@ function showDashSection(id){
   if(id === "dash-news") window.loadPublicNews?.();
   if(id === "dash-adventures") window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
+  if(id === "dash-my-puzzle-progress") actualiserProgressionCartePersonnelle();
   if(id === "dash-profile") window.loadExplorerProfile?.();
   if(id === "dash-testers") window.loadTesterApplication?.();
   if(id === "dash-tester-space") window.loadTesterSpace?.();
@@ -2793,6 +2823,12 @@ function refreshProgress(){
 
 let villageMapInstance = null;
 let villageMapMarkers = {};
+function actualiserProgressionCartePersonnelle(){
+  const humbertDone = localStorage.getItem("humbertTamponObtenu") === "true";
+  const status = document.getElementById("my-puzzle-humbert-status");
+  if(status) status.textContent = humbertDone ? "Statut : découvert ✓" : "Statut : pas encore visité";
+}
+
 function actualiserCarteVillages(){
   const humbertDone = localStorage.getItem("humbertTamponObtenu") === "true";
   const hStatus = document.getElementById("map-status-humbert");
@@ -3639,4 +3675,3 @@ if(adminPlayersSearch){
 
 </body>
 </html>
-```
