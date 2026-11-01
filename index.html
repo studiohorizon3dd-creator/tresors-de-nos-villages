@@ -64,6 +64,17 @@ h1{font-size:clamp(34px,4vw,60px);line-height:1.02;margin:0 0 18px}
 .formula-safety{font-size:12px!important;color:#7b5b27!important}
 .formula-body button{margin-top:12px}
 .formula-body button:disabled{opacity:.65;cursor:not-allowed}
+
+/* Détails dépliables des formules : résumé visible, explications au clic */
+.formula-details{width:100%;margin-top:10px;border-top:1px solid #e7dcc0;padding-top:9px}
+.formula-details summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#174b35;font-weight:700;padding:9px 11px;border:1px solid #dfd0a8;border-radius:10px;background:#f8f2e4}
+.formula-details summary::-webkit-details-marker{display:none}
+.formula-details summary::after{content:'＋';font-size:18px;color:#987321;flex:none}
+.formula-details[open] summary::after{content:'−'}
+.formula-details[open] summary{border-color:#c7a24c;background:#f5edda;border-radius:10px 10px 0 0}
+.formula-details .formula-detail-content{padding:10px 2px 2px}
+.formula-details .formula-detail-content h5:first-child{margin-top:5px}
+@media(max-width:600px){.formula-details summary{padding:11px 12px}}
 @media(max-width:900px){.formula-grid{grid-template-columns:1fr}}
 
 
@@ -645,80 +656,80 @@ body.halloween-accueil .home-hero{
     <article class="formula-card">
       <div class="formula-visual child"><img src="images/image-03.jpg" alt="Photo réaliste du parcours child" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price free">Gratuit</span><h4>1. Niveau Enfant</h4>
-        <p class="formula-lead"><strong>10 énigmes</strong> · Une aventure pour apprendre en s'amusant.</p>
+        <p class="formula-lead"><strong>10 énigmes</strong> · Une aventure pour apprendre en s'amusant.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 30 à 45 min</span><span>📍 Distance : À définir</span></p>
         <p>Un parcours ludique à faire avec un adulte accompagnateur.</p>
         <h5>Au programme</h5><ul><li>Devinettes faciles et questions à choix multiples</li><li>Photos à reconnaître et jeux d'observation</li><li>Petits calculs, animaux et nature</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> « J'ai quatre pattes et je fais wouaf. Qui suis-je ? »</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Petit Explorateur, 10 étoiles et tampon enfant.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Parcours en préparation</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Parcours en préparation</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual easy"><img src="images/image-04.jpg" alt="Photo réaliste du parcours easy" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price free">Gratuit</span><h4>2. Niveau Facile</h4>
-        <p class="formula-lead"><strong>10 énigmes</strong> · La première aventure pour découvrir le village.</p>
+        <p class="formula-lead"><strong>10 énigmes</strong> · La première aventure pour découvrir le village.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 45 min à 1 h</span><span>📍 Distance : À définir</span></p>
         <p>Un parcours guidé par le GPS pour explorer les lieux importants et les petites histoires de la commune.</p>
         <h5>Au programme</h5><ul><li>Découverte des bâtiments et lieux du village</li><li>Observation des façades et des panneaux</li><li>Questions simples et anecdotes locales</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> « Trouve la mairie et observe ce qui est inscrit au-dessus de son entrée. »</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Explorateur, 10 étoiles et tampon du village.</p>
-        <button class="small-btn" type="button" onclick="chooseFormula('facile')">Choisir Facile</button></div>
+        </div></details><button class="small-btn" type="button" onclick="chooseFormula('facile')">Choisir Facile</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual family"><img src="images/image-05.jpg" alt="Photo réaliste du parcours family" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">1,99 €</span><h4>3. Niveau Famille</h4>
-        <p class="formula-lead"><strong>15 énigmes</strong> · Une aventure à partager ensemble.</p>
+        <p class="formula-lead"><strong>15 énigmes</strong> · Une aventure à partager ensemble.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 1 h à 1 h 30</span><span>📍 Distance : À définir</span></p>
         <p>Les enfants et les adultes avancent en équipe et mettent leurs idées en commun.</p>
         <h5>Au programme</h5><ul><li>Devinettes pour les enfants</li><li>Questions de culture générale pour les adultes</li><li>Défis d'équipe, observation et mémoire</li><li>Questions sur l'histoire locale</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> l'enfant observe une photo et le parent résout une question pour obtenir la suite.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Famille Aventurière, 15 étoiles et souvenir familial.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual medium"><img src="images/image-06.jpg" alt="Photo réaliste du parcours medium" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">1,99 €</span><h4>4. Niveau Moyen</h4>
-        <p class="formula-lead"><strong>15 énigmes</strong> · Réflexion et observation.</p>
+        <p class="formula-lead"><strong>15 énigmes</strong> · Réflexion et observation.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 1 h à 1 h 30</span><span>📍 Distance : À définir</span></p>
         <p>Un parcours pour les explorateurs qui aiment chercher, comprendre et assembler des indices.</p>
         <h5>Au programme</h5><ul><li>Codes secrets et messages à déchiffrer</li><li>Énigmes de logique et questions historiques</li><li>Observation de détails précis</li><li>Association de plusieurs indices</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> retrouve trois chiffres au fil du parcours et assemble-les dans le bon ordre.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Aventurier confirmé, 15 étoiles et carte souvenir spéciale.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual hard"><img src="images/image-07.jpg" alt="Photo réaliste du parcours hard" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">2,99 €</span><h4>5. Niveau Difficile</h4>
-        <p class="formula-lead"><strong>20 énigmes</strong> · Une véritable enquête.</p>
+        <p class="formula-lead"><strong>20 énigmes</strong> · Une véritable enquête.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 1 h 30 à 2 h</span><span>📍 Distance : À définir</span></p>
         <p>Il faut réfléchir, déduire et faire travailler sa mémoire pour relier les découvertes.</p>
         <h5>Au programme</h5><ul><li>Énigmes à plusieurs étapes</li><li>Messages codés et déductions logiques</li><li>Questions historiques plus précises</li><li>Indices qui se complètent</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> plusieurs lieux donnent chacun un morceau de phrase à reconstituer.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Maître Explorateur, 20 étoiles et trésor numérique.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual extreme"><img src="images/image-08.jpg" alt="Photo réaliste du parcours extreme" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">3,99 €</span><h4>6. Niveau Extrême</h4>
-        <p class="formula-lead"><strong>25 énigmes</strong> · Le grand défi des explorateurs.</p>
+        <p class="formula-lead"><strong>25 énigmes</strong> · Le grand défi des explorateurs.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 2 h à 3 h</span><span>📍 Distance : À définir</span></p>
         <p>Une aventure longue avec une enquête construite étape par étape. Chaque réponse peut servir plus tard.</p>
         <h5>Au programme</h5><ul><li>Codes à plusieurs combinaisons</li><li>Énigmes mathématiques et déductions complexes</li><li>Messages cryptés et réponses à combiner</li><li>Grande énigme finale</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> retrouve un code de six chiffres grâce aux réponses récoltées auparavant.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Légende des villages, 25 étoiles et médaille virtuelle exclusive.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual night"><img src="images/image-09.jpg" alt="Photo réaliste du parcours night" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">3,99 €</span><h4>7. Niveau Nuit</h4>
-        <p class="formula-lead"><strong>20 énigmes</strong> · Une aventure mystérieuse après la tombée de la nuit.</p>
+        <p class="formula-lead"><strong>20 énigmes</strong> · Une aventure mystérieuse après la tombée de la nuit.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 1 h à 1 h 30</span><span>📍 Distance : À définir</span></p>
         <p>Une ambiance différente, avec une histoire à découvrir au fil des messages et des énigmes.</p>
         <h5>Au programme</h5><ul><li>Messages mystérieux et codes secrets</li><li>Histoires et légendes locales</li><li>Silhouettes illustrées et sons à reconnaître</li><li>Enquête et révélation finale</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> trois symboles retrouvés dans l'histoire révèlent ce que le vieux gardien voulait protéger.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Gardien de la nuit, 20 étoiles et trésor nocturne.</p>
         <p class="formula-safety">Parcours sur des lieux publics autorisés, avec horaires et conditions de sécurité adaptés.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card formula-card-pack">
       <div class="formula-visual pack" role="img" aria-label="Coffre au trésor et récompenses du pack complet">
@@ -727,13 +738,13 @@ body.halloween-accueil .home-hero{
         <small>5 aventures · 1 grande collection</small>
       </div>
       <div class="formula-body"><span class="formula-price pack-price">Offre spéciale</span><h4>8. Pack Complet</h4>
-        <p class="formula-lead"><strong>5 aventures réunies</strong> · Toute l'expérience à prix réduit.</p>
+        <p class="formula-lead"><strong>5 aventures réunies</strong> · Toute l'expérience à prix réduit.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⭐ 95 énigmes au total</span><span>🏆 5 récompenses</span></p>
         <p>Profite de toutes les formules payantes et découvre les villages à ton rythme.</p>
         <h5>Le pack comprend</h5><ul><li>Niveau Famille — 15 énigmes</li><li>Niveau Moyen — 15 énigmes</li><li>Niveau Difficile — 20 énigmes</li><li>Niveau Extrême — 25 énigmes</li><li>Niveau Nuit — 20 énigmes</li></ul>
         <p class="formula-example"><strong>Ton avantage :</strong> 14,95 € en achetant les 5 formules séparément, au lieu de 9,99 € avec le pack. Tu économises 4,96 €.</p>
         <p class="formula-reward"><strong>Bonus :</strong> badge Légende des villages, collection complète des récompenses et accès à l'aventure secrète bonus.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card formula-card-pack">
       <div class="formula-visual pack" role="img" aria-label="Carte et deux villages à découvrir">
@@ -744,12 +755,12 @@ body.halloween-accueil .home-hero{
       <div class="formula-body">
         <span class="formula-price pack-price">Tarif à définir</span>
         <h4>9. Pack Voyageur</h4>
-        <p class="formula-lead"><strong>Choisis 2 villages</strong> · Deux aventures à collectionner.</p>
+        <p class="formula-lead"><strong>Choisis 2 villages</strong> · Deux aventures à collectionner.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p>Compose ton voyage en sélectionnant deux communes parmi les villages qui proposeront une aventure.</p>
         <h5>Le pack comprend</h5>
         <ul><li>Le choix de 2 villages</li><li>Les formules disponibles dans chacun des villages sélectionnés</li><li>Deux tampons à ajouter à ton passeport de voyageur</li></ul>
         <p class="formula-reward"><strong>Objectif :</strong> découvrir plusieurs communes et enrichir ton passeport.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
       </div>
     </article>
     <article class="formula-card formula-card-pack">
@@ -761,12 +772,12 @@ body.halloween-accueil .home-hero{
       <div class="formula-body">
         <span class="formula-price pack-price">Tarif à définir</span>
         <h4>10. Pack Grand Voyageur</h4>
-        <p class="formula-lead"><strong>Choisis 3 villages</strong> · Le grand circuit des explorateurs.</p>
+        <p class="formula-lead"><strong>Choisis 3 villages</strong> · Le grand circuit des explorateurs.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p>Prépare un parcours de découverte à travers trois communes participantes.</p>
         <h5>Le pack comprend</h5>
         <ul><li>Le choix de 3 villages</li><li>Les formules disponibles dans chacun des villages sélectionnés</li><li>Trois tampons à collectionner dans ton passeport</li></ul>
         <p class="formula-reward"><strong>Objectif :</strong> partir à la découverte de trois villages et compléter ta collection.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
       </div>
     </article>
   </div>
@@ -880,15 +891,19 @@ body.halloween-accueil .home-hero{
       </div>
       <div class="admin-nav-label">PILOTAGE</div>
       <button class="admin-nav-item active" type="button" onclick="adminShowHome()"><span>▦</span> Tableau de bord</button>
-      <div class="admin-nav-label">GESTION</div>
-      <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
+      <div class="admin-nav-label">GESTION DES AVENTURES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Mystères & événements')"><span>✨</span> Mystères & événements</button>
+      <div class="admin-nav-label">GESTION DES MEMBRES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
-      <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
-      <div class="admin-nav-label">SUIVI</div>
+      <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
+      <div class="admin-nav-label">GESTION COMMERCIALE</div>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')"><span>€</span> Formules & paiements</button>
+      <div class="admin-nav-label">SUIVI DU SITE</div>
       <button class="admin-nav-item" type="button" onclick="adminShowAnalytics()"><span>▥</span> Statistiques</button>
-      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules et paiements')"><span>€</span> Formules & paiements</button>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Récompenses & collections')"><span>🏆</span> Récompenses & collections</button>
       <div class="admin-sidebar-bottom">
         <span class="admin-online-dot"></span> Espace sécurisé
         <button type="button" onclick="returnHome()">↩ Retour au site</button>
