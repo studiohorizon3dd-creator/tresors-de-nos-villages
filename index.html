@@ -19,6 +19,18 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #d7ad
 .brand-name{text-align:center;font-size:27px;font-weight:bold;line-height:1.05;margin:8px 0 30px}
 .nav-btn{display:block;width:100%;border:0;border-radius:12px;background:transparent;color:#fff4cf;text-align:left;padding:14px 15px;margin:4px 0;font-size:17px}
 .nav-btn:hover,.nav-btn.active{background:#656321}
+/* Menu latéral organisé en catégories repliables */
+.nav-accordion{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:7px;}
+.nav-category{border-bottom:1px solid rgba(255,244,207,.18);padding:2px 0 7px;}
+.nav-category>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-radius:10px;color:#ffe49b;font-weight:700;font-size:14px;letter-spacing:1px;user-select:none;}
+.nav-category>summary::-webkit-details-marker{display:none;}
+.nav-category>summary:hover,.nav-category[open]>summary{background:rgba(255,228,155,.12);}
+.nav-arrow{font-size:20px;transition:transform .18s ease;}
+.nav-category[open] .nav-arrow{transform:rotate(180deg);}
+.nav-submenu{padding:2px 0 3px 8px;}
+.nav-submenu .nav-btn{font-size:15px;padding:11px 12px;margin:2px 0;}
+.nav-bottom-links{margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,244,207,.2);}
+
 .sidebar-note{margin-top:auto;text-align:center;color:#c9c39b;font-size:13px;line-height:1.6}
 .content {
   margin-left: 245px;
@@ -64,6 +76,17 @@ h1{font-size:clamp(34px,4vw,60px);line-height:1.02;margin:0 0 18px}
 .formula-safety{font-size:12px!important;color:#7b5b27!important}
 .formula-body button{margin-top:12px}
 .formula-body button:disabled{opacity:.65;cursor:not-allowed}
+
+/* Détails dépliables des formules : résumé visible, explications au clic */
+.formula-details{width:100%;margin-top:10px;border-top:1px solid #e7dcc0;padding-top:9px}
+.formula-details summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#174b35;font-weight:700;padding:9px 11px;border:1px solid #dfd0a8;border-radius:10px;background:#f8f2e4}
+.formula-details summary::-webkit-details-marker{display:none}
+.formula-details summary::after{content:'＋';font-size:18px;color:#987321;flex:none}
+.formula-details[open] summary::after{content:'−'}
+.formula-details[open] summary{border-color:#c7a24c;background:#f5edda;border-radius:10px 10px 0 0}
+.formula-details .formula-detail-content{padding:10px 2px 2px}
+.formula-details .formula-detail-content h5:first-child{margin-top:5px}
+@media(max-width:600px){.formula-details summary{padding:11px 12px}}
 @media(max-width:900px){.formula-grid{grid-template-columns:1fr}}
 
 
@@ -245,7 +268,7 @@ body.halloween-accueil .home-hero{
 @media(max-width:1050px){.admin-workspace{grid-template-columns:205px minmax(0,1fr)}.admin-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.admin-workspace{display:block;margin:-24px -16px;min-height:0}.admin-sidebar{padding:12px;display:block}.admin-brand{flex-direction:row;justify-content:center;padding:4px 4px 12px;margin-bottom:8px}.admin-brand-mark{width:34px;height:34px;font-size:20px}.admin-brand small{display:none}.admin-nav-label{display:none}.admin-nav-item{display:inline-flex;width:auto;padding:9px;margin:2px;font-size:11px}.admin-sidebar-bottom{display:none}.admin-main{padding:17px 13px 25px}.admin-topbar{align-items:flex-start;flex-direction:column}.admin-welcome{padding:20px}.admin-shortcut-grid,.admin-bottom-grid{grid-template-columns:1fr}}
 @media(max-width:420px){.admin-metric-grid{grid-template-columns:1fr 1fr}.admin-metric{padding:12px}.admin-metric strong{font-size:24px}.admin-nav-item{font-size:10px;padding:8px}}
-@media(max-width:650px){#admin-village-form,#admin-adventure-form,#admin-adventure-step-form{grid-template-columns:1fr!important}#admin-village-form{grid-template-columns:1fr!important}#admin-village-form label[style*="grid-column:1/-1"]{grid-column:1!important}}
+@media(max-width:650px){#admin-village-form{grid-template-columns:1fr!important}#admin-village-form label[style*="grid-column:1/-1"]{grid-column:1!important}}
 
 
 /* Invitation testeur sur l'accueil */
@@ -282,7 +305,25 @@ body.halloween-accueil .home-hero{
 #dashboard .tester-home-card[hidden] {
   display: none !important;
 }
-\n</style>
+\n
+/* SUPPORT ADMIN TABLE */
+/* À ajouter dans le <style> principal de index.html */
+#admin-support-list { width:100%; }
+.support-admin-scroll { width:100%; overflow-x:auto; border:1px solid #e2d7bc; border-radius:13px; background:#fffdf7; }
+.support-admin-table { width:100%; min-width:900px; border-collapse:collapse; font:14px Arial,sans-serif; }
+.support-admin-table th { position:sticky; top:0; background:#eee8d6; color:#173e2d; text-align:left; padding:14px 12px; }
+.support-admin-table td { padding:14px 12px; border-top:1px solid #eee7d8; vertical-align:top; }
+.support-admin-table tr:hover td { background:#fbf7ec; }
+.support-admin-message { white-space:pre-wrap; overflow-wrap:anywhere; min-width:220px; max-width:390px; line-height:1.55; }
+.support-admin-reply { display:block; width:min(100%,520px); min-height:145px; padding:13px; border:1px solid #cdbb8d; border-radius:9px; font:15px/1.5 Arial,sans-serif; resize:vertical; background:#fff; color:#20392b; }
+.support-admin-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:230px; }
+.support-admin-actions select,.support-admin-actions button { padding:9px 11px; border:1px solid #c9ae65; border-radius:8px; background:#fffaf0; color:#244b36; font-weight:600; }
+.support-admin-send { background:#174b37 !important; color:#fff !important; }
+@media(max-width:700px){.support-admin-table{min-width:760px}.support-admin-reply{min-width:230px}}
+
+
+@media(max-width:900px){.nav-list.nav-accordion{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start}.nav-accordion .nav-btn{width:100%;text-align:left}.nav-category{width:100%}.nav-bottom-links{width:100%}}
+</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
@@ -378,20 +419,38 @@ body.halloween-accueil .home-hero{
 <section class="dashboard" id="dashboard">
   <aside class="sidebar">
     <div class="brand-mark">✥</div><div class="brand-name">Trésors<br>de nos Villages</div>
-    <nav class="nav-list" aria-label="Menu explorateur">
-      <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
-      <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
-      <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
-      <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
-      <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
-      <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
-      <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
-      <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
-      <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
-      <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
-      <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
-      <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" hidden>⚙ &nbsp; Administration</button>
-      <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
+    <nav class="nav-list nav-accordion" aria-label="Menu explorateur">
+      <details class="nav-category"><summary>EXPLORER <span class="nav-arrow">⌄</span></summary>
+        <div class="nav-submenu">
+          <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
+          <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
+        </div>
+      </details>
+      <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
+        <div class="nav-submenu">
+          <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
+          <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
+          <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
+        </div>
+      </details>
+      <details class="nav-category"><summary>COMMUNAUTÉ <span class="nav-arrow">⌄</span></summary>
+        <div class="nav-submenu">
+          <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
+          <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
+        </div>
+      </details>
+      <details class="nav-category"><summary>INFORMATIONS <span class="nav-arrow">⌄</span></summary>
+        <div class="nav-submenu">
+          <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
+          <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
+          <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
+          <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
+        </div>
+      </details>
+      <div class="nav-bottom-links">
+        <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" hidden>⚙ &nbsp; Administration</button>
+        <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
+      </div>
     </nav>
     <div class="sidebar-note">Bonne exploration !</div>
   </aside>
@@ -579,49 +638,56 @@ body.halloween-accueil .home-hero{
 <section class="dash-section hidden" id="dash-tester-space">
   <div class="tester-space-header">
     <p class="eyebrow">ACCÈS RÉSERVÉ AUX TESTEURS VALIDÉS</p>
-    <h3>🔐 Espace testeurs</h3>
-    <p>Bienvenue dans les coulisses de Trésors de nos Villages ! Merci de nous aider à améliorer les aventures avant leur ouverture.</p>
+    <h3>🔐 Mon espace testeur</h3>
+    <p>Retrouve ici uniquement les villages et niveaux que l’administration t’a confiés.</p>
     <span class="tester-official-badge">🧪 Testeur officiel</span>
   </div>
-  <div class="tester-space-grid">
-    <article class="tester-space-card">
-      <div class="feature-icon">🗺️</div>
-      <h4>Parcours à tester</h4>
-      <p>Les parcours seront affichés ici dès qu’une session de test sera ouverte et que les autorisations nécessaires seront confirmées.</p>
-      <span class="tester-space-tag">Aucun parcours ouvert pour le moment</span>
-    </article>
-    <article class="tester-space-card">
-      <div class="feature-icon">🧩</div>
-      <h4>Missions de test</h4>
-      <ul>
-        <li>Vérifier que les énigmes sont compréhensibles.</li>
-        <li>Signaler les indices difficiles ou ambigus.</li>
-        <li>Vérifier le bon fonctionnement de la carte et du GPS.</li>
-        <li>Donner son avis sur la durée et la difficulté du parcours.</li>
-      </ul>
-      <span class="tester-space-tag">Consignes communiquées au lancement des tests</span>
-    </article>
-    <article class="tester-space-card">
-      <div class="feature-icon">💬</div>
-      <h4>Retours et problèmes</h4>
-      <p>Lorsqu’une session sera ouverte, tu pourras transmettre tes observations à l’équipe depuis les consignes de cette session.</p>
-      <span class="tester-space-tag">Outil de retour à venir</span>
-    </article>
+  <p id="tester-space-status" class="status" role="status" aria-live="polite">Chargement de tes autorisations…</p>
+  <div class="tester-space-card" style="margin:14px 0">
+    <h4>🗺️ Mes parcours autorisés</h4>
+    <div id="tester-space-access-list"><p>Chargement…</p></div>
   </div>
-  <p class="tester-space-note">Cet espace est réservé aux comptes dont la candidature a été acceptée. L’accès testeur ne donne pas automatiquement accès aux aventures payantes ni aux données des autres joueurs.</p>
+  <div class="tester-space-card" style="margin:14px 0">
+    <h4>💬 Envoyer un retour de test</h4>
+    <p>Choisis l’un de tes accès, puis explique le problème rencontré ou ton idée d’amélioration.</p>
+    <form id="tester-feedback-form" style="display:grid;gap:10px">
+      <label>Village et niveau autorisés
+        <select id="tester-feedback-access" required style="display:block;width:100%;padding:11px;border:1px solid #d4c49c;border-radius:9px;background:white"><option value="">Chargement des accès…</option></select>
+      </label>
+      <label>Type de retour
+        <select id="tester-feedback-category" required style="display:block;width:100%;padding:11px;border:1px solid #d4c49c;border-radius:9px;background:white">
+          <option value="bug">🐞 Signaler un bug</option><option value="idee">💡 Proposer une idée</option><option value="experience">⭐ Donner mon avis</option><option value="autre">📝 Autre remarque</option>
+        </select>
+      </label>
+      <label>Ton message
+        <textarea id="tester-feedback-message" required minlength="5" maxlength="3000" rows="4" placeholder="Décris ce que tu as remarqué…" style="width:100%;padding:11px;border:1px solid #d4c49c;border-radius:9px"></textarea>
+      </label>
+      <button type="submit" class="primary-btn" id="tester-feedback-submit">Envoyer mon retour</button>
+      <p id="tester-feedback-form-status" class="status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+  <div class="tester-space-card" style="margin:14px 0">
+    <h4>📋 Mes retours précédents</h4>
+    <p>Seuls tes propres messages apparaissent dans cette liste.</p>
+    <div id="tester-feedback-history"><p>Chargement…</p></div>
+  </div>
+  <div class="tester-space-card" style="margin:14px 0">
+    <h4>🧩 Les points à vérifier</h4>
+    <ul><li>Les énigmes sont-elles compréhensibles ?</li><li>Les indices et les réponses fonctionnent-ils ?</li><li>La carte et la validation GPS fonctionnent-elles à l’arrivée ?</li><li>Le parcours est-il agréable et adapté à son niveau ?</li></ul>
+  </div>
+  <p class="tester-space-note">Ton espace est personnel. Les autres testeurs ne peuvent pas consulter tes accès ni tes retours. L’accès testeur ne donne pas automatiquement accès aux aventures payantes.</p>
 </section>
 
 <section class="dash-section hidden" id="dash-adventures">
   <h3>Mes aventures</h3>
-
-  <div class="feature-grid">
-    <article class="feature">
-      <div class="feature-icon">🗺️</div>
-      <h3>Nos aventures arrivent bientôt !</h3>
-      <p>De nouvelles aventures se préparent pour vous faire découvrir le patrimoine, les histoires et les secrets de nos villages.</p>
-      <p>Nos parcours sont en préparation. Nous vous donnerons rendez-vous dès que les autorisations nécessaires seront confirmées.</p>
-      <p><strong>Merci pour votre patience et à très bientôt ! 🌱</strong></p>
-    </article>
+  <p>Choisis une aventure à laquelle tu as accès. Ton arrivée sera vérifiée grâce au GPS.</p>
+  <p id="player-adventures-status" role="status" aria-live="polite">Chargement de tes aventures…</p>
+  <div id="player-adventures-list" class="feature-grid"></div>
+  <div id="player-adventure-detail" class="feature" style="display:none;text-align:left;margin-top:20px">
+    <button type="button" class="small-btn" onclick="loadPlayerAdventures()">← Retour aux aventures</button>
+    <h3 id="player-adventure-title"></h3>
+    <p id="player-adventure-progress"></p>
+    <div id="player-adventure-steps"></div>
   </div>
 </section>
 
@@ -645,80 +711,80 @@ body.halloween-accueil .home-hero{
     <article class="formula-card">
       <div class="formula-visual child"><img src="images/image-03.jpg" alt="Photo réaliste du parcours child" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price free">Gratuit</span><h4>1. Niveau Enfant</h4>
-        <p class="formula-lead"><strong>10 énigmes</strong> · Une aventure pour apprendre en s'amusant.</p>
+        <p class="formula-lead"><strong>10 énigmes</strong> · Une aventure pour apprendre en s'amusant.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 30 à 45 min</span><span>📍 Distance : À définir</span></p>
         <p>Un parcours ludique à faire avec un adulte accompagnateur.</p>
         <h5>Au programme</h5><ul><li>Devinettes faciles et questions à choix multiples</li><li>Photos à reconnaître et jeux d'observation</li><li>Petits calculs, animaux et nature</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> « J'ai quatre pattes et je fais wouaf. Qui suis-je ? »</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Petit Explorateur, 10 étoiles et tampon enfant.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Parcours en préparation</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Parcours en préparation</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual easy"><img src="images/image-04.jpg" alt="Photo réaliste du parcours easy" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price free">Gratuit</span><h4>2. Niveau Facile</h4>
-        <p class="formula-lead"><strong>10 énigmes</strong> · La première aventure pour découvrir le village.</p>
+        <p class="formula-lead"><strong>10 énigmes</strong> · La première aventure pour découvrir le village.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 45 min à 1 h</span><span>📍 Distance : À définir</span></p>
         <p>Un parcours guidé par le GPS pour explorer les lieux importants et les petites histoires de la commune.</p>
         <h5>Au programme</h5><ul><li>Découverte des bâtiments et lieux du village</li><li>Observation des façades et des panneaux</li><li>Questions simples et anecdotes locales</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> « Trouve la mairie et observe ce qui est inscrit au-dessus de son entrée. »</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Explorateur, 10 étoiles et tampon du village.</p>
-        <button class="small-btn" type="button" onclick="chooseFormula('facile')">Choisir Facile</button></div>
+        </div></details><button class="small-btn" type="button" onclick="chooseFormula('facile')">Choisir Facile</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual family"><img src="images/image-05.jpg" alt="Photo réaliste du parcours family" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">1,99 €</span><h4>3. Niveau Famille</h4>
-        <p class="formula-lead"><strong>15 énigmes</strong> · Une aventure à partager ensemble.</p>
+        <p class="formula-lead"><strong>15 énigmes</strong> · Une aventure à partager ensemble.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 1 h à 1 h 30</span><span>📍 Distance : À définir</span></p>
         <p>Les enfants et les adultes avancent en équipe et mettent leurs idées en commun.</p>
         <h5>Au programme</h5><ul><li>Devinettes pour les enfants</li><li>Questions de culture générale pour les adultes</li><li>Défis d'équipe, observation et mémoire</li><li>Questions sur l'histoire locale</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> l'enfant observe une photo et le parent résout une question pour obtenir la suite.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Famille Aventurière, 15 étoiles et souvenir familial.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual medium"><img src="images/image-06.jpg" alt="Photo réaliste du parcours medium" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">1,99 €</span><h4>4. Niveau Moyen</h4>
-        <p class="formula-lead"><strong>15 énigmes</strong> · Réflexion et observation.</p>
+        <p class="formula-lead"><strong>15 énigmes</strong> · Réflexion et observation.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 1 h à 1 h 30</span><span>📍 Distance : À définir</span></p>
         <p>Un parcours pour les explorateurs qui aiment chercher, comprendre et assembler des indices.</p>
         <h5>Au programme</h5><ul><li>Codes secrets et messages à déchiffrer</li><li>Énigmes de logique et questions historiques</li><li>Observation de détails précis</li><li>Association de plusieurs indices</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> retrouve trois chiffres au fil du parcours et assemble-les dans le bon ordre.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Aventurier confirmé, 15 étoiles et carte souvenir spéciale.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual hard"><img src="images/image-07.jpg" alt="Photo réaliste du parcours hard" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">2,99 €</span><h4>5. Niveau Difficile</h4>
-        <p class="formula-lead"><strong>20 énigmes</strong> · Une véritable enquête.</p>
+        <p class="formula-lead"><strong>20 énigmes</strong> · Une véritable enquête.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 1 h 30 à 2 h</span><span>📍 Distance : À définir</span></p>
         <p>Il faut réfléchir, déduire et faire travailler sa mémoire pour relier les découvertes.</p>
         <h5>Au programme</h5><ul><li>Énigmes à plusieurs étapes</li><li>Messages codés et déductions logiques</li><li>Questions historiques plus précises</li><li>Indices qui se complètent</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> plusieurs lieux donnent chacun un morceau de phrase à reconstituer.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Maître Explorateur, 20 étoiles et trésor numérique.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual extreme"><img src="images/image-08.jpg" alt="Photo réaliste du parcours extreme" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">3,99 €</span><h4>6. Niveau Extrême</h4>
-        <p class="formula-lead"><strong>25 énigmes</strong> · Le grand défi des explorateurs.</p>
+        <p class="formula-lead"><strong>25 énigmes</strong> · Le grand défi des explorateurs.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 2 h à 3 h</span><span>📍 Distance : À définir</span></p>
         <p>Une aventure longue avec une enquête construite étape par étape. Chaque réponse peut servir plus tard.</p>
         <h5>Au programme</h5><ul><li>Codes à plusieurs combinaisons</li><li>Énigmes mathématiques et déductions complexes</li><li>Messages cryptés et réponses à combiner</li><li>Grande énigme finale</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> retrouve un code de six chiffres grâce aux réponses récoltées auparavant.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Légende des villages, 25 étoiles et médaille virtuelle exclusive.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card">
       <div class="formula-visual night"><img src="images/image-09.jpg" alt="Photo réaliste du parcours night" loading="lazy"></div>
       <div class="formula-body"><span class="formula-price">3,99 €</span><h4>7. Niveau Nuit</h4>
-        <p class="formula-lead"><strong>20 énigmes</strong> · Une aventure mystérieuse après la tombée de la nuit.</p>
+        <p class="formula-lead"><strong>20 énigmes</strong> · Une aventure mystérieuse après la tombée de la nuit.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⏱️ Durée estimée : 1 h à 1 h 30</span><span>📍 Distance : À définir</span></p>
         <p>Une ambiance différente, avec une histoire à découvrir au fil des messages et des énigmes.</p>
         <h5>Au programme</h5><ul><li>Messages mystérieux et codes secrets</li><li>Histoires et légendes locales</li><li>Silhouettes illustrées et sons à reconnaître</li><li>Enquête et révélation finale</li></ul>
         <p class="formula-example"><strong>Exemple :</strong> trois symboles retrouvés dans l'histoire révèlent ce que le vieux gardien voulait protéger.</p>
         <p class="formula-reward"><strong>Récompense :</strong> badge Gardien de la nuit, 20 étoiles et trésor nocturne.</p>
         <p class="formula-safety">Parcours sur des lieux publics autorisés, avec horaires et conditions de sécurité adaptés.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card formula-card-pack">
       <div class="formula-visual pack" role="img" aria-label="Coffre au trésor et récompenses du pack complet">
@@ -727,13 +793,13 @@ body.halloween-accueil .home-hero{
         <small>5 aventures · 1 grande collection</small>
       </div>
       <div class="formula-body"><span class="formula-price pack-price">Offre spéciale</span><h4>8. Pack Complet</h4>
-        <p class="formula-lead"><strong>5 aventures réunies</strong> · Toute l'expérience à prix réduit.</p>
+        <p class="formula-lead"><strong>5 aventures réunies</strong> · Toute l'expérience à prix réduit.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p class="formula-meta"><span>⭐ 95 énigmes au total</span><span>🏆 5 récompenses</span></p>
         <p>Profite de toutes les formules payantes et découvre les villages à ton rythme.</p>
         <h5>Le pack comprend</h5><ul><li>Niveau Famille — 15 énigmes</li><li>Niveau Moyen — 15 énigmes</li><li>Niveau Difficile — 20 énigmes</li><li>Niveau Extrême — 25 énigmes</li><li>Niveau Nuit — 20 énigmes</li></ul>
         <p class="formula-example"><strong>Ton avantage :</strong> 14,95 € en achetant les 5 formules séparément, au lieu de 9,99 € avec le pack. Tu économises 4,96 €.</p>
         <p class="formula-reward"><strong>Bonus :</strong> badge Légende des villages, collection complète des récompenses et accès à l'aventure secrète bonus.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button></div>
     </article>
     <article class="formula-card formula-card-pack">
       <div class="formula-visual pack" role="img" aria-label="Carte et deux villages à découvrir">
@@ -744,12 +810,12 @@ body.halloween-accueil .home-hero{
       <div class="formula-body">
         <span class="formula-price pack-price">Tarif à définir</span>
         <h4>9. Pack Voyageur</h4>
-        <p class="formula-lead"><strong>Choisis 2 villages</strong> · Deux aventures à collectionner.</p>
+        <p class="formula-lead"><strong>Choisis 2 villages</strong> · Deux aventures à collectionner.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p>Compose ton voyage en sélectionnant deux communes parmi les villages qui proposeront une aventure.</p>
         <h5>Le pack comprend</h5>
         <ul><li>Le choix de 2 villages</li><li>Les formules disponibles dans chacun des villages sélectionnés</li><li>Deux tampons à ajouter à ton passeport de voyageur</li></ul>
         <p class="formula-reward"><strong>Objectif :</strong> découvrir plusieurs communes et enrichir ton passeport.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
       </div>
     </article>
     <article class="formula-card formula-card-pack">
@@ -761,12 +827,12 @@ body.halloween-accueil .home-hero{
       <div class="formula-body">
         <span class="formula-price pack-price">Tarif à définir</span>
         <h4>10. Pack Grand Voyageur</h4>
-        <p class="formula-lead"><strong>Choisis 3 villages</strong> · Le grand circuit des explorateurs.</p>
+        <p class="formula-lead"><strong>Choisis 3 villages</strong> · Le grand circuit des explorateurs.</p><details class="formula-details"><summary>En savoir plus sur cette formule</summary><div class="formula-detail-content">
         <p>Prépare un parcours de découverte à travers trois communes participantes.</p>
         <h5>Le pack comprend</h5>
         <ul><li>Le choix de 3 villages</li><li>Les formules disponibles dans chacun des villages sélectionnés</li><li>Trois tampons à collectionner dans ton passeport</li></ul>
         <p class="formula-reward"><strong>Objectif :</strong> partir à la découverte de trois villages et compléter ta collection.</p>
-        <button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
+        </div></details><button class="small-btn" type="button" disabled aria-disabled="true">Bientôt disponible</button>
       </div>
     </article>
   </div>
@@ -801,18 +867,8 @@ body.halloween-accueil .home-hero{
 <section class="dash-section hidden" id="dash-news">
   <h3>📰 Actualités</h3>
   <p>Retrouve ici les nouvelles de Trésors de nos Villages et les prochains parcours à découvrir.</p>
-  <article class="feature" style="margin:18px 0">
-    <p class="eyebrow">Le projet</p>
-    <h3>Bienvenue sur Trésors de nos Villages !</h3>
-    <p>Le site évolue pour vous faire découvrir les villages autrement, grâce à des parcours, des indices et des énigmes à résoudre.</p>
-    <p class="status">Première aventure : Humbert, dans le Pas-de-Calais.</p>
-  </article>
-  <article class="feature" style="margin:18px 0">
-    <p class="eyebrow">Prochainement</p>
-    <h3>De nouveaux villages en préparation</h3>
-    <p>D’autres communes pourront bientôt rejoindre la carte. Les parcours seront annoncés ici lorsqu’ils seront prêts.</p>
-    <p class="status">Reviens consulter cette page pour suivre les nouveautés !</p>
-  </article>
+  <p id="public-news-status" class="status" role="status" aria-live="polite">Chargement des actualités…</p>
+  <div id="public-news-list" aria-live="polite"></div>
 </section>
 
 <section class="dash-section hidden" id="dash-town-contact">
@@ -880,15 +936,21 @@ body.halloween-accueil .home-hero{
       </div>
       <div class="admin-nav-label">PILOTAGE</div>
       <button class="admin-nav-item active" type="button" onclick="adminShowHome()"><span>▦</span> Tableau de bord</button>
-      <div class="admin-nav-label">GESTION</div>
-      <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
+      <div class="admin-nav-label">GESTION DES AVENTURES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenLevels()"><span>✦</span> Niveaux par village</button>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Mystères & événements')"><span>✨</span> Mystères & événements</button>
+      <div class="admin-nav-label">GESTION DES MEMBRES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
-      <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
-      <div class="admin-nav-label">SUIVI</div>
+      <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des actualités</button>
+      <div class="admin-nav-label">GESTION COMMERCIALE</div>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')"><span>€</span> Formules & paiements</button>
+      <div class="admin-nav-label">SUIVI DU SITE</div>
       <button class="admin-nav-item" type="button" onclick="adminShowAnalytics()"><span>▥</span> Statistiques</button>
-      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules et paiements')"><span>€</span> Formules & paiements</button>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Récompenses & collections')"><span>🏆</span> Récompenses & collections</button>
       <div class="admin-sidebar-bottom">
         <span class="admin-online-dot"></span> Espace sécurisé
         <button type="button" onclick="returnHome()">↩ Retour au site</button>
@@ -957,7 +1019,24 @@ body.halloween-accueil .home-hero{
         </div>
         <p id="admin-testers-status" class="status" role="status" aria-live="polite">Chargement des demandes…</p>
         <div id="admin-testers-list" class="admin-recent-list tester-table-wrap" aria-live="polite"><p>Les demandes apparaîtront ici.</p></div>
-        <p class="admin-footnote">Les demandes sont liées au compte Neon existant. Accepter une demande enregistre le statut testeur ; cela ne modifie pas les formules, les paiements ni les aventures publiques.</p>
+        <div class="admin-section-heading" style="margin-top:28px"><div><h3>Retours des testeurs</h3><p>Les retours restent privés et ne sont visibles que par l’administration.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterFeedback()">↻ Actualiser les retours</button></div>
+        <p id="admin-tester-feedback-status" class="status" role="status" aria-live="polite">Les retours seront chargés ici.</p>
+        <div id="admin-tester-feedback-list" class="admin-recent-list tester-table-wrap"><p>Aucun retour chargé.</p></div>
+        <p class="admin-footnote">Les accès testeurs sont indépendants des achats. Un testeur ne voit que les villages et niveaux qui lui sont attribués.</p>
+      </div>
+
+      <div id="admin-levels-view" class="admin-subview" hidden>
+        <div class="admin-section-heading">
+          <div><h3>Catalogue des niveaux par village</h3><p>Modifie le nombre d’énigmes, les étoiles, le type d’accès et le statut de chaque niveau.</p></div>
+          <button type="button" class="admin-secondary-btn" onclick="adminLoadVillageLevels()">↻ Actualiser</button>
+        </div>
+        <div class="admin-info-panel" style="margin-bottom:14px">
+          <label for="admin-level-village" style="display:block;margin-bottom:7px"><strong>Choisir un village</strong></label>
+          <select id="admin-level-village" style="width:100%;max-width:420px;padding:11px;border:1px solid #d4c49c;border-radius:9px;background:#fff"><option value="">Chargement des villages…</option></select>
+          <p class="admin-footnote">Chaque village possède ses propres réglages. Enfant et Facile commencent avec 10 énigmes et 10 étoiles ; tu peux modifier ces valeurs.</p>
+        </div>
+        <p id="admin-levels-status" class="status" role="status" aria-live="polite">Choisis un village pour afficher ses niveaux.</p>
+        <div id="admin-levels-list" class="admin-recent-list"><p>Les niveaux apparaîtront ici.</p></div>
       </div>
 
       <div id="admin-villages-view" class="admin-subview" hidden>
@@ -1009,32 +1088,35 @@ body.halloween-accueil .home-hero{
       </div>
 
       <div id="admin-adventures-view" class="admin-subview" hidden>
-        <div class="admin-section-heading"><div><h3>Aventures & énigmes</h3><p>Créer, modifier, valider et publier les parcours</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadAdventures()">↻ Actualiser</button></div>
+        <div class="admin-section-heading"><div><h3>Aventures & énigmes</h3><p>Créer un parcours et préparer ses étapes sans publier automatiquement</p></div></div>
         <p id="admin-adventures-status" class="status" role="status" aria-live="polite">Chargement des aventures…</p>
-        <div id="admin-adventures-list" class="admin-recent-list"><p>Les aventures apparaîtront ici.</p></div>
-        <div class="admin-info-panel" style="margin-top:18px">
-          <h3 id="admin-adventure-form-title">Créer une aventure</h3>
-          <form id="admin-adventure-form" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px">
-            <input type="hidden" id="admin-adventure-id">
-            <label style="display:grid;gap:6px">Titre de l’aventure<input id="admin-adventure-title" required maxlength="150" placeholder="Ex. Mystère du village" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></label>
-            <label style="display:grid;gap:6px">Village<input id="admin-adventure-village" required maxlength="150" placeholder="Ex. Humbert" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></label>
-            <label style="grid-column:1/-1;display:grid;gap:6px">Description<textarea id="admin-adventure-description" maxlength="3000" rows="3" placeholder="Présentation de l’aventure…" style="padding:11px;border:1px solid #d4c49c;border-radius:9px"></textarea></label>
-            <label style="display:grid;gap:6px">Statut de l’aventure<select id="admin-adventure-status" style="padding:11px;border:1px solid #d4c49c;border-radius:9px;background:white"><option value="en_creation">En cours de création</option><option value="a_valider">À valider</option><option value="en_attente">En attente</option><option value="en_travaux">En travaux</option><option value="mise_a_jour">Mise à jour</option><option value="en_ligne">En ligne</option><option value="suspendue">Suspendue</option></select></label>
-            <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap"><button type="submit" class="admin-secondary-btn" id="admin-adventure-save">Enregistrer</button><button type="button" class="admin-secondary-btn" onclick="adminResetAdventureForm()">Annuler</button></div>
+        <div class="admin-info-panel" style="margin-bottom:16px">
+          <h4 style="margin-top:0">Créer une aventure</h4>
+          <form id="admin-adventure-create-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+            <label>Village<select id="admin-adventure-village" required style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"><option value="">Chargement…</option></select></label>
+            <label>Niveau<select id="admin-adventure-level" required style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"><option value="">Choisir un village d’abord…</option></select></label>
+            <label>Nom du parcours<input id="admin-adventure-title" required maxlength="150" placeholder="Ex. Le mystère du vieux village" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></label>
+            <label style="grid-column:1/-1">Description<textarea id="admin-adventure-description" rows="2" maxlength="3000" placeholder="Présentation du parcours…" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></textarea></label>
+            <div style="grid-column:1/-1"><button class="admin-secondary-btn" type="submit">Créer en brouillon</button></div>
           </form>
-          <p class="admin-footnote">« Valider » confirme le contenu sans le publier. « Mettre en ligne » reste une action distincte.</p>
         </div>
-        <div id="admin-adventure-steps-panel" class="admin-info-panel" style="margin-top:18px" hidden>
-          <h3>Étapes et énigmes — <span id="admin-steps-adventure-name"></span></h3><p id="admin-steps-status" class="status" role="status"></p><div id="admin-adventure-steps-list"></div>
-          <form id="admin-adventure-step-form" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px">
-            <label style="display:grid;gap:5px">N° étape<input id="admin-step-number" type="number" min="1" required value="1" style="padding:10px"></label>
-            <label style="display:grid;gap:5px">Lieu<input id="admin-step-place" required maxlength="200" placeholder="Ex. Rue du Bout du Bas" style="padding:10px"></label>
-            <label style="display:grid;gap:5px">Latitude GPS<input id="admin-step-lat" type="number" step="any" placeholder="50.506349" style="padding:10px"></label>
-            <label style="display:grid;gap:5px">Longitude GPS<input id="admin-step-lon" type="number" step="any" placeholder="1.910030" style="padding:10px"></label>
-            <label style="grid-column:1/-1;display:grid;gap:5px">Énigme<textarea id="admin-step-riddle" rows="2" style="padding:10px"></textarea></label>
-            <label style="display:grid;gap:5px">Réponse<textarea id="admin-step-answer" rows="2" style="padding:10px"></textarea></label>
-            <label style="display:grid;gap:5px">Indice<textarea id="admin-step-hint" rows="2" style="padding:10px"></textarea></label>
-            <button type="submit" class="admin-secondary-btn">Ajouter l’étape</button>
+        <div class="admin-info-panel" style="margin-bottom:16px"><h4 style="margin-top:0">Parcours enregistrés</h4><div id="admin-adventures-list">Chargement…</div></div>
+        <div class="admin-info-panel" id="admin-adventure-steps-panel" hidden>
+          <h4 id="admin-adventure-steps-title" style="margin-top:0">Étapes du parcours</h4>
+          <p>Tu peux préparer les lieux et les coordonnées GPS. Les champs énigme, réponse et indice restent facultatifs tant que tu n'as pas écrit tes énigmes.</p>
+          <div id="admin-adventure-steps-list"></div>
+          <div id="admin-step-map-preview" style="margin-top:12px"></div>
+          <p style="font-size:13px;color:#667">Simulation réservée à l’administratrice : elle affiche un aperçu du point GPS, sans valider une étape réelle ni ajouter d’étoile.</p>
+          <form id="admin-adventure-step-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px">
+            <label>Numéro d'étape<input id="admin-step-number" type="number" min="1" max="200" required value="1" style="display:block;width:100%;padding:9px"></label>
+            <label>Nom du lieu<input id="admin-step-place" required maxlength="200" placeholder="Ex. Place du village" style="display:block;width:100%;padding:9px"></label>
+            <label>Latitude<input id="admin-step-lat" type="number" step="any" min="-90" max="90" placeholder="50.000000" style="display:block;width:100%;padding:9px"></label>
+            <label>Longitude<input id="admin-step-lon" type="number" step="any" min="-180" max="180" placeholder="1.000000" style="display:block;width:100%;padding:9px"></label>
+            <label style="grid-column:1/-1">Photo de l’étape<input id="admin-step-photo-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:block;width:100%;padding:9px"><small>JPG, PNG ou WEBP · 8 Mo maximum</small><input id="admin-step-photo" type="hidden"></label><div id="admin-step-photo-preview" style="grid-column:1/-1"></div>
+            <label style="grid-column:1/-1">Énigme (facultatif)<textarea id="admin-step-riddle" rows="2" style="display:block;width:100%;padding:9px"></textarea></label>
+            <label>Réponse (facultatif)<input id="admin-step-answer" maxlength="500" style="display:block;width:100%;padding:9px"></label>
+            <label>Indice (facultatif)<input id="admin-step-hint" maxlength="1000" style="display:block;width:100%;padding:9px"></label>
+            <div style="grid-column:1/-1"><button class="admin-secondary-btn" type="submit">Ajouter l'étape</button></div>
           </form>
         </div>
       </div>
@@ -1043,6 +1125,19 @@ body.halloween-accueil .home-hero{
         <div class="admin-section-heading"><div><h3>Demandes d'aide des joueurs</h3><p>Répondre aux joueurs et suivre les demandes</p></div></div>
         <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
         <div id="admin-support-area"><div id="admin-support-list"></div></div>
+      </div>
+      <div id="admin-news-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>Gestion des actualités</h3><p>Rédiger, modifier, publier ou archiver les annonces.</p></div></div>
+        <p id="admin-news-status" class="status" role="status" aria-live="polite"></p>
+        <form id="admin-news-form" class="feature" style="display:grid;gap:12px">
+          <input id="admin-news-id" type="hidden">
+          <label>Titre<input id="admin-news-title" maxlength="180" required style="display:block;width:100%;padding:12px"></label>
+          <label>Rubrique<input id="admin-news-category" maxlength="80" value="Actualité" style="display:block;width:100%;padding:12px"></label>
+          <label>Texte<textarea id="admin-news-body" maxlength="12000" required rows="9" style="display:block;width:100%;padding:13px;min-height:220px;font:15px/1.6 Arial,sans-serif"></textarea></label>
+          <label><input id="admin-news-publish" type="checkbox"> Publier immédiatement</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer l'actualité</button><button class="admin-secondary-btn" type="button" onclick="adminNewsReset()">Nouvelle actualité</button></div>
+        </form>
+        <div id="admin-news-list"></div>
       </div>
     </div>
   </div>
@@ -1402,13 +1497,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-villages-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-villages-view","admin-levels-view","admin-news-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-villages-view"?"adminOpenVillages":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-villages-view"?"adminOpenVillages":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -1427,33 +1522,10 @@ async function adminOpenSupport(){
     if (status) status.textContent = error.message || "Impossible de charger le support.";
   }
 }
-function adminOpenAdventures(){adminSetView("admin-adventures-view","Aventures & énigmes");adminLoadAdventures();}
-const adventureStatusLabels={en_creation:"En cours de création",a_valider:"À valider",en_attente:"En attente",en_travaux:"En travaux",mise_a_jour:"Mise à jour",en_ligne:"En ligne",suspendue:"Suspendue"};
-let adminCurrentAdventureId=null;
-window.adminLoadAdventures=async function(){
- const status=document.getElementById("admin-adventures-status"),list=document.getElementById("admin-adventures-list"); if(!status||!list)return;
- status.textContent="Chargement des aventures…";list.replaceChildren();
- try{const data=await adminApi("/api/admin/adventures");const adventures=data.adventures||[];
- if(!adventures.length){list.textContent="Aucune aventure enregistrée pour le moment.";status.textContent="";return;}
- adventures.forEach(a=>{const card=document.createElement("article");card.className="admin-list-item";card.style.cssText="padding:14px;margin:10px 0;border:1px solid #dfd2b3;border-radius:12px;background:#fffdf7";
- const title=document.createElement("strong");title.textContent=a.title+" — "+a.village;const meta=document.createElement("p");meta.textContent="Statut : "+(adventureStatusLabels[a.status]|| (a.is_published?"En ligne":"En cours de création"))+(a.is_validated?" · Validée":" · Non validée");
- const actions=document.createElement("div");actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px";
- const add=(label,fn)=>{const b=document.createElement("button");b.type="button";b.className="admin-secondary-btn";b.textContent=label;b.addEventListener("click",fn);actions.append(b)};
- add("Modifier",()=>adminEditAdventure(a));add("Gérer les énigmes",()=>adminLoadAdventureSteps(a));
- if(!a.is_validated)add("Valider",()=>adminSetAdventureValidation(a.id,true));
- if(a.is_validated&&!a.is_published)add("Mettre en ligne",()=>adminSetAdventureStatus(a.id,"en_ligne"));
- if(a.is_published)add("Suspendre",()=>adminSetAdventureStatus(a.id,"suspendue"));
- card.append(title,meta,actions);list.append(card);
- });status.textContent=adventures.length+" aventure(s)";
- }catch(e){status.textContent=e.message||"Impossible de charger les aventures.";}
-};
-function adminEditAdventure(a){document.getElementById("admin-adventure-id").value=a.id;document.getElementById("admin-adventure-title").value=a.title||"";document.getElementById("admin-adventure-village").value=a.village||"";document.getElementById("admin-adventure-description").value=a.description||"";document.getElementById("admin-adventure-status").value=a.status|| (a.is_published?"en_ligne":"en_creation");document.getElementById("admin-adventure-form-title").textContent="Modifier l’aventure";document.getElementById("admin-adventure-form").scrollIntoView({behavior:"smooth",block:"center"});}
-function adminResetAdventureForm(){document.getElementById("admin-adventure-form").reset();document.getElementById("admin-adventure-id").value="";document.getElementById("admin-adventure-form-title").textContent="Créer une aventure";}
-async function adminSetAdventureValidation(id,validated){try{await adminApi(`/api/admin/adventures/${id}`,{method:"PATCH",body:JSON.stringify({is_validated:validated})});await adminLoadAdventures();}catch(e){alert(e.message||"Validation impossible.");}}
-async function adminSetAdventureStatus(id,status){try{await adminApi(`/api/admin/adventures/${id}`,{method:"PATCH",body:JSON.stringify({status})});await adminLoadAdventures();}catch(e){alert(e.message||"Modification impossible.");}}
-const adminAdventureForm=document.getElementById("admin-adventure-form");if(adminAdventureForm)adminAdventureForm.addEventListener("submit",async e=>{e.preventDefault();const id=document.getElementById("admin-adventure-id").value;const payload={title:document.getElementById("admin-adventure-title").value.trim(),village:document.getElementById("admin-adventure-village").value.trim(),description:document.getElementById("admin-adventure-description").value.trim(),status:document.getElementById("admin-adventure-status").value};const status=document.getElementById("admin-adventures-status");try{await adminApi(id?`/api/admin/adventures/${id}`:"/api/admin/adventures",{method:id?"PATCH":"POST",body:JSON.stringify(payload)});status.textContent="Aventure enregistrée.";adminResetAdventureForm();await adminLoadAdventures();}catch(err){status.textContent=err.message||"Enregistrement impossible.";}});
-async function adminLoadAdventureSteps(a){adminCurrentAdventureId=a.id;document.getElementById("admin-adventure-steps-panel").hidden=false;document.getElementById("admin-steps-adventure-name").textContent=a.title;const status=document.getElementById("admin-steps-status"),list=document.getElementById("admin-adventure-steps-list");status.textContent="Chargement…";list.replaceChildren();try{const data=await adminApi(`/api/admin/adventures/${a.id}/steps`);(data.steps||[]).forEach(s=>{const p=document.createElement("p");p.textContent=`Étape ${s.step_number} — ${s.place_name} · ${s.riddle||"Pas encore d’énigme"}`;list.append(p);});status.textContent=(data.steps||[]).length+" étape(s) enregistrée(s).";document.getElementById("admin-step-number").value=(data.steps||[]).length+1;}catch(e){status.textContent=e.message||"Impossible de charger les étapes.";}}
-const adminStepForm=document.getElementById("admin-adventure-step-form");if(adminStepForm)adminStepForm.addEventListener("submit",async e=>{e.preventDefault();if(!adminCurrentAdventureId)return;const val=id=>document.getElementById(id).value;const payload={step_number:Number(val("admin-step-number")),place_name:val("admin-step-place").trim(),latitude:val("admin-step-lat")||null,longitude:val("admin-step-lon")||null,riddle:val("admin-step-riddle"),answer:val("admin-step-answer"),hint:val("admin-step-hint")};try{await adminApi(`/api/admin/adventures/${adminCurrentAdventureId}/steps`,{method:"POST",body:JSON.stringify(payload)});adminStepForm.reset();await adminLoadAdventureSteps({id:adminCurrentAdventureId,title:document.getElementById("admin-steps-adventure-name").textContent});}catch(e){document.getElementById("admin-steps-status").textContent=e.message||"Impossible d’ajouter l’étape.";}});
+async function adminOpenAdventures(){
+  adminSetView("admin-adventures-view","Aventures & énigmes");
+  await window.adminLoadAdventures();
+}
 async function adminOpenPlayers(){
   adminSetView("admin-players-view","Joueurs & administrateurs");
   await window.adminLoadPlayers();
@@ -1577,6 +1649,75 @@ if(testerForm){
   });
 }
 
+// ===== Espace personnel du testeur =====
+const testerFeedbackForm = document.getElementById("tester-feedback-form");
+const testerFormulaLabels = {enfant:"Enfant",facile:"Facile",famille:"Famille",moyen:"Moyen",difficile:"Difficile",extreme:"Extrême",nuit:"Nuit"};
+window.loadTesterSpace = async function(){
+  const status=document.getElementById("tester-space-status");
+  const accessList=document.getElementById("tester-space-access-list");
+  const accessSelect=document.getElementById("tester-feedback-access");
+  const history=document.getElementById("tester-feedback-history");
+  if(!status||!accessList||!accessSelect||!history)return;
+  status.textContent="Chargement de tes autorisations…";
+  accessList.replaceChildren();history.replaceChildren();accessSelect.replaceChildren();
+  try{
+    const [accessData,feedbackData]=await Promise.all([
+      profileApi("/api/testers/access"),
+      profileApi("/api/testers/feedback/mine")
+    ]);
+    const access=Array.isArray(accessData.access)?accessData.access:[];
+    if(!access.length){
+      accessList.textContent="Aucun village ou niveau ne t’a encore été attribué. Reviens consulter cet espace lorsque l’administration aura préparé ton accès.";
+      const option=document.createElement("option");option.value="";option.textContent="Aucun accès disponible";accessSelect.appendChild(option);
+      accessSelect.disabled=true;
+      if(testerFeedbackForm){testerFeedbackForm.querySelectorAll("input,select,textarea,button").forEach(el=>{if(el.id!=="tester-feedback-category")el.disabled=true;});}
+    }else{
+      accessSelect.disabled=false;
+      if(testerFeedbackForm){testerFeedbackForm.querySelectorAll("input,textarea,button").forEach(el=>el.disabled=false);}
+      access.forEach(item=>{
+        const label=`${item.village_name||item.village_slug} — ${testerFormulaLabels[item.formula]||item.formula}`;
+        const row=document.createElement("div");row.style.cssText="padding:10px;margin:7px 0;border:1px solid #e4dcc8;border-radius:9px;background:#fffefa";
+        const strong=document.createElement("strong");strong.textContent="🗺️ "+label;row.appendChild(strong);accessList.appendChild(row);
+        const option=document.createElement("option");option.value=JSON.stringify({village:item.village_slug,formula:item.formula});option.textContent=label;accessSelect.appendChild(option);
+      });
+    }
+    const feedback=Array.isArray(feedbackData.feedback)?feedbackData.feedback:[];
+    if(!feedback.length){history.textContent="Tu n’as pas encore envoyé de retour.";}
+    else feedback.forEach(item=>{
+      const card=document.createElement("article");card.style.cssText="padding:12px;margin:8px 0;border:1px solid #e4dcc8;border-radius:9px;background:#fffefa";
+      const title=document.createElement("strong");title.textContent=`${item.village_slug} — ${testerFormulaLabels[item.formula]||item.formula}`;
+      const meta=document.createElement("p");meta.style.cssText="font-size:12px;color:#687366;margin:5px 0";meta.textContent=`${({bug:"Bug",idee:"Idée",experience:"Avis",autre:"Autre"})[item.category]||item.category} · ${{nouveau:"Nouveau",en_cours:"En cours",traite:"Traité"}[item.status]||item.status} · ${item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"Date inconnue"}`;
+      const message=document.createElement("p");message.style.cssText="white-space:pre-wrap;overflow-wrap:anywhere;margin:7px 0";message.textContent=item.message;
+      card.append(title,meta,message);history.appendChild(card);
+    });
+    status.textContent=`Espace chargé : ${access.length} accès autorisé${access.length>1?"s":""}.`;
+  }catch(error){
+    status.textContent=error.message||"Impossible de charger ton espace testeur.";
+    accessList.textContent="Vérifie que le serveur testeurs est déployé et que les tables SQL sont installées dans Neon.";
+    const option=document.createElement("option");option.value="";option.textContent="Chargement impossible";accessSelect.appendChild(option);
+    history.textContent="Historique indisponible pour le moment.";
+  }
+};
+if(testerFeedbackForm){
+  testerFeedbackForm.addEventListener("submit",async event=>{
+    event.preventDefault();
+    const status=document.getElementById("tester-feedback-form-status");
+    const submit=document.getElementById("tester-feedback-submit");
+    const selected=document.getElementById("tester-feedback-access").value;
+    const message=document.getElementById("tester-feedback-message").value.trim();
+    if(!selected){status.textContent="Aucun accès disponible pour envoyer un retour.";return;}
+    let target;try{target=JSON.parse(selected);}catch{status.textContent="Sélection invalide.";return;}
+    submit.disabled=true;status.textContent="Envoi de ton retour…";
+    try{
+      await profileApi("/api/testers/feedback",{method:"POST",body:JSON.stringify({village:target.village,formula:target.formula,category:document.getElementById("tester-feedback-category").value,message})});
+      document.getElementById("tester-feedback-message").value="";
+      status.textContent="Merci ! Ton retour a bien été envoyé à l’administration.";
+      await window.loadTesterSpace();
+    }catch(error){status.textContent=error.message||"Impossible d’envoyer ton retour.";}
+    finally{submit.disabled=false;}
+  });
+}
+
 window.adminOpenTesters = async function(){
   adminSetView("admin-testers-view","Demandes testeurs");
   await window.adminLoadTesters();
@@ -1588,30 +1729,99 @@ window.adminLoadTesters = async function(){
   status.textContent = "Chargement des demandes…";
   list.replaceChildren();
   try{
-    const data = await adminApi("/api/admin/testers");
+    const [data, villageData] = await Promise.all([
+      adminApi("/api/admin/testers"),
+      adminApi("/api/admin/villages")
+    ]);
     const apps = Array.isArray(data.applications) ? data.applications : [];
-    if(!apps.length){ list.textContent = "Aucune demande de testeur pour le moment."; status.textContent = "Liste chargée."; return; }
-    const table = document.createElement("table");
-    table.style.cssText = "width:100%;min-width:760px;border-collapse:collapse;font-size:13px";
-    const head = document.createElement("thead"); const hr = document.createElement("tr");
-    ["Nom","E-mail","Motivation","Date","Statut","Action"].forEach(label=>{const th=document.createElement("th");th.textContent=label;th.style.cssText="text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";hr.appendChild(th);});
-    head.appendChild(hr);table.appendChild(head);
-    const body = document.createElement("tbody");
-    for(const app of apps){
-      const tr=document.createElement("tr");
-      const date=app.submitted_at?new Date(app.submitted_at).toLocaleDateString("fr-FR"):"—";
-      const vals=[app.name||"Compte utilisateur",app.email||"—",app.motivation||"—",date,({pending:"En attente",accepted:"Acceptée",rejected:"Refusée"})[app.status]||app.status];
-      vals.forEach(value=>{const td=document.createElement("td");td.textContent=String(value);td.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;vertical-align:top;overflow-wrap:anywhere;max-width:240px";tr.appendChild(td);});
-      const actions=document.createElement("td");actions.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;white-space:nowrap";
-      const makeButton=(label,statusValue)=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.style.cssText="margin:2px;padding:7px 9px;border:1px solid #c9ae65;border-radius:7px;background:#fffaf0;color:#244b36;cursor:pointer";b.addEventListener("click",async()=>{b.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(app.id)}`,{method:"PATCH",body:JSON.stringify({status:statusValue})});await window.adminLoadTesters();}catch(error){status.textContent=error.message||"Mise à jour impossible.";b.disabled=false;}});return b;};
-      if(app.status!=="accepted") actions.appendChild(makeButton("Accepter","accepted"));
-      if(app.status!=="rejected") actions.appendChild(makeButton("Refuser","rejected"));
-      if(app.status!=="pending") actions.appendChild(makeButton("Remettre en attente","pending"));
-      tr.appendChild(actions);body.appendChild(tr);
+    const villages = Array.isArray(villageData.villages) ? villageData.villages : [];
+    if(!apps.length){ list.textContent = "Aucune demande de testeur pour le moment."; status.textContent = "Liste chargée."; }
+    else {
+      const table = document.createElement("table");
+      table.style.cssText = "width:100%;min-width:760px;border-collapse:collapse;font-size:13px";
+      const head = document.createElement("thead"); const hr = document.createElement("tr");
+      ["Nom","E-mail","Motivation","Date","Statut","Actions / accès"].forEach(label=>{const th=document.createElement("th");th.textContent=label;th.style.cssText="text-align:left;padding:11px 9px;border-bottom:1px solid #ded9ca;color:#244b36";hr.appendChild(th);});
+      head.appendChild(hr);table.appendChild(head);
+      const body = document.createElement("tbody");
+      for(const app of apps){
+        const tr=document.createElement("tr");
+        const date=app.submitted_at?new Date(app.submitted_at).toLocaleDateString("fr-FR"):"—";
+        const vals=[app.name||"Compte utilisateur",app.email||"—",app.motivation||"—",date,({pending:"En attente",accepted:"Acceptée",rejected:"Refusée"})[app.status]||app.status];
+        vals.forEach(value=>{const td=document.createElement("td");td.textContent=String(value);td.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;vertical-align:top;overflow-wrap:anywhere;max-width:240px";tr.appendChild(td);});
+        const actions=document.createElement("td");actions.style.cssText="padding:11px 9px;border-bottom:1px solid #eee8d9;min-width:230px";
+        const makeButton=(label,statusValue)=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.style.cssText="margin:2px;padding:7px 9px;border:1px solid #c9ae65;border-radius:7px;background:#fffaf0;color:#244b36;cursor:pointer";b.addEventListener("click",async()=>{b.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(app.id)}`,{method:"PATCH",body:JSON.stringify({status:statusValue})});await window.adminLoadTesters();}catch(error){status.textContent=error.message||"Mise à jour impossible.";b.disabled=false;}});return b;};
+        if(app.status!=="accepted") actions.appendChild(makeButton("Accepter","accepted"));
+        if(app.status!=="rejected") actions.appendChild(makeButton("Refuser","rejected"));
+        if(app.status!=="pending") actions.appendChild(makeButton("Remettre en attente","pending"));
+        if(app.status==="accepted"){
+          const accessBtn=document.createElement("button");accessBtn.type="button";accessBtn.textContent="Gérer les accès";accessBtn.style.cssText="display:block;margin:5px 2px;padding:7px 9px;border:1px solid #8da58e;border-radius:7px;background:#edf4eb;color:#244b36;cursor:pointer";
+          accessBtn.addEventListener("click",()=>adminShowTesterAccess(app.user_id, app.name||app.email||"ce testeur", villages, actions));
+          actions.appendChild(accessBtn);
+        }
+        tr.appendChild(actions);body.appendChild(tr);
+      }
+      table.appendChild(body);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
+      status.textContent=`${apps.length} demande${apps.length>1?"s":""} chargée${apps.length>1?"s":""}.`;
     }
-    table.appendChild(body);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
-    status.textContent=`${apps.length} demande${apps.length>1?"s":""} chargée${apps.length>1?"s":""}.`;
-  }catch(error){status.textContent=error.message||"Impossible de charger les demandes.";list.textContent="Vérifie que la route /api/admin/testers est déployée et que la table SQL a été créée.";}
+    await window.adminLoadTesterFeedback();
+  }catch(error){status.textContent=error.message||"Impossible de charger les demandes.";list.textContent="Vérifie que les routes testeurs sont déployées et que les tables SQL ont été créées dans Neon.";}
+};
+
+const TESTER_FORMULAS = [
+  ["enfant","Enfant"],["facile","Facile"],["famille","Famille"],["moyen","Moyen"],
+  ["difficile","Difficile"],["extreme","Extrême"],["nuit","Nuit"]
+];
+window.adminShowTesterAccess = async function(userId, testerName, villages, host){
+  let panel=host.querySelector(".tester-access-editor");
+  if(panel){panel.remove();return;}
+  panel=document.createElement("div");panel.className="tester-access-editor";panel.style.cssText="margin-top:10px;padding:12px;background:#f7f4e9;border:1px solid #d8c99f;border-radius:10px;min-width:260px";
+  const title=document.createElement("strong");title.textContent="Accès de : "+testerName;panel.appendChild(title);
+  const villageSelect=document.createElement("select");villageSelect.style.cssText="display:block;width:100%;margin:9px 0;padding:8px;border:1px solid #c9c1aa;border-radius:7px";
+  villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name+" ("+v.slug+")";villageSelect.appendChild(o);});
+  const levelSelect=document.createElement("select");levelSelect.style.cssText=villageSelect.style.cssText;
+  TESTER_FORMULAS.forEach(([value,label])=>{const o=document.createElement("option");o.value=value;o.textContent=label;levelSelect.appendChild(o);});
+  const assign=document.createElement("button");assign.type="button";assign.textContent="+ Attribuer ce niveau";assign.style.cssText="padding:8px 10px;border:0;border-radius:7px;background:#214b36;color:white;cursor:pointer";
+  const accessList=document.createElement("div");accessList.style.cssText="margin-top:12px;font-size:12px";
+  const note=document.createElement("p");note.style.cssText="font-size:11px;color:#596454";note.textContent="Un accès autorise uniquement ce village et ce niveau. Il ne donne pas accès aux autres profils.";
+  panel.append(villageSelect,levelSelect,assign,accessList,note);host.appendChild(panel);
+  const refresh=async()=>{
+    const result=await adminApi(`/api/admin/testers/${encodeURIComponent(userId)}/access`);
+    accessList.replaceChildren();
+    const entries=Array.isArray(result.access)?result.access:[];
+    if(!entries.length){accessList.textContent="Aucun accès attribué.";return;}
+    entries.forEach(item=>{
+      const row=document.createElement("div");row.style.cssText="display:flex;gap:8px;align-items:center;justify-content:space-between;padding:6px 0;border-top:1px solid #e4dcc8";
+      const label=document.createElement("span");label.textContent=(item.village_name||item.village_slug)+" — "+(TESTER_FORMULAS.find(x=>x[0]===item.formula)?.[1]||item.formula);
+      const remove=document.createElement("button");remove.type="button";remove.textContent="Retirer";remove.style.cssText="padding:5px 7px;border:1px solid #c88;border-radius:6px;background:#fff;color:#933;cursor:pointer";
+      remove.addEventListener("click",async()=>{remove.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(userId)}/access`,{method:"PUT",body:JSON.stringify({village:item.village_slug,formula:item.formula,enabled:false})});await refresh();}catch(e){remove.disabled=false;alert(e.message||"Impossible de retirer cet accès.");}});
+      row.append(label,remove);accessList.appendChild(row);
+    });
+  };
+  assign.addEventListener("click",async()=>{if(!villageSelect.value){alert("Ajoute d’abord un village dans la gestion des villages.");return;}assign.disabled=true;try{await adminApi(`/api/admin/testers/${encodeURIComponent(userId)}/access`,{method:"PUT",body:JSON.stringify({village:villageSelect.value,formula:levelSelect.value,enabled:true})});await refresh();}catch(e){alert(e.message||"Impossible d’attribuer cet accès.");}finally{assign.disabled=false;}});
+  try{await refresh();}catch(e){accessList.textContent=e.message||"Impossible de charger les accès.";}
+};
+
+window.adminLoadTesterFeedback = async function(){
+  const status=document.getElementById("admin-tester-feedback-status");
+  const list=document.getElementById("admin-tester-feedback-list");
+  if(!status||!list)return;
+  status.textContent="Chargement des retours…";list.replaceChildren();
+  try{
+    const data=await adminApi("/api/admin/tester-feedback");
+    const feedback=Array.isArray(data.feedback)?data.feedback:[];
+    if(!feedback.length){list.textContent="Aucun retour de test pour le moment.";status.textContent="Liste chargée.";return;}
+    feedback.forEach(item=>{
+      const card=document.createElement("article");card.style.cssText="padding:14px;margin:9px 0;background:#fffefa;border:1px solid #e4dcc8;border-radius:10px";
+      const heading=document.createElement("strong");heading.textContent=(item.tester_name||item.tester_email||"Testeur")+" — "+(item.village_name||item.village_slug)+" / "+(TESTER_FORMULAS.find(x=>x[0]===item.formula)?.[1]||item.formula);
+      const meta=document.createElement("p");meta.style.cssText="font-size:12px;color:#687366;margin:5px 0";meta.textContent=( {bug:"Bug",idee:"Idée",experience:"Expérience",autre:"Autre"}[item.category]||item.category )+" · "+(item.created_at?new Date(item.created_at).toLocaleString("fr-FR"):"date inconnue");
+      const message=document.createElement("p");message.style.cssText="white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0";message.textContent=item.message;
+      const select=document.createElement("select");select.style.cssText="padding:7px;border:1px solid #c9c1aa;border-radius:7px";
+      [["nouveau","Nouveau"],["en_cours","En cours"],["traite","Traité"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;select.appendChild(o);});select.value=item.status;
+      select.addEventListener("change",async()=>{select.disabled=true;try{await adminApi(`/api/admin/tester-feedback/${encodeURIComponent(item.id)}/status`,{method:"PATCH",body:JSON.stringify({status:select.value})});}catch(e){alert(e.message||"Impossible de modifier le statut.");select.value=item.status;}finally{select.disabled=false;}});
+      card.append(heading,meta,message,select);list.appendChild(card);
+    });
+    status.textContent=`${feedback.length} retour${feedback.length>1?"s":""} chargé${feedback.length>1?"s":""}.`;
+  }catch(error){status.textContent=error.message||"Impossible de charger les retours.";list.textContent="Vérifie que la route /api/admin/tester-feedback est déployée et que la table tester_feedback existe.";}
 };
 
 const ADMIN_VILLAGE_STATUSES = {
@@ -1748,6 +1958,128 @@ if (adminVillageForm) {
   });
 }
 
+const ADMIN_LEVEL_DEFINITIONS = [
+  ["enfant","Enfant"],["facile","Facile"],["famille","Famille"],["moyen","Moyen"],
+  ["difficile","Difficile"],["extreme","Extrême"],["nuit","Nuit"]
+];
+window.adminOpenLevels = async function(){
+  adminSetView("admin-levels-view","Niveaux par village");
+  const select=document.getElementById("admin-level-village");
+  if(!select.dataset.loaded){
+    try{
+      const data=await adminApi("/api/admin/villages");
+      const villages=Array.isArray(data.villages)?data.villages:[];
+      select.replaceChildren();
+      const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choisir un village…";select.appendChild(placeholder);
+      villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;select.appendChild(o);});
+      select.dataset.loaded="1";
+      if(villages.length===1)select.value=villages[0].slug;
+    }catch(e){document.getElementById("admin-levels-status").textContent=e.message||"Impossible de charger les villages.";return;}
+    select.addEventListener("change",()=>window.adminLoadVillageLevels());
+  }
+  if(select.value) await window.adminLoadVillageLevels();
+};
+window.adminLoadVillageLevels = async function(){
+  const select=document.getElementById("admin-level-village"), status=document.getElementById("admin-levels-status"), list=document.getElementById("admin-levels-list");
+  if(!select||!status||!list)return;
+  const village=select.value;
+  if(!village){status.textContent="Choisis un village pour gérer ses niveaux.";list.textContent="Aucun village sélectionné.";return;}
+  status.textContent="Chargement des niveaux…";list.replaceChildren();
+  try{
+    const data=await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);
+    const existing=new Map((Array.isArray(data.levels)?data.levels:[]).map(x=>[x.level_key,x]));
+    const table=document.createElement("table");table.style.cssText="width:100%;min-width:780px;border-collapse:collapse;font-size:13px";
+    const thead=document.createElement("thead"),hr=document.createElement("tr");
+    ["Niveau","Énigmes","Étoiles","Accès","Statut","Action"].forEach(t=>{const th=document.createElement("th");th.textContent=t;th.style.cssText="text-align:left;padding:10px;border-bottom:1px solid #ded9ca;color:#244b36";hr.appendChild(th);});thead.appendChild(hr);table.appendChild(thead);
+    const tbody=document.createElement("tbody");
+    for(const [key,label] of ADMIN_LEVEL_DEFINITIONS){
+      const saved=existing.get(key)||{};const tr=document.createElement("tr");
+      const nameCell=document.createElement("td");nameCell.style.cssText="padding:10px;border-bottom:1px solid #eee8d9;min-width:120px";
+      const name=document.createElement("input");name.value=saved.display_name||label;name.maxLength=60;name.setAttribute("aria-label",`Nom du niveau ${label}`);name.style.cssText="width:100%;padding:8px;border:1px solid #d4c49c;border-radius:7px";nameCell.appendChild(name);tr.appendChild(nameCell);
+      const makeNumber=(value,min,max,aria)=>{const input=document.createElement("input");input.type="number";input.min=String(min);input.max=String(max);input.step="1";input.value=String(value);input.setAttribute("aria-label",aria);input.style.cssText="width:82px;padding:8px;border:1px solid #d4c49c;border-radius:7px";return input;};
+      const riddles=makeNumber(saved.riddle_count??10,1,200,"Nombre d’énigmes"),stars=makeNumber(saved.star_count??10,0,1000,"Nombre d’étoiles");
+      for(const input of [riddles,stars]){const td=document.createElement("td");td.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";td.appendChild(input);tr.appendChild(td);}
+      const access=document.createElement("select");[["gratuit","Gratuit"],["payant","Payant"],["testeur","Testeur"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;access.appendChild(o);});access.value=saved.access_type||"gratuit";
+      const statusSelect=document.createElement("select");[["preparation","En préparation"],["actif","Actif"],["desactive","Désactivé"]].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;statusSelect.appendChild(o);});statusSelect.value=saved.status||"preparation";
+      for(const sel of [access,statusSelect]){sel.style.cssText="max-width:130px;padding:8px;border:1px solid #d4c49c;border-radius:7px;background:#fff";const td=document.createElement("td");td.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";td.appendChild(sel);tr.appendChild(td);}
+      const actionCell=document.createElement("td");actionCell.style.cssText="padding:10px;border-bottom:1px solid #eee8d9";
+      const save=document.createElement("button");save.type="button";save.textContent="Enregistrer";save.className="admin-secondary-btn";save.addEventListener("click",async()=>{
+        save.disabled=true;save.textContent="Enregistrement…";
+        try{await adminApi("/api/admin/village-levels",{method:"PUT",body:JSON.stringify({village_slug:village,level_key:key,display_name:name.value.trim(),riddle_count:Number(riddles.value),star_count:Number(stars.value),access_type:access.value,status:statusSelect.value})});save.textContent="Enregistré ✓";status.textContent=`Niveau ${name.value.trim()} enregistré pour ${select.options[select.selectedIndex].text}.`;}
+        catch(e){alert(e.message||"Impossible d’enregistrer ce niveau.");save.textContent="Enregistrer";}
+        finally{save.disabled=false;}
+      });actionCell.appendChild(save);tr.appendChild(actionCell);tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);const wrap=document.createElement("div");wrap.style.overflowX="auto";wrap.appendChild(table);list.appendChild(wrap);
+    status.textContent=`${ADMIN_LEVEL_DEFINITIONS.length} niveaux prêts à être configurés pour ${select.options[select.selectedIndex].text}.`;
+  }catch(e){status.textContent=e.message||"Impossible de charger les niveaux.";list.textContent="Vérifie que la table village_level_settings existe dans Neon et que le serveur correspondant est déployé.";}
+};
+
+window.adminSelectedAdventureId = null;
+window.adminLoadAdventures = async function(){
+  const status=document.getElementById("admin-adventures-status"), list=document.getElementById("admin-adventures-list"), villageSelect=document.getElementById("admin-adventure-village");
+  if(!status||!list||!villageSelect)return;
+  status.textContent="Chargement des villages et des parcours…"; list.replaceChildren();
+  try{
+    const [villageData, adventureData]=await Promise.all([adminApi("/api/admin/villages"),adminApi("/api/admin/adventures")]);
+    const villages=Array.isArray(villageData.villages)?villageData.villages:[];
+    villageSelect.replaceChildren();
+    const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choisir un village…";villageSelect.appendChild(placeholder);
+    villages.forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;villageSelect.appendChild(o);});
+    villageSelect.onchange=()=>window.adminLoadAdventureLevels();
+    const adventures=Array.isArray(adventureData.adventures)?adventureData.adventures:[];
+    if(!adventures.length){list.textContent="Aucun parcours enregistré pour le moment. Tu peux créer le premier ci-dessus.";}
+    adventures.forEach(a=>{
+      const card=document.createElement("div");card.style.cssText="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid #e8e1d2";
+      const info=document.createElement("div");const title=document.createElement("strong");title.textContent=a.title;const meta=document.createElement("p");meta.style.cssText="margin:4px 0;color:#66736a;font-size:13px";meta.textContent=`${a.village} · ${a.level_key||"Niveau non défini"} · ${a.is_published?"Publié":"Brouillon"}`;info.append(title,meta);
+      const btn=document.createElement("button");btn.type="button";btn.className="admin-secondary-btn";btn.textContent="Gérer les étapes";btn.addEventListener("click",()=>window.adminLoadAdventureSteps(a.id,a.title));card.append(info,btn);list.appendChild(card);
+    });
+    status.textContent=`${adventures.length} parcours enregistré${adventures.length>1?"s":""}. Les nouveaux parcours sont créés sans publication.`;
+  }catch(e){status.textContent=e.message||"Impossible de charger les aventures.";list.textContent="Vérifie la connexion au serveur et les droits administrateur.";}
+};
+window.adminLoadAdventureLevels=async function(){
+  const village=document.getElementById("admin-adventure-village").value, levelSelect=document.getElementById("admin-adventure-level");
+  levelSelect.replaceChildren(); const first=document.createElement("option");first.value="";first.textContent="Choisir un niveau…";levelSelect.appendChild(first);
+  if(!village)return;
+  try{const data=await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);(data.levels||[]).filter(x=>x.status!=="desactive").forEach(x=>{const o=document.createElement("option");o.value=x.level_key;o.textContent=`${x.display_name} — ${x.riddle_count} énigmes / ${x.star_count} étoiles`;levelSelect.appendChild(o);});}
+  catch(e){const o=document.createElement("option");o.value="";o.textContent="Impossible de charger les niveaux";levelSelect.appendChild(o);}
+};
+document.getElementById("admin-adventure-create-form")?.addEventListener("submit",async e=>{
+  e.preventDefault();const status=document.getElementById("admin-adventures-status"),btn=e.currentTarget.querySelector('button[type="submit"]');
+  const villageSlug=document.getElementById("admin-adventure-village").value,village=document.getElementById("admin-adventure-village").selectedOptions[0]?.textContent||"",levelKey=document.getElementById("admin-adventure-level").value,title=document.getElementById("admin-adventure-title").value.trim(),description=document.getElementById("admin-adventure-description").value.trim();
+  if(!villageSlug||!levelKey){status.textContent="Choisis d'abord un village et un niveau.";return;}
+  btn.disabled=true;try{const result=await adminApi("/api/admin/adventures",{method:"POST",body:JSON.stringify({village,village_slug:villageSlug,level_key:levelKey,title,description})});document.getElementById("admin-adventure-title").value="";document.getElementById("admin-adventure-description").value="";status.textContent=`Parcours « ${result.adventure.title} » créé en brouillon.`;await window.adminLoadAdventures();if(result.adventure?.id)await window.adminLoadAdventureSteps(result.adventure.id,result.adventure.title);}catch(err){status.textContent=err.message||"Impossible de créer le parcours.";}finally{btn.disabled=false;}
+});
+window.adminLoadAdventureSteps=async function(id,title){
+  const panel=document.getElementById("admin-adventure-steps-panel"),list=document.getElementById("admin-adventure-steps-list"),heading=document.getElementById("admin-adventure-steps-title");
+  window.adminSelectedAdventureId=id;panel.hidden=false;heading.textContent=`Étapes — ${title}`;list.textContent="Chargement…";
+  try{const data=await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps`),steps=Array.isArray(data.steps)?data.steps:[];list.replaceChildren();
+    if(data.level?.riddle_count){const info=document.createElement("p");info.textContent=`Niveau ${data.level.level_key} : ${steps.length}/${data.level.riddle_count} étapes prévues · ${data.level.star_count} étoiles`;info.style.cssText="font-weight:600;color:#52634f";list.appendChild(info);document.getElementById("admin-step-number").max=String(data.level.riddle_count);document.getElementById("admin-step-form-note")?.remove();}
+    if(!steps.length)list.textContent="Aucune étape pour le moment. Tu peux ajouter les lieux ci-dessous.";
+    steps.forEach(step=>{const row=document.createElement("div");row.style.cssText="padding:12px;border-bottom:1px solid #eee8d9;margin:0;display:grid;gap:8px";const title=document.createElement("strong");title.textContent=`Étape ${step.step_number} — ${step.place_name}`;row.appendChild(title);if(step.photo_url){const img=document.createElement("img");img.src=step.photo_url;img.alt=`Photo de ${step.place_name}`;img.loading="lazy";img.style.cssText="max-width:260px;max-height:180px;object-fit:cover;border-radius:10px";row.appendChild(img);}const gps=document.createElement("span");gps.textContent=step.latitude!=null&&step.longitude!=null?`GPS : ${step.latitude}, ${step.longitude}`:"GPS à renseigner";row.appendChild(gps);if(step.latitude!=null&&step.longitude!=null){const sim=document.createElement("button");sim.type="button";sim.className="admin-secondary-btn";sim.textContent="Voir le point sur la carte (simulation admin)";sim.addEventListener("click",()=>{const box=document.getElementById("admin-step-map-preview");box.replaceChildren();const frame=document.createElement("iframe");frame.title=`Carte du point ${step.place_name}`;frame.loading="lazy";frame.width="100%";frame.height="280";frame.style.border="0";frame.style.borderRadius="12px";frame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${Number(step.longitude)-0.003}%2C${Number(step.latitude)-0.002}%2C${Number(step.longitude)+0.003}%2C${Number(step.latitude)+0.002}&layer=mapnik&marker=${step.latitude}%2C${step.longitude}`;box.appendChild(frame);const note=document.createElement("p");note.textContent="Aperçu uniquement : aucune validation GPS de joueur n’est enregistrée.";box.appendChild(note);});row.appendChild(sim);}list.appendChild(row);});
+    const next=Math.max(0,...steps.map(x=>Number(x.step_number)||0))+1;document.getElementById("admin-step-number").value=String(next);
+  }catch(e){list.textContent=e.message||"Impossible de charger les étapes.";}
+};
+document.getElementById("admin-step-photo-file")?.addEventListener("change",e=>{const box=document.getElementById("admin-step-photo-preview");box.replaceChildren();const file=e.target.files?.[0];if(!file)return;const img=document.createElement("img");img.alt="Aperçu de la photo choisie";img.src=URL.createObjectURL(file);img.style.cssText="max-width:240px;max-height:160px;object-fit:cover;border-radius:10px";box.appendChild(img);});
+document.getElementById("admin-adventure-step-form")?.addEventListener("submit",async e=>{
+  e.preventDefault();const id=window.adminSelectedAdventureId;if(!id){alert("Choisis d'abord un parcours.");return;}const form=e.currentTarget,btn=form.querySelector('button[type="submit"]');btn.disabled=true;
+  try{
+    const photoInput=document.getElementById("admin-step-photo-file");
+    const photoFile=photoInput?.files?.[0];
+    let photoUrl=document.getElementById("admin-step-photo").value.trim();
+    if(photoFile){
+      if(!["image/jpeg","image/png","image/webp"].includes(photoFile.type))throw new Error("Choisis une image JPG, PNG ou WEBP.");
+      if(photoFile.size>8*1024*1024)throw new Error("La photo ne doit pas dépasser 8 Mo.");
+      const signed=await adminApi("/api/admin/cloudinary/signature",{method:"POST",body:JSON.stringify({})});
+      const formData=new FormData();formData.append("file",photoFile);formData.append("api_key",signed.api_key);formData.append("timestamp",String(signed.timestamp));formData.append("folder",signed.folder);formData.append("signature",signed.signature);
+      const upload=await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloud_name)}/image/upload`,{method:"POST",body:formData});
+      const uploaded=await upload.json().catch(()=>({}));if(!upload.ok||!uploaded.secure_url)throw new Error(uploaded.error?.message||"L’envoi de la photo a échoué.");photoUrl=uploaded.secure_url;
+    }
+    const payload={step_number:Number(document.getElementById("admin-step-number").value),place_name:document.getElementById("admin-step-place").value.trim(),latitude:document.getElementById("admin-step-lat").value||null,longitude:document.getElementById("admin-step-lon").value||null,riddle:document.getElementById("admin-step-riddle").value.trim(),answer:document.getElementById("admin-step-answer").value.trim(),hint:document.getElementById("admin-step-hint").value.trim(),photo_url:photoUrl};
+    await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps`,{method:"POST",body:JSON.stringify(payload)});document.getElementById("admin-step-place").value="";document.getElementById("admin-step-lat").value="";document.getElementById("admin-step-lon").value="";document.getElementById("admin-step-riddle").value="";document.getElementById("admin-step-answer").value="";document.getElementById("admin-step-hint").value="";document.getElementById("admin-step-photo").value="";if(photoInput)photoInput.value="";document.getElementById("admin-step-photo-preview")?.replaceChildren();const title=document.getElementById("admin-adventure-steps-title").textContent.replace("Étapes — ","");await window.adminLoadAdventureSteps(id,title);document.getElementById("admin-adventures-status").textContent="Étape enregistrée.";
+  }catch(err){alert(err.message||"Impossible d'ajouter l'étape.");}finally{btn.disabled=false;}
+});
+
 function adminComingSoon(name){
   adminSetView("admin-placeholder-view",name);
   const title=document.getElementById("admin-placeholder-title"); if(title) title.textContent=name+" — en préparation";
@@ -1762,6 +2094,61 @@ window.adminOpenSupport = adminOpenSupport;
 window.adminOpenAdventures = adminOpenAdventures;
 window.adminComingSoon = adminComingSoon;
 
+function renderAdminSupportTable(requests, statusEl, list){
+  list.replaceChildren();
+  if(!requests.length){list.textContent='Aucune demande d’aide pour le moment.';return;}
+  const wrap=document.createElement('div');wrap.className='support-admin-scroll';
+  const table=document.createElement('table');table.className='support-admin-table';
+  const thead=document.createElement('thead');const hr=document.createElement('tr');
+  ['Joueur / demande','Message','Date','Réponse','Suivi'].forEach(label=>{const th=document.createElement('th');th.textContent=label;hr.append(th);});
+  thead.append(hr);table.append(thead);
+  const tbody=document.createElement('tbody');
+  for(const request of requests){
+    const tr=document.createElement('tr');
+    const who=document.createElement('td');const subject=document.createElement('strong');subject.textContent=request.subject||'Demande';
+    const user=document.createElement('div');user.textContent=request.user_name||request.user_email||`Compte ${request.user_id||'joueur'}`;who.append(subject,user);
+    const message=document.createElement('td');message.className='support-admin-message';message.textContent=request.message||'';
+    const date=document.createElement('td');date.textContent=request.created_at?new Date(request.created_at).toLocaleString('fr-FR'):'—';
+    const replyCell=document.createElement('td');const reply=document.createElement('textarea');reply.className='support-admin-reply';reply.placeholder='Écris ta réponse au joueur ici…';reply.setAttribute('aria-label',`Réponse à ${request.subject||'la demande'}`);replyCell.append(reply);
+    const actions=document.createElement('td');actions.className='support-admin-actions';
+    const state=document.createElement('select');state.setAttribute('aria-label','Statut de la demande');
+    for(const [value,label] of [['en_attente','En attente'],['en_cours','En cours'],['repondu','Répondu'],['ferme','Fermé']]){const option=document.createElement('option');option.value=value;option.textContent=label;option.selected=value===request.status;state.append(option);}
+    const send=document.createElement('button');send.type='button';send.className='support-admin-send';send.textContent='Envoyer la réponse';
+    send.addEventListener('click',async()=>{if(reply.value.trim().length<2){statusEl.textContent='Écris ta réponse avant de l’envoyer.';reply.focus();return;}send.disabled=true;try{await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/replies`,{method:'POST',body:JSON.stringify({message:reply.value})});statusEl.textContent='Réponse enregistrée.';await window.openAdminPanel();}catch(e){statusEl.textContent=e.message||'Envoi impossible.';send.disabled=false;}});
+    const update=document.createElement('button');update.type='button';update.textContent='Mettre à jour';
+    update.addEventListener('click',async()=>{update.disabled=true;try{await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/status`,{method:'PATCH',body:JSON.stringify({status:state.value})});statusEl.textContent='Statut mis à jour.';await window.openAdminPanel();}catch(e){statusEl.textContent=e.message||'Mise à jour impossible.';update.disabled=false;}});
+    actions.append(state,update,send);tr.append(who,message,date,replyCell,actions);tbody.append(tr);
+  }
+  table.append(tbody);wrap.append(table);list.append(wrap);
+}
+
+function adminOpenNews(){adminSetView('admin-news-view','Gestion des actualités');adminLoadNews();}
+window.adminOpenNews=adminOpenNews;
+function adminNewsReset(){document.getElementById('admin-news-form')?.reset();document.getElementById('admin-news-id').value='';document.getElementById('admin-news-category').value='Actualité';}
+window.adminNewsReset=adminNewsReset;
+async function adminLoadNews(){
+  const status=document.getElementById('admin-news-status'),list=document.getElementById('admin-news-list');if(!status||!list)return;
+  status.textContent='Chargement des actualités…';list.replaceChildren();
+  try{const data=await adminApi('/api/admin/news');for(const item of (data.news||[])){
+    const card=document.createElement('article');card.className='feature';card.style.margin='14px 0';
+    const heading=document.createElement('h4');heading.textContent=item.title;
+    const meta=document.createElement('p');meta.textContent=`${item.category} · ${item.archived_at?'Archivée':item.is_published?'Publiée':'Brouillon'}`;
+    const preview=document.createElement('p');preview.textContent=item.body.length>260?item.body.slice(0,260)+'…':item.body;
+    const edit=document.createElement('button');edit.type='button';edit.className='admin-secondary-btn';edit.textContent='Modifier';edit.addEventListener('click',()=>{document.getElementById('admin-news-id').value=item.id;document.getElementById('admin-news-title').value=item.title;document.getElementById('admin-news-category').value=item.category||'Actualité';document.getElementById('admin-news-body').value=item.body;document.getElementById('admin-news-publish').checked=!!item.is_published;document.getElementById('admin-news-form').scrollIntoView({behavior:'smooth',block:'start'});});
+    const archive=document.createElement('button');archive.type='button';archive.className='admin-secondary-btn';archive.textContent=item.archived_at?'Restaurer':'Archiver';archive.addEventListener('click',async()=>{archive.disabled=true;try{await adminApi(`/api/admin/news/${encodeURIComponent(item.id)}/archive`,{method:'PATCH',body:JSON.stringify({archived:!item.archived_at})});await adminLoadNews();}catch(e){status.textContent=e.message;archive.disabled=false;}});
+    card.append(heading,meta,preview,edit,archive);list.append(card);
+  }status.textContent=`${(data.news||[]).length} actualité(s) chargée(s).`;
+  }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
+}
+window.adminLoadNews=adminLoadNews;
+document.getElementById('admin-news-form')?.addEventListener('submit',async event=>{event.preventDefault();const status=document.getElementById('admin-news-status'),id=document.getElementById('admin-news-id').value;const payload={title:document.getElementById('admin-news-title').value,category:document.getElementById('admin-news-category').value,body:document.getElementById('admin-news-body').value,is_published:document.getElementById('admin-news-publish').checked};try{await adminApi(id?`/api/admin/news/${encodeURIComponent(id)}`:'/api/admin/news',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});adminNewsReset();status.textContent='Actualité enregistrée.';await adminLoadNews();}catch(e){status.textContent=e.message||'Impossible d’enregistrer cette actualité.';}});
+
+window.loadPublicNews=async function(){
+ const status=document.getElementById('public-news-status'),list=document.getElementById('public-news-list');if(!status||!list)return;status.textContent='Chargement des actualités…';list.replaceChildren();
+ try{const response=await fetch(`${API_BASE}/api/news`);const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Impossible de charger les actualités.');const items=Array.isArray(data.news)?data.news:[];if(!items.length){status.textContent='Aucune actualité pour le moment.';return;}for(const item of items){const card=document.createElement('article');card.className='feature';card.style.margin='18px 0';const eyebrow=document.createElement('p');eyebrow.className='eyebrow';eyebrow.textContent=item.category||'Actualité';const title=document.createElement('h3');title.textContent=item.title;const body=document.createElement('p');body.style.whiteSpace='pre-wrap';body.textContent=item.body;card.append(eyebrow,title,body);list.append(card);}status.textContent=`${items.length} actualité(s).`;
+ }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
+};
+
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
   const supportArea = document.getElementById("admin-support-area");
@@ -1775,47 +2162,7 @@ window.openAdminPanel = async function() {
     statusEl.textContent = "Accès administrateur confirmé.";
     const result = await adminApi("/api/admin/support");
     const list = document.getElementById("admin-support-list");
-    list.replaceChildren();
-    if (!result.requests?.length) {
-      list.textContent = "Aucune demande d’aide pour le moment.";
-    } else {
-      for (const request of result.requests) {
-        const card = document.createElement("article");
-        card.className = "feature";
-        const title = document.createElement("h4");
-        title.textContent = `${request.subject} — ${request.status}`;
-        const message = document.createElement("p");
-        message.textContent = request.message;
-        const reply = document.createElement("textarea");
-        reply.placeholder = "Écrire une réponse au joueur…";
-        reply.setAttribute("aria-label", `Réponse à ${request.subject}`);
-        const send = document.createElement("button");
-        send.type = "button";
-        send.textContent = "Envoyer la réponse";
-        send.addEventListener("click", async () => {
-          send.disabled = true;
-          try {
-            await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/replies`, { method: "POST", body: JSON.stringify({ message: reply.value }) });
-            statusEl.textContent = "Réponse enregistrée.";
-            await window.openAdminPanel();
-          } catch (error) { statusEl.textContent = error.message; send.disabled = false; }
-        });
-        const state = document.createElement("select");
-        state.setAttribute("aria-label", `Statut de ${request.subject}`);
-        for (const [value, label] of [["en_attente","En attente"],["en_cours","En cours"],["repondu","Répondu"],["ferme","Fermé"]]) {
-          const option = document.createElement("option"); option.value = value; option.textContent = label; option.selected = value === request.status; state.append(option);
-        }
-        const update = document.createElement("button");
-        update.type = "button"; update.textContent = "Mettre à jour le statut";
-        update.addEventListener("click", async () => {
-          update.disabled = true;
-          try { await adminApi(`/api/admin/support/${encodeURIComponent(request.id)}/status`, { method: "PATCH", body: JSON.stringify({ status: state.value }) }); statusEl.textContent = "Statut mis à jour."; await window.openAdminPanel(); }
-          catch (error) { statusEl.textContent = error.message; update.disabled = false; }
-        });
-        card.append(title, message, reply, send, state, update);
-        list.append(card);
-      }
-    }
+    renderAdminSupportTable(result.requests || [], statusEl, list);
     supportArea.hidden = false;
   } catch (error) {
     window.setAdminAccessGranted(false);
@@ -1901,6 +2248,88 @@ function ouvrirPropositionVillage(){
   if(commune) commune.focus({preventScroll:true});
 }
 
+async function playerApi(path, options = {}) {
+  const token = await getAdminBearerToken();
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json', ...(options.headers || {}) }
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
+  return data;
+}
+
+window.loadPlayerAdventures = async function() {
+  const status = document.getElementById('player-adventures-status');
+  const list = document.getElementById('player-adventures-list');
+  const detail = document.getElementById('player-adventure-detail');
+  if (!status || !list) return;
+  detail.style.display = 'none'; list.innerHTML = ''; status.textContent = 'Chargement de tes aventures…';
+  try {
+    const data = await playerApi('/api/adventures');
+    if (!data.adventures?.length) {
+      status.textContent = 'Aucune aventure ne t’est encore attribuée. Vérifie tes formules ou tes accès testeur.';
+      return;
+    }
+    status.textContent = `${data.adventures.length} aventure(s) disponible(s).`;
+    data.adventures.forEach(adventure => {
+      const card = document.createElement('article'); card.className = 'feature';
+      const title = document.createElement('h3'); title.textContent = adventure.title;
+      const info = document.createElement('p'); info.textContent = `${adventure.village_slug} · ${adventure.level_name} · ${adventure.total_steps} étapes · ${adventure.total_stars} étoiles`;
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'small-btn'; button.textContent = 'Ouvrir l’aventure';
+      button.addEventListener('click', () => openPlayerAdventure(adventure.id));
+      card.append(title, info, button); list.appendChild(card);
+    });
+  } catch (error) { status.textContent = error.message || 'Impossible de charger tes aventures.'; }
+};
+
+async function openPlayerAdventure(id) {
+  const status = document.getElementById('player-adventures-status');
+  const list = document.getElementById('player-adventures-list');
+  const detail = document.getElementById('player-adventure-detail');
+  const stepsBox = document.getElementById('player-adventure-steps');
+  try {
+    status.textContent = 'Ouverture de l’aventure…';
+    const [data, progress] = await Promise.all([
+      playerApi(`/api/adventures/${id}/steps`), playerApi(`/api/adventures/${id}/progress`)
+    ]);
+    document.getElementById('player-adventure-title').textContent = data.adventure.title;
+    document.getElementById('player-adventure-progress').textContent = `⭐ ${progress.stars_earned} / ${progress.total_stars} étoiles · ${progress.validated_steps} / ${progress.total_steps} étapes validées`;
+    stepsBox.innerHTML = '';
+    data.steps.forEach(step => {
+      const article = document.createElement('article'); article.className = 'feature'; article.style.margin = '12px 0';
+      const heading = document.createElement('h4'); heading.textContent = `Étape ${step.step_number} — ${step.place_name}`; article.appendChild(heading);
+      const state = document.createElement('p'); state.textContent = step.validated ? '✅ Arrivée validée' : '📍 Rends-toi sur place pour découvrir l’énigme.'; article.appendChild(state);
+      if (step.validated) {
+        const riddle = document.createElement('p'); riddle.textContent = step.riddle || 'Aucune énigme renseignée.'; article.appendChild(riddle);
+        if (step.hint) { const hint = document.createElement('p'); hint.textContent = `Indice : ${step.hint}`; article.appendChild(hint); }
+      } else {
+        const button = document.createElement('button'); button.type = 'button'; button.className = 'small-btn'; button.textContent = '📍 Valider mon arrivée';
+        button.addEventListener('click', () => validatePlayerGps(id, step.id)); article.appendChild(button);
+      }
+      stepsBox.appendChild(article);
+    });
+    list.style.display = 'none'; detail.style.display = 'block'; status.textContent = '';
+  } catch (error) { status.textContent = error.message || 'Impossible d’ouvrir cette aventure.'; }
+}
+
+async function validatePlayerGps(adventureId, stepId) {
+  if (!navigator.geolocation) { alert('La géolocalisation n’est pas disponible sur cet appareil.'); return; }
+  const button = [...document.querySelectorAll('#player-adventure-steps button')].find(b => b.textContent.includes('Valider mon arrivée'));
+  if (button) { button.disabled = true; button.textContent = 'Localisation en cours…'; }
+  navigator.geolocation.getCurrentPosition(async position => {
+    try {
+      await playerApi(`/api/adventures/${adventureId}/steps/${stepId}/validate-gps`, {
+        method: 'POST', body: JSON.stringify({ latitude: position.coords.latitude, longitude: position.coords.longitude, accuracy: position.coords.accuracy })
+      });
+      await openPlayerAdventure(adventureId);
+    } catch (error) { alert(error.message || 'La validation GPS a échoué.'); if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; } }
+  }, error => {
+    alert(error.code === 1 ? 'Autorise la géolocalisation pour valider ton arrivée.' : 'Position GPS indisponible. Réessaie dehors.');
+    if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; }
+  }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+}
+
 function showDashSection(id){
   if(id === "dash-admin-info" && !adminAccessGranted){
     if(window.openAdminPanel) window.openAdminPanel();
@@ -1921,9 +2350,12 @@ function showDashSection(id){
   const selected = document.getElementById(id);
   if(!selected){console.warn("Rubrique introuvable :", id);return;}
   selected.classList.remove("hidden");
+  if(id === "dash-news") window.loadPublicNews?.();
+  if(id === "dash-adventures") window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
   if(id === "dash-profile") window.loadExplorerProfile?.();
   if(id === "dash-testers") window.loadTesterApplication?.();
+  if(id === "dash-tester-space") window.loadTesterSpace?.();
   document.querySelectorAll("#dashboard .nav-btn").forEach(btn=>btn.classList.remove("active"));
   const clickedButton = Array.from(document.querySelectorAll("#dashboard .nav-btn"))
     .find(btn => (btn.getAttribute("onclick") || "").includes("'" + id + "'"));
