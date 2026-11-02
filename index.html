@@ -567,6 +567,18 @@ body.halloween-accueil .home-hero{
 .site-status-track span{display:block;flex:0 0 auto;padding-right:70px;font:600 15px Georgia,serif;letter-spacing:.2px}
 .site-status-banner:hover .site-status-track{animation-play-state:paused}
 @keyframes siteStatusMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* Sur téléphone, le statut passe sur deux lignes pour que tout le message soit lisible */
+@media(max-width:700px){
+  #landing .site-status-banner{display:none;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:10px;row-gap:7px;padding:12px 14px;margin:5px 10px 0;min-height:0}
+  #landing .site-status-banner.is-visible{display:grid}
+  #landing .site-status-banner .status-symbol{grid-column:1;grid-row:1;font-size:25px}
+  #landing .site-status-banner strong{grid-column:2;grid-row:1;white-space:normal;line-height:1.2;padding:0;border:0;font-size:15px}
+  #landing .site-status-ticker{grid-column:1/-1;width:100%;min-width:0;overflow:visible;white-space:normal;mask-image:none}
+  #landing .site-status-track{display:block;width:auto;animation:none;transform:none}
+  #landing .site-status-track span{display:inline;white-space:normal;padding:0;font-size:14px;line-height:1.4}
+  #landing .site-status-track span[aria-hidden="true"]{display:none}
+}
+
 @media(prefers-reduced-motion:reduce){.site-status-track{animation:none;width:auto}.site-status-track span[aria-hidden="true"]{display:none}.site-status-ticker{white-space:normal}}
 .site-status-admin-grid{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(360px,1.4fr);gap:18px}
 .site-status-panel{background:#fffdf7;border:1px solid #e7d6ae;border-radius:16px;padding:17px;box-shadow:0 4px 14px #4b34100b}
@@ -1648,7 +1660,7 @@ body.halloween-accueil .home-hero{
       <p>Construisons ensemble des parcours ludiques et culturels pour mettre en valeur votre commune !</p>
     </div>
   </div>
-  <button class="public-contact-mobile-toggle" id="public-contact-mobile-toggle" type="button" aria-expanded="false" aria-controls="public-contact-mobile-content" onclick="(function(btn){const section=document.getElementById('public-town-contact');const open=section.classList.toggle('public-contact-mobile-open');btn.setAttribute('aria-expanded',String(open));btn.innerHTML=open?'Refermer le contact <span aria-hidden="true">↑</span>':'Afficher le contact <span aria-hidden="true">↓</span>';if(open){setTimeout(()=>document.getElementById('public-contact-mobile-content').scrollIntoView({behavior:'smooth',block:'start'}),80);}})(this)">Afficher le contact <span aria-hidden="true">↓</span></button>
+  <button class="public-contact-mobile-toggle" id="public-contact-mobile-toggle" type="button" aria-expanded="false" aria-controls="public-contact-mobile-content" onclick="togglePublicContact(this)">Afficher le contact ↓</button>
   <div id="public-contact-mobile-content" class="public-contact-mobile-content">
   <nav class="town-tabs" aria-label="Rubriques partenaires">
     <button type="button" onclick="document.getElementById('public-town-name').focus()">✉ Nous contacter</button>
@@ -6226,6 +6238,18 @@ window.toggleMobileExplorerMenu = function(forceOpen) {
   syncNewsMobileState();
   window.addEventListener('resize', syncNewsMobileState);
 })();
+</script>
+
+<script>
+window.togglePublicContact = function(btn){
+  const section = document.getElementById("public-town-contact");
+  const content = document.getElementById("public-contact-mobile-content");
+  if(!section || !content || !btn) return;
+  const isOpen = section.classList.toggle("public-contact-mobile-open");
+  btn.setAttribute("aria-expanded", String(isOpen));
+  btn.textContent = isOpen ? "Refermer le contact ↑" : "Afficher le contact ↓";
+  if(isOpen){ setTimeout(function(){ content.scrollIntoView({behavior:"smooth", block:"start"}); }, 100); }
+};
 </script>
 </body>
 </html>
