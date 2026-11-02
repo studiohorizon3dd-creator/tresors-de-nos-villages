@@ -795,6 +795,24 @@ body.halloween-accueil .home-hero{
 }
 
 
+
+/* Correctif de position : éviter de conserver l'ancien défilement de l'accueil
+   et supprimer tout décalage vertical au-dessus du contenu membre. */
+#dashboard:not(.admin-mode) {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#dashboard:not(.admin-mode) > .content {
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+  padding-top: 0 !important;
+  transform: none !important;
+}
+#dashboard:not(.admin-mode) > .sidebar {
+  margin: 0 !important;
+}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -3973,12 +3991,12 @@ function showDashboard(name, email){
   window.loadTesterApplication?.();
   // Toujours lancer la vérification des droits, même si un bloc du profil manque.
   window.checkAdminAccess?.();
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({top:0,left:0,behavior:"instant"});
 }
 function returnHome(){
   document.getElementById("dashboard").style.display="none";
   document.getElementById("landing").style.display="block";
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({top:0,left:0,behavior:"instant"});
 }
 let adminAccessGranted = false;
 window.setAdminAccessGranted = function(value){
@@ -4223,7 +4241,7 @@ function showDashSection(id){
   const clickedButton = Array.from(document.querySelectorAll("#dashboard .nav-btn"))
     .find(btn => (btn.getAttribute("onclick") || "").includes("'" + id + "'"));
   if(clickedButton) clickedButton.classList.add("active");
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({top:0,left:0,behavior:"instant"});
   if(id==="dash-stars"||id==="dash-badges"||id==="dash-home"||id==="dash-profile"){refreshProgress();actualiserPasseport();}
 }
   
