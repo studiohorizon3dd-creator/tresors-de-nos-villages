@@ -1527,7 +1527,7 @@ body.halloween-accueil .home-hero{
 @media(max-width:650px){#dash-tester-space.tester-dashboard{padding:9px 8px 22px}.tester-dashboard-hero{min-height:80px;padding:10px 12px;background-position:60% center}.tester-dashboard-hero-art{display:none}.tester-dashboard-brand h2{font-size:25px}.tester-dashboard-brand p{font-size:11px}.tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr));padding:7px;gap:5px}.tester-identity-card{grid-column:1/-1}.tester-topstat{border-right:1px solid #d8c18a!important;border-bottom:1px solid #e6d8b7}.tester-topstat:nth-child(odd){border-right:0!important}.tester-topstat:last-child{border-bottom:0}.tester-dashboard-grid{grid-template-columns:1fr;gap:8px}.tester-progression-card,.tester-rewards-card{grid-column:auto}.tester-dash-card{padding:12px}.tester-dash-card h3{font-size:17px}.tester-announcement-art{min-width:70px;min-height:65px}.tester-rank-item strong{font-size:10px}.tester-badge-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
 
-/* Mise en page fidèle à la maquette Espace Testeur — placement sans chevauchement */
+/* Mise en page calquée sur la maquette validée de l'Espace Testeur */
 #dash-tester-space.tester-dashboard{max-width:1600px;padding:10px 14px 26px;background:#f6efdc}
 #dash-tester-space .tester-dashboard-hero{min-height:76px;padding:9px 20px;border-radius:13px;background:linear-gradient(90deg,rgba(4,43,31,.94),rgba(4,43,31,.65) 58%,rgba(4,43,31,.20)),url('images/espace-testeur.png') center 45%/cover;color:#fff4d5}
 #dash-tester-space .tester-dashboard-brand h2{color:#fff2c9;font-size:clamp(25px,2.7vw,34px);text-shadow:0 1px 3px #14291d}
@@ -1539,27 +1539,22 @@ body.halloween-accueil .home-hero{
 #dash-tester-space .tester-dash-card{min-width:0;padding:11px 12px;border-radius:13px;box-shadow:0 3px 9px #273b2410}
 #dash-tester-space .tester-dash-card h3{font-size:16px;margin-bottom:7px}
 #dash-tester-space .tester-dash-card>p{font-size:11px;line-height:1.35;margin:4px 0 7px}
-/* Première rangée : annonces + progression */
+/* Rangée 1 : annonces + progression */
 #dash-tester-space .tester-announcement-card{grid-column:span 5;min-height:128px}
 #dash-tester-space .tester-progression-card{grid-column:span 7;min-height:128px}
-/* Deuxième rangée : missions, validation et retours */
-#dash-tester-space .tester-missions-card{grid-column:span 4}
-#dash-tester-space .tester-validation-card{grid-column:span 4}
-#dash-tester-space .tester-feedback-card{grid-column:span 4}
-/* Troisième rangée : suivi, badges et version */
-#dash-tester-space .tester-dashboard-grid>.tester-dash-card:nth-child(8){grid-column:span 4}
-#dash-tester-space .tester-dashboard-grid>.tester-dash-card:nth-child(9){grid-column:span 4}
-#dash-tester-space .tester-dashboard-grid>.tester-dash-card:nth-child(10){grid-column:span 4}
-/* Quatrième rangée : quatre panneaux compacts */
-#dash-tester-space .tester-stats-card{grid-column:span 3}
-#dash-tester-space .tester-community-card{grid-column:span 3}
-#dash-tester-space .tester-journal-card{grid-column:span 3}
+/* Rangée 2 : missions de test + validation + signalements */
+#dash-tester-space .tester-missions-card,
+#dash-tester-space .tester-validation-card,
+#dash-tester-space .tester-feedback-card{grid-column:span 4;min-height:190px}
+/* Rangée 3 : suivi + badges + version */
+#dash-tester-space .tester-history-card,
+#dash-tester-space .tester-badges-card,
+#dash-tester-space .tester-version-card{grid-column:span 4}
+/* Rangée 4 : statistiques + communauté + carnet + récompenses */
+#dash-tester-space .tester-stats-card,
+#dash-tester-space .tester-community-card,
+#dash-tester-space .tester-journal-card,
 #dash-tester-space .tester-rewards-card{grid-column:span 3}
-/* Fonctionnalités complémentaires */
-#dash-tester-space .tester-dashboard-grid>.tester-dash-card:nth-child(3),
-#dash-tester-space .tester-dashboard-grid>.tester-dash-card:nth-child(4){grid-column:span 6}
-#dash-tester-space .tester-dashboard-grid>.tester-dash-card:nth-child(14){grid-column:span 6}
-#dash-tester-space .tester-dashboard-grid>.tester-dash-card:nth-child(16){grid-column:1/-1}
 #dash-tester-space .tester-rank-track{grid-template-columns:repeat(4,minmax(0,1fr))}
 #dash-tester-space .tester-community-people{font-size:24px;letter-spacing:5px;text-align:center;margin:5px 0}
 #dash-tester-space .tester-dash-action{font-size:11px;padding:8px 12px;margin-top:5px}
@@ -1567,17 +1562,22 @@ body.halloween-accueil .home-hero{
 #dash-tester-space .tester-mini-stats strong{font-size:19px}
 #dash-tester-space .tester-mini-stats small{font-size:9px}
 #dash-tester-space .tester-dashboard-footnote{font-size:11px}
+#dash-tester-space .tester-extra-challenges{margin-top:10px;border:1px solid #e3d1a2;border-radius:12px;background:#fffaf0;padding:10px 13px}
+#dash-tester-space .tester-extra-challenges>summary{cursor:pointer;color:#174b35;font:700 14px Georgia,serif}
+#dash-tester-space .tester-extra-challenges-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+#dash-tester-space .tester-extra-challenges-grid>.tester-dash-card{min-height:0}
 @media(max-width:1050px){
  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(3,minmax(0,1fr))}
  #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:auto!important;grid-row:auto!important}
+ #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1!important}
  #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 1!important}
- #dash-tester-space .tester-rewards-card{grid-column:1/-1!important}
+ #dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 1!important}
+ #dash-tester-space .tester-extra-challenges-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:650px){
  #dash-tester-space.tester-dashboard{padding:9px 8px 22px}
  #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr;gap:8px}
- #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1!important;grid-row:auto!important}
+ #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important;min-height:0}
  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))}
  #dash-tester-space .tester-identity-card{grid-column:1/-1}
  #dash-tester-space .tester-dashboard-hero{min-height:76px;background-position:58% center}
@@ -1585,8 +1585,8 @@ body.halloween-accueil .home-hero{
  #dash-tester-space .tester-dashboard-brand p{font-size:11px}
  #dash-tester-space .tester-dashboard-hero-art{display:none}
  #dash-tester-space .tester-rank-track{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #dash-tester-space .tester-extra-challenges-grid{grid-template-columns:1fr}
 }
-
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -2163,30 +2163,22 @@ body.halloween-accueil .home-hero{
   </div>
 
   <div class="tester-dashboard-grid">
-    <article class="tester-dash-card tester-announcement-card">
+<article class="tester-dash-card tester-announcement-card">
       <h3>📣 Annonces Testeurs <span class="tester-live-dot"></span></h3>
       <div class="tester-announcement-body"><span class="tester-announcement-art">🗺️🧭</span><div><small>Bienvenue dans ton espace</small><h4>À toi de jouer !</h4><p>Teste les parcours qui te sont confiés et partage tes retours pour nous aider à améliorer les aventures.</p></div></div>
     </article>
 
-    <article class="tester-dash-card tester-progression-card">
+<article class="tester-dash-card tester-progression-card">
       <h3>🎯 Ma progression explorateur</h3>
       <p id="tester-explorer-level-text">Niveau actuel : Débutant. Termine des parcours pour atteindre le rang suivant.</p>
       <div class="tester-rank-track"><div class="tester-rank-item" data-explorer-rank="0"><b>🏅</b><strong>Débutant</strong></div><div class="tester-rank-item" data-explorer-rank="1"><b>🧭</b><strong>Aventurier</strong></div><div class="tester-rank-item" data-explorer-rank="2"><b>⭐</b><strong>Expert</strong></div><div class="tester-rank-item" data-explorer-rank="3"><b>👑</b><strong>Légende</strong></div></div>
     </article>
 
-    <article class="tester-dash-card">
-      <h3>📅 Missions quotidiennes</h3><p>De petites actions pour faire avancer ton exploration.</p><div id="tester-daily-list" class="tester-daily-list"></div><p id="tester-daily-progress" class="tester-daily-progress" aria-live="polite">0/3 missions quotidiennes réalisées</p>
+<article class="tester-dash-card tester-missions-card">
+      <h3>🎯 Mes missions de test</h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div><strong class="tester-subheading">Mes parcours autorisés</strong><div id="tester-space-access-list"><p>Chargement…</p></div>
     </article>
 
-    <article class="tester-dash-card">
-      <h3>🗺️ Défi du mois</h3><p id="tester-month-challenge">Découvre le village qui t’a été confié et observe ses lieux emblématiques.</p><span class="tester-space-tag" id="tester-month-label">Défi du mois</span>
-    </article>
-
-    <article class="tester-dash-card tester-missions-card">
-      <h3>🎯 Mes missions de test</h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div>
-    </article>
-
-    <article class="tester-dash-card tester-validation-card">
+<article class="tester-dash-card tester-validation-card">
       <h3>🏁 Validation de mon niveau</h3><p>Lorsque tu as terminé un parcours, envoie ton bilan à l’administration.</p>
       <form id="tester-level-review-form" class="tester-dash-form">
         <label>Village et niveau terminé<select id="tester-level-review-access" required><option value="">Chargement des missions…</option></select></label>
@@ -2195,7 +2187,7 @@ body.halloween-accueil .home-hero{
       </form><div id="tester-level-review-history"></div>
     </article>
 
-    <article class="tester-dash-card tester-feedback-card">
+<article class="tester-dash-card tester-feedback-card">
       <h3>🐞 Signalement & retours</h3><p>Un problème, une idée ou une remarque ? Fais-nous-en part.</p>
       <form id="tester-feedback-form" class="tester-dash-form">
         <label>Village et niveau autorisés<select id="tester-feedback-access" required><option value="">Chargement des accès…</option></select></label>
@@ -2205,42 +2197,42 @@ body.halloween-accueil .home-hero{
       </form>
     </article>
 
-    <article class="tester-dash-card">
-      <h3>📋 Suivi de mes retours</h3><p>Retrouve les messages envoyés à l’administration.</p><div id="tester-feedback-history" class="tester-history-list"><p>Chargement…</p></div>
+<article class="tester-dash-card tester-history-card">
+      <h3>📋 Suivi & historique de mes contributions</h3><p>Retrouve les messages envoyés à l’administration.</p><div id="tester-feedback-history" class="tester-history-list"><p>Chargement…</p></div><strong class="tester-subheading">Mes villages découverts et aventures terminées</strong><div id="tester-contribution-history" class="tester-history-list"><p>Ton historique apparaîtra ici.</p></div>
     </article>
 
-    <article class="tester-dash-card">
+<article class="tester-dash-card tester-badges-card">
       <h3>🎖️ Mes badges Testeur</h3><p>Des distinctions gagnées grâce à ta participation.</p><div id="tester-exclusive-badges" class="tester-badge-row"></div>
     </article>
 
-    <article class="tester-dash-card">
+<article class="tester-dash-card tester-version-card">
       <h3>🧪 Version de test</h3><p class="tester-version-pill">Espace de test — version en évolution</p><strong class="tester-subheading">Les points à vérifier</strong><ul class="tester-check-list"><li>Les énigmes sont-elles compréhensibles ?</li><li>Les indices et les réponses fonctionnent-ils ?</li><li>La carte et la validation GPS fonctionnent-elles à l’arrivée ?</li><li>Le parcours est-il agréable et adapté à son niveau ?</li></ul>
     </article>
 
-    <article class="tester-dash-card tester-stats-card">
+<article class="tester-dash-card tester-stats-card">
       <h3>📊 Statistiques de mes tests</h3><div class="tester-mini-stats"><div><strong id="tester-stat-missions-copy">0</strong><small>Missions</small></div><div><strong id="tester-stat-completed-copy">0</strong><small>Parcours terminés</small></div><div><strong id="tester-stat-feedback-copy">0</strong><small>Retours envoyés</small></div></div><p id="tester-space-status" class="status" role="status" aria-live="polite">Chargement de tes autorisations…</p>
     </article>
 
-    <article class="tester-dash-card tester-community-card">
+<article class="tester-dash-card tester-community-card">
       <h3>👥 Communauté Testeurs</h3><p>Partage tes idées, tes observations et tes astuces pour aider à améliorer les parcours.</p><div class="tester-community-people" aria-hidden="true">🧑‍🌾 🧭 🧑‍🚀</div><button type="button" class="tester-dash-action" onclick="showDashSection('dash-support')">💬 Contacter l’équipe</button>
     </article>
 
-    <article class="tester-dash-card tester-journal-card">
+<article class="tester-dash-card tester-journal-card">
       <h3>📔 Mon carnet personnel</h3><p>Note tes découvertes et tes souvenirs. Tes notes restent privées sur cet appareil.</p><textarea id="tester-personal-journal" class="tester-journal" maxlength="5000" placeholder="Aujourd’hui, j’ai découvert…"></textarea><button type="button" class="tester-dash-action" id="tester-journal-save">✍️ Enregistrer mon carnet</button><span id="tester-journal-status" class="tester-space-note" role="status"></span>
     </article>
 
-    <article class="tester-dash-card">
-      <h3>📜 Historique des contributions</h3><p>Retrouve les parcours terminés, les bilans transmis et tes retours.</p><div id="tester-contribution-history" class="tester-history-list"><p>Ton historique apparaîtra ici.</p></div><button type="button" class="tester-dash-action" onclick="document.getElementById('tester-feedback-history')?.scrollIntoView({behavior:'smooth',block:'center'})">Voir mes retours détaillés</button>
-    </article>
-
-    <article class="tester-dash-card tester-rewards-card">
+<article class="tester-dash-card tester-rewards-card">
       <h3>🎁 Récompenses Testeurs</h3><p>Des badges spéciaux remercient les testeurs qui participent aux essais et aident à améliorer les aventures.</p><div id="tester-reward-status" class="tester-badge-row"></div>
     </article>
-
-    <article class="tester-dash-card">
-      <h3>🗺️ Mes parcours autorisés</h3><div id="tester-space-access-list"><p>Chargement…</p></div>
-    </article>
   </div>
+  <details class="tester-extra-challenges">
+    <summary>🧭 Mes défis complémentaires : missions quotidiennes & défi du mois</summary>
+    <div class="tester-extra-challenges-grid"><article class="tester-dash-card">
+      <h3>📅 Missions quotidiennes</h3><p>De petites actions pour faire avancer ton exploration.</p><div id="tester-daily-list" class="tester-daily-list"></div><p id="tester-daily-progress" class="tester-daily-progress" aria-live="polite">0/3 missions quotidiennes réalisées</p>
+    </article><article class="tester-dash-card">
+      <h3>🗺️ Défi du mois</h3><p id="tester-month-challenge">Découvre le village qui t’a été confié et observe ses lieux emblématiques.</p><span class="tester-space-tag" id="tester-month-label">Défi du mois</span>
+    </article></div>
+  </details>
   <p class="tester-space-note tester-dashboard-footnote">Ton espace est personnel. Les autres testeurs ne peuvent pas consulter tes accès ni tes retours. L’accès testeur ne donne pas automatiquement accès aux aventures payantes.</p>
 </section>
 
