@@ -2083,6 +2083,7 @@ body.halloween-accueil .home-hero{
         </div>
       </details>
       <div class="nav-bottom-links">
+        <button class="nav-btn" id="moderator-space-nav" hidden onclick="openModeratorSpace()" title="Accès réservé aux modérateurs">🛡️ &nbsp; Espace Modérateur</button>
         <button class="nav-btn" id="admin-nav-button" hidden onclick="showDashSection('dash-admin-info')" title="Réservé aux administrateurs autorisés">⚙ &nbsp; Administration</button>
         <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
       </div>
@@ -4426,7 +4427,37 @@ window.checkAdminAccess = async function(){
     window.adminCurrentRole = staffInfo.role || "admin";
     window.setAdminAccessGranted(true);
   }catch(_error){
+    window.adminCurrentRole = null;
     window.setAdminAccessGranted(false);
+  }
+};
+
+// Espace séparé : le modérateur ne passe jamais par le tableau de bord administrateur.
+window.openModeratorSpace = async function(){
+  const status = document.getElementById("admin-panel-status");
+  try {
+    const staffInfo = await adminApi("/api/admin/me");
+    if (staffInfo.role !== "moderator") throw new Error("Cet espace est réservé aux modérateurs.");
+    window.adminCurrentRole = "moderator";
+    window.setAdminAccessGranted(true);
+    window.showDashSection("dash-admin-info");
+    const brand = document.querySelector(".admin-brand small");
+    if (brand) brand.textContent = "ESPACE MODÉRATION";
+    document.querySelectorAll(".admin-nav-item").forEach(button => {
+      const action = button.getAttribute("onclick") || "";
+      button.hidden = !action.includes("adminOpenSupport");
+    });
+    document.querySelectorAll(".communication-tab").forEach(button => {
+      button.hidden = !((button.getAttribute("onclick") || "").includes("adminOpenSupport"));
+    });
+    adminSetView("admin-support-view", "Espace Modérateur · Support");
+    if (status) status.textContent = "Chargement des demandes de support…";
+    const result = await adminApi("/api/admin/support");
+    renderAdminSupportTable(result.requests || [], status, document.getElementById("admin-support-list"));
+    const area = document.getElementById("admin-support-area");
+    if (area) area.hidden = false;
+  } catch (error) {
+    if (status) status.textContent = error.message || "Impossible d’ouvrir l’espace modérateur.";
   }
 };
 
@@ -5670,7 +5701,12 @@ window.openAdminPanel = async function() {
   supportArea.hidden = true;
   try {
     await adminApi("/api/admin/me");
+    window.adminCurrentRole = "admin";
     window.setAdminAccessGranted(true);
+    const brand = document.querySelector(".admin-brand small");
+    if (brand) brand.textContent = "ESPACE ADMINISTRATION";
+    document.querySelectorAll(".admin-nav-item").forEach(button => { button.hidden = false; });
+    document.querySelectorAll(".communication-tab").forEach(button => { button.hidden = false; });
     document.getElementById("admin-access-error")?.remove();
     window.showDashSection("dash-admin-info");
     adminShowHome();
@@ -5827,12 +5863,14 @@ let adminAccessGranted = false;
 window.setAdminAccessGranted = function(value){
   adminAccessGranted = value === true;
   const adminNav = document.getElementById("admin-nav-button");
+  const moderatorNav = document.getElementById("moderator-space-nav");
   const testerNav = document.getElementById("tester-space-nav");
   const isModerator = window.adminCurrentRole === "moderator";
   if(adminNav) {
-    adminNav.hidden = !adminAccessGranted;
-    adminNav.setAttribute("aria-label", "Administration — accès équipe autorisé");
+    adminNav.hidden = !adminAccessGranted || isModerator;
+    adminNav.setAttribute("aria-label", "Administration — accès administrateur uniquement");
   }
+  if(moderatorNav) moderatorNav.hidden = !adminAccessGranted || !isModerator;
   if(adminAccessGranted && testerNav) testerNav.hidden = false;
   document.querySelectorAll(".admin-nav-item").forEach(button => {
     const action = button.getAttribute("onclick") || "";
