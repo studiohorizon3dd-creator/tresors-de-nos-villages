@@ -6207,7 +6207,7 @@ function showDashSection(id){
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
   "dash-home", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges",
-  "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-town-contact", "dash-support",
+  "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-updates", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
 ];
@@ -6224,7 +6224,7 @@ function showDashSection(id){
   if(!selected){console.warn("Rubrique introuvable :", id);return;}
   selected.classList.remove("hidden");
   selected.style.removeProperty("display");
-  if(id === "dash-news") window.loadPublicNews?.();
+  if(id === "dash-news" || id === "dash-updates") window.loadPublicNews?.();
   if(id === "dash-notifications") window.loadMemberNotifications?.();
   if(id === "dash-mailbox") window.loadMemberMailbox?.();
   if(id === "dash-adventures") window.loadPlayerAdventures?.();
