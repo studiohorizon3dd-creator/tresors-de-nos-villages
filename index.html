@@ -4349,7 +4349,7 @@ window.saveLeaderboardPreference = async function(enabled) {
   }
 };
 
-function adminSetView(view, title) {
+const adminSetView = window.adminSetView = function(view, title) {
   ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
@@ -4358,7 +4358,7 @@ function adminSetView(view, title) {
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
   const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenMailboxAdmin":"adminComingSoon"));
   if(active) active.classList.add("active");
-}
+};
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
 function adminShowAnalytics(){adminSetView("admin-analytics-view","Statistiques");window.loadSiteAnalytics?.();}
 async function adminOpenSupport(){
