@@ -673,83 +673,105 @@ body.halloween-accueil .home-hero{
 </script>
 
 <div class="layout" id="landing">
-  <aside class="sidebar">
-    <div class="brand-mark">✥</div>
-    <div class="brand-name">Trésors<br>de nos Villages</div>
-    <nav class="nav-list" aria-label="Menu principal">
-      <button class="nav-btn active" onclick="goTo('accueil')">⌂ &nbsp; Accueil</button>
-      <button class="nav-btn" onclick="goTo('concept')">♧ &nbsp; Le concept</button>
-      <button class="nav-btn" onclick="goTo('villages-public')">▤ &nbsp; Les villages</button>
-      <button class="nav-btn" onclick="showAccount()">♙ &nbsp; Mon compte</button>
+  <div class="content premium-public-home">
+    <nav class="premium-topnav" aria-label="Navigation principale">
+      <a class="premium-logo" href="#accueil" onclick="goTo('accueil');return false;">
+        <span class="premium-logo-mark">🏡</span>
+        <span>Trésors<br><small>de nos Villages</small></span>
+      </a>
+      <div class="premium-nav-links">
+        <button class="premium-nav-link active" type="button" onclick="goTo('accueil')">⌂ <span>Accueil</span></button>
+        <button class="premium-nav-link" type="button" onclick="goTo('concept')">◎ <span>Le concept</span></button>
+        <button class="premium-nav-link" type="button" onclick="goTo('villages-public')">▤ <span>Les aventures</span></button>
+        <button class="premium-nav-link" type="button" onclick="goTo('formules-public')">◇ <span>Les formules</span></button>
+        <button class="premium-nav-link" type="button" onclick="goTo('partenaires-public')">♧ <span>Partenaires</span></button>
+      </div>
+      <div class="premium-account-links">
+        <button class="premium-login" type="button" onclick="showAccount()">♙ &nbsp;Se connecter</button>
+        <button class="premium-signup" type="button" onclick="showAccount()">✎ &nbsp;S'inscrire</button>
+      </div>
     </nav>
-    <div class="sidebar-note">Explorez · Observez<br>Réfléchissez · Trouvez !</div>
-  </aside>
-  <div class="content">
-    <header class="home-hero" id="accueil">
-      <div class="home-hero-inner">
-        <div class="home-brand-ribbon">Bienvenue dans<br><strong>Trésors de nos Villages</strong></div>
-        <div class="home-hero-copy">
-          <p class="eyebrow">Partez à la découverte</p>
-          <h1>Et si votre village<br>cachait un trésor&nbsp;?</h1>
-          <div class="gold-line"></div>
-          <p>Explorez des lieux, résolvez des énigmes et découvrez les petites histoires qui rendent chaque village unique.</p>
-          <div class="home-hero-actions">
-            <button class="primary-btn" type="button" onclick="showAccount()">🧭 &nbsp; Découvrir les aventures&nbsp; →</button>
-            <button class="home-secondary-btn" type="button" onclick="goTo('formules-public')">🗝️ &nbsp; Voir les formules&nbsp; →</button>
-          </div>
+
+    <header class="premium-hero" id="accueil">
+      <div class="premium-signposts" aria-label="Les thèmes de l'aventure">
+        <div>🧭 &nbsp;Aventure</div>
+        <div>⚑ &nbsp;Découverte</div>
+        <div>🍃 &nbsp;Patrimoine</div>
+        <div>♧ &nbsp;En famille</div>
+      </div>
+      <div class="premium-hero-copy">
+        <p class="premium-script">Partez à la découverte de</p>
+        <h1>Trésors de nos Villages</h1>
+        <div class="premium-flourish"><span></span>❧</div>
+        <p>Explorez des villages authentiques, résolvez des énigmes,<br class="desktop-break"> découvrez leur patrimoine et collectionnez des trésors<br class="desktop-break"> uniques tout en vous amusant&nbsp;!</p>
+        <div class="premium-hero-actions">
+          <button class="premium-gold-button" type="button" onclick="showAccount()">◎ &nbsp; Découvrir les aventures&nbsp; →</button>
+          <button class="premium-light-button" type="button" onclick="goTo('formules-public')">◇ &nbsp; Voir les formules</button>
         </div>
       </div>
     </header>
 
-    <div id="public-site-status-banner" class="site-status-banner" role="status" aria-live="polite">
+    <div id="public-site-status-banner" class="site-status-banner premium-status" role="status" aria-live="polite">
       <span class="status-symbol" id="public-site-status-icon">✨</span>
       <strong id="public-site-status-title">Information du site</strong>
       <div class="site-status-ticker"><div class="site-status-track"><span id="public-site-status-message"></span><span id="public-site-status-message-copy" aria-hidden="true"></span></div></div>
     </div>
-    <div class="home-promises" aria-label="Les points forts de l'aventure">
-      <div class="home-promise"><span>🗺️</span> Des villages à explorer</div>
-      <div class="home-promise"><span>🔎</span> Des énigmes à résoudre</div>
-      <div class="home-promise"><span>⭐</span> Des étoiles à collectionner</div>
-      <div class="home-promise"><span>👨‍👩‍👧‍👦</span> Une aventure pour tous</div>
+
+    <div class="premium-feature-strip" aria-label="Les points forts de l'aventure">
+      <div><span>♧</span><strong>Des villages<br>à explorer</strong></div>
+      <div><span>⌕</span><strong>Des énigmes<br>à résoudre</strong></div>
+      <div><span>☆</span><strong>Des étoiles<br>à collectionner</strong></div>
+      <div><span>♙♙</span><strong>Une aventure<br>pour tous</strong></div>
     </div>
-    <section class="home-formulas" id="formules-public">
-      <div class="home-section-heading">
-        <span>⟶</span>
-        <div>
-          <h2 class="section-title">Choisissez votre façon de partir à l’aventure</h2>
-          <p class="section-intro">En solo, en famille ou entre amis, il existe une formule pour chaque envie.<br>Découvrez les univers et choisissez celui qui vous ressemble.</p>
+
+    <main class="premium-main">
+      <section class="home-formulas premium-formulas" id="formules-public">
+        <div class="premium-section-heading">
+          <span></span>
+          <div>
+            <h2>Choisissez votre façon de vivre l’aventure</h2>
+            <p>En solo, en famille ou entre amis, il existe une formule pour chaque envie.</p>
+          </div>
+          <span></span>
         </div>
-        <span>⟵</span>
-      </div>
-      <div class="home-formula-grid">
-        <article class="home-formula home-formula-child">
-          <div class="home-formula-art"><span>🧰</span><i>🌼</i></div>
-          <div class="home-formula-top"><div class="home-formula-icon">🧒</div><h3>Mode Enfant</h3></div>
-          <p>Des aventures ludiques et adaptées aux plus jeunes pour découvrir les villages en s’amusant&nbsp;!</p>
-          <button class="home-formula-button" type="button" onclick="showAccount()">Je découvre le mode Enfant&nbsp; →</button>
-        </article>
-        <article class="home-formula home-formula-family">
-          <div class="home-formula-art"><span>🥾</span><i>🌳</i></div>
-          <div class="home-formula-top"><div class="home-formula-icon">👨‍👩‍👧</div><h3>Mode Famille</h3></div>
-          <p>Vivez une aventure conviviale et collaborative, idéale pour partager un moment en famille&nbsp;!</p>
-          <button class="home-formula-button" type="button" onclick="showAccount()">Je découvre le mode Famille&nbsp; →</button>
-        </article>
-        <article class="home-formula home-formula-easy">
-          <div class="home-formula-art"><span>🪧</span><i>🌿</i></div>
-          <div class="home-formula-top"><div class="home-formula-icon">🌱</div><h3>Mode Facile</h3></div>
-          <p>Une première aventure accessible à tous pour découvrir le concept et les trésors de nos villages&nbsp;!</p>
-          <button class="home-formula-button" type="button" onclick="showAccount()">Je découvre le mode Facile&nbsp; →</button>
-        </article>
-      </div>
-    </section>
-    <section class="home-rewards" aria-label="Les récompenses de l’aventure">
-      <div><span>🏆</span><strong>Collectionnez<br>des badges</strong></div>
-      <div><span>📕</span><strong>Complétez votre<br>passeport du voyageur</strong></div>
-      <div><span>🗓️</span><strong>Participez aux<br>événements saisonniers<small>(Noël, Pâques, Halloween…)</small></strong></div>
-      <div><span>🏅</span><strong>Obtenez votre<br>certificat d’explorateur</strong></div>
-    </section>
-    <section class="home-how" id="concept">
-      <h2 class="section-title">Comment fonctionne l'aventure ?</h2>
+        <div class="premium-card-grid">
+          <article class="premium-adventure-card">
+            <div class="premium-card-photo premium-photo-child" role="img" aria-label="Une famille découvre un village"></div>
+            <div class="premium-card-content">
+              <div class="premium-card-title"><span>☻</span><h3>Mode Enfant</h3></div>
+              <p>Des aventures ludiques et adaptées aux plus jeunes pour découvrir les villages en s’amusant&nbsp;!</p>
+              <button type="button" aria-label="Découvrir le mode Enfant" onclick="showAccount()">➜</button>
+            </div>
+          </article>
+          <article class="premium-adventure-card">
+            <div class="premium-card-photo premium-photo-family" role="img" aria-label="Une famille part à l'aventure"></div>
+            <div class="premium-card-content">
+              <div class="premium-card-title"><span>♟</span><h3>Mode Famille</h3></div>
+              <p>Vivez une aventure conviviale et collaborative, idéale pour partager un moment en famille&nbsp;!</p>
+              <button type="button" aria-label="Découvrir le mode Famille" onclick="showAccount()">➜</button>
+            </div>
+          </article>
+          <article class="premium-adventure-card">
+            <div class="premium-card-photo premium-photo-easy" role="img" aria-label="Une ruelle fleurie d'un village"></div>
+            <div class="premium-card-content">
+              <div class="premium-card-title"><span>❧</span><h3>Mode Facile</h3></div>
+              <p>Une première exploration accessible à tous pour découvrir le concept et les trésors de nos villages&nbsp;!</p>
+              <button type="button" aria-label="Découvrir le mode Facile" onclick="showAccount()">➜</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="premium-rewards" aria-label="Les récompenses de l'aventure">
+        <div><span>🏆</span><strong>Collectionnez<br>des badges</strong></div>
+        <div><span>📕</span><strong>Complétez votre<br>passeport du voyageur</strong></div>
+        <div><span>🗓️</span><strong>Participez aux<br>événements saisonniers<small>(Noël, Pâques, Halloween…)</small></strong></div>
+        <div><span>🏅</span><strong>Obtenez votre<br>certificat d’explorateur</strong></div>
+      </section>
+    </main>
+
+    <section class="home-how premium-how" id="concept">
+      <h2 class="section-title">Comment fonctionne l’aventure&nbsp;?</h2>
       <p class="section-intro">Quelques étapes simples pour transformer une balade en chasse au trésor.</p>
       <div class="home-steps">
         <article class="home-step"><strong>🗺️ 1</strong><p>Choisissez une aventure</p></article>
@@ -758,11 +780,14 @@ body.halloween-accueil .home-hero{
         <article class="home-step"><strong>⭐ 4</strong><p>Gagnez des étoiles et des badges</p></article>
       </div>
     </section>
-    <!-- Carte aux pièces mystères retirée de l’accueil public à la demande de l’utilisatrice. -->
-
-<section class="section" id="villages-public">
+    <section class="section" id="villages-public">
       <h2 class="section-title">Des aventures au cœur de nos villages</h2>
       <p class="section-intro">Le projet se construit avec les communes pour proposer des parcours de découverte et mettre en valeur le patrimoine local. Les villages et aventures disponibles seront annoncés ici au fur et à mesure de leur confirmation.</p>
+    </section>
+    <section class="section" id="partenaires-public">
+      <h2 class="section-title">Vous souhaitez devenir partenaire&nbsp;?</h2>
+      <p class="section-intro">Mairies, associations et acteurs locaux : construisons ensemble des parcours pour faire découvrir les richesses de vos villages.</p>
+      <div class="cta-wrap"><button class="primary-btn" type="button" onclick="showAccount()">Nous contacter&nbsp; →</button></div>
     </section>
     <div class="cta-wrap"><button class="primary-btn" type="button" onclick="showAccount()">Créer mon compte / Me connecter&nbsp; →</button></div>
     <section class="account-area" id="account-area">
@@ -782,7 +807,6 @@ body.halloween-accueil .home-hero{
     <footer>🗝️ Trésors de nos Villages · Un projet en préparation à Humbert, Pas-de-Calais.</footer>
   </div>
 </div>
-
 <section class="dashboard" id="dashboard">
   <aside class="sidebar">
     <div class="brand-mark">✥</div><div class="brand-name">Trésors<br>de nos Villages</div>
@@ -1536,7 +1560,119 @@ body.halloween-accueil .home-hero{
           .puzzle-admin-empty{color:#766e5d;text-align:center;padding:24px 12px}.puzzle-admin-rank{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:50%;background:#f8e7b7;color:#654b0b;font-weight:800;margin-right:8px}
           @media(max-width:850px){.puzzle-admin-grid{grid-template-columns:1fr}.puzzle-admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
           @media(max-width:600px){.puzzle-admin-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.puzzle-admin-board{grid-template-columns:repeat(2,minmax(0,1fr))}.puzzle-admin-form{grid-template-columns:1fr}.puzzle-admin-hero h2{font-size:22px}.puzzle-admin-hero-mark{font-size:36px}}
-        </style>
+        
+/* Accueil public — reproduction fidèle de la maquette touristique premium */
+#landing{display:block!important;min-height:100vh;background:#f8f1df;color:#102e24}
+#landing>.content{margin:0!important;width:100%!important;max-width:none!important;min-height:100vh;background:#fbf4e5}
+#landing .premium-topnav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:8px clamp(18px,3vw,42px);background:linear-gradient(100deg,#03291e,#0b3b2c 55%,#062b20);border-bottom:1px solid #c99d3c;color:#fff4d4;position:relative;z-index:2}
+#landing .premium-logo{display:flex;align-items:center;gap:8px;min-width:235px;color:#ffedb7;text-decoration:none;font-family:Georgia,serif;font-size:22px;font-weight:bold;line-height:.94;text-shadow:0 2px 3px #0008}
+#landing .premium-logo-mark{font-size:39px;filter:drop-shadow(0 2px 2px #0008)}
+#landing .premium-logo small{font-size:17px}
+#landing .premium-nav-links{display:flex;align-items:center;justify-content:center;gap:clamp(9px,1.6vw,24px);flex:1}
+#landing .premium-nav-link{border:0;border-bottom:2px solid transparent;background:transparent;color:#fff4d8;padding:12px 2px 9px;font:600 14px Georgia,serif;white-space:nowrap}
+#landing .premium-nav-link:hover,#landing .premium-nav-link.active{color:#ffd46c;border-bottom-color:#e2b64f}
+#landing .premium-account-links{display:flex;align-items:center;gap:9px;white-space:nowrap}
+#landing .premium-login,#landing .premium-signup{border:1px solid #e6c66e;border-radius:24px;padding:9px 15px;font:bold 13px Georgia,serif}
+#landing .premium-login{background:#073425;color:#fff4d8}
+#landing .premium-signup{background:linear-gradient(#ffe7a0,#e9b747);color:#173525;box-shadow:0 2px 6px #0004}
+#landing .premium-hero{height:300px;min-height:300px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:18px 20px;background-image:linear-gradient(90deg,rgba(0,29,20,.1),rgba(0,25,18,.28) 30%,rgba(0,25,18,.08) 75%),url("images/image-01.jpg");background-position:center 48%;background-size:cover;border:0}
+#landing .premium-hero-copy{width:min(700px,58%);margin-left:120px;text-align:center;color:#fff9e9;background:transparent;border:0;box-shadow:none;padding:0;text-shadow:0 2px 4px #1a261b}
+#landing .premium-script{font-family:"Brush Script MT","Segoe Script",cursive;font-style:italic;font-size:clamp(25px,3vw,39px);line-height:1;color:#ffd05a;margin:0 0 0;text-shadow:0 2px 4px #36220a}
+#landing .premium-hero-copy h1{font-family:Georgia,serif;font-size:clamp(36px,4.4vw,58px);line-height:1.02;font-weight:bold;color:#fff9e9;margin:0 auto 3px;text-shadow:0 3px 5px #1a261b}
+#landing .premium-flourish{display:flex;align-items:center;justify-content:center;gap:0;color:#f6d36e;font-size:30px;line-height:1;margin:0 auto 5px}
+#landing .premium-flourish span{display:block;width:135px;height:3px;background:linear-gradient(90deg,transparent,#f3cf6c)}
+#landing .premium-hero-copy>p:not(.premium-script){font-size:16px;line-height:1.28;margin:4px auto 14px;color:#fff9ed}
+#landing .premium-hero-actions{display:flex;justify-content:center;gap:16px;margin-top:12px}
+#landing .premium-gold-button,#landing .premium-light-button{border-radius:28px;padding:12px 22px;font:bold 16px Georgia,serif;box-shadow:0 3px 8px #0004}
+#landing .premium-gold-button{border:1px solid #f9d66f;background:linear-gradient(#ffe18b,#d99a1d);color:#173325}
+#landing .premium-light-button{border:1px solid #d6ae55;background:linear-gradient(#fffdf5,#f4e8cc);color:#3b2b12}
+#landing .premium-signposts{position:absolute;left:clamp(24px,4vw,65px);top:34px;display:flex;flex-direction:column;gap:8px;transform:rotate(-4deg);z-index:1}
+#landing .premium-signposts div{min-width:170px;padding:9px 15px 9px 23px;background:linear-gradient(180deg,#f5d78c,#c98d3b);border:2px solid #74451d;border-radius:5px 14px 6px 5px;color:#2e2112;font:bold 18px Georgia,serif;box-shadow:0 4px 7px #0007;clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,5% 50%)}
+#landing .premium-status{margin:0!important;border-radius:0!important;border:0!important;border-top:4px solid #d6a93c!important;border-bottom:1px solid #d6a93c!important;background:#063426!important;color:#fff0c9!important;min-height:47px;padding:10px 16px!important;box-shadow:none!important}
+#landing .premium-feature-strip{min-height:78px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;padding:8px clamp(20px,4vw,65px);background:#f7eacb url("images/image-05.jpg") center/cover;border-bottom:1px solid #d7bd7f;color:#1b3025}
+#landing .premium-feature-strip>div{display:flex;align-items:center;justify-content:center;gap:14px;min-height:42px;border-right:1px solid #d0ae68}
+#landing .premium-feature-strip>div:last-child{border:0}
+#landing .premium-feature-strip span{font-size:34px;color:#8d681e}
+#landing .premium-feature-strip strong{font: bold 15px/1.15 Georgia,serif}
+#landing .premium-main{position:relative;padding:10px clamp(22px,4vw,68px) 14px;background:#fbf5e9 url("images/image-06.jpg") center top/cover}
+#landing .premium-formulas{padding:0!important;background:transparent!important}
+#landing .premium-section-heading{display:flex;align-items:center;justify-content:center;gap:14px;text-align:center;margin:0 auto 14px}
+#landing .premium-section-heading>span{width:68px;height:2px;background:linear-gradient(90deg,transparent,#b78324)}
+#landing .premium-section-heading>span:last-child{background:linear-gradient(90deg,#b78324,transparent)}
+#landing .premium-section-heading h2{font:bold clamp(23px,2.4vw,30px)/1.2 Georgia,serif;color:#10251e;margin:0 0 4px}
+#landing .premium-section-heading p{font:15px Georgia,serif;color:#29251c;margin:0}
+#landing .premium-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;max-width:1280px;margin:0 auto}
+#landing .premium-adventure-card{position:relative;overflow:hidden;border:1px solid #d8b66a;border-radius:18px;background:#fff9eb;box-shadow:0 4px 9px #5c431d30;min-width:0}
+#landing .premium-card-photo{height:112px;background-size:cover;background-position:center}
+#landing .premium-photo-child{background-image:url("images/image-02.jpg")}
+#landing .premium-photo-family{background-image:url("images/image-03.jpg")}
+#landing .premium-photo-easy{background-image:url("images/image-04.jpg")}
+#landing .premium-card-content{position:relative;min-height:82px;padding:0 54px 10px 68px;background:linear-gradient(180deg,#fff9eb,#f8edcf)}
+#landing .premium-card-title{display:flex;align-items:center;gap:9px;margin-top:-20px;position:relative}
+#landing .premium-card-title span{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:3px solid #d6a83c;border-radius:50%;background:#073626;color:#ffe6a2;font-size:24px;box-shadow:0 2px 5px #0003}
+#landing .premium-card-title h3{font:bold 20px Georgia,serif;color:#102f23;margin:0;text-shadow:0 1px #fff}
+#landing .premium-card-content p{font:13px/1.23 Georgia,serif;color:#201e17;margin:2px 0 0 4px}
+#landing .premium-card-content button{position:absolute;right:18px;bottom:13px;width:31px;height:31px;border:2px solid #d9b24e;border-radius:50%;background:#0b432d;color:#fff2c9;font-size:20px;box-shadow:0 2px 5px #0003}
+#landing .premium-rewards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;max-width:1320px;margin:5px auto 0;padding:9px 12px;border:2px solid #d8ad45;border-radius:17px;background:linear-gradient(110deg,#032c20,#0b432d 50%,#032b1f);box-shadow:0 4px 10px #4a371b40;color:#fff4d6}
+#landing .premium-rewards>div{display:flex;align-items:center;justify-content:center;gap:12px;padding:3px 8px;border-right:1px solid #d7ad4e}
+#landing .premium-rewards>div:last-child{border:0}
+#landing .premium-rewards span{font-size:35px;filter:drop-shadow(0 2px 2px #0007)}
+#landing .premium-rewards strong{font:bold 13px/1.2 Georgia,serif}
+#landing .premium-rewards small{display:block;font:10px Georgia,serif}
+#landing .premium-how{margin-top:20px;padding:25px clamp(20px,4vw,65px);background:#fbf5e9}
+#landing .premium-how .section-title{text-align:center;color:#123326}
+#landing .premium-public-home .section{padding-left:clamp(22px,4vw,68px);padding-right:clamp(22px,4vw,68px)}
+@media(max-width:900px){
+ #landing .premium-topnav{height:auto;min-height:70px;flex-wrap:wrap;justify-content:center}
+ #landing .premium-logo{min-width:0;margin-right:auto}
+ #landing .premium-nav-links{order:3;flex-basis:100%;flex-wrap:wrap}
+ #landing .premium-hero{height:330px}
+ #landing .premium-hero-copy{margin-left:130px;width:65%}
+ #landing .premium-signposts{left:15px}
+ #landing .premium-signposts div{min-width:130px;font-size:15px}
+ #landing .premium-card-content{padding-left:55px;padding-right:40px}
+ #landing .premium-card-title h3{font-size:17px}
+ #landing .premium-card-content p{font-size:12px}
+}
+@media(max-width:620px){
+ #landing .premium-topnav{padding:9px 12px}
+ #landing .premium-logo{font-size:18px}
+ #landing .premium-logo-mark{font-size:30px}
+ #landing .premium-account-links{gap:5px}
+ #landing .premium-login,#landing .premium-signup{padding:7px 9px;font-size:11px}
+ #landing .premium-nav-links{gap:12px}
+ #landing .premium-nav-link{font-size:12px;padding:7px 0}
+ #landing .premium-nav-link span{font-size:11px}
+ #landing .premium-hero{height:390px;align-items:flex-end;padding:18px 12px;background-position:57% center}
+ #landing .premium-hero-copy{width:100%;margin:0;padding:12px 8px;background:linear-gradient(90deg,#05291ed9,#05291eaa);border-radius:12px}
+ #landing .premium-hero-copy h1{font-size:34px}
+ #landing .premium-script{font-size:27px}
+ #landing .premium-hero-copy>p:not(.premium-script){font-size:13px}
+ #landing .desktop-break{display:none}
+ #landing .premium-signposts{top:12px;left:12px;gap:5px;transform:rotate(-3deg)}
+ #landing .premium-signposts div{min-width:118px;padding:5px 9px;font-size:12px}
+ #landing .premium-hero-actions{gap:7px;flex-wrap:wrap}
+ #landing .premium-gold-button,#landing .premium-light-button{font-size:12px;padding:9px 12px}
+ #landing .premium-feature-strip{grid-template-columns:repeat(2,1fr);padding:8px}
+ #landing .premium-feature-strip>div{justify-content:flex-start;padding:5px 8px;border-right:0}
+ #landing .premium-feature-strip span{font-size:25px}
+ #landing .premium-feature-strip strong{font-size:12px}
+ #landing .premium-main{padding:14px 10px}
+ #landing .premium-section-heading>span{width:20px}
+ #landing .premium-section-heading h2{font-size:21px}
+ #landing .premium-section-heading p{font-size:12px}
+ #landing .premium-card-grid{grid-template-columns:1fr;gap:12px}
+ #landing .premium-card-photo{height:145px}
+ #landing .premium-card-content{min-height:85px;padding-left:68px;padding-right:52px}
+ #landing .premium-card-title h3{font-size:19px}
+ #landing .premium-card-content p{font-size:13px}
+ #landing .premium-rewards{grid-template-columns:repeat(2,1fr);padding:8px 5px}
+ #landing .premium-rewards>div{justify-content:flex-start;border-right:0;padding:6px}
+ #landing .premium-rewards span{font-size:27px}
+ #landing .premium-rewards strong{font-size:11px}
+}
+
+</style>
         <div class="puzzle-admin-hero"><div><h2>🧩 Carte Puzzle</h2><p>Gérez les pièces de la carte et programmez leurs révélations.</p></div><div class="puzzle-admin-hero-mark">🏡</div></div>
         <div class="puzzle-admin-tabs" role="tablist" aria-label="Rubriques de la carte puzzle">
           <button type="button" class="puzzle-admin-tab active" data-puzzle-tab="overview">🗺️ Vue d’ensemble</button>
