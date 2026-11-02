@@ -1675,6 +1675,22 @@ body.halloween-accueil .home-hero{
 
 
 <style>
+/* Petit raccourci enveloppe toujours accessible dans l'espace membre */
+.member-mailbox-float{position:fixed;right:22px;bottom:22px;z-index:40;width:54px;height:54px;border:2px solid #d7ad45;border-radius:50%;background:linear-gradient(145deg,#062c20,#1d6242);color:#fff5d2;box-shadow:0 5px 18px #0003;display:none;align-items:center;justify-content:center;font:28px Arial,sans-serif;transition:transform .18s,filter .18s}
+.member-mailbox-float:hover{transform:translateY(-3px);filter:brightness(1.12)}
+.member-mailbox-float:focus-visible{outline:3px solid #d7ad45;outline-offset:4px}
+.mailbox-float-badge{position:absolute;top:-5px;right:-5px;min-width:21px;height:21px;padding:0 5px;display:grid;place-items:center;border:2px solid #fff8e8;border-radius:20px;background:#c83c32;color:white;font:bold 11px Arial,sans-serif}
+.mailbox-float-badge[hidden]{display:none}
+#dashboard:not([style*="display: none"]):not(.admin-mode) .member-mailbox-float{display:flex}
+#dashboard.admin-mode .member-mailbox-float{display:none}
+@media(max-width:600px){.member-mailbox-float{right:15px;bottom:15px;width:50px;height:50px}}
+.member-notifications-float{position:fixed;right:22px;bottom:88px;z-index:40;width:54px;height:54px;border:2px solid #d7ad45;border-radius:50%;background:linear-gradient(145deg,#7b5a16,#d7ad45);color:#fffdf3;box-shadow:0 5px 18px #0003;display:none;align-items:center;justify-content:center;font:26px Arial,sans-serif;transition:transform .18s,filter .18s}
+.member-notifications-float:hover{transform:translateY(-3px);filter:brightness(1.1)}
+.member-notifications-float:focus-visible{outline:3px solid #d7ad45;outline-offset:4px}
+#dashboard:not([style*="display: none"]):not(.admin-mode) .member-notifications-float{display:flex}
+#dashboard.admin-mode .member-notifications-float{display:none}
+@media(max-width:600px){.member-notifications-float{right:15px;bottom:78px;width:50px;height:50px}}
+
 /* Messagerie personnelle et administration */
 .mailbox-unread-badge{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 6px;margin-left:5px;border-radius:20px;background:#d7ad45;color:#173b29;font:700 12px Arial,sans-serif}
 .mailbox-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px 28px;border:1px solid #d7ad45;border-radius:18px;background:linear-gradient(120deg,#062c20,#1d6242);color:#fff5d2}
@@ -1985,6 +2001,16 @@ body.halloween-accueil .home-hero{
   </div>
 </div>
 <section class="dashboard" id="dashboard">
+  <button type="button" id="member-mailbox-float" class="member-mailbox-float"
+    onclick="openMemberMailbox()" aria-label="Ouvrir ma boîte aux lettres" title="Ma boîte aux lettres">
+    <span aria-hidden="true">✉</span>
+    <span id="mailbox-unread-float" class="mailbox-float-badge" hidden>0</span>
+  </button>
+  <button type="button" id="member-notifications-float" class="member-notifications-float"
+    onclick="openMemberNotifications()" aria-label="Ouvrir mes notifications" title="Mes notifications">
+    <span aria-hidden="true">🔔</span>
+    <span id="notifications-unread-float" class="mailbox-float-badge" hidden>0</span>
+  </button>
   <aside class="sidebar">
     <div class="brand-mark">✥</div><div class="brand-name">Trésors<br>de nos Villages</div>
     <button class="mobile-menu-toggle" id="mobile-explorer-menu-toggle" type="button"
@@ -2704,7 +2730,7 @@ body.halloween-accueil .home-hero{
             <label for="admin-mailbox-title">Objet du message</label>
             <input id="admin-mailbox-title" maxlength="160" required placeholder="Ex. Information sur une aventure">
             <label for="admin-mailbox-category">Type de message</label>
-            <select id="admin-mailbox-category"><option>Message de l’administration</option><option>Information importante</option><option>Mission de test</option><option>Actualité du site</option><option>Réponse personnelle</option></select>
+            <select id="admin-mailbox-category"><option>Message de l’administration</option><option>Information importante</option><option>Mission de test</option><option>Actualité du site</option><option>Réponse personnelle</option><option>Notification</option></select>
             <label for="admin-mailbox-body">Ton message</label>
             <textarea id="admin-mailbox-body" rows="6" maxlength="8000" required placeholder="Écris ton message ici…"></textarea>
             <button type="submit" class="primary-btn" id="admin-mailbox-send">📨 Envoyer le message</button>
@@ -5840,6 +5866,7 @@ function showDashSection(id){
   selected.classList.remove("hidden");
   selected.style.removeProperty("display");
   if(id === "dash-news") window.loadPublicNews?.();
+  if(id === "dash-mailbox") window.loadMemberMailbox?.();
   if(id === "dash-adventures") window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
   if(id === "dash-my-puzzle-progress") actualiserProgressionCartePersonnelle();
@@ -6707,13 +6734,38 @@ function mailboxDate(value) {
 }
 window.refreshMailboxUnread = async function() {
   const badge = document.getElementById("mailbox-unread-nav");
-  if (!badge) return;
+  const floatingBadge = document.getElementById("mailbox-unread-float");
+  const notificationBadge = document.getElementById("notifications-unread-float");
   try {
     const data = await mailboxApi("/api/mailbox");
-    const count = Number(data.unread_count || 0);
-    badge.textContent = count > 99 ? "99+" : String(count);
-    badge.hidden = count < 1;
+    const messages = data.messages || [];
+    const unreadMessages = Number(data.unread_count || 0);
+    const unreadNotifications = messages.filter(message =>
+      !message.read_at && String(message.category || "").toLocaleLowerCase("fr") === "notification"
+    ).length;
+    [badge, floatingBadge].filter(Boolean).forEach(item => {
+      item.textContent = unreadMessages > 99 ? "99+" : String(unreadMessages);
+      item.hidden = unreadMessages < 1;
+    });
+    if (notificationBadge) {
+      notificationBadge.textContent = unreadNotifications > 99 ? "99+" : String(unreadNotifications);
+      notificationBadge.hidden = unreadNotifications < 1;
+    }
   } catch (error) { console.warn("Compteur de boîte aux lettres indisponible :", error.message); }
+};
+window.openMemberNotifications = async function() {
+  showDashSection("dash-mailbox");
+  await window.loadMemberMailbox?.();
+  const first = document.querySelector("#member-mailbox-list [data-category-notification]");
+  if (first) first.scrollIntoView({ behavior:"smooth", block:"center" });
+};
+window.openMemberMailbox = function() {
+  if (typeof window.showDashSection !== "function" && typeof showDashSection !== "function") {
+    console.error("Navigation vers la boîte aux lettres indisponible.");
+    return;
+  }
+  showDashSection("dash-mailbox");
+  window.loadMemberMailbox?.();
 };
 window.loadMemberMailbox = async function() {
   const list = document.getElementById("member-mailbox-list");
@@ -6729,7 +6781,7 @@ window.loadMemberMailbox = async function() {
     if (!messages.length) {
       list.innerHTML = '<div class="mailbox-empty"><div style="font-size:38px">📭</div><strong>Ta boîte aux lettres est vide.</strong><p>Tu trouveras ici les prochains messages de l’administration.</p></div>';
     } else {
-      list.innerHTML = messages.map(message => `<article class="mailbox-message ${message.read_at ? "" : "unread"}">
+      list.innerHTML = messages.map(message => `<article class="mailbox-message ${message.read_at ? "" : "unread"}" ${String(message.category || "").toLocaleLowerCase("fr") === "notification" ? 'data-category-notification="1"' : ""}>
         <div class="mailbox-message-head"><div><small>${mailboxEscape(message.category || "Message")} · ${mailboxEscape(mailboxDate(message.created_at))}</small><h4>${mailboxEscape(message.title)}</h4></div>${message.read_at ? '<span>✓ Lu</span>' : '<span class="mailbox-unread-badge">Nouveau</span>'}</div>
         <p>${mailboxEscape(message.body)}</p>
         <div class="mailbox-message-actions">${message.read_at ? "" : `<button type="button" onclick="markMailboxMessageRead(${Number(message.id)})">✓ Marquer comme lu</button>`}<button type="button" onclick="deleteMailboxMessage(${Number(message.id)})">🗑 Supprimer</button></div>
