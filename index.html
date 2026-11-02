@@ -1518,7 +1518,7 @@ body.halloween-accueil .home-hero{
 
 /* Espace Testeur — tableau de bord complet inspiré de la maquette validée */
 #dash-tester-space.tester-dashboard{padding:14px 14px 28px;max-width:1600px;margin:0 auto;background:#f7efdD;color:#173a29}
-.tester-dashboard-hero{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 22px;border:1px solid #d7ad45;border-radius:16px;background:linear-gradient(90deg,rgba(255,248,225,.98),rgba(255,248,225,.83) 48%,rgba(255,248,225,.18)),url('images/espace-testeur.png') center 45%/cover;box-shadow:0 4px 13px #273b2415;overflow:hidden}
+.tester-dashboard-hero{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 22px;border:1px solid #d7ad45;border-radius:16px;background:linear-gradient(90deg,rgba(255,248,225,.98),rgba(255,248,225,.83) 48%,rgba(255,248,225,.18)),url('tester_assets/banner_background.png') center 45%/cover;box-shadow:0 4px 13px #273b2415;overflow:hidden}
 .tester-dashboard-brand{display:flex;align-items:center;gap:13px;min-width:0}.tester-dashboard-flask{font-size:37px}.tester-dashboard-brand h2{font:700 clamp(25px,3vw,36px) Georgia,serif;color:#102f21;margin:0}.tester-dashboard-brand p{font:13px Georgia,serif;margin:2px 0 0;color:#354b3b}.tester-dashboard-hero-art{font-size:30px;white-space:nowrap;filter:drop-shadow(0 2px 2px #fff)}
 .tester-dashboard-topstats{display:grid;grid-template-columns:1.35fr repeat(5,minmax(0,1fr));gap:7px;margin:10px 0 12px;padding:9px;background:linear-gradient(145deg,#fffaf0,#f3e6c5);border:1px solid #e0c77f;border-radius:15px;box-shadow:0 4px 12px #273b2410}
 .tester-identity-card,.tester-topstat{display:flex;align-items:center;justify-content:center;gap:9px;min-width:0;padding:7px;border-right:1px solid #d8c18a}.tester-identity-card{justify-content:flex-start}.tester-topstat:last-child{border:0}.tester-avatar{width:58px;height:58px;flex:none;display:grid;place-items:center;border:2px solid #d7ad45;border-radius:50%;background:#e6e9d2;font-size:34px}.tester-identity-card strong{display:block;font:700 16px Georgia,serif;color:#173b2a}.tester-validated-pill{display:inline-block;margin-top:5px;padding:5px 12px;border-radius:20px;background:#16813e;color:white;font:700 11px Arial,sans-serif}.tester-topstat{flex-direction:column;gap:0;text-align:center}.tester-topstat>span{font-size:25px}.tester-topstat strong{font:700 23px Georgia,serif;color:#123d2b}.tester-topstat small{font:11px Georgia,serif;color:#354b3b}
@@ -1527,64 +1527,146 @@ body.halloween-accueil .home-hero{
 @media(max-width:650px){#dash-tester-space.tester-dashboard{padding:9px 8px 22px}.tester-dashboard-hero{min-height:80px;padding:10px 12px;background-position:60% center}.tester-dashboard-hero-art{display:none}.tester-dashboard-brand h2{font-size:25px}.tester-dashboard-brand p{font-size:11px}.tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr));padding:7px;gap:5px}.tester-identity-card{grid-column:1/-1}.tester-topstat{border-right:1px solid #d8c18a!important;border-bottom:1px solid #e6d8b7}.tester-topstat:nth-child(odd){border-right:0!important}.tester-topstat:last-child{border-bottom:0}.tester-dashboard-grid{grid-template-columns:1fr;gap:8px}.tester-progression-card,.tester-rewards-card{grid-column:auto}.tester-dash-card{padding:12px}.tester-dash-card h3{font-size:17px}.tester-announcement-art{min-width:70px;min-height:65px}.tester-rank-item strong{font-size:10px}.tester-badge-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
 
-/* Mise en page calquée sur la maquette validée de l'Espace Testeur */
-#dash-tester-space.tester-dashboard{max-width:1600px;padding:10px 14px 26px;background:#f6efdc}
-#dash-tester-space .tester-dashboard-hero{min-height:76px;padding:9px 20px;border-radius:13px;background:linear-gradient(90deg,rgba(4,43,31,.94),rgba(4,43,31,.65) 58%,rgba(4,43,31,.20)),url('images/espace-testeur.png') center 45%/cover;color:#fff4d5}
-#dash-tester-space .tester-dashboard-brand h2{color:#fff2c9;font-size:clamp(25px,2.7vw,34px);text-shadow:0 1px 3px #14291d}
-#dash-tester-space .tester-dashboard-brand p{color:#fff8e8;text-shadow:0 1px 2px #14291d}
-#dash-tester-space .tester-dashboard-flask{font-size:38px;filter:drop-shadow(0 2px 2px #0005)}
-#dash-tester-space .tester-dashboard-topstats{grid-template-columns:1.5fr repeat(5,minmax(0,1fr));gap:5px;margin:8px 0 10px;padding:7px;border-radius:13px;background:linear-gradient(145deg,#fffaf0,#f5e9ca)}
-#dash-tester-space .tester-avatar{width:54px;height:54px;font-size:31px;background:linear-gradient(145deg,#dce9bd,#f5d889)}
-#dash-tester-space .tester-dashboard-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:9px;align-items:stretch}
-#dash-tester-space .tester-dash-card{min-width:0;padding:11px 12px;border-radius:13px;box-shadow:0 3px 9px #273b2410}
-#dash-tester-space .tester-dash-card h3{font-size:16px;margin-bottom:7px}
-#dash-tester-space .tester-dash-card>p{font-size:11px;line-height:1.35;margin:4px 0 7px}
-/* Rangée 1 : annonces + progression */
-#dash-tester-space .tester-announcement-card{grid-column:span 5;min-height:128px}
-#dash-tester-space .tester-progression-card{grid-column:span 7;min-height:128px}
-/* Rangée 2 : missions de test + validation + signalements */
-#dash-tester-space .tester-missions-card,
-#dash-tester-space .tester-validation-card,
-#dash-tester-space .tester-feedback-card{grid-column:span 4;min-height:190px}
-/* Rangée 3 : suivi + badges + version */
-#dash-tester-space .tester-history-card,
-#dash-tester-space .tester-badges-card,
-#dash-tester-space .tester-version-card{grid-column:span 4}
-/* Rangée 4 : statistiques + communauté + carnet + récompenses */
-#dash-tester-space .tester-stats-card,
-#dash-tester-space .tester-community-card,
-#dash-tester-space .tester-journal-card,
-#dash-tester-space .tester-rewards-card{grid-column:span 3}
-#dash-tester-space .tester-rank-track{grid-template-columns:repeat(4,minmax(0,1fr))}
-#dash-tester-space .tester-community-people{font-size:24px;letter-spacing:5px;text-align:center;margin:5px 0}
-#dash-tester-space .tester-dash-action{font-size:11px;padding:8px 12px;margin-top:5px}
-#dash-tester-space .tester-mini-stats div{padding:6px 3px}
-#dash-tester-space .tester-mini-stats strong{font-size:19px}
-#dash-tester-space .tester-mini-stats small{font-size:9px}
-#dash-tester-space .tester-dashboard-footnote{font-size:11px}
-#dash-tester-space .tester-extra-challenges{margin-top:10px;border:1px solid #e3d1a2;border-radius:12px;background:#fffaf0;padding:10px 13px}
-#dash-tester-space .tester-extra-challenges>summary{cursor:pointer;color:#174b35;font:700 14px Georgia,serif}
-#dash-tester-space .tester-extra-challenges-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
-#dash-tester-space .tester-extra-challenges-grid>.tester-dash-card{min-height:0}
+
+/* NOUVELLE DIRECTION VISUELLE — Espace Testeur : aventure illustrée */
+#dash-tester-space.tester-dashboard{
+  --tester-forest:#063b29;--tester-green:#087044;--tester-gold:#d9a72e;
+  position:relative;isolation:isolate;max-width:1720px;margin:0 auto;
+  padding:16px clamp(10px,1.8vw,26px) 34px;color:#173728;
+  background:
+    radial-gradient(ellipse at 8% 8%,rgba(223,190,104,.20),transparent 28%),
+    radial-gradient(ellipse at 92% 90%,rgba(75,121,65,.12),transparent 25%),
+    linear-gradient(135deg,#f6e9c9 0%,#fff8e9 48%,#f2e4c2 100%);
+}
+#dash-tester-space .tester-dashboard-hero{
+  min-height:86px;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;
+  border:2px solid #b98b27;border-radius:17px;
+  background:linear-gradient(90deg,rgba(4,45,31,.10),rgba(4,45,31,0) 34%),url('tester_assets/banner_background.png') center/cover no-repeat;
+  box-shadow:0 5px 0 rgba(111,76,16,.13),0 10px 24px rgba(46,54,29,.12);overflow:hidden
+}
+#dash-tester-space .tester-dashboard-brand{display:flex;align-items:center;gap:14px}
+#dash-tester-space .tester-dashboard-flask{width:48px;height:48px;display:grid;place-items:center;font-size:0;background:url('tester_assets/flask.png') center/contain no-repeat;filter:drop-shadow(0 2px 2px #fff)}
+#dash-tester-space .tester-dashboard-brand h2{font:900 clamp(27px,3vw,42px) Georgia,serif;color:#092e21;margin:0;text-shadow:0 1px #fff8df}
+#dash-tester-space .tester-dashboard-brand p{font:700 13px Georgia,serif;color:#173728;margin:2px 0 0;text-shadow:0 1px 3px #fff}
+#dash-tester-space .tester-dashboard-hero-art{display:none}
+#dash-tester-space .tester-dashboard-topstats{
+ display:grid;grid-template-columns:1.45fr repeat(5,minmax(0,1fr));gap:0;margin:12px 0 14px;padding:8px;
+ border:2px solid #d5aa42;border-radius:19px;
+ background:linear-gradient(145deg,rgba(255,250,232,.97),rgba(242,222,173,.94));
+ box-shadow:0 6px 16px rgba(58,46,20,.12)
+}
+#dash-tester-space .tester-identity-card,#dash-tester-space .tester-topstat{min-width:0;border-right:1px solid #d5b96e}
+#dash-tester-space .tester-identity-card{justify-content:flex-start;padding:7px 12px;gap:12px}
+#dash-tester-space .tester-avatar{width:78px;height:78px;border:3px solid #d7a62e;background:#fff0bd url('tester_assets/avatar.png') center/cover no-repeat;font-size:0;box-shadow:0 2px 7px #654b1d55}
+#dash-tester-space .tester-identity-card strong{font:bold 19px Georgia,serif;color:#123b2a}
+#dash-tester-space .tester-validated-pill{background:linear-gradient(#159b50,#08703a);border:1px solid #f0d47c;padding:6px 15px;font-size:12px}
+#dash-tester-space .tester-topstat{flex-direction:column;justify-content:center;gap:1px;padding:6px 3px;text-align:center}
+#dash-tester-space .tester-topstat>span{font-size:31px;filter:drop-shadow(0 2px 1px #bca66b)}
+#dash-tester-space .tester-topstat strong{font:bold 26px Georgia,serif;color:#0b3928}
+#dash-tester-space .tester-topstat small{font:12px Georgia,serif;color:#294536}
+#dash-tester-space .tester-topstat:last-child{border-right:0}
+#dash-tester-space .tester-top-xp{width:90%;height:10px;margin-top:5px;border:1px solid #a88b4b;border-radius:20px;background:#eee1bd;overflow:hidden}
+#dash-tester-space .tester-top-xp i{display:block;height:100%;width:0;background:linear-gradient(90deg,#128849,#d7b333);border-radius:20px}
+#dash-tester-space .tester-dashboard-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;align-items:stretch}
+#dash-tester-space .tester-dash-card{
+ position:relative;min-width:0;padding:15px 16px;border:1px solid #d8b75e;border-radius:17px;
+ background:linear-gradient(145deg,rgba(255,253,244,.98),rgba(248,232,194,.96));
+ box-shadow:0 5px 0 rgba(157,117,37,.10),0 8px 18px rgba(48,52,29,.10);overflow:hidden
+}
+#dash-tester-space .tester-dash-card:before{content:"";position:absolute;inset:5px;border:1px solid rgba(207,169,79,.18);border-radius:12px;pointer-events:none}
+#dash-tester-space .tester-dash-card h3{position:relative;display:flex;align-items:center;gap:9px;margin:0 0 9px;color:#102f22;font:bold 19px Georgia,serif}
+#dash-tester-space .tester-dash-card>p{position:relative;font:13px/1.45 Georgia,serif;color:#4b5949;margin:5px 0 9px}
+#dash-tester-space .tester-announcement-card{grid-column:span 5;min-height:148px;background:linear-gradient(110deg,#fff8e3,#f0dca9)}
+#dash-tester-space .tester-progression-card{grid-column:span 7;min-height:148px}
+#dash-tester-space .tester-announcement-card h3{display:inline-flex;padding:7px 15px;border-radius:9px;background:linear-gradient(110deg,#06432d,#087b4a);color:#fff5d8;border:1px solid #d8ad45}
+#dash-tester-space .tester-announcement-body{gap:13px}
+#dash-tester-space .tester-announcement-art{flex:0 0 40%;min-width:0;min-height:94px;border:1px solid #d3a83c;border-radius:12px;background:#e8d49a url('tester_assets/announcement_compass.png') center/cover no-repeat;font-size:0}
+#dash-tester-space .tester-announcement-body small{font:bold 11px Georgia,serif;color:#946b17}
+#dash-tester-space .tester-announcement-body h4{font:bold 20px Georgia,serif;color:#123a29}
+#dash-tester-space .tester-announcement-body p{font:13px/1.4 Georgia,serif;color:#344638}
+#dash-tester-space .tester-announcement-dots{display:flex;justify-content:center;gap:7px;margin-top:7px}
+#dash-tester-space .tester-announcement-dots i{width:9px;height:9px;border-radius:50%;background:#c6bda2}
+#dash-tester-space .tester-announcement-dots i:first-child{background:#087542}
+#dash-tester-space .tester-live-dot{width:10px;height:10px;border-radius:50%;background:#ed4936;box-shadow:0 0 0 3px #f7d4b7}
+#dash-tester-space .tester-rank-track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0 8px}
+#dash-tester-space .tester-rank-item{position:relative;min-width:0;min-height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 3px;border:0;border-radius:0;background:transparent;color:#4b5148;text-align:center}
+#dash-tester-space .tester-rank-item img{width:66px;height:66px;object-fit:contain;filter:drop-shadow(0 3px 2px #8b6b2e55)}
+#dash-tester-space .tester-rank-item strong{font:bold 11px/1.15 Georgia,serif}
+#dash-tester-space .tester-rank-item.active{color:#fff7d7;background:radial-gradient(ellipse,#087346 0%,#087346 56%,transparent 58%)}
+#dash-tester-space .tester-xp-track{height:11px;position:relative;border:1px solid #b99a4c;border-radius:20px;background:#e9dfc6;margin:2px 10px 12px}
+#dash-tester-space .tester-xp-track span{display:block;height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,#15904b,#e7b82f)}
+#dash-tester-space .tester-xp-track b{position:absolute;right:0;top:12px;font:10px Georgia,serif;color:#5a4b25}
+#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card{grid-column:span 4;min-height:250px}
+#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4;min-height:190px}
+#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3;min-height:170px}
+#dash-tester-space .tester-dash-form{display:grid;gap:8px}
+#dash-tester-space .tester-dash-form label{display:grid;gap:5px;font:bold 13px Georgia,serif;color:#294b35}
+#dash-tester-space .tester-dash-form select,#dash-tester-space .tester-dash-form textarea,#dash-tester-space .tester-journal{width:100%;min-width:0;padding:11px 12px;border:1px solid #d6bd7e;border-radius:10px;background:#fffdf6;color:#293e30;font:13px Georgia,serif}
+#dash-tester-space .tester-dash-form textarea{min-height:54px;resize:vertical}
+#dash-tester-space .tester-validation-steps{display:flex;justify-content:space-around;gap:8px;padding:10px 5px;margin:4px 0 10px;border:1px solid #d9bd72;border-radius:13px;background:#f8efd7}
+#dash-tester-space .tester-validation-steps span{display:flex;flex:1;flex-direction:column;align-items:center;text-align:center;gap:4px}
+#dash-tester-space .tester-validation-steps b{display:grid;place-items:center;width:31px;height:31px;border:2px solid #caa34a;border-radius:50%;background:#fff9e9;color:#31503a;font:bold 16px Georgia,serif}
+#dash-tester-space .tester-validation-steps span:first-child b{background:#087346;color:white;border-color:#d9b34e}
+#dash-tester-space .tester-validation-steps small{font:bold 11px Georgia,serif;color:#38503c}
+#dash-tester-space .tester-dash-action{display:inline-flex;justify-content:center;align-items:center;gap:7px;width:100%;margin-top:7px;padding:11px 14px;border:1px solid #d5ad45;border-radius:24px;background:linear-gradient(110deg,#06432d,#087849);color:#fff6d9;font:bold 13px Georgia,serif;box-shadow:0 3px 0 #b18b37;cursor:pointer}
+#dash-tester-space .tester-dash-action:hover{filter:brightness(1.08);transform:translateY(-1px)}
+#dash-tester-space .tester-feedback-shortcuts{display:grid;gap:8px}
+#dash-tester-space .tester-feedback-shortcuts button{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:1px solid #dfc47d;border-radius:12px;background:#fffaf0;color:#173728;text-align:left}
+#dash-tester-space .tester-feedback-shortcuts button>span:first-child{font-size:25px}
+#dash-tester-space .tester-feedback-shortcuts button>span:nth-child(2){display:grid;gap:2px;flex:1}
+#dash-tester-space .tester-feedback-shortcuts strong{font:bold 13px Georgia,serif}
+#dash-tester-space .tester-feedback-shortcuts small{font:11px Georgia,serif;color:#58634f}
+#dash-tester-space .tester-feedback-shortcuts button>b{color:#b17d16;font-size:22px}
+#dash-tester-space .tester-feedback-details{margin-top:9px}
+#dash-tester-space .tester-feedback-details summary{cursor:pointer;color:#145235;font:bold 12px Georgia,serif}
+#dash-tester-space .tester-badge-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+#dash-tester-space .tester-mini-badge{min-width:0;padding:8px 4px;text-align:center;border:1px solid #d8b24e;border-radius:12px;background:linear-gradient(145deg,#fff9e7,#f2dfad);font:11px/1.2 Georgia,serif}
+#dash-tester-space .tester-mini-badge span{display:block;font-size:30px;margin-bottom:3px}
+#dash-tester-space .tester-version-pill{display:inline-block!important;padding:7px 12px;border-radius:20px;background:#eee3c5;color:#76531a!important;font:bold 12px Georgia,serif!important}
+#dash-tester-space .tester-subheading{display:block;margin:10px 0 5px;color:#244b36;font:bold 13px Georgia,serif}
+#dash-tester-space .tester-check-list{padding-left:19px;margin:6px 0;font:13px/1.5 Georgia,serif;color:#4b594d}
+#dash-tester-space .tester-mini-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+#dash-tester-space .tester-mini-stats div{padding:10px 4px;text-align:center;border:1px solid #dfc47d;border-radius:11px;background:#fffaf0}
+#dash-tester-space .tester-mini-stats strong{display:block;font:bold 23px Georgia,serif;color:#087044}
+#dash-tester-space .tester-mini-stats small{font:11px Georgia,serif;color:#687267}
+#dash-tester-space .tester-community-people{font-size:28px;letter-spacing:5px;text-align:center;margin:8px 0}
+#dash-tester-space .tester-journal{min-height:80px}
+#dash-tester-space .tester-dashboard .tester-history-list{max-height:145px;overflow:auto}
+#dash-tester-space #tester-space-missions,#dash-tester-space #tester-space-access-list,#dash-tester-space #tester-feedback-history,#dash-tester-space #tester-level-review-history{font:13px/1.5 Georgia,serif;overflow-wrap:anywhere}
+#dash-tester-space #tester-space-missions>*,#dash-tester-space #tester-space-access-list>*{margin-top:7px}
+#dash-tester-space .tester-dashboard-footnote{margin:14px 3px 0;font:11px/1.45 Georgia,serif}
+#dash-tester-space .tester-extra-challenges{margin-top:12px;padding:12px 15px;border:1px solid #d8b75e;border-radius:14px;background:#fff8e7}
+#dash-tester-space .tester-extra-challenges>summary{cursor:pointer;color:#174b35;font:bold 14px Georgia,serif}
+#dash-tester-space .tester-extra-challenges-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+#dash-tester-space .tester-extra-challenges-grid>.tester-dash-card{grid-column:auto;min-height:0}
+#dash-tester-space .tester-dash-card .status{font-size:12px;overflow-wrap:anywhere}
 @media(max-width:1050px){
  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #dash-tester-space .tester-identity-card{grid-column:1/-1;justify-content:center;border-right:0;border-bottom:1px solid #d5b96e}
  #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1!important}
- #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 1!important}
- #dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 1!important}
- #dash-tester-space .tester-extra-challenges-grid{grid-template-columns:1fr 1fr}
+ #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1;min-height:0}
+ #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 1}
+ #dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 1}
+ #dash-tester-space .tester-badge-row{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(max-width:650px){
  #dash-tester-space.tester-dashboard{padding:9px 8px 22px}
- #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr;gap:8px}
- #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important;min-height:0}
- #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))}
- #dash-tester-space .tester-identity-card{grid-column:1/-1}
- #dash-tester-space .tester-dashboard-hero{min-height:76px;background-position:58% center}
+ #dash-tester-space .tester-dashboard-hero{min-height:78px;padding:8px 12px;background-position:65% center}
+ #dash-tester-space .tester-dashboard-brand{gap:8px}
  #dash-tester-space .tester-dashboard-brand h2{font-size:25px}
- #dash-tester-space .tester-dashboard-brand p{font-size:11px}
- #dash-tester-space .tester-dashboard-hero-art{display:none}
- #dash-tester-space .tester-rank-track{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #dash-tester-space .tester-dashboard-brand p{font-size:10px}
+ #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr));padding:6px}
+ #dash-tester-space .tester-identity-card{grid-column:1/-1}
+ #dash-tester-space .tester-topstat{border-right:1px solid #d5b96e;border-bottom:1px solid #d5b96e;padding:8px 3px}
+ #dash-tester-space .tester-topstat:nth-child(odd){border-right:0}
+ #dash-tester-space .tester-topstat:last-child{grid-column:1/-1;border:0}
+ #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr;gap:9px}
+ #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1;min-height:0}
+ #dash-tester-space .tester-announcement-card{min-height:0}
+ #dash-tester-space .tester-rank-track{gap:2px}
+ #dash-tester-space .tester-rank-item img{width:48px;height:48px}
+ #dash-tester-space .tester-rank-item strong{font-size:9px}
+ #dash-tester-space .tester-badge-row{grid-template-columns:repeat(3,minmax(0,1fr))}
  #dash-tester-space .tester-extra-challenges-grid{grid-template-columns:1fr}
 }
 </style>
