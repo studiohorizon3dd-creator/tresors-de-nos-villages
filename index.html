@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="referrer" content="no-referrer">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#062c20">
@@ -2131,7 +2131,8 @@ body.halloween-accueil .home-hero{
         <div class="nav-submenu">
           <button class="nav-btn" onclick="showDashSection('dash-rules')">📜 &nbsp; Règlement</button>
           <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
-          <button class="nav-btn" onclick="showDashSection('dash-news')">📔 &nbsp; Journal du projet</button>
+          <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
+          <button class="nav-btn" onclick="showDashSection('dash-updates')">🔄 &nbsp; Mises à jour</button>
           <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
           <button class="nav-btn" onclick="showDashSection('dash-support')">🎧 &nbsp; Centre d’aide & Support</button>
         </div>
@@ -2736,10 +2737,17 @@ body.halloween-accueil .home-hero{
 
   
 <section class="dash-section hidden" id="dash-news">
-  <h3>📔 Journal du projet</h3>
-  <p>Retrouve chaque jour les travaux réalisés, les nouveautés, les bugs corrigés et les prochaines étapes du projet.</p>
+  <h3>📰 Actualités</h3>
+  <p>Retrouve les annonces, les nouvelles du projet et les informations importantes de Trésors de nos Villages.</p>
   <p id="public-news-status" class="status" role="status" aria-live="polite">Chargement des actualités…</p>
   <div id="public-news-list" aria-live="polite"></div>
+</section>
+
+<section class="dash-section hidden" id="dash-updates">
+  <h3>🔄 Mises à jour</h3>
+  <p>Découvre l’évolution du site : nouvelles fonctionnalités, améliorations, corrections et opérations de maintenance.</p>
+  <p id="public-updates-status" class="status" role="status" aria-live="polite">Chargement des mises à jour…</p>
+  <div id="public-updates-list" aria-live="polite"></div>
 </section>
 
 <section class="dash-section hidden" id="dash-town-contact">
@@ -2869,7 +2877,7 @@ body.halloween-accueil .home-hero{
           <div class="admin-category-links">
             <button class="admin-nav-item active" type="button" onclick="adminShowHome()"><span>▦</span> Tableau de bord</button>
             <button class="admin-nav-item" type="button" onclick="adminShowAnalytics()"><span>▥</span> Statistiques</button>
-            <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📔</span> Journal du projet</button>
+            <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des informations</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenSiteStatus()"><span>⚙</span> Statut du site</button>
           </div>
         </details>
@@ -4216,16 +4224,16 @@ body.halloween-accueil .home-hero{
         <div id="admin-support-area"><div id="admin-support-list"></div></div>
       </div>
       <div id="admin-news-view" class="admin-subview" hidden>
-        <div class="admin-section-heading"><div><h3>📔 Journal du projet</h3><p>Publier le bilan de la journée : travaux réalisés, nouveautés, bugs corrigés et prochaines étapes.</p></div></div>
+        <div class="admin-section-heading"><div><h3>📰 Gestion des informations</h3><p>Rédige et publie les actualités et les mises à jour visibles par les visiteurs et les membres.</p></div></div>
         <p id="admin-news-status" class="status" role="status" aria-live="polite"></p>
-        <div class="mailbox-admin-side" style="margin:12px 0"><strong>💡 Ton rendez-vous du soir</strong><p>Chaque soir, publie un petit point sur les nouveautés, les améliorations, les bugs corrigés et ce qui reste à faire. Les bilans publiés seront visibles dans le Journal du projet.</p></div>
+        <div class="mailbox-admin-side" style="margin:12px 0"><strong>💡 Deux types de publications</strong><p><b>Actualité :</b> annonces et nouvelles du projet. <b>Mise à jour :</b> nouveautés du site, améliorations, corrections et maintenance. Tu peux enregistrer un brouillon avant publication.</p></div>
         <form id="admin-news-form" class="feature" style="display:grid;gap:12px">
           <input id="admin-news-id" type="hidden">
           <label>Titre<input id="admin-news-title" maxlength="180" required style="display:block;width:100%;padding:12px"></label>
-          <label>Rubrique<input id="admin-news-category" maxlength="80" value="Bilan quotidien" style="display:block;width:100%;padding:12px"></label>
+          <label>Type de publication<select id="admin-news-category" required style="display:block;width:100%;padding:12px"><option value="Actualité">📰 Actualité</option><option value="Mise à jour">🔄 Mise à jour</option></select></label>
           <label>Texte<textarea id="admin-news-body" maxlength="12000" required rows="9" style="display:block;width:100%;padding:13px;min-height:220px;font:15px/1.6 Arial,sans-serif"></textarea></label>
           <label><input id="admin-news-publish" type="checkbox"> Publier immédiatement</label>
-          <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer l'actualité</button><button class="admin-secondary-btn" type="button" onclick="adminNewsReset()">Nouvelle actualité</button></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer la publication</button><button class="admin-secondary-btn" type="button" onclick="adminNewsReset()">Nouvelle publication</button></div>
         </form>
         <div id="admin-news-list"></div>
       </div>
@@ -5344,7 +5352,7 @@ function adminRenderVillageMap(containerId,kind){
   const mapped=ADMIN_VILLAGES_CACHE.filter(v=>Number.isFinite(Number(v.latitude))&&Number.isFinite(Number(v.longitude))&&v.latitude!==null&&v.longitude!==null);
   const map=L.map(el,{scrollWheelZoom:false}).setView([46.6,2.4],5);
   ADMIN_VILLAGE_MAPS[kind]=map;
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+  L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=VOTRE_CLE_CARTO",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
   const colors={available:"#238044",pending_confirmation:"#e5a000",in_progress:"#287da7",suspended:"#c63b35",updating:"#8053b8"};
   mapped.forEach(v=>{const marker=L.circleMarker([Number(v.latitude),Number(v.longitude)],{radius:9,color:"#fff",weight:2,fillColor:colors[v.status]||"#496b4e",fillOpacity:1}).addTo(map);marker.bindPopup("<strong>"+String(v.name).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+"</strong><br>"+(ADMIN_VILLAGE_STATUSES[v.status]||v.status));});
   if(mapped.length)map.fitBounds(L.latLngBounds(mapped.map(v=>[Number(v.latitude),Number(v.longitude)])).pad(.2));
@@ -5698,9 +5706,9 @@ function renderAdminSupportTable(requests, statusEl, list){
   table.append(tbody);wrap.append(table);list.append(wrap);
 }
 
-function adminOpenNews(){adminSetView('admin-news-view','Journal du projet');adminLoadNews();}
+function adminOpenNews(){adminSetView('admin-news-view','Gestion des informations');adminLoadNews();}
 window.adminOpenNews=adminOpenNews;
-function adminNewsReset(){document.getElementById('admin-news-form')?.reset();document.getElementById('admin-news-id').value='';document.getElementById('admin-news-category').value='Bilan quotidien';}
+function adminNewsReset(){document.getElementById('admin-news-form')?.reset();document.getElementById('admin-news-id').value='';document.getElementById('admin-news-category').value='Actualité';}
 window.adminNewsReset=adminNewsReset;
 async function adminLoadNews(){
   const status=document.getElementById('admin-news-status'),list=document.getElementById('admin-news-list');if(!status||!list)return;
@@ -5710,55 +5718,60 @@ async function adminLoadNews(){
     const heading=document.createElement('h4');heading.textContent=item.title;
     const meta=document.createElement('p');meta.textContent=`${item.category} · ${item.archived_at?'Archivée':item.is_published?'Publiée':'Brouillon'}`;
     const preview=document.createElement('p');preview.textContent=item.body.length>260?item.body.slice(0,260)+'…':item.body;
-    const edit=document.createElement('button');edit.type='button';edit.className='admin-secondary-btn';edit.textContent='Modifier';edit.addEventListener('click',()=>{document.getElementById('admin-news-id').value=item.id;document.getElementById('admin-news-title').value=item.title;document.getElementById('admin-news-category').value=item.category||'Actualité';document.getElementById('admin-news-body').value=item.body;document.getElementById('admin-news-publish').checked=!!item.is_published;document.getElementById('admin-news-form').scrollIntoView({behavior:'smooth',block:'start'});});
+    const edit=document.createElement('button');edit.type='button';edit.className='admin-secondary-btn';edit.textContent='Modifier';edit.addEventListener('click',()=>{document.getElementById('admin-news-id').value=item.id;document.getElementById('admin-news-title').value=item.title;document.getElementById('admin-news-category').value=(String(item.category||'').trim().toLocaleLowerCase('fr')==='mise à jour'?'Mise à jour':'Actualité');document.getElementById('admin-news-body').value=item.body;document.getElementById('admin-news-publish').checked=!!item.is_published;document.getElementById('admin-news-form').scrollIntoView({behavior:'smooth',block:'start'});});
     const archive=document.createElement('button');archive.type='button';archive.className='admin-secondary-btn';archive.textContent=item.archived_at?'Restaurer':'Archiver';archive.addEventListener('click',async()=>{archive.disabled=true;try{await adminApi(`/api/admin/news/${encodeURIComponent(item.id)}/archive`,{method:'PATCH',body:JSON.stringify({archived:!item.archived_at})});await adminLoadNews();}catch(e){status.textContent=e.message;archive.disabled=false;}});
     card.append(heading,meta,preview,edit,archive);list.append(card);
-  }status.textContent=`${(data.news||[]).length} actualité(s) chargée(s).`;
+  }status.textContent=`${(data.news||[]).length} publication(s) chargée(s).`;
   }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
 }
 window.adminLoadNews=adminLoadNews;
-document.getElementById('admin-news-form')?.addEventListener('submit',async event=>{event.preventDefault();const status=document.getElementById('admin-news-status'),id=document.getElementById('admin-news-id').value;const payload={title:document.getElementById('admin-news-title').value,category:document.getElementById('admin-news-category').value,body:document.getElementById('admin-news-body').value,is_published:document.getElementById('admin-news-publish').checked};try{await adminApi(id?`/api/admin/news/${encodeURIComponent(id)}`:'/api/admin/news',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});adminNewsReset();status.textContent='Actualité enregistrée.';await adminLoadNews();}catch(e){status.textContent=e.message||'Impossible d’enregistrer cette actualité.';}});
+document.getElementById('admin-news-form')?.addEventListener('submit',async event=>{event.preventDefault();const status=document.getElementById('admin-news-status'),id=document.getElementById('admin-news-id').value;const payload={title:document.getElementById('admin-news-title').value,category:document.getElementById('admin-news-category').value,body:document.getElementById('admin-news-body').value,is_published:document.getElementById('admin-news-publish').checked};try{await adminApi(id?`/api/admin/news/${encodeURIComponent(id)}`:'/api/admin/news',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});adminNewsReset();status.textContent='Publication enregistrée.';await adminLoadNews();}catch(e){status.textContent=e.message||'Impossible d’enregistrer cette actualité.';}});
 
 window.loadPublicNews=async function(){
- const statusTargets=['public-home-news-status','public-news-status'].map(id=>document.getElementById(id)).filter(Boolean);
+ const statusTargets=['public-home-news-status','public-news-status','public-updates-status'].map(id=>document.getElementById(id)).filter(Boolean);
  const homeList=document.getElementById('public-home-news-list');
  const homeMore=document.getElementById('public-home-news-more');
  const toggle=document.getElementById('public-home-news-toggle');
  const dashList=document.getElementById('public-news-list');
- statusTargets.forEach(el=>el.textContent='Chargement des actualités…');
- [homeList,homeMore,dashList].filter(Boolean).forEach(el=>el.replaceChildren());
+ const updatesList=document.getElementById('public-updates-list');
+ statusTargets.forEach(el=>el.textContent='Chargement des publications…');
+ [homeList,homeMore,dashList,updatesList].filter(Boolean).forEach(el=>el.replaceChildren());
  if(toggle){toggle.hidden=true;toggle.setAttribute('aria-expanded','false');}
  try{
    const response=await fetch(`${API_BASE}/api/news`);
    const data=await response.json().catch(()=>({}));
-   if(!response.ok)throw new Error(data.error||'Impossible de charger les actualités.');
+   if(!response.ok)throw new Error(data.error||'Impossible de charger les publications.');
    const items=Array.isArray(data.news)?data.news:[];
-   if(!items.length){statusTargets.forEach(el=>el.textContent='Aucune actualité pour le moment.');return;}
+   const updates=items.filter(item=>String(item.category||'').trim().toLocaleLowerCase('fr')==='mise à jour');
+   const news=items.filter(item=>String(item.category||'').trim().toLocaleLowerCase('fr')!=='mise à jour');
    const makeCard=(item,home)=>{
      const card=document.createElement('article');card.className=home?'public-home-news-card':'feature';
      if(!home)card.style.margin='18px 0';
      const eyebrow=document.createElement('p');eyebrow.className=home?'news-category':'eyebrow';eyebrow.textContent=item.category||'Actualité';
-     const title=document.createElement('h3');title.textContent=item.title||'Actualité';
+     const title=document.createElement('h3');title.textContent=item.title||'Publication';
      const body=document.createElement('p');body.textContent=item.body||'';if(!home)body.style.whiteSpace='pre-wrap';
      card.append(eyebrow,title,body);return card;
    };
-   items.slice(0,3).forEach(item=>{
-     if(homeList)homeList.append(makeCard(item,true));
-     if(dashList)dashList.append(makeCard(item,false));
-   });
+   items.slice(0,3).forEach(item=>{if(homeList)homeList.append(makeCard(item,true));});
    const older=items.slice(3);
    older.forEach(item=>{if(homeMore)homeMore.append(makeCard(item,true));});
    if(toggle&&older.length){
      toggle.hidden=false;
      toggle.addEventListener('click',()=>{
        const expanded=toggle.getAttribute('aria-expanded')==='true';
-       toggle.setAttribute('aria-expanded',expanded?'false':'true');
-       homeMore.hidden=expanded;
+       toggle.setAttribute('aria-expanded',expanded?'false':'true');homeMore.hidden=expanded;
        toggle.innerHTML=expanded?'Voir toutes les actualités <span aria-hidden="true">↓</span>':'Réduire les actualités <span aria-hidden="true">↑</span>';
      });
    }
-   statusTargets.forEach(el=>el.textContent=`${items.length} actualité(s) publiée(s).`);
- }catch(e){statusTargets.forEach(el=>el.textContent=e.message||'Impossible de charger les actualités.');}
+   news.forEach(item=>{if(dashList)dashList.append(makeCard(item,false));});
+   updates.forEach(item=>{if(updatesList)updatesList.append(makeCard(item,false));});
+   const newsStatus=document.getElementById('public-news-status');
+   const updatesStatus=document.getElementById('public-updates-status');
+   if(newsStatus)newsStatus.textContent=news.length?`${news.length} actualité(s) publiée(s).`:'Aucune actualité pour le moment.';
+   if(updatesStatus)updatesStatus.textContent=updates.length?`${updates.length} mise(s) à jour publiée(s).`:'Aucune mise à jour pour le moment.';
+   const homeStatus=document.getElementById('public-home-news-status');
+   if(homeStatus)homeStatus.textContent=items.length?`${items.length} publication(s) publiée(s).`:'Aucune actualité pour le moment.';
+ }catch(e){statusTargets.forEach(el=>el.textContent=e.message||'Impossible de charger les publications.');}
 };
 
 // Charge les actualités publiées sur l'accueil public, sans connexion.
@@ -6364,8 +6377,8 @@ function actualiserCarteVillages(){
   }
   if(!villageMapInstance){
     villageMapInstance=L.map("village-map").setView([50.4982,1.8925],12);
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
-      maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=VOTRE_CLE_CARTO",{
+      maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(villageMapInstance);
     villageMapMarkers.humbert=L.circleMarker([50.50379,1.9064],{radius:10,color:"#ffffff",weight:2,fillColor:"#23834a",fillOpacity:1}).addTo(villageMapInstance);
     villageMapMarkers.sempy=L.circleMarker([50.49291,1.87896],{radius:10,color:"#ffffff",weight:2,fillColor:"#8b9290",fillOpacity:1}).addTo(villageMapInstance);
@@ -6424,8 +6437,8 @@ function initialiserCarte(){
   const zoneCarte = document.getElementById("carteGPS");
   if(!zoneCarte || typeof L === "undefined") return;
   carteGPS = L.map("carteGPS").setView([50.5038, 1.9073], 16);
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=VOTRE_CLE_CARTO", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
   }).addTo(carteGPS);
   L.marker([50.50510, 1.90770]).addTo(carteGPS)
     .bindPopup("📍 Départ : mairie d’Humbert");
