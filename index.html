@@ -1672,6 +1672,19 @@ body.halloween-accueil .home-hero{
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+<style>
+/* Messagerie personnelle et administration */
+.mailbox-unread-badge{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 6px;margin-left:5px;border-radius:20px;background:#d7ad45;color:#173b29;font:700 12px Arial,sans-serif}
+.mailbox-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px 28px;border:1px solid #d7ad45;border-radius:18px;background:linear-gradient(120deg,#062c20,#1d6242);color:#fff5d2}
+.mailbox-hero .eyebrow{color:#f0d47d}.mailbox-hero h2{font-size:clamp(27px,3vw,38px);margin:4px 0 8px}.mailbox-hero p:last-child{margin:0;line-height:1.5;color:#fff3d5}.mailbox-hero-icon{font-size:58px}
+.mailbox-toolbar,.mailbox-history-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 12px}.mailbox-toolbar p{margin:5px 0;color:#667064;font-size:14px}
+.mailbox-list{display:grid;gap:12px}.mailbox-message{background:#fffaf0;border:1px solid #e5d3a4;border-radius:14px;padding:17px 19px;box-shadow:0 4px 12px #1833260c}.mailbox-message.unread{border-left:5px solid #d7ad45;background:#fff8e7}.mailbox-message-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.mailbox-message h4{margin:3px 0 7px;color:#123d2b;font-size:19px}.mailbox-message p{line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}.mailbox-message small{color:#716b5c}.mailbox-message-actions{display:flex;gap:8px;flex-wrap:wrap}.mailbox-message-actions button{border:1px solid #cdbb8b;background:#fffdf7;color:#234735;border-radius:8px;padding:8px 11px}.mailbox-empty{padding:28px;text-align:center;border:1px dashed #d7c69b;border-radius:14px;background:#fffaf0;color:#657060}
+.mailbox-admin-intro{margin:0 0 18px}.mailbox-admin-intro h3{font-size:25px;margin:0 0 6px}.mailbox-admin-intro p{color:#657060}.mailbox-admin-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(220px,.8fr);gap:16px;align-items:start}.mailbox-compose-card,.mailbox-admin-side,.mailbox-history-card{background:#fffaf0;border:1px solid #e5d3a4;border-radius:15px;padding:20px}.mailbox-compose-card{display:grid;gap:9px}.mailbox-compose-card h4,.mailbox-admin-side h4,.mailbox-history-card h4{font-size:20px;color:#123d2b;margin:0 0 8px}.mailbox-compose-card label{font-weight:700;color:#254b36;margin-top:5px}.mailbox-compose-card input,.mailbox-compose-card select,.mailbox-compose-card textarea{width:100%;padding:11px;border:1px solid #d4c49c;border-radius:8px;background:#fffefa;color:#183326;font:15px Georgia,serif}.mailbox-compose-card textarea{resize:vertical;line-height:1.5}.mailbox-compose-card .primary-btn{justify-self:start;margin-top:8px}.mailbox-admin-side{background:#f6efdD}.mailbox-admin-side li{margin:10px 0;line-height:1.5}.mailbox-history-card{margin-top:18px}.mailbox-history-row{display:grid;grid-template-columns:1fr auto;gap:5px 15px;padding:13px 0;border-top:1px solid #e9dfca}.mailbox-history-row small{color:#6b705f}.mailbox-history-row p{grid-column:1/-1;margin:0;line-height:1.5;white-space:pre-wrap}
+@media(max-width:700px){.mailbox-hero{padding:19px}.mailbox-hero-icon{font-size:40px}.mailbox-admin-grid{grid-template-columns:1fr}.mailbox-toolbar{align-items:flex-start}.mailbox-message-head{display:block}.mailbox-history-row{grid-template-columns:1fr}.mailbox-history-row small{grid-column:1}}
+</style>
+
 </head>
 <body>
 
@@ -1989,6 +2002,7 @@ body.halloween-accueil .home-hero{
       </details>
       <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
+          <button class="nav-btn" onclick="showDashSection('dash-mailbox');loadMemberMailbox()">📬 &nbsp; Ma boîte aux lettres <span id="mailbox-unread-nav" class="mailbox-unread-badge" hidden>0</span></button>
           <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
           <button class="nav-btn" onclick="showDashSection('dash-adventures')">🧭 &nbsp; Mes aventures</button>
           <button class="nav-btn" onclick="showDashSection('dash-badges')">🏅 &nbsp; Mes badges</button>
@@ -2117,6 +2131,13 @@ body.halloween-accueil .home-hero{
   </div>
 </div>
     </div>
+    <section class="dash-section hidden" id="dash-mailbox">
+      <div class="mailbox-hero"><div><p class="eyebrow">TON ESPACE PERSONNEL</p><h2>📬 Ma boîte aux lettres</h2><p>Retrouve ici les messages et les informations envoyés par l’administration.</p></div><span class="mailbox-hero-icon">✉️</span></div>
+      <div class="mailbox-toolbar"><div><strong id="mailbox-unread-summary">Chargement des messages…</strong><p>Seuls tes messages personnels sont visibles dans cet espace.</p></div><button type="button" class="small-btn" onclick="loadMemberMailbox()">↻ Actualiser</button></div>
+      <div id="member-mailbox-list" class="mailbox-list" aria-live="polite"><p class="mailbox-empty">Ouverture de ta boîte aux lettres…</p></div>
+      <p id="member-mailbox-status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
     <section class="dash-section hidden explorer-profile-page" id="dash-profile">
       <div class="explorer-profile-heading"><div><p class="eyebrow">TON ESPACE PERSONNEL</p><h2>Mon profil</h2><p>Suis ta progression, tes badges et ton passeport !</p></div><span class="profile-leaf">✦</span></div>
 
@@ -2647,6 +2668,7 @@ body.halloween-accueil .home-hero{
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenMailboxAdmin()"><span>📬</span> Messagerie des membres</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des actualités</button>
       <div class="admin-nav-label">GESTION COMMERCIALE</div>
@@ -2666,6 +2688,32 @@ body.halloween-accueil .home-hero{
         <div><span class="admin-kicker">CENTRE DE PILOTAGE</span><h2 id="admin-page-title">Tableau de bord</h2></div>
         <div class="admin-top-actions"><span class="admin-secure-pill">● Administration active</span><button type="button" class="admin-refresh" onclick="loadSiteAnalytics()">↻ Actualiser</button></div>
       </header>
+
+      <div id="admin-mailbox-view" class="admin-subview" hidden>
+        <div class="mailbox-admin-intro"><h3>📨 Messagerie des membres</h3><p>Envoie une information ou un message privé directement dans la boîte aux lettres des membres.</p></div>
+        <div class="mailbox-admin-grid">
+          <form id="admin-mailbox-form" class="mailbox-compose-card">
+            <h4>✍️ Rédiger un message</h4>
+            <label for="admin-mailbox-audience">Destinataires</label>
+            <select id="admin-mailbox-audience" required>
+              <option value="all">Tous les membres</option>
+              <option value="testers">Testeurs acceptés uniquement</option>
+              <option value="member">Une personne précise</option>
+            </select>
+            <div id="admin-mailbox-member-wrap" hidden><label for="admin-mailbox-member">Choisir le membre</label><select id="admin-mailbox-member"><option value="">Chargement des membres…</option></select></div>
+            <label for="admin-mailbox-title">Objet du message</label>
+            <input id="admin-mailbox-title" maxlength="160" required placeholder="Ex. Information sur une aventure">
+            <label for="admin-mailbox-category">Type de message</label>
+            <select id="admin-mailbox-category"><option>Message de l’administration</option><option>Information importante</option><option>Mission de test</option><option>Actualité du site</option><option>Réponse personnelle</option></select>
+            <label for="admin-mailbox-body">Ton message</label>
+            <textarea id="admin-mailbox-body" rows="6" maxlength="8000" required placeholder="Écris ton message ici…"></textarea>
+            <button type="submit" class="primary-btn" id="admin-mailbox-send">📨 Envoyer le message</button>
+            <p id="admin-mailbox-compose-status" class="status" role="status" aria-live="polite"></p>
+          </form>
+          <aside class="mailbox-admin-side"><h4>💡 À savoir</h4><ul><li>Chaque membre reçoit une copie personnelle.</li><li>Un membre ne peut jamais lire les messages d’un autre.</li><li>Les testeurs ciblés sont les candidatures acceptées.</li><li>Les messages restent disponibles dans la boîte aux lettres jusqu’à leur suppression par le membre.</li></ul></aside>
+        </div>
+        <div class="mailbox-history-card"><div class="mailbox-history-heading"><h4>📜 Historique des envois</h4><button type="button" class="small-btn" onclick="loadAdminMailboxHistory()">↻ Actualiser</button></div><div id="admin-mailbox-history"><p>Chargement de l’historique…</p></div></div>
+      </div>
 
       <div id="admin-home-view">
         <div class="admin-home-banner">
@@ -4302,13 +4350,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenMailboxAdmin":"adminComingSoon"));
   if(active) active.classList.add("active");
 }
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -5509,6 +5557,7 @@ function showDashboard(name, email){
 
   try { refreshProgress(); } catch(error) { console.warn("Actualisation du profil :", error); }
   window.loadTesterApplication?.();
+  window.refreshMailboxUnread?.();
   // Toujours lancer la vérification des droits, même si un bloc du profil manque.
   window.checkAdminAccess?.();
   window.scrollTo({top:0,behavior:"smooth"});
@@ -5772,7 +5821,7 @@ function showDashSection(id){
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
-  "dash-home", "dash-profile", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges",
+  "dash-home", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges",
   "dash-stars", "dash-formulas", "dash-help", "dash-news", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
@@ -6636,6 +6685,119 @@ function chooseFormulaFromMenu() {
   const status = document.getElementById("selected-village-status");
   if(status) status.textContent = "Village sélectionné : " + (village === "humbert" ? "Humbert." : village + ".");
 }
+
+// ===== Boîte aux lettres des membres et messagerie admin =====
+async function mailboxApi(path, options = {}) {
+  const token = await window.getAdminBearerToken();
+  const response = await fetch("https://tresors-de-nos-villages-serveur.onrender.com" + path, {
+    ...options,
+    headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json", ...(options.headers || {}) }
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || "Une erreur est survenue.");
+  return data;
+}
+function mailboxEscape(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
+}
+function mailboxDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : date.toLocaleString("fr-FR", { dateStyle:"medium", timeStyle:"short" });
+}
+window.refreshMailboxUnread = async function() {
+  const badge = document.getElementById("mailbox-unread-nav");
+  if (!badge) return;
+  try {
+    const data = await mailboxApi("/api/mailbox");
+    const count = Number(data.unread_count || 0);
+    badge.textContent = count > 99 ? "99+" : String(count);
+    badge.hidden = count < 1;
+  } catch (error) { console.warn("Compteur de boîte aux lettres indisponible :", error.message); }
+};
+window.loadMemberMailbox = async function() {
+  const list = document.getElementById("member-mailbox-list");
+  const summary = document.getElementById("mailbox-unread-summary");
+  const status = document.getElementById("member-mailbox-status");
+  if (!list) return;
+  list.innerHTML = '<p class="mailbox-empty">Chargement de tes messages…</p>';
+  if (status) status.textContent = "";
+  try {
+    const data = await mailboxApi("/api/mailbox");
+    const messages = data.messages || [];
+    if (summary) summary.textContent = `${data.unread_count || 0} message(s) non lu(s) · ${messages.length} message(s) au total`;
+    if (!messages.length) {
+      list.innerHTML = '<div class="mailbox-empty"><div style="font-size:38px">📭</div><strong>Ta boîte aux lettres est vide.</strong><p>Tu trouveras ici les prochains messages de l’administration.</p></div>';
+    } else {
+      list.innerHTML = messages.map(message => `<article class="mailbox-message ${message.read_at ? "" : "unread"}">
+        <div class="mailbox-message-head"><div><small>${mailboxEscape(message.category || "Message")} · ${mailboxEscape(mailboxDate(message.created_at))}</small><h4>${mailboxEscape(message.title)}</h4></div>${message.read_at ? '<span>✓ Lu</span>' : '<span class="mailbox-unread-badge">Nouveau</span>'}</div>
+        <p>${mailboxEscape(message.body)}</p>
+        <div class="mailbox-message-actions">${message.read_at ? "" : `<button type="button" onclick="markMailboxMessageRead(${Number(message.id)})">✓ Marquer comme lu</button>`}<button type="button" onclick="deleteMailboxMessage(${Number(message.id)})">🗑 Supprimer</button></div>
+      </article>`).join("");
+    }
+    await window.refreshMailboxUnread();
+  } catch (error) {
+    list.innerHTML = `<p class="mailbox-empty">${mailboxEscape(error.message || "Impossible de charger les messages.")}</p>`;
+    if (status) status.textContent = error.message || "Erreur de chargement.";
+  }
+};
+window.markMailboxMessageRead = async function(id) {
+  try { await mailboxApi(`/api/mailbox/${id}/read`, { method:"PATCH", body:"{}" }); await window.loadMemberMailbox(); }
+  catch (error) { alert(error.message || "Impossible de modifier ce message."); }
+};
+window.deleteMailboxMessage = async function(id) {
+  if (!confirm("Supprimer ce message de ta boîte aux lettres ?")) return;
+  try { await mailboxApi(`/api/mailbox/${id}`, { method:"DELETE" }); await window.loadMemberMailbox(); }
+  catch (error) { alert(error.message || "Impossible de supprimer ce message."); }
+};
+window.adminOpenMailboxAdmin = async function() {
+  adminSetView("admin-mailbox-view", "Messagerie des membres");
+  const form = document.getElementById("admin-mailbox-form");
+  const audience = document.getElementById("admin-mailbox-audience");
+  const memberWrap = document.getElementById("admin-mailbox-member-wrap");
+  const memberSelect = document.getElementById("admin-mailbox-member");
+  const status = document.getElementById("admin-mailbox-compose-status");
+  if (audience && !audience.dataset.bound) {
+    audience.addEventListener("change", () => { memberWrap.hidden = audience.value !== "member"; });
+    audience.dataset.bound = "1";
+  }
+  if (form && !form.dataset.bound) {
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      const button = document.getElementById("admin-mailbox-send");
+      button.disabled = true;
+      status.textContent = "Envoi en cours…";
+      try {
+        const result = await mailboxApi("/api/admin/mailbox/send", { method:"POST", body:JSON.stringify({
+          audience: audience.value, member_id: memberSelect.value,
+          title: document.getElementById("admin-mailbox-title").value.trim(),
+          category: document.getElementById("admin-mailbox-category").value,
+          body: document.getElementById("admin-mailbox-body").value.trim()
+        })});
+        status.textContent = `Message envoyé à ${result.count} membre(s).`;
+        form.reset(); memberWrap.hidden = true;
+        await window.loadAdminMailboxHistory();
+      } catch (error) { status.textContent = error.message || "Échec de l’envoi."; }
+      finally { button.disabled = false; }
+    });
+    form.dataset.bound = "1";
+  }
+  try {
+    const data = await mailboxApi("/api/admin/mailbox/recipients");
+    if (memberSelect) memberSelect.innerHTML = '<option value="">Sélectionner un membre…</option>' + (data.recipients || []).map(user => `<option value="${mailboxEscape(user.user_id)}">${mailboxEscape(user.name || "Membre")} — ${mailboxEscape(user.email)}${user.is_tester ? " · Testeur" : ""}</option>`).join("");
+  } catch (error) { if (memberSelect) memberSelect.innerHTML = '<option value="">Liste indisponible</option>'; status.textContent = error.message; }
+  await window.loadAdminMailboxHistory();
+};
+window.loadAdminMailboxHistory = async function() {
+  const target = document.getElementById("admin-mailbox-history");
+  if (!target) return;
+  target.innerHTML = "<p>Chargement…</p>";
+  try {
+    const data = await mailboxApi("/api/admin/mailbox/history");
+    const history = data.history || [];
+    target.innerHTML = history.length ? history.map(item => `<article class="mailbox-history-row"><strong>${mailboxEscape(item.title)}</strong><small>${mailboxEscape(mailboxDate(item.created_at))}</small><small>${Number(item.recipient_count)} destinataire(s) · ${Number(item.read_count)} lu(s)</small><p>${mailboxEscape(item.body)}</p></article>`).join("") : '<p class="mailbox-empty">Aucun envoi pour le moment.</p>';
+  } catch (error) { target.innerHTML = `<p class="mailbox-empty">${mailboxEscape(error.message)}</p>`; }
+};
 
 Object.assign(window, {
   showDashboard,
