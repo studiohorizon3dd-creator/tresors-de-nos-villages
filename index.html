@@ -149,25 +149,51 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 .map-village-card strong{display:block;margin-bottom:6px}
 @media(max-width:600px){#village-map{height:340px}}
 
-/* Présentation soignée du formulaire de contact des mairies */
-#dash-town-contact{max-width:1100px;margin:0 auto;padding:38px clamp(18px,4vw,48px)}
-#dash-town-contact>h3{font-size:clamp(27px,3vw,36px);color:var(--forest);margin-bottom:10px}
-#dash-town-contact>p{max-width:760px;line-height:1.7;color:#536253;margin:0 0 24px}
-#dash-town-contact .town-contact-card{max-width:780px;margin:0 auto;background:linear-gradient(145deg,#fffaf0,#f8efd9);border:1px solid #d7ad45;border-radius:22px;padding:clamp(20px,4vw,38px);box-shadow:0 12px 32px rgba(6,44,32,.10)}
-#dash-town-contact .town-contact-intro{background:var(--forest);color:#fff4cf;border-radius:15px;padding:20px 22px;margin-bottom:25px}
-#dash-town-contact .town-contact-intro .eyebrow{color:#e6c56f;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 7px}
-#dash-town-contact .town-contact-intro h4{font-size:23px;margin:0 0 7px;color:#fff0b5}
-#dash-town-contact .town-contact-intro p{margin:0;line-height:1.55;color:#f8edcf}
-#town-contact-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 18px;align-items:start}
-#town-contact-form label{display:block;font-weight:700;color:#254b36;margin:8px 0 0;font-size:15px}
-#town-contact-form input,#town-contact-form select,#town-contact-form textarea{display:block;width:100%;min-width:0;padding:12px 13px;border:1px solid #d4c49c;border-radius:10px;background:#fffefa;color:#183326;font:16px Georgia,"Times New Roman",serif;box-shadow:inset 0 1px 2px rgba(0,0,0,.03)}
+/* Contact mairies & partenaires — présentation illustrée */
+#dash-town-contact{max-width:1500px;margin:0 auto;padding:0 22px 36px;background:#f7efdD;color:#183326}
+#dash-town-contact .town-hero{position:relative;overflow:hidden;min-height:174px;margin:0 -22px 0;padding:25px clamp(20px,4vw,55px);display:flex;align-items:center;gap:22px;color:#fff5d9;background:linear-gradient(100deg,rgba(4,43,30,.97),rgba(13,76,49,.88) 58%,rgba(13,76,49,.45)),url('images/image-01.jpg') center/cover no-repeat;border-bottom:3px solid #d7ad45}
+#dash-town-contact .town-hero-mark{font-size:48px;flex:none}
+#dash-town-contact .town-hero h3{font:700 clamp(27px,3.4vw,43px) Georgia,serif;color:#fff1c6;margin:0 0 8px}
+#dash-town-contact .town-hero p{font-size:16px;line-height:1.5;margin:0;color:#fff8e8;max-width:680px}
+#dash-town-contact .town-tabs{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;padding:13px 10px 16px;margin:0 -22px 18px;background:#fff4d9;border-bottom:1px solid #e2ca88}
+#dash-town-contact .town-tabs button{border:1px solid #d9bd70;border-radius:30px;padding:10px 17px;background:#fffaf0;color:#173d2b;font:700 14px Georgia,serif;box-shadow:0 3px 8px #45341416}
+#dash-town-contact .town-tabs button:first-child{background:#07512f;color:#fff4d5;border-color:#d7ad45}
+#dash-town-contact .town-contact-introline{max-width:950px;text-align:center;margin:0 auto 18px;line-height:1.55;color:#586653}
+#dash-town-contact .town-contact-layout{display:grid;grid-template-columns:minmax(205px,.78fr) minmax(440px,1.75fr) minmax(220px,.88fr);gap:16px;align-items:start}
+#dash-town-contact .town-side-card,#dash-town-contact .town-form-card{background:linear-gradient(145deg,#fffaf0,#f8efd9);border:1px solid #dfc77f;border-radius:17px;box-shadow:0 7px 22px rgba(6,44,32,.09);overflow:hidden}
+#dash-town-contact .town-side-card{margin-bottom:13px;padding:17px}
+#dash-town-contact .town-side-card h4{font:700 20px Georgia,serif;color:#123d2b;margin:0 0 12px}
+#dash-town-contact .town-side-card p{font-size:14px;line-height:1.55;margin:7px 0;color:#465348}
+#dash-town-contact .town-side-hero{background:linear-gradient(150deg,#062c20,#17613e);color:#fff4cf;border-color:#d7ad45;text-align:center;padding:20px 16px}
+#dash-town-contact .town-side-hero h4{font-size:23px;color:#fff0b5;margin:8px 0}
+#dash-town-contact .town-side-hero p{color:#fff4df}
+#dash-town-contact .town-village-picture{font-size:54px;margin:10px 0 2px}
+#dash-town-contact .town-benefits{list-style:none;padding:0;margin:10px 0 0}
+#dash-town-contact .town-benefits li{padding:5px 0;font-size:13px;line-height:1.4}
+#dash-town-contact .town-benefits li:before{content:'✓';display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#168044;color:white;font-weight:bold;margin-right:8px}
+#dash-town-contact .town-form-card{padding:19px clamp(16px,2vw,25px)}
+#dash-town-contact .town-form-heading{display:flex;align-items:center;gap:12px;padding-bottom:12px;margin-bottom:8px;border-bottom:1px solid #eadbb7}
+#dash-town-contact .town-form-heading span{font-size:30px}
+#dash-town-contact .town-form-heading h4{font:700 25px Georgia,serif;color:#123d2b;margin:0}
+#town-contact-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 16px;align-items:start}
+#town-contact-form label{display:block;font-weight:700;color:#254b36;margin:7px 0 0;font-size:14px}
+#town-contact-form input,#town-contact-form select,#town-contact-form textarea{display:block;width:100%;min-width:0;padding:11px 12px;border:1px solid #d4c49c;border-radius:9px;background:#fffefa;color:#183326;font:15px Georgia,"Times New Roman",serif}
 #town-contact-form input:focus,#town-contact-form select:focus,#town-contact-form textarea:focus{outline:3px solid rgba(215,173,69,.28);border-color:#b58b2f}
-#town-contact-form textarea{resize:vertical;min-height:145px;line-height:1.5}
-#town-contact-form label[for="town-message"],#town-contact-form #town-message,#town-contact-form button,#town-contact-status{grid-column:1/-1}
-#town-contact-form .primary-btn{justify-self:start;margin-top:8px;padding:14px 25px;border-radius:999px}
-#town-contact-status{background:#f1ead6;border-left:3px solid var(--gold);padding:12px 14px;border-radius:8px;line-height:1.5;margin:4px 0 0}
-@media(max-width:650px){#town-contact-form{grid-template-columns:1fr}#town-contact-form label[for="town-message"],#town-contact-form #town-message,#town-contact-form button,#town-contact-status{grid-column:1}#town-contact-form .primary-btn{width:100%}#dash-town-contact{padding:25px 14px}}
-
+#town-contact-form textarea{resize:vertical;min-height:125px;line-height:1.5}
+#town-contact-form label[for="town-message"],#town-contact-form #town-message,#town-contact-form .town-upload-row,#town-contact-form button,#town-contact-status{grid-column:1/-1}
+#town-contact-form .town-upload-row{padding:9px 11px;background:#f4ecd5;border-radius:9px}
+#town-contact-form .town-upload-row input{border:0;background:transparent;padding:6px 0;font-size:12px}
+#town-contact-form .primary-btn{justify-self:center;margin-top:8px;padding:13px 27px;border-radius:999px;min-width:240px}
+#town-contact-status{background:#f1ead6;border-left:3px solid var(--gold);padding:11px 13px;border-radius:8px;line-height:1.5;margin:4px 0 0;font-size:13px}
+#dash-town-contact .town-steps{list-style:none;padding:0;margin:0;counter-reset:townstep}
+#dash-town-contact .town-steps li{counter-increment:townstep;position:relative;padding:0 0 14px 39px;font-size:13px;line-height:1.45}
+#dash-town-contact .town-steps li:before{content:counter(townstep);position:absolute;left:0;top:0;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:#438347;color:white;font-weight:bold;font-size:15px}
+#dash-town-contact .town-side-action{display:block;width:100%;margin-top:9px;padding:11px 12px;border:1px solid #d7ad45;border-radius:24px;background:#07512f;color:#fff4d5;font-weight:bold}
+#dash-town-contact .town-doc-button{display:block;width:100%;padding:10px;border:1px solid #b9aa7b;border-radius:9px;background:#fffdf7;color:#203b2d;font-weight:bold}
+#dash-town-contact .town-side-card.town-highlight{background:linear-gradient(135deg,#fff0bd,#f7dfa0)}
+@media(max-width:1050px){#dash-town-contact .town-contact-layout{grid-template-columns:minmax(190px,.75fr) minmax(0,1.6fr)}#dash-town-contact .town-right-column{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#dash-town-contact .town-right-column .town-side-card{margin:0}}
+@media(max-width:700px){#dash-town-contact{padding:0 12px 25px}#dash-town-contact .town-hero{margin:0 -12px;padding:22px 16px;min-height:150px}#dash-town-contact .town-hero-mark{font-size:36px}#dash-town-contact .town-tabs{margin:0 -12px 15px}#dash-town-contact .town-contact-layout{grid-template-columns:1fr}#dash-town-contact .town-left-column{display:grid;grid-template-columns:1fr 1fr;gap:10px}#dash-town-contact .town-left-column .town-side-card{margin:0}#dash-town-contact .town-right-column{grid-column:auto;grid-template-columns:1fr}#town-contact-form{grid-template-columns:1fr}#town-contact-form label[for="town-message"],#town-contact-form #town-message,#town-contact-form .town-upload-row,#town-contact-form button,#town-contact-status{grid-column:1}#town-contact-form .primary-btn{width:100%;min-width:0}}
+@media(max-width:460px){#dash-town-contact .town-left-column{grid-template-columns:1fr}#dash-town-contact .town-form-heading h4{font-size:21px}}
 
 /* Galerie des villages */
 .village-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;margin:24px 0}
@@ -1041,34 +1067,92 @@ body.halloween-accueil .home-hero{
 </section>
 
 <section class="dash-section hidden" id="dash-town-contact">
-  <h3>✉️ Contact – Mairies</h3>
-  <p>Vous représentez une mairie ou une commune et souhaitez proposer un parcours, obtenir des renseignements ou échanger autour du projet ? Écrivez-nous.</p>
-  <div class="town-contact-card">
-    <div class="town-contact-intro">
-      <p class="eyebrow">Espace partenaires</p>
-      <h4>Vous êtes une mairie ?</h4>
-      <p>Parlons ensemble de votre commune et imaginons un parcours pour faire découvrir ses richesses.</p>
+  <div class="town-hero">
+    <div class="town-hero-mark">🤝</div>
+    <div>
+      <h3>Contact – Mairies &amp; Partenaires</h3>
+      <p>Construisons ensemble des parcours ludiques et culturels pour mettre en valeur votre commune !</p>
     </div>
-    <form id="town-contact-form">
-      <label for="town-name">Nom de la mairie / commune</label>
-      <input id="town-name" type="text" required maxlength="120" placeholder="Ex. : Mairie de ...">
-      <label for="town-person">Votre nom et fonction</label>
-      <input id="town-person" type="text" maxlength="120" placeholder="Nom, fonction (facultatif)">
-      <label for="town-email">Votre adresse e-mail</label>
-      <input id="town-email" type="email" required maxlength="180" placeholder="nom@commune.fr">
-      <label for="town-subject">Objet de votre demande</label>
-      <select id="town-subject" required>
-        <option value="">Choisissez un sujet</option>
-        <option>Proposer ma commune</option>
-        <option>Demander des informations</option>
-        <option>Échanger sur un parcours</option>
-        <option>Autre demande</option>
-      </select>
-      <label for="town-message">Votre message</label>
-      <textarea id="town-message" rows="5" maxlength="3000" required placeholder="Présentez votre demande…"></textarea>
-      <button class="primary-btn" type="submit">✉️ &nbsp; Préparer mon message</button>
-      <p class="status" id="town-contact-status" role="status" aria-live="polite">Le bouton prépare un e-mail à destination de l’équipe du projet. Vous devrez confirmer son envoi depuis votre messagerie.</p>
-    </form>
+  </div>
+  <nav class="town-tabs" aria-label="Rubriques partenaires">
+    <button type="button" onclick="document.getElementById('town-name').focus()">✉ Nous contacter</button>
+    <button type="button" onclick="document.getElementById('town-project-info').scrollIntoView({behavior:'smooth',block:'center'})">📖 Le projet</button>
+    <button type="button" onclick="document.getElementById('town-subject').value='Proposer ma commune';document.getElementById('town-name').focus()">🤝 Devenir partenaire</button>
+    <button type="button" onclick="document.getElementById('town-faq-info').scrollIntoView({behavior:'smooth',block:'center'})">❔ Questions fréquentes</button>
+  </nav>
+  <p class="town-contact-introline">Vous représentez une mairie, une association ou un acteur local ? Présentez-nous votre commune et vos idées : nous vous répondrons pour étudier ensemble votre projet.</p>
+  <div class="town-contact-layout">
+    <div class="town-left-column">
+      <article class="town-side-card town-side-hero" id="town-project-info">
+        <div style="font-size:27px">👥 Espace partenaires</div>
+        <h4>Vous êtes une mairie ?</h4>
+        <p>Valorisez votre patrimoine et faites découvrir votre village autrement !</p>
+        <div class="town-village-picture">🏡 🌳 🧭</div>
+      </article>
+      <article class="town-side-card">
+        <h4>⭐ Pourquoi devenir partenaire ?</h4>
+        <ul class="town-benefits">
+          <li>Mettre en avant votre patrimoine</li>
+          <li>Attirer visiteurs et familles</li>
+          <li>Dynamiser la vie locale</li>
+          <li>Bénéficier d'un accompagnement personnalisé</li>
+          <li>Participer à un projet local accessible à tous</li>
+        </ul>
+      </article>
+    </div>
+    <div class="town-form-card">
+      <div class="town-form-heading"><span>✉️</span><h4>Envoyer une demande</h4></div>
+      <form id="town-contact-form">
+        <label for="town-name">🏛 Nom de la mairie / commune *</label>
+        <input id="town-name" type="text" required maxlength="120" placeholder="Ex. : Mairie de Humbert">
+        <label for="town-person">👤 Votre nom et fonction *</label>
+        <input id="town-person" type="text" required maxlength="120" placeholder="Ex. : Anne Dupont, Maire">
+        <label for="town-email">✉️ Votre adresse e-mail *</label>
+        <input id="town-email" type="email" required maxlength="180" placeholder="nom@commune.fr">
+        <label for="town-phone">📞 Votre téléphone (facultatif)</label>
+        <input id="town-phone" type="tel" maxlength="40" placeholder="Ex. : 06 12 34 56 78">
+        <label for="town-subject">☷ Objet de votre demande *</label>
+        <select id="town-subject" required>
+          <option value="">Choisissez un sujet</option>
+          <option>Proposer ma commune</option>
+          <option>Demander des informations</option>
+          <option>Échanger sur un parcours</option>
+          <option>Demander un rendez-vous</option>
+          <option>Demander le dossier de présentation</option>
+          <option>Autre demande</option>
+        </select>
+        <div class="town-upload-row">
+          <label for="town-attachment">📎 Pièce jointe (facultatif)</label>
+          <input id="town-attachment" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+          <small>Si vous ajoutez un document, pensez à le joindre dans votre messagerie après ouverture de l'e-mail.</small>
+        </div>
+        <label for="town-message">💬 Votre message *</label>
+        <textarea id="town-message" rows="5" maxlength="3000" required placeholder="Présentez votre demande, vos idées ou vos questions..."></textarea>
+        <button class="primary-btn" type="submit">✈️ &nbsp; Envoyer ma demande</button>
+        <p class="status" id="town-contact-status" role="status" aria-live="polite">Votre messagerie s'ouvrira avec votre demande préremplie. Vous devrez confirmer l'envoi.</p>
+      </form>
+    </div>
+    <div class="town-right-column">
+      <article class="town-side-card">
+        <h4>⚙️ Comment ça fonctionne ?</h4>
+        <ol class="town-steps">
+          <li><strong>Prise de contact</strong><br>Échange sur votre projet.</li>
+          <li><strong>Étude et proposition</strong><br>Création d'un parcours adapté à votre commune.</li>
+          <li><strong>Mise en place</strong><br>Accompagnement et tests.</li>
+          <li><strong>Lancement</strong><br>Ouverture du parcours aux explorateurs.</li>
+        </ol>
+      </article>
+      <article class="town-side-card town-highlight">
+        <h4>🗓 Besoin d'un échange direct ?</h4>
+        <p>Vous souhaitez discuter de votre projet ? Faites-le-nous savoir.</p>
+        <button class="town-side-action" type="button" onclick="document.getElementById('town-subject').value='Demander un rendez-vous';document.getElementById('town-message').focus();document.getElementById('town-message').scrollIntoView({behavior:'smooth',block:'center'})">🗓 Demander un rendez-vous</button>
+      </article>
+      <article class="town-side-card" id="town-faq-info">
+        <h4>📁 Nos documents</h4>
+        <p>Vous souhaitez recevoir notre dossier de présentation ? Faites-en la demande via le formulaire.</p>
+        <button class="town-doc-button" type="button" onclick="document.getElementById('town-subject').value='Demander le dossier de présentation';document.getElementById('town-message').value='Bonjour, je souhaiterais recevoir le dossier de présentation de Trésors de nos Villages. Merci.';document.getElementById('town-message').focus()">⬇ Demander le dossier (PDF)</button>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -3041,6 +3125,8 @@ document.addEventListener("DOMContentLoaded", function(){
     const senderEmail = document.getElementById("town-email").value.trim();
     const subjectChoice = document.getElementById("town-subject").value;
     const message = document.getElementById("town-message").value.trim();
+    const phone = document.getElementById("town-phone")?.value.trim() || "Non renseigné";
+    const attachment = document.getElementById("town-attachment")?.files?.[0];
     const subject = "Contact mairie – " + commune + " – Trésors de nos Villages";
     const body = [
       "Nouvelle demande depuis le site Trésors de nos Villages",
@@ -3048,10 +3134,13 @@ document.addEventListener("DOMContentLoaded", function(){
       "Commune : " + commune,
       "Nom et fonction : " + person,
       "Adresse e-mail : " + senderEmail,
+      "Téléphone : " + phone,
       "Objet : " + subjectChoice,
       "",
       "Message :",
-      message
+      message,
+      "",
+      attachment ? "Pièce jointe sélectionnée : " + attachment.name + " (à ajouter manuellement dans votre messagerie)" : "Aucune pièce jointe"
     ].join("\n");
 
     const status = document.getElementById("town-contact-status");
