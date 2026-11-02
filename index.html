@@ -5720,7 +5720,14 @@ async function adminLoadNews(){
     const preview=document.createElement('p');preview.textContent=item.body.length>260?item.body.slice(0,260)+'…':item.body;
     const edit=document.createElement('button');edit.type='button';edit.className='admin-secondary-btn';edit.textContent='Modifier';edit.addEventListener('click',()=>{document.getElementById('admin-news-id').value=item.id;document.getElementById('admin-news-title').value=item.title;document.getElementById('admin-news-category').value=(String(item.category||'').trim().toLocaleLowerCase('fr')==='mise à jour'?'Mise à jour':'Actualité');document.getElementById('admin-news-body').value=item.body;document.getElementById('admin-news-publish').checked=!!item.is_published;document.getElementById('admin-news-form').scrollIntoView({behavior:'smooth',block:'start'});});
     const archive=document.createElement('button');archive.type='button';archive.className='admin-secondary-btn';archive.textContent=item.archived_at?'Restaurer':'Archiver';archive.addEventListener('click',async()=>{archive.disabled=true;try{await adminApi(`/api/admin/news/${encodeURIComponent(item.id)}/archive`,{method:'PATCH',body:JSON.stringify({archived:!item.archived_at})});await adminLoadNews();}catch(e){status.textContent=e.message;archive.disabled=false;}});
-    card.append(heading,meta,preview,edit,archive);list.append(card);
+    const remove=document.createElement('button');remove.type='button';remove.className='admin-secondary-btn';remove.textContent='Supprimer';remove.style.marginLeft='8px';
+    remove.addEventListener('click',async()=>{
+      if(!confirm(`Supprimer définitivement « ${item.title} » ? Cette action est irréversible.`))return;
+      remove.disabled=true;
+      try{await adminApi(`/api/admin/news/${encodeURIComponent(item.id)}`,{method:'DELETE'});status.textContent='Publication supprimée.';await adminLoadNews();}
+      catch(e){status.textContent=e.message||'Impossible de supprimer cette publication.';remove.disabled=false;}
+    });
+    card.append(heading,meta,preview,edit,archive,remove);list.append(card);
   }status.textContent=`${(data.news||[]).length} publication(s) chargée(s).`;
   }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
 }
@@ -5744,13 +5751,29 @@ window.loadPublicNews=async function(){
    const items=Array.isArray(data.news)?data.news:[];
    const updates=items.filter(item=>String(item.category||'').trim().toLocaleLowerCase('fr')==='mise à jour');
    const news=items.filter(item=>String(item.category||'').trim().toLocaleLowerCase('fr')!=='mise à jour');
-   const makeCard=(item,home)=>{
-     const card=document.createElement('article');card.className=home?'public-home-news-card':'feature';
-     if(!home)card.style.margin='18px 0';
+   const makeCard=(item,home,compact=false)=>{
+     const card=document.createElement('article');card.className=home?'public-home-news-card':(compact?'public-update-card':'feature');
+     if(compact)card.style.cssText='margin:10px 0;padding:14px 18px;border:1px solid #ead8b2;border-radius:14px;background:#fffaf1;box-shadow:0 2px 8px rgba(35,50,35,.05);text-align:left';
+     else if(!home)card.style.margin='18px 0';
      const eyebrow=document.createElement('p');eyebrow.className=home?'news-category':'eyebrow';eyebrow.textContent=item.category||'Actualité';
+     if(compact)eyebrow.style.cssText='margin:0 0 4px;font-size:11px;letter-spacing:2px;text-transform:uppercase';
      const title=document.createElement('h3');title.textContent=item.title||'Publication';
-     const body=document.createElement('p');body.textContent=item.body||'';if(!home)body.style.whiteSpace='pre-wrap';
-     card.append(eyebrow,title,body);return card;
+     if(compact)title.style.cssText='margin:0 0 8px;font-size:19px;line-height:1.3';
+     const raw=String(item.body||'');
+     const clean=raw.replace(/^#{1,6}\s*/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1');
+     const body=document.createElement('p');body.textContent=clean;
+     if(compact){
+       body.style.cssText='margin:0;color:#34443e;font-size:14px;line-height:1.55;white-space:pre-wrap';
+       body.textContent=clean.length>260?clean.slice(0,260).trimEnd()+'…':clean;
+       card.append(eyebrow,title,body);
+       if(clean.length>260){
+         const more=document.createElement('details');more.style.marginTop='8px';
+         const summary=document.createElement('summary');summary.textContent='Lire le détail';summary.style.cssText='cursor:pointer;font-size:13px;font-weight:600;color:#52602a';
+         const full=document.createElement('p');full.textContent=clean;full.style.cssText='white-space:pre-wrap;font-size:14px;line-height:1.55;margin:8px 0 0';
+         more.append(summary,full);card.append(more);
+       }
+     } else { if(!home)body.style.whiteSpace='pre-wrap';card.append(eyebrow,title,body); }
+     return card;
    };
    items.slice(0,3).forEach(item=>{if(homeList)homeList.append(makeCard(item,true));});
    const older=items.slice(3);
@@ -5764,7 +5787,7 @@ window.loadPublicNews=async function(){
      });
    }
    news.forEach(item=>{if(dashList)dashList.append(makeCard(item,false));});
-   updates.forEach(item=>{if(updatesList)updatesList.append(makeCard(item,false));});
+   updates.forEach(item=>{if(updatesList)updatesList.append(makeCard(item,false,true));});
    const newsStatus=document.getElementById('public-news-status');
    const updatesStatus=document.getElementById('public-updates-status');
    if(newsStatus)newsStatus.textContent=news.length?`${news.length} actualité(s) publiée(s).`:'Aucune actualité pour le moment.';
