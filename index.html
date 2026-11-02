@@ -400,6 +400,25 @@ body.halloween-accueil .home-hero{
 .tester-space-banner{display:block;width:100%;height:auto;max-height:440px;object-fit:cover;object-position:center}
 @media(max-width:650px){.tester-space-banner-wrap{border-radius:12px}.tester-space-banner{max-height:260px;object-fit:contain}}
 
+
+/* Espace testeur enrichi : tableau de bord explorateur */
+.tester-overview{margin:0 0 20px;padding:16px;border:1px solid #d7ad45;border-radius:18px;background:linear-gradient(145deg,#fffaf0,#f4e8c9);box-shadow:0 7px 20px #263b2512}
+.tester-overview-title{display:flex;align-items:center;gap:12px;margin:0 0 14px;color:#123d2b}
+.tester-overview-title h3{font:700 clamp(21px,2.5vw,28px) Georgia,serif;margin:0}
+.tester-overview-title p{margin:3px 0 0;color:#687267;font-size:12px}
+.tester-overview-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-bottom:13px}
+.tester-overview-stat{padding:10px 8px;text-align:center;border:1px solid #e4d4aa;border-radius:12px;background:#fffdf7;min-width:0}
+.tester-overview-stat span{display:block;font-size:23px}.tester-overview-stat strong{display:block;font:700 23px Georgia,serif;color:#123d2b}.tester-overview-stat small{font-size:11px;color:#5d685b}
+.tester-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.tester-feature-card{min-width:0;padding:14px;background:#fffdf7;border:1px solid #e3d5b6;border-radius:14px;box-shadow:0 3px 10px #263b250c}
+.tester-feature-card h4{margin:0 0 8px;color:#174b35;font:700 17px Georgia,serif}.tester-feature-card p{font-size:12px;line-height:1.45;color:#5c675a;margin:5px 0}
+.tester-feature-card .tester-feature-action{display:inline-block;margin-top:8px;padding:8px 12px;border:1px solid #d7ad45;border-radius:22px;background:#07512f;color:#fff5d9;font-weight:bold;font-size:12px}
+.tester-daily-list{display:grid;gap:7px}.tester-daily-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4;color:#354b3b}.tester-daily-item input{margin-top:2px;accent-color:#176b45}
+.tester-level-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:10px 0}.tester-level-step{padding:8px 3px;text-align:center;border:1px solid #d9d1bf;border-radius:9px;background:#f1eee5;color:#667064;font-size:10px}.tester-level-step.active{background:#0b4b31;color:#fff4d5;border-color:#d7ad45;font-weight:bold}
+.tester-badge-row{display:flex;gap:7px;flex-wrap:wrap}.tester-mini-badge{flex:1;min-width:65px;padding:8px 5px;text-align:center;background:#f7f0dc;border:1px solid #dfc77f;border-radius:10px;font-size:11px}.tester-mini-badge span{display:block;font-size:24px}.tester-journal{width:100%;min-height:92px;padding:10px;border:1px solid #d4c49c;border-radius:9px;background:#fffefa;font:13px/1.5 Georgia,serif;resize:vertical}.tester-history-list{max-height:150px;overflow:auto;display:grid;gap:6px}.tester-history-item{padding:7px 9px;border-left:3px solid #d7ad45;background:#f8f2e4;border-radius:6px;font-size:11px;line-height:1.4}
+@media(max-width:900px){.tester-overview-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.tester-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.tester-overview{padding:11px}.tester-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.tester-overview-grid{grid-template-columns:1fr}.tester-overview-title{align-items:flex-start}.tester-feature-card{padding:13px}}
+
 /* Espace privé des testeurs */
 .tester-space-header{background:linear-gradient(135deg,#173f31,#285b43);color:#fffaf0;border:1px solid #c9ae65;border-radius:18px;padding:25px;margin-bottom:20px;box-shadow:0 10px 26px rgba(35,54,39,.10)}
 .tester-space-header .eyebrow{font-size:11px;letter-spacing:1.5px;font-weight:700;color:#f0d58b;margin:0 0 8px}
@@ -2060,6 +2079,27 @@ body.halloween-accueil .home-hero{
   <div class="tester-space-banner-wrap">
     <img class="tester-space-banner" src="images/espace-testeur.png" alt="Espace Testeur de Trésors de nos Villages : tester les parcours, signaler les bugs, donner des retours et proposer des idées">
   </div>
+
+  <div class="tester-overview" id="tester-explorer-overview">
+    <div class="tester-overview-title"><span style="font-size:34px">🧭</span><div><h3>Mon aventure d’explorateur</h3><p>Progresse, relève des défis et garde une trace de tes découvertes.</p></div></div>
+    <div class="tester-overview-stats">
+      <div class="tester-overview-stat"><span>🎯</span><strong id="tester-stat-missions">0</strong><small>Missions confiées</small></div>
+      <div class="tester-overview-stat"><span>✅</span><strong id="tester-stat-completed">0</strong><small>Parcours terminés</small></div>
+      <div class="tester-overview-stat"><span>💬</span><strong id="tester-stat-feedback">0</strong><small>Retours envoyés</small></div>
+      <div class="tester-overview-stat"><span>🏅</span><strong id="tester-stat-badges">0</strong><small>Badges obtenus</small></div>
+      <div class="tester-overview-stat"><span>⭐</span><strong id="tester-stat-stars">0</strong><small>Étoiles possibles</small></div>
+    </div>
+    <div class="tester-overview-grid">
+      <article class="tester-feature-card"><h4>📅 Missions quotidiennes</h4><p>De petites actions pour faire avancer ton exploration.</p><div id="tester-daily-list" class="tester-daily-list"></div><p id="tester-daily-progress" aria-live="polite"></p></article>
+      <article class="tester-feature-card"><h4>🗺️ Défi du mois</h4><p id="tester-month-challenge">Découvre le village qui t’a été confié et observe ses lieux emblématiques.</p><span class="tester-space-tag" id="tester-month-label">Défi de novembre</span></article>
+      <article class="tester-feature-card"><h4>🏆 Niveaux d’explorateur</h4><p id="tester-explorer-level-text">Commence tes missions pour devenir un explorateur confirmé.</p><div class="tester-level-track"><div class="tester-level-step" data-explorer-rank="0">Débutant</div><div class="tester-level-step" data-explorer-rank="1">Aventurier</div><div class="tester-level-step" data-explorer-rank="2">Expert</div><div class="tester-level-step" data-explorer-rank="3">Légende</div></div></article>
+      <article class="tester-feature-card"><h4>🎖️ Badges exclusifs</h4><p>Des distinctions gagnées grâce à ta participation.</p><div id="tester-exclusive-badges" class="tester-badge-row"></div></article>
+      <article class="tester-feature-card"><h4>📔 Mon carnet personnel</h4><p>Note tes découvertes et tes souvenirs. Tes notes restent privées sur cet appareil.</p><textarea id="tester-personal-journal" class="tester-journal" maxlength="5000" placeholder="Aujourd’hui, j’ai découvert…"></textarea><button type="button" class="tester-feature-action" id="tester-journal-save">Enregistrer mon carnet</button><span id="tester-journal-status" class="tester-space-note" role="status"></span></article>
+      <article class="tester-feature-card"><h4>📜 Historique des contributions</h4><p>Retrouve les parcours terminés et tes retours envoyés.</p><div id="tester-contribution-history" class="tester-history-list"><p>Ton historique apparaîtra ici.</p></div><button type="button" class="tester-feature-action" onclick="document.getElementById('tester-feedback-history')?.scrollIntoView({behavior:'smooth',block:'center'})">Voir mes retours détaillés</button></article>
+    </div>
+    <article class="tester-feature-card" style="margin-top:11px"><h4>🎁 Récompenses testeurs</h4><p>Des badges spéciaux remercient les testeurs qui participent aux essais et aident à améliorer les aventures.</p><div id="tester-reward-status" class="tester-badge-row"></div></article>
+  </div>
+
   <div class="tester-space-header">
     <p class="eyebrow">ACCÈS RÉSERVÉ AUX TESTEURS VALIDÉS</p>
     <h3>🔐 Mon espace testeur</h3>
@@ -3934,6 +3974,34 @@ function testerAutomaticReport(report){
   ];
   return lines.join("\n")+"\n\nMon retour complémentaire : ";
 }
+function testerLocalKey(suffix){
+  const identity=String(window.currentExplorerEmail||"explorateur").trim().toLowerCase();
+  return `tdnv_tester_${suffix}_${identity}`;
+}
+function renderTesterPersonalFeatures(missions,feedback,reviews){
+  const completed=missions.filter(m=>m.completed).length;
+  const feedbackCount=feedback.length;
+  const totalStars=missions.reduce((sum,m)=>sum+(Number(m.total_stars)||0),0);
+  const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value);};
+  put("tester-stat-missions",missions.length);put("tester-stat-completed",completed);put("tester-stat-feedback",feedbackCount);put("tester-stat-stars",totalStars);
+  const earned=[completed>0,feedbackCount>0,feedback.some(f=>f.category==="bug"),completed>=3,feedbackCount>=5];
+  const badges=[ ["🧭","Premier parcours",earned[0]],["💬","Voix utile",earned[1]],["🐞","Œil attentif",earned[2]],["🏅","Explorateur régulier",earned[3]],["🌟","Ambassadeur",earned[4]] ];
+  put("tester-stat-badges",earned.filter(Boolean).length);
+  const badgeBox=document.getElementById("tester-exclusive-badges");if(badgeBox){badgeBox.replaceChildren();badges.forEach(([icon,label,ok])=>{const item=document.createElement("div");item.className="tester-mini-badge";item.innerHTML=`<span>${ok?icon:"🔒"}</span>${label}`;badgeBox.appendChild(item);});}
+  const reward=document.getElementById("tester-reward-status");if(reward){reward.replaceChildren();[["🧪","Testeur engagé",feedbackCount>=1],["🐛","Chasseur de bugs",feedback.some(f=>f.category==="bug")],["🏆","Testeur confirmé",completed>=2]].forEach(([icon,label,ok])=>{const item=document.createElement("div");item.className="tester-mini-badge";item.innerHTML=`<span>${ok?icon:"🔒"}</span>${label}<br><small>${ok?"Obtenu":"À débloquer"}</small>`;reward.appendChild(item);});}
+  const rank=completed>=8?3:completed>=5?2:completed>=2?1:0;const rankNames=["Débutant","Aventurier","Expert","Légende"];
+  put("tester-explorer-level-text",`Niveau actuel : ${rankNames[rank]}. Termine des parcours pour atteindre le rang suivant.`);
+  document.querySelectorAll("[data-explorer-rank]").forEach(el=>{el.classList.toggle("active",Number(el.dataset.explorerRank)===rank);});
+  const month=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});put("tester-month-label","Défi de "+month.charAt(0).toUpperCase()+month.slice(1));
+  const firstVillage=missions.find(m=>m.village_name||m.village_slug);if(firstVillage)put("tester-month-challenge",`Défi du mois : explore le village de ${firstVillage.village_name||firstVillage.village_slug}, termine ton parcours et repère un détail patrimonial à partager dans ton carnet.`);
+  const daily=["Consulter les annonces et nouveautés testeurs","Vérifier un indice ou une énigme de ton parcours","Noter une découverte ou une idée dans ton carnet"];
+  const today=new Date().toISOString().slice(0,10),key=testerLocalKey("daily_"+today);let checked=[];try{checked=JSON.parse(localStorage.getItem(key)||"[]");}catch{}
+  const dailyBox=document.getElementById("tester-daily-list");if(dailyBox){dailyBox.replaceChildren();daily.forEach((label,index)=>{const row=document.createElement("label");row.className="tester-daily-item";const input=document.createElement("input");input.type="checkbox";input.checked=checked.includes(index);input.addEventListener("change",()=>{checked=input.checked?[...new Set([...checked,index])]:checked.filter(x=>x!==index);localStorage.setItem(key,JSON.stringify(checked));put("tester-daily-progress",`${checked.length}/3 missions quotidiennes réalisées`);});const text=document.createElement("span");text.textContent=label;row.append(input,text);dailyBox.appendChild(row);});}put("tester-daily-progress",`${checked.length}/3 missions quotidiennes réalisées`);
+  const journal=document.getElementById("tester-personal-journal");if(journal&&!journal.dataset.loaded){journal.value=localStorage.getItem(testerLocalKey("journal"))||"";journal.dataset.loaded="true";}
+  const save=document.getElementById("tester-journal-save");if(save&&!save.dataset.bound){save.dataset.bound="true";save.addEventListener("click",()=>{localStorage.setItem(testerLocalKey("journal"),document.getElementById("tester-personal-journal").value);put("tester-journal-status","Carnet enregistré sur cet appareil.");});}
+  const history=document.getElementById("tester-contribution-history");if(history){history.replaceChildren();const events=[];missions.filter(m=>m.completed).forEach(m=>events.push({date:m.completed_at||m.updated_at||m.created_at,label:`✅ Parcours terminé : ${m.village_name||m.village_slug} — ${testerFormulaLabels[m.level_key]||m.level_name||m.level_key}`}));feedback.forEach(f=>events.push({date:f.created_at,label:`💬 Retour envoyé : ${f.village_slug||f.village||"Village"} — ${({bug:"Bug",idee:"Idée",experience:"Avis",autre:"Autre"})[f.category]||f.category}`}));reviews.forEach(r=>events.push({date:r.created_at,label:`🏁 Bilan transmis : ${r.village_name||r.village_slug} — ${r.status||"En attente"}`}));events.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));if(!events.length){history.textContent="Tes découvertes et contributions apparaîtront ici.";}else events.slice(0,12).forEach(e=>{const item=document.createElement("div");item.className="tester-history-item";item.textContent=(e.date?new Date(e.date).toLocaleDateString("fr-FR")+" · ":"")+e.label;history.appendChild(item);});}
+}
+
 window.loadTesterSpace = async function(){
   const status=document.getElementById("tester-space-status");
   const accessList=document.getElementById("tester-space-access-list");
@@ -3950,6 +4018,10 @@ window.loadTesterSpace = async function(){
       profileApi("/api/testers/level-reviews/mine")
     ]);
     const access=Array.isArray(accessData.access)?accessData.access:[];
+    const loadedMissions=Array.isArray(missionData.missions)?missionData.missions:[];
+    const loadedFeedback=Array.isArray(feedbackData.feedback)?feedbackData.feedback:[];
+    const loadedReviews=Array.isArray(reviewData.reviews)?reviewData.reviews:[];
+    renderTesterPersonalFeatures(loadedMissions,loadedFeedback,loadedReviews);
     const missionsBox=document.getElementById("tester-space-missions");
     if(missionsBox){
       missionsBox.replaceChildren();
@@ -4799,6 +4871,7 @@ function showAccount(){
   document.getElementById("account-area").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function showDashboard(name, email){
+  window.currentExplorerEmail = email || "explorateur";
   const landing = document.getElementById("landing");
   const dashboard = document.getElementById("dashboard");
   if(landing) landing.style.display = "none";
