@@ -956,6 +956,30 @@ body.halloween-accueil .home-hero{
   #dashboard:not(.admin-mode) > .sidebar .mobile-menu-toggle {min-height:42px;padding:8px 12px}
 }
 
+
+/* Administration toujours en premier dans le flux de la page */
+#dashboard.admin-mode > .content {
+  position: relative !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  min-height: 100vh !important;
+}
+#dashboard.admin-mode > .content > #dash-admin-info {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+#dashboard.admin-mode > .content > #dash-admin-info > .admin-workspace {
+  margin: 0 !important;
+  min-height: 100vh !important;
+}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -4352,22 +4376,38 @@ function showDashSection(id){
   // En administration, le menu explorateur latéral est masqué et la navigation admin passe en haut.
   const dashboard = document.getElementById("dashboard");
   if(dashboard) dashboard.classList.toggle("admin-mode", id === "dash-admin-info");
-  // L'espace administration doit toujours s'afficher pendant la vérification
-  // des droits : auparavant, le return ci-dessous laissait une page vide.
-  if(id === "dash-admin-info" && !adminAccessGranted){
+
+  // L'administration est déplacée au début de la zone de contenu au moment
+  // de son ouverture. Elle ne reste donc plus après toutes les rubriques joueur.
+  if(id === "dash-admin-info"){
     const adminSection = document.getElementById("dash-admin-info");
-    if(adminSection) {
+    const dashboardContent = dashboard?.querySelector(":scope > .content");
+    if(adminSection && dashboardContent && dashboardContent.firstElementChild !== adminSection){
+      dashboardContent.insertBefore(adminSection, dashboardContent.firstElementChild);
+    }
+    if(dashboardContent){
+      dashboardContent.querySelectorAll(":scope > .dash-section, :scope > #dash-home").forEach(section => {
+        if(section !== adminSection){
+          section.classList.add("hidden");
+          section.style.display = "none";
+        }
+      });
+    }
+    if(adminSection){
       adminSection.classList.remove("hidden");
       adminSection.style.removeProperty("display");
       adminSection.scrollTop = 0;
     }
     window.scrollTo({top:0,left:0,behavior:"instant"});
-    const adminHome = document.getElementById("admin-home-view");
-    if(adminHome) adminHome.hidden = false;
-    const adminStatus = document.getElementById("admin-panel-status");
-    if(adminStatus) adminStatus.textContent = "Vérification des droits administrateur…";
-    if(window.openAdminPanel) window.openAdminPanel();
-    return;
+    // L'espace administration doit rester visible pendant la vérification des droits.
+    if(!adminAccessGranted){
+      const adminHome = document.getElementById("admin-home-view");
+      if(adminHome) adminHome.hidden = false;
+      const adminStatus = document.getElementById("admin-panel-status");
+      if(adminStatus) adminStatus.textContent = "Vérification des droits administrateur…";
+      if(window.openAdminPanel) window.openAdminPanel();
+      return;
+    }
   }
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
@@ -5480,6 +5520,7 @@ document.getElementById("players-next")?.addEventListener("click",()=>{adminPlay
 </script>
 
 
+<script>
 /* Ouverture/fermeture du menu mobile explorateur */
 window.toggleMobileExplorerMenu = function(forceOpen) {
   const sidebar = document.querySelector("#dashboard:not(.admin-mode) > .sidebar");
@@ -5500,6 +5541,7 @@ document.addEventListener("click", function(event) {
     window.toggleMobileExplorerMenu(false);
   }
 });
+</script>
 
 </body>
 </html>
