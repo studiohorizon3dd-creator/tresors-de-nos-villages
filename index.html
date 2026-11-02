@@ -1693,6 +1693,26 @@ body.halloween-accueil .home-hero{
   .member-quick-actions{gap:5px}
   .member-quick-icon{width:34px;height:34px;font-size:18px}
 }
+/* Règlement : thème parchemin, vert et doré */
+.rules-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:25px 28px;border:2px solid #d5b45d;border-radius:20px;background:linear-gradient(115deg,#fff5d9,#ead39a);box-shadow:0 5px 16px #49350e16;margin-bottom:18px}
+.rules-kicker{margin:0 0 5px;color:#6a7133;font-size:12px;font-weight:800;letter-spacing:1.5px}
+.rules-hero h2{margin:0;color:#123e2c;font-family:Georgia,serif;font-size:clamp(27px,4vw,40px)}
+.rules-hero-copy>p:last-child{margin:8px 0 0;color:#493b20}
+.rules-hero-mark{font-size:54px;flex:none}
+.rules-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:10px;border:1px solid #e2d2a9;border-radius:16px;background:#fff9e9}
+.rules-tab{padding:10px 13px;border:1px solid #d8c79e;border-radius:12px;background:#fffdf6;color:#244432;font-weight:700;cursor:pointer}
+.rules-tab:hover{background:#fff0c6;border-color:#c89c35}
+.rules-tab.active{background:linear-gradient(135deg,#0c3b29,#17613e);color:#fff8df;border-color:#d7ad45;box-shadow:0 3px 8px #0002}
+.rules-panel{padding:22px;border:1px solid #e1d1aa;border-radius:18px;background:linear-gradient(145deg,#fffdf5,#f7edcf);box-shadow:0 4px 14px #47381712;min-height:250px}
+.rules-content{display:none;color:#26372c;line-height:1.75}
+.rules-content.active{display:block}
+.rules-content h3{margin:0 0 12px;color:#12432e;font-family:Georgia,serif;font-size:23px}
+.rules-content p{margin:8px 0}
+.rules-content ul{padding-left:23px;margin:10px 0}
+.rules-content li{margin:7px 0}
+.rules-footer{margin-top:16px;padding:17px 20px;border:2px solid #d5b45d;border-radius:16px;background:linear-gradient(110deg,#0b3c29,#17613e);color:#fff8df;text-align:center}
+.rules-footer p{margin:7px 0 0;color:#f7e9bd}
+@media(max-width:600px){.rules-hero{padding:18px}.rules-hero-mark{font-size:38px}.rules-tabs{display:grid;grid-template-columns:1fr 1fr}.rules-tab{padding:10px 7px;font-size:12px}.rules-panel{padding:16px}.rules-content h3{font-size:20px}}
 /* Navigation unifiée du centre de communication */
 .communication-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:10px;border:1px solid #e5d3a4;border-radius:14px;background:#fffaf0}
 .communication-tab{border:1px solid #ddcfad;border-radius:10px;background:#fff;color:#294735;padding:10px 16px;font-weight:700;cursor:pointer}
@@ -2055,6 +2075,7 @@ body.halloween-accueil .home-hero{
       </details>
       <details class="nav-category"><summary>INFORMATIONS <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
+          <button class="nav-btn" onclick="showDashSection('dash-rules')">📜 &nbsp; Règlement</button>
           <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
           <button class="nav-btn" onclick="showDashSection('dash-news')">📔 &nbsp; Journal du projet</button>
           <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
@@ -2545,6 +2566,97 @@ body.halloween-accueil .home-hero{
   <p id="formula-status" class="status" aria-live="polite"></p>
 </section>
     
+    <section class="dash-section hidden" id="dash-rules">
+      <div class="rules-hero">
+        <div class="rules-hero-copy">
+          <p class="rules-kicker">🌿 TRÉSORS DE NOS VILLAGES</p>
+          <h2>📜 Règlement</h2>
+          <p>Les règles du jeu pour une aventure équitable, respectueuse et amusante !</p>
+        </div>
+        <div class="rules-hero-mark" aria-hidden="true">⚖️</div>
+      </div>
+
+      <nav class="rules-tabs" aria-label="Rubriques du règlement">
+        <button type="button" class="rules-tab active" data-rule-tab="rules-game" onclick="showRuleTab('rules-game',this)">🎮 Règles du jeu</button>
+        <button type="button" class="rules-tab" data-rule-tab="rules-conduct" onclick="showRuleTab('rules-conduct',this)">🤝 Code de conduite</button>
+        <button type="button" class="rules-tab" data-rule-tab="rules-account" onclick="showRuleTab('rules-account',this)">🔐 Comptes &amp; sécurité</button>
+        <button type="button" class="rules-tab" data-rule-tab="rules-photos" onclick="showRuleTab('rules-photos',this)">📷 Photos &amp; publications</button>
+        <button type="button" class="rules-tab" data-rule-tab="rules-places" onclick="showRuleTab('rules-places',this)">🌿 Respect des lieux</button>
+        <button type="button" class="rules-tab" data-rule-tab="rules-sanctions" onclick="showRuleTab('rules-sanctions',this)">⚖️ Sanctions</button>
+      </nav>
+
+      <div class="rules-panel">
+        <article class="rules-content active" id="rules-game">
+          <h3>🎯 1. Règles du jeu</h3>
+          <p>Le but est de découvrir les villages, leur patrimoine et leurs histoires en suivant les indices et en résolvant les énigmes.</p>
+          <ul>
+            <li>Lis attentivement les consignes et les indices de chaque étape.</li>
+            <li>Respecte le parcours proposé et les zones accessibles au public.</li>
+            <li>La validation GPS sert à confirmer ton arrivée à proximité du lieu indiqué. Elle ne t'autorise jamais à entrer dans un espace privé.</li>
+            <li>Ne triche pas, ne partage pas les réponses des énigmes et laisse à chacun le plaisir de jouer.</li>
+            <li>Les étoiles, badges et tampons sont attribués selon les règles de chaque aventure.</li>
+          </ul>
+        </article>
+        <article class="rules-content" id="rules-conduct">
+          <h3>🤝 2. Code de conduite</h3>
+          <p>Chaque joueur contribue à garder une ambiance conviviale et bienveillante.</p>
+          <ul>
+            <li>Sois poli et respectueux envers les habitants, les autres joueurs et les partenaires.</li>
+            <li>Aucun propos insultant, discriminatoire, menaçant ou harcelant n'est accepté.</li>
+            <li>Respecte les consignes des organisateurs et des personnes responsables des lieux.</li>
+            <li>En cas de désaccord, utilise le support plutôt que de provoquer un conflit.</li>
+            <li>Les enfants doivent participer sous la responsabilité d'un adulte accompagnateur.</li>
+          </ul>
+        </article>
+        <article class="rules-content" id="rules-account">
+          <h3>🔐 3. Comptes et sécurité</h3>
+          <ul>
+            <li>Chaque membre doit utiliser son propre compte et fournir des informations exactes.</li>
+            <li>La création de plusieurs comptes pour contourner les règles ou obtenir des récompenses est interdite.</li>
+            <li>Ne communique jamais ton mot de passe ni tes codes de connexion.</li>
+            <li>Signale rapidement au support toute activité inhabituelle sur ton compte.</li>
+            <li>N'utilise pas le compte d'une autre personne sans son autorisation.</li>
+          </ul>
+        </article>
+        <article class="rules-content" id="rules-photos">
+          <h3>📷 4. Photos et publications</h3>
+          <ul>
+            <li>Tu peux partager tes découvertes en veillant à respecter les personnes et les lieux photographiés.</li>
+            <li>Demande l'autorisation avant de publier une photo où une personne est reconnaissable.</li>
+            <li>Ne publie pas d'informations personnelles, d'adresses privées, de visages d'enfants ou de données permettant d'identifier quelqu'un sans autorisation appropriée.</li>
+            <li>Ne diffuse pas de photos dangereuses, humiliantes, trompeuses ou portant atteinte aux droits d'autrui.</li>
+            <li>Les photos envoyées au site doivent être en lien avec l'aventure et respecter les consignes affichées.</li>
+          </ul>
+        </article>
+        <article class="rules-content" id="rules-places">
+          <h3>🌿 5. Respect des villages et des lieux</h3>
+          <ul>
+            <li>Reste sur les chemins, trottoirs et espaces ouverts au public.</li>
+            <li>N'entre jamais dans une propriété privée, un bâtiment fermé ou un terrain interdit.</li>
+            <li>Respecte le calme des habitants, les horaires, la signalisation et les règles locales.</li>
+            <li>Ne dégrade rien, ne déplace aucun objet et ne laisse aucun déchet.</li>
+            <li>Ne prends aucun risque pour atteindre une étape : la sécurité passe avant le jeu.</li>
+            <li>Si un lieu est inaccessible ou dangereux, arrête l'étape et contacte le support.</li>
+          </ul>
+        </article>
+        <article class="rules-content" id="rules-sanctions">
+          <h3>⚖️ 6. Sanctions</h3>
+          <p>En cas de non-respect du règlement, l'équipe peut intervenir en tenant compte de la gravité et de la répétition des faits.</p>
+          <ul>
+            <li>Rappel des règles ou avertissement.</li>
+            <li>Retrait d'un contenu publié qui ne respecte pas les règles.</li>
+            <li>Suspension temporaire de certaines fonctions ou de l'accès au compte.</li>
+            <li>Fermeture du compte en cas de faits graves ou répétés.</li>
+          </ul>
+          <p>Lorsque cela est possible, le membre sera informé de la mesure prise et pourra contacter le support pour demander des explications.</p>
+        </article>
+      </div>
+      <div class="rules-footer">
+        <strong>🌟 En poursuivant ton aventure sur Trésors de nos Villages, tu t'engages à respecter ces règles.</strong>
+        <p>Merci de contribuer à une expérience agréable pour tous et de prendre soin des villages qui nous accueillent.</p>
+      </div>
+    </section>
+
     <section class="dash-section hidden" id="dash-help">
       <h3>❔ Centre d’aide</h3>
       <p>Voici les réponses aux questions les plus fréquentes.</p>
@@ -5811,6 +5923,10 @@ async function validatePlayerGps(adventureId, stepId) {
   }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
 }
 
+function showRuleTab(id, button) {
+  document.querySelectorAll("#dash-rules .rules-content").forEach(panel => panel.classList.toggle("active", panel.id === id));
+  document.querySelectorAll("#dash-rules .rules-tab").forEach(tab => tab.classList.toggle("active", tab === button));
+}
 function showDashSection(id){
   // Ne jamais afficher l'espace admin avant confirmation du serveur.
   if(id === "dash-admin-info" && !adminAccessGranted){
@@ -5874,7 +5990,7 @@ function showDashSection(id){
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
   "dash-home", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges",
-  "dash-stars", "dash-formulas", "dash-help", "dash-news", "dash-town-contact", "dash-support",
+  "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
 ];
