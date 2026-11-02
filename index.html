@@ -3823,6 +3823,7 @@ window.openAdminPanel = async function() {
   try {
     await adminApi("/api/admin/me");
     window.setAdminAccessGranted(true);
+    document.getElementById("admin-access-error")?.remove();
     window.showDashSection("dash-admin-info");
     adminShowHome();
     statusEl.textContent = "Accès administrateur confirmé.";
@@ -3832,8 +3833,21 @@ window.openAdminPanel = async function() {
     supportArea.hidden = false;
   } catch (error) {
     window.setAdminAccessGranted(false);
-    statusEl.textContent = error.message || "Accès administrateur refusé.";
+    const message = error.message || "Accès administrateur refusé.";
+    statusEl.textContent = message;
     supportArea.hidden = true;
+    const adminSection = document.getElementById("dash-admin-info");
+    if(adminSection) adminSection.classList.remove("hidden");
+    const homeView = document.getElementById("admin-home-view");
+    if(homeView) homeView.hidden = true;
+    let errorPanel = document.getElementById("admin-access-error");
+    if(!errorPanel && adminSection){
+      errorPanel = document.createElement("div");
+      errorPanel.id = "admin-access-error";
+      errorPanel.style.cssText = "margin:24px;padding:18px 22px;border:1px solid #d8b66b;border-radius:12px;background:#fff8e8;color:#493b20;font:15px Arial,sans-serif";
+      adminSection.prepend(errorPanel);
+    }
+    if(errorPanel) errorPanel.textContent = "Impossible de charger l’administration : " + message + " Vérifie ta connexion puis réessaie.";
   }
 };
 
@@ -4078,7 +4092,15 @@ async function validatePlayerGps(adventureId, stepId) {
 }
 
 function showDashSection(id){
+  // L'espace administration doit toujours s'afficher pendant la vérification
+  // des droits : auparavant, le return ci-dessous laissait une page vide.
   if(id === "dash-admin-info" && !adminAccessGranted){
+    const adminSection = document.getElementById("dash-admin-info");
+    if(adminSection) adminSection.classList.remove("hidden");
+    const adminHome = document.getElementById("admin-home-view");
+    if(adminHome) adminHome.hidden = false;
+    const adminStatus = document.getElementById("admin-panel-status");
+    if(adminStatus) adminStatus.textContent = "Vérification des droits administrateur…";
     if(window.openAdminPanel) window.openAdminPanel();
     return;
   }
