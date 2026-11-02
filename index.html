@@ -778,7 +778,7 @@ body.halloween-accueil .home-hero{
 #dashboard.admin-mode > .sidebar{display:none!important}
 #dashboard.admin-mode > .content{margin-left:0!important;width:100%!important}
 #dashboard.admin-mode .admin-workspace{margin:0!important}
-#dashboard.admin-mode .admin-sidebar{position:sticky;top:0;z-index:100}
+#dashboard.admin-mode .admin-sidebar{position:sticky!important;top:0!important;align-self:start;z-index:1000!important}
 @media(max-width:900px){
   #dashboard:not(.admin-mode) > .sidebar{flex-wrap:wrap;gap:7px!important;padding:8px 10px!important}
   #dashboard:not(.admin-mode) > .sidebar .brand-name{font-size:15px;margin-right:4px}
@@ -4177,6 +4177,11 @@ async function validatePlayerGps(adventureId, stepId) {
 }
 
 function showDashSection(id){
+  // À l’ouverture de l’administration, revenir en haut pour afficher immédiatement
+  // la barre de navigation horizontale, même si le navigateur a conservé l’ancien défilement.
+  if(id === "dash-admin-info"){
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }
   // En administration, le menu explorateur latéral est masqué et la navigation admin passe en haut.
   const dashboard = document.getElementById("dashboard");
   if(dashboard) dashboard.classList.toggle("admin-mode", id === "dash-admin-info");
