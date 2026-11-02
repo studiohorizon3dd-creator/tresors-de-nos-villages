@@ -2768,19 +2768,102 @@ body.halloween-accueil .home-hero{
       </div>
 
       <div id="admin-tester-management-view" class="admin-subview" hidden>
-        <div class="admin-section-heading">
-          <div><h3>Gestion des testeurs</h3><p>Retrouve les testeurs acceptés, leurs accès aux villages et niveaux, puis leurs retours.</p></div>
+        <style>
+          #admin-tester-management-view{color:#123b2d}
+          #admin-tester-management-view .tm-hero{display:flex;align-items:center;gap:16px;padding:18px 22px;margin:0 0 12px;border:1px solid #dfbd63;border-radius:16px;background:linear-gradient(100deg,#fff9e9 0%,#fffdf5 58%,#f4e4b8 100%);box-shadow:0 4px 14px #4b35121a}
+          #admin-tester-management-view .tm-hero-icon{font-size:38px}
+          #admin-tester-management-view .tm-hero h2{font:700 27px Georgia,serif;margin:0 0 4px;color:#073c2b}
+          #admin-tester-management-view .tm-hero p{margin:0;color:#5d5a4c;font-size:13px}
+          #admin-tester-management-view .tm-hero .admin-secondary-btn{margin-left:auto;white-space:nowrap}
+          #admin-tester-management-view .tm-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+          #admin-tester-management-view .tm-stat{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1px solid #e5c779;border-radius:13px;background:#fffaf0;min-width:0}
+          #admin-tester-management-view .tm-stat-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;font-size:22px;background:#e5f0e4}
+          #admin-tester-management-view .tm-stat strong{display:block;font:700 25px Georgia,serif;color:#073c2b}
+          #admin-tester-management-view .tm-stat span:last-child{font-size:12px;color:#555044}
+          #admin-tester-management-view .tm-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:12px;align-items:start}
+          #admin-tester-management-view .tm-panel{border:1px solid #e2c77f;border-radius:14px;background:#fffdf7;box-shadow:0 3px 10px #4b35120c;padding:13px;min-width:0}
+          #admin-tester-management-view .tm-panel h3{font:700 17px Georgia,serif;margin:0 0 10px;color:#073c2b}
+          #admin-tester-management-view .tm-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+          #admin-tester-management-view .tm-toolbar input,#admin-tester-management-view .tm-toolbar select{min-height:37px;border:1px solid #d9cba9;border-radius:8px;background:#fffefa;padding:7px 10px;color:#294a3b;font:13px Georgia,serif}
+          #admin-tester-management-view .tm-toolbar input{flex:1;min-width:180px}
+          #admin-tester-management-view .tm-table-wrap{overflow-x:auto;border:1px solid #e5d5ad;border-radius:10px}
+          #admin-tester-management-view table{width:100%;min-width:680px;border-collapse:collapse;font:12px Georgia,serif}
+          #admin-tester-management-view th{padding:11px 9px;text-align:left;background:#f7edcf;color:#244333;border-bottom:1px solid #e3cf99;white-space:nowrap}
+          #admin-tester-management-view td{padding:10px 9px;border-bottom:1px solid #eee5d2;vertical-align:middle;color:#263d32}
+          #admin-tester-management-view tbody tr:last-child td{border-bottom:0}
+          #admin-tester-management-view tbody tr:hover{background:#fff8e7}
+          #admin-tester-management-view .tm-person{display:flex;align-items:center;gap:8px;min-width:130px}
+          #admin-tester-management-view .tm-avatar{width:32px;height:32px;flex:0 0 32px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#e7c66b,#fff0bd);border:1px solid #d9ad45;font-size:16px}
+          #admin-tester-management-view .tm-person strong{display:block;font-size:12px}
+          #admin-tester-management-view .tm-person small{display:block;color:#777064;font-size:10px;margin-top:2px}
+          #admin-tester-management-view .tm-pill{display:inline-block;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:bold;background:#dff1df;color:#176b36;white-space:nowrap}
+          #admin-tester-management-view .tm-actions{display:flex;gap:5px}
+          #admin-tester-management-view .tm-action{width:30px;height:29px;border:1px solid #d9cba9;border-radius:7px;background:#fffaf0;color:#145b3c;cursor:pointer;font-size:14px}
+          #admin-tester-management-view .tm-action:hover{background:#e7f3e8}
+          #admin-tester-management-view .tm-side{display:grid;gap:12px}
+          #admin-tester-management-view .tm-selected{background:linear-gradient(150deg,#fffdf7,#f7edcf)}
+          #admin-tester-management-view .tm-selected-head{display:flex;gap:10px;align-items:center;padding:10px;background:#fffaf0;border:1px solid #ead7a7;border-radius:11px}
+          #admin-tester-management-view .tm-selected-head .tm-avatar{width:54px;height:54px;flex-basis:54px;font-size:25px}
+          #admin-tester-management-view .tm-selected-head strong{font:700 16px Georgia,serif}
+          #admin-tester-management-view .tm-selected-head small{display:block;color:#6a6559;margin-top:4px}
+          #admin-tester-management-view .tm-wide-btn{width:100%;margin-top:8px}
+          #admin-tester-management-view .tm-detail-empty{font-size:12px;color:#6b6559;line-height:1.5}
+          #admin-tester-management-view .tm-subsections{margin-top:14px}
+          #admin-tester-management-view .tm-subsections .admin-section-heading{margin-top:20px}
+          #admin-tester-management-view .tm-foot{font-size:11px;color:#6a6559;margin:12px 2px 0}
+          @media(max-width:1050px){#admin-tester-management-view .tm-layout{grid-template-columns:1fr}#admin-tester-management-view .tm-side{grid-template-columns:repeat(2,minmax(0,1fr))}}
+          @media(max-width:680px){#admin-tester-management-view .tm-hero{align-items:flex-start;flex-wrap:wrap;padding:14px}#admin-tester-management-view .tm-hero h2{font-size:22px}#admin-tester-management-view .tm-hero .admin-secondary-btn{margin-left:0}#admin-tester-management-view .tm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-tester-management-view .tm-side{grid-template-columns:1fr}#admin-tester-management-view .tm-stat{padding:10px}#admin-tester-management-view .tm-stat-icon{width:34px;height:34px;font-size:18px}}
+        </style>
+
+        <div class="tm-hero">
+          <span class="tm-hero-icon">🧭</span>
+          <div><h2>Gestion des testeurs</h2><p>Gérez les testeurs, leurs accès aux villages et niveaux, et consultez leurs retours.</p></div>
           <button type="button" class="admin-secondary-btn" onclick="adminLoadTesterDirectory()">↻ Actualiser</button>
         </div>
-        <p id="admin-tester-directory-status" class="status" role="status" aria-live="polite">Chargement des testeurs validés…</p>
-        <div id="admin-tester-directory-list" class="admin-recent-list tester-table-wrap"><p>Les testeurs validés apparaîtront ici.</p></div>
-        <div class="admin-section-heading" style="margin-top:28px"><div><h3>🏁 Validation des niveaux</h3><p>Examine les bilans de fin de parcours et décide si le niveau est validé ou à corriger.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterLevelReviews()">↻ Actualiser les validations</button></div>
-        <p id="admin-tester-reviews-status" class="status" role="status" aria-live="polite">Les demandes de validation apparaîtront ici.</p>
-        <div id="admin-tester-reviews-list" class="admin-recent-list tester-table-wrap"><p>Aucune demande chargée.</p></div>
-        <div class="admin-section-heading" style="margin-top:28px"><div><h3>Retours et réponses</h3><p>Lis les retours, réponds au testeur et mets à jour le suivi.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterFeedback()">↻ Actualiser les retours</button></div>
-        <p id="admin-tester-feedback-status" class="status" role="status" aria-live="polite">Les retours seront chargés ici.</p>
-        <div id="admin-tester-feedback-list" class="admin-recent-list tester-table-wrap"><p>Aucun retour chargé.</p></div>
-        <p class="admin-footnote">Les accès testeurs sont indépendants des achats. Un testeur ne voit que les villages et niveaux qui lui sont attribués.</p>
+
+        <div class="tm-stats">
+          <div class="tm-stat"><span class="tm-stat-icon">👥</span><div><strong id="tm-total-testers">—</strong><span>Testeurs validés</span></div></div>
+          <div class="tm-stat"><span class="tm-stat-icon">🗺️</span><div><strong id="tm-total-villages">—</strong><span>Villages disponibles</span></div></div>
+          <div class="tm-stat"><span class="tm-stat-icon">💬</span><div><strong id="tm-total-feedback">—</strong><span>Retours reçus</span></div></div>
+          <div class="tm-stat"><span class="tm-stat-icon">🏁</span><div><strong id="tm-total-reviews">—</strong><span>Bilans à examiner</span></div></div>
+        </div>
+
+        <div class="tm-layout">
+          <section class="tm-panel">
+            <h3>👥 Liste des testeurs</h3>
+            <div class="tm-toolbar">
+              <input id="tm-search" type="search" placeholder="⌕ Rechercher un testeur (nom, e-mail)…" aria-label="Rechercher un testeur">
+              <select id="tm-sort" aria-label="Trier les testeurs"><option value="name">Trier : nom</option><option value="email">Trier : e-mail</option></select>
+            </div>
+            <p id="admin-tester-directory-status" class="status" role="status" aria-live="polite">Chargement des testeurs validés…</p>
+            <div id="admin-tester-directory-list" class="tm-table-wrap"><p style="padding:12px">Les testeurs validés apparaîtront ici.</p></div>
+            <p class="tm-foot">Les accès testeurs sont indépendants des achats : chaque personne voit uniquement les villages et niveaux qui lui sont attribués.</p>
+          </section>
+
+          <aside class="tm-side">
+            <section class="tm-panel tm-selected">
+              <h3>🧑‍ explorer · Testeur sélectionné</h3>
+              <div id="tm-selected-tester" class="tm-detail-empty">Sélectionne un testeur dans la liste pour consulter son profil et gérer ses autorisations.</div>
+              <div id="tm-selected-access"></div>
+            </section>
+            <section class="tm-panel">
+              <h3>⚡ Accès rapides</h3>
+              <button type="button" class="admin-secondary-btn tm-wide-btn" onclick="adminOpenTesters()">📨 Voir les demandes de testeurs</button>
+              <button type="button" class="admin-secondary-btn tm-wide-btn" onclick="adminLoadTesterFeedback();document.getElementById('admin-tester-feedback-list')?.scrollIntoView({behavior:'smooth',block:'center'})">💬 Consulter les retours</button>
+              <button type="button" class="admin-secondary-btn tm-wide-btn" onclick="adminLoadTesterLevelReviews();document.getElementById('admin-tester-reviews-list')?.scrollIntoView({behavior:'smooth',block:'center'})">🏁 Examiner les bilans</button>
+            </section>
+          </aside>
+        </div>
+
+        <div class="tm-subsections">
+          <div class="admin-section-heading" style="margin-top:22px"><div><h3>🏁 Validation des niveaux</h3><p>Examine les bilans de fin de parcours et décide si le niveau est validé ou à corriger.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterLevelReviews()">↻ Actualiser</button></div>
+          <p id="admin-tester-reviews-status" class="status" role="status" aria-live="polite">Les demandes de validation apparaîtront ici.</p>
+          <div id="admin-tester-reviews-list" class="admin-recent-list tester-table-wrap"><p>Aucune demande chargée.</p></div>
+
+          <div class="admin-section-heading" style="margin-top:22px"><div><h3>💬 Retours et réponses</h3><p>Lis les retours, réponds au testeur et mets à jour le suivi.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTesterFeedback()">↻ Actualiser</button></div>
+          <p id="admin-tester-feedback-status" class="status" role="status" aria-live="polite">Les retours seront chargés ici.</p>
+          <div id="admin-tester-feedback-list" class="admin-recent-list tester-table-wrap"><p>Aucun retour chargé.</p></div>
+        </div>
       </div>
 
       <div id="admin-levels-view" class="admin-subview" hidden>
@@ -4697,25 +4780,88 @@ window.adminLoadTesterDirectory = async function(){
   const status=document.getElementById("admin-tester-directory-status");
   const list=document.getElementById("admin-tester-directory-list");
   if(!status||!list)return;
-  status.textContent="Chargement des testeurs validés…";list.replaceChildren();
+  status.textContent="Chargement des testeurs validés…";
+  list.replaceChildren();
   try{
-    const [data,villageData]=await Promise.all([adminApi("/api/admin/testers"),adminApi("/api/admin/villages")]);
+    const [data,villageData,feedbackData,reviewData]=await Promise.all([
+      adminApi("/api/admin/testers"),
+      adminApi("/api/admin/villages"),
+      adminApi("/api/admin/tester-feedback").catch(()=>({feedback:[]})),
+      adminApi("/api/admin/tester-level-reviews").catch(()=>({reviews:[]}))
+    ]);
     const accepted=(Array.isArray(data.applications)?data.applications:[]).filter(x=>x.status==="accepted");
     const villages=Array.isArray(villageData.villages)?villageData.villages:[];
-    if(!accepted.length){list.textContent="Aucun testeur validé pour le moment. Accepte d’abord une demande dans « Demandes testeurs ».";status.textContent="0 testeur validé.";return;}
-    accepted.forEach(app=>{
-      const card=document.createElement("article");card.style.cssText="padding:14px;margin:10px 0;background:#fffefa;border:1px solid #e4dcc8;border-radius:11px";
-      const title=document.createElement("strong");title.textContent=app.name||app.email||"Testeur";
-      const email=document.createElement("p");email.style.cssText="margin:4px 0 10px;color:#687366;font-size:13px";email.textContent=app.email||"Adresse e-mail non disponible";
-      const info=document.createElement("p");info.style.cssText="margin:0 0 10px;font-size:13px";info.textContent="Compte testeur validé · Identifiant : "+(app.user_id||"non disponible");
-      const host=document.createElement("div");
-      const button=document.createElement("button");button.type="button";button.className="admin-secondary-btn";button.textContent="Gérer ses villages et niveaux";
-      button.addEventListener("click",()=>adminShowTesterAccess(app.user_id,app.name||app.email||"ce testeur",villages,host));
-      card.append(title,email,info,button,host);list.appendChild(card);
-    });
-    status.textContent=accepted.length+" testeur"+(accepted.length>1?"s":"")+" validé"+(accepted.length>1?"s":"")+". Choisis une personne pour lui attribuer ses parcours.";
-  }catch(error){status.textContent=error.message||"Impossible de charger les testeurs.";list.textContent="Vérifie que /api/admin/testers et /api/admin/villages sont disponibles.";}
+    const feedback=Array.isArray(feedbackData.feedback)?feedbackData.feedback:[];
+    const reviews=Array.isArray(reviewData.reviews)?reviewData.reviews:[];
+    const setText=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value);};
+    setText("tm-total-testers",accepted.length);
+    setText("tm-total-villages",villages.length);
+    setText("tm-total-feedback",feedback.length);
+    setText("tm-total-reviews",reviews.filter(x=>["pending","en_attente","submitted"].includes(String(x.status||"").toLowerCase())).length);
+    const selected=document.getElementById("tm-selected-tester");
+    const selectedAccess=document.getElementById("tm-selected-access");
+    const renderSelected=(app,host)=>{
+      if(!selected||!selectedAccess)return;
+      selected.replaceChildren();selectedAccess.replaceChildren();
+      const head=document.createElement("div");head.className="tm-selected-head";
+      const avatar=document.createElement("span");avatar.className="tm-avatar";avatar.textContent="🧑‍🌾";
+      const info=document.createElement("div");
+      const name=document.createElement("strong");name.textContent=app.name||app.email||"Testeur";
+      const email=document.createElement("small");email.textContent=app.email||"E-mail non disponible";
+      const badge=document.createElement("span");badge.className="tm-pill";badge.textContent="✓ Accès validé";
+      info.append(name,email,badge);head.append(avatar,info);selected.append(head);
+      const meta=document.createElement("p");meta.className="tm-detail-empty";meta.style.margin="10px 2px";
+      meta.textContent="Identifiant du compte : "+(app.user_id||"non disponible");
+      selected.append(meta);
+      const hostDiv=document.createElement("div");selectedAccess.append(hostDiv);
+      const accessBtn=document.createElement("button");accessBtn.type="button";accessBtn.className="admin-secondary-btn tm-wide-btn";accessBtn.textContent="🗺️ Gérer ses villages et niveaux";
+      accessBtn.addEventListener("click",()=>window.adminShowTesterAccess(app.user_id,app.name||app.email||"ce testeur",villages,hostDiv));
+      selectedAccess.append(accessBtn);
+    };
+    if(!accepted.length){
+      list.innerHTML='<p style="padding:16px">Aucun testeur validé pour le moment. Accepte d’abord une demande dans « Demandes testeurs ».</p>';
+      status.textContent="0 testeur validé.";
+      if(selected)selected.textContent="Aucun testeur validé pour le moment.";
+      if(selectedAccess)selectedAccess.replaceChildren();
+      return;
+    }
+    const table=document.createElement("table");
+    const thead=document.createElement("thead"),headRow=document.createElement("tr");
+    ["Testeur","E-mail","Statut","Dernière activité","Actions"].forEach(label=>{const th=document.createElement("th");th.textContent=label;headRow.appendChild(th);});
+    thead.appendChild(headRow);table.appendChild(thead);
+    const tbody=document.createElement("tbody");table.appendChild(tbody);
+    const renderRows=()=>{
+      tbody.replaceChildren();
+      const query=(document.getElementById("tm-search")?.value||"").trim().toLocaleLowerCase("fr");
+      const sort=document.getElementById("tm-sort")?.value||"name";
+      const rows=accepted.filter(app=>[app.name,app.email].some(v=>String(v||"").toLocaleLowerCase("fr").includes(query)));
+      rows.sort((a,b)=>String(a[sort]||a.name||"").localeCompare(String(b[sort]||b.name||""),"fr"));
+      rows.forEach((app,index)=>{
+        const tr=document.createElement("tr");
+        const person=document.createElement("td");const wrap=document.createElement("div");wrap.className="tm-person";
+        const avatar=document.createElement("span");avatar.className="tm-avatar";avatar.textContent=["🧑‍🌾","👩‍🌾","🧭","🧑‍💻"][index%4];
+        const label=document.createElement("div");const strong=document.createElement("strong");strong.textContent=app.name||"Testeur";const small=document.createElement("small");small.textContent="Compte testeur";label.append(strong,small);wrap.append(avatar,label);person.append(wrap);
+        const email=document.createElement("td");email.textContent=app.email||"—";
+        const state=document.createElement("td");const pill=document.createElement("span");pill.className="tm-pill";pill.textContent="Actif";state.append(pill);
+        const activity=document.createElement("td");activity.textContent=app.updated_at||app.created_at?new Date(app.updated_at||app.created_at).toLocaleDateString("fr-FR"):"—";
+        const actions=document.createElement("td");const actionWrap=document.createElement("div");actionWrap.className="tm-actions";
+        const view=document.createElement("button");view.type="button";view.className="tm-action";view.title="Voir la fiche";view.setAttribute("aria-label","Voir la fiche de "+(app.name||"ce testeur"));view.textContent="◉";view.addEventListener("click",()=>renderSelected(app));
+        const access=document.createElement("button");access.type="button";access.className="tm-action";access.title="Gérer les accès";access.setAttribute("aria-label","Gérer les accès de "+(app.name||"ce testeur"));access.textContent="✎";access.addEventListener("click",()=>{renderSelected(app);window.adminShowTesterAccess(app.user_id,app.name||app.email||"ce testeur",villages,selectedAccess.querySelector("div"));});
+        actionWrap.append(view,access);actions.append(actionWrap);tr.append(person,email,state,activity,actions);tbody.append(tr);
+      });
+      if(!rows.length){const tr=document.createElement("tr");const td=document.createElement("td");td.colSpan=5;td.textContent="Aucun testeur ne correspond à cette recherche.";td.style.padding="16px";tr.append(td);tbody.append(tr);}
+    };
+    list.append(table);renderRows();
+    const searchInput=document.getElementById("tm-search");if(searchInput)searchInput.oninput=renderRows;
+    const sortSelect=document.getElementById("tm-sort");if(sortSelect)sortSelect.onchange=renderRows;
+    renderSelected(accepted[0]);
+    status.textContent=accepted.length+" testeur"+(accepted.length>1?"s":"")+" validé"+(accepted.length>1?"s":"")+". Sélectionne une personne pour consulter sa fiche ou gérer ses accès.";
+  }catch(error){
+    status.textContent=error.message||"Impossible de charger les testeurs.";
+    list.textContent="Vérifie que /api/admin/testers et /api/admin/villages sont disponibles.";
+  }
 };
+
 window.adminShowTesterAccess = async function(userId, testerName, villages, host){
   let panel=host.querySelector(".tester-access-editor");
   if(panel){panel.remove();return;}
