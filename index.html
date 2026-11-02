@@ -711,6 +711,16 @@ body.halloween-accueil .home-hero{
 @media(max-width:700px){#public-town-contact{padding:0 12px 25px}#public-town-contact .town-hero{margin:0 -12px}#public-town-contact .town-tabs{margin-left:-12px;margin-right:-12px}}
 
 
+
+/* Sur téléphone, le contact public se replie pour alléger la page */
+.public-contact-mobile-toggle{display:none}
+@media(max-width:700px){
+  #public-town-contact .public-contact-mobile-toggle{display:block;width:calc(100% - 4px);margin:12px 2px 18px;padding:14px 18px;border:1px solid #c79a3d;border-radius:25px;background:linear-gradient(120deg,#073322,#17613e);color:#fff5d2;font-weight:700;font-size:15px;box-shadow:0 4px 12px #173d2b20;cursor:pointer}
+  #public-town-contact .public-contact-mobile-toggle span{margin-left:7px}
+  #public-town-contact .public-contact-mobile-content{display:none}
+  #public-town-contact.public-contact-mobile-open .public-contact-mobile-content{display:block}
+}
+
 /* Administration : navigation horizontale, sans le menu explorateur à gauche */
 #dashboard.admin-mode > .sidebar{display:none!important}
 #dashboard.admin-mode > .content{margin-left:0!important;width:100%!important;min-height:100vh}
@@ -1468,6 +1478,13 @@ body.halloween-accueil .home-hero{
 #landing .public-home-news-toggle:hover{filter:brightness(1.08)}
 @media(max-width:800px){#landing .public-home-news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){#landing .public-news-showcase{margin:18px 10px;padding:19px 13px;border-radius:19px}#landing .public-news-heading{justify-content:flex-start;gap:12px}#landing .public-news-heading-icon{flex-basis:46px;width:46px;height:46px;font-size:23px}#landing .public-news-heading h2{font-size:23px}#landing .public-news-heading p:last-child{font-size:12px;line-height:1.4}#landing .public-home-news-grid,#landing .public-home-news-more{grid-template-columns:1fr}#landing .public-home-news-card{padding:16px}}
+/* Actualités repliables sur téléphone uniquement */
+#landing .public-home-news-mobile-toggle{display:none}
+@media(max-width:560px){
+  #landing .public-home-news-mobile-toggle{display:block;width:100%;margin:14px 0 0;padding:12px 16px;border:1px solid #c79a3d;border-radius:24px;background:linear-gradient(120deg,#073322,#17613e);color:#fff5d2;font-weight:700;font-size:14px;cursor:pointer}
+  #landing .public-news-showcase:not(.news-expanded) .public-home-news-content{display:none}
+  #landing .public-news-showcase.news-expanded .public-home-news-content{display:block}
+}
 
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -1600,12 +1617,18 @@ body.halloween-accueil .home-hero{
       <p>Les nouvelles du projet, les préparatifs et les prochaines aventures.</p>
     </div>
   </div>
+  <button id="public-home-news-mobile-toggle" class="public-home-news-mobile-toggle" type="button"
+    aria-expanded="false" aria-controls="public-home-news-content">
+    Afficher les actualités <span aria-hidden="true">↓</span>
+  </button>
+  <div id="public-home-news-content" class="public-home-news-content">
   <p id="public-home-news-status" class="public-home-news-status" role="status" aria-live="polite">Chargement des actualités…</p>
   <div id="public-home-news-list" class="public-home-news-grid" aria-live="polite"></div>
   <div id="public-home-news-more" class="public-home-news-more" hidden></div>
   <button id="public-home-news-toggle" class="public-home-news-toggle" type="button" aria-expanded="false" hidden>
     Voir toutes les actualités <span aria-hidden="true">↓</span>
   </button>
+  </div>
 </section>
 
     <section class="section" id="villages-public">
@@ -1625,6 +1648,8 @@ body.halloween-accueil .home-hero{
       <p>Construisons ensemble des parcours ludiques et culturels pour mettre en valeur votre commune !</p>
     </div>
   </div>
+  <button class="public-contact-mobile-toggle" id="public-contact-mobile-toggle" type="button" aria-expanded="false" aria-controls="public-contact-mobile-content" onclick="(function(btn){const section=document.getElementById('public-town-contact');const open=section.classList.toggle('public-contact-mobile-open');btn.setAttribute('aria-expanded',String(open));btn.innerHTML=open?'Refermer le contact <span aria-hidden="true">↑</span>':'Afficher le contact <span aria-hidden="true">↓</span>';if(open){setTimeout(()=>document.getElementById('public-contact-mobile-content').scrollIntoView({behavior:'smooth',block:'start'}),80);}})(this)">Afficher le contact <span aria-hidden="true">↓</span></button>
+  <div id="public-contact-mobile-content" class="public-contact-mobile-content">
   <nav class="town-tabs" aria-label="Rubriques partenaires">
     <button type="button" onclick="document.getElementById('public-town-name').focus()">✉ Nous contacter</button>
     <button type="button" onclick="document.getElementById('public-town-project-info').scrollIntoView({behavior:'smooth',block:'center'})">📖 Le projet</button>
@@ -1704,6 +1729,7 @@ body.halloween-accueil .home-hero{
         <button class="town-doc-button" type="button" onclick="document.getElementById('public-town-subject').value='Demander le dossier de présentation';document.getElementById('public-town-message').value='Bonjour, je souhaiterais recevoir le dossier de présentation de Trésors de nos Villages. Merci.';document.getElementById('public-town-message').focus()">⬇ Demander le dossier (PDF)</button>
       </article>
     </div>
+  </div>
   </div>
 </section>
 
@@ -6172,5 +6198,34 @@ window.toggleMobileExplorerMenu = function(forceOpen) {
 })();
 </script>
 
+<script>
+/* Ouvrir ou replier le fil d’actualités sur téléphone, sans modifier l’affichage ordinateur. */
+(function(){
+  const section = document.getElementById('public-news-home');
+  const button = document.getElementById('public-home-news-mobile-toggle');
+  if (!section || !button) return;
+
+  function syncNewsMobileState(){
+    if (window.matchMedia('(max-width: 560px)').matches) {
+      section.classList.remove('news-expanded');
+      button.setAttribute('aria-expanded', 'false');
+      button.innerHTML = 'Afficher les actualités <span aria-hidden="true">↓</span>';
+    } else {
+      section.classList.add('news-expanded');
+    }
+  }
+
+  button.addEventListener('click', function(){
+    const expanded = section.classList.toggle('news-expanded');
+    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    button.innerHTML = expanded
+      ? 'Masquer les actualités <span aria-hidden="true">↑</span>'
+      : 'Afficher les actualités <span aria-hidden="true">↓</span>';
+  });
+
+  syncNewsMobileState();
+  window.addEventListener('resize', syncNewsMobileState);
+})();
+</script>
 </body>
 </html>
