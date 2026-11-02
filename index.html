@@ -3177,11 +3177,11 @@ body.halloween-accueil .home-hero{
 }
 
 /* Ajustement fidèle à la maquette de référence : largeur, bannière et cartes compactes */
-#dash-tester-space.tester-dashboard{width:100%;max-width:1050px;margin:0 auto;padding:8px 12px 24px;background:#f6efdc;color:#173a29}
-#dash-tester-space .tester-dashboard-hero{min-height:68px;padding:8px 18px;border-radius:13px;background:linear-gradient(90deg,rgba(255,248,225,.96),rgba(255,248,225,.72) 43%,rgba(255,248,225,.08)),url('images/admin-dashboard-banner.jpg') center 47%/cover;color:#173a29}
-#dash-tester-space .tester-dashboard-brand h2{color:#102f21;font-size:clamp(25px,3vw,35px);text-shadow:none}
-#dash-tester-space .tester-dashboard-brand p{color:#354b3b;text-shadow:none}
-#dash-tester-space .tester-dashboard-flask{font-size:36px;filter:none}
+#dash-tester-space.tester-dashboard{width:100%;max-width:1600px;margin:0 auto;padding:8px 14px 24px;background:#f6efdc;color:#173a29}
+#dash-tester-space .tester-dashboard-hero{min-height:76px;padding:9px 20px;border-radius:13px;background:linear-gradient(90deg,rgba(4,43,31,.96),rgba(4,43,31,.72) 52%,rgba(4,43,31,.25)),url('images/espace-testeur.png') center 45%/cover;color:#fff4d5;border:1px solid #d7ad45;box-shadow:0 5px 14px #173b2818}
+#dash-tester-space .tester-dashboard-brand h2{color:#fff2c9;font-size:clamp(25px,3vw,35px);text-shadow:0 2px 5px #10291d}
+#dash-tester-space .tester-dashboard-brand p{color:#fff8e8;text-shadow:0 1px 3px #10291d}
+#dash-tester-space .tester-dashboard-flask{font-size:38px;filter:drop-shadow(0 2px 2px #0005)}
 #dash-tester-space .tester-dashboard-topstats{grid-template-columns:1.45fr repeat(5,minmax(0,1fr));margin:8px 0 10px;padding:6px;gap:4px}
 #dash-tester-space .tester-avatar{width:52px;height:52px;font-size:29px}
 #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:stretch}
@@ -3223,6 +3223,36 @@ body.halloween-accueil .home-hero{
 @media(max-width:1050px){#dash-tester-space.tester-dashboard{max-width:100%}#dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr))}#dash-tester-space .tester-announcement-card{grid-column:span 5!important}#dash-tester-space .tester-progression-card{grid-column:span 7!important}#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4!important}#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3!important}}
 @media(max-width:700px){#dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))}#dash-tester-space .tester-identity-card{grid-column:1/-1}#dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1!important;min-height:0}#dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:1/-1!important}#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 1!important}}
 @media(max-width:480px){#dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr}#dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}#dash-tester-space .tester-rank-track{grid-template-columns:repeat(4,minmax(0,1fr))}#dash-tester-space .tester-feedback-shortcuts small{font-size:10px}}
+
+/* Correction finale : l'Espace Testeur reprend la composition large de la maquette de référence. */
+#dash-tester-space.tester-dashboard{width:100%;max-width:1600px;margin:0 auto;padding:8px 14px 24px;background:#f6efdc}
+#dash-tester-space .tester-dashboard-hero{min-height:76px;background:linear-gradient(90deg,rgba(4,43,31,.96),rgba(4,43,31,.72) 52%,rgba(4,43,31,.25)),url('images/espace-testeur.png') center 45%/cover;color:#fff4d5}
+#dash-tester-space .tester-dashboard-brand h2{color:#fff2c9;text-shadow:0 2px 5px #10291d}
+#dash-tester-space .tester-dashboard-brand p{color:#fff8e8;text-shadow:0 1px 3px #10291d}
+#dash-tester-space .tester-dashboard-flask{filter:drop-shadow(0 2px 2px #0005)}
+#dash-tester-space .tester-dashboard-topstats{grid-template-columns:1.45fr repeat(5,minmax(0,1fr))}
+#dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr))}
+#dash-tester-space .tester-announcement-card{grid-column:span 5}
+#dash-tester-space .tester-progression-card{grid-column:span 7}
+#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card{grid-column:span 4}
+#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4}
+#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3}
+@media(max-width:1050px){
+  #dash-tester-space.tester-dashboard{max-width:100%;padding-left:12px;padding-right:12px}
+  #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #dash-tester-space .tester-identity-card{grid-column:1/-1}
+  #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1!important;min-height:0}
+  #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:1/-1!important}
+}
+@media(max-width:480px){
+  #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr}
+  #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}
+}
+
 </style>
         <div class="puzzle-admin-hero"><div><h2>🧩 Carte Puzzle</h2><p>Gérez les pièces de la carte et programmez leurs révélations.</p></div><div class="puzzle-admin-hero-mark">🏡</div></div>
         <div class="puzzle-admin-tabs" role="tablist" aria-label="Rubriques de la carte puzzle">
