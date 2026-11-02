@@ -4368,6 +4368,11 @@ async function validatePlayerGps(adventureId, stepId) {
 }
 
 function showDashSection(id){
+  if (window.matchMedia("(max-width: 900px)").matches) {
+    window.toggleMobileExplorerMenu(false);
+    document.querySelectorAll("#explorer-main-navigation .nav-category[open]")
+      .forEach(category => category.removeAttribute("open"));
+  }
   // À l’ouverture de l’administration, revenir en haut pour afficher immédiatement
   // la barre de navigation horizontale, même si le navigateur a conservé l’ancien défilement.
   if(id === "dash-admin-info"){
@@ -5443,6 +5448,22 @@ document.querySelectorAll("[data-players-tab]").forEach(button=>button.addEventL
 ["players-filter-status","players-filter-formula","players-filter-ranking","players-page-size"].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener("change",()=>{adminPlayersPage=1;renderPlayersTab();});});
 document.getElementById("players-prev")?.addEventListener("click",()=>{adminPlayersPage=Math.max(1,adminPlayersPage-1);renderPlayersList();});
 document.getElementById("players-next")?.addEventListener("click",()=>{adminPlayersPage++;renderPlayersList();});
+
+// Menu mobile explorateur : fonction intégrée au script principal du site.
+window.toggleMobileExplorerMenu = function(forceOpen) {
+  const sidebar = document.querySelector("#dashboard:not(.admin-mode) > .sidebar");
+  const toggle = document.getElementById("mobile-explorer-menu-toggle");
+  if (!sidebar || !toggle) return;
+  const open = typeof forceOpen === "boolean"
+    ? forceOpen
+    : !sidebar.classList.contains("mobile-menu-open");
+  sidebar.classList.toggle("mobile-menu-open", open);
+  toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  toggle.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
+  const icon = toggle.querySelector(".mobile-menu-icon");
+  if (icon) icon.textContent = open ? "✕" : "☰";
+};
+
 </script>
 <script>
 (async function loadPublicPuzzle(){
@@ -5519,29 +5540,6 @@ document.getElementById("players-next")?.addEventListener("click",()=>{adminPlay
 })();
 </script>
 
-
-<script>
-/* Ouverture/fermeture du menu mobile explorateur */
-window.toggleMobileExplorerMenu = function(forceOpen) {
-  const sidebar = document.querySelector("#dashboard:not(.admin-mode) > .sidebar");
-  const toggle = document.getElementById("mobile-explorer-menu-toggle");
-  if (!sidebar || !toggle) return;
-  const shouldOpen = typeof forceOpen === "boolean"
-    ? forceOpen
-    : !sidebar.classList.contains("mobile-menu-open");
-  sidebar.classList.toggle("mobile-menu-open", shouldOpen);
-  toggle.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
-  toggle.setAttribute("aria-label", shouldOpen ? "Fermer le menu" : "Ouvrir le menu");
-  const icon = toggle.querySelector(".mobile-menu-icon");
-  if (icon) icon.textContent = shouldOpen ? "✕" : "☰";
-};
-document.addEventListener("click", function(event) {
-  const navButton = event.target.closest("#explorer-main-navigation .nav-btn");
-  if (navButton && window.matchMedia("(max-width: 900px)").matches) {
-    window.toggleMobileExplorerMenu(false);
-  }
-});
-</script>
 
 </body>
 </html>
