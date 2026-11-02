@@ -796,21 +796,31 @@ body.halloween-accueil .home-hero{
 
 
 
-/* Correctif de position : éviter de conserver l'ancien défilement de l'accueil
-   et supprimer tout décalage vertical au-dessus du contenu membre. */
-#dashboard:not(.admin-mode) {
+/* Correctif définitif de l'espace membre :
+   une seule rubrique doit participer à la mise en page à la fois. */
+#dashboard:not(.admin-mode) > .content {
+  display: flow-root !important;
   margin: 0 !important;
   padding: 0 !important;
-}
-#dashboard:not(.admin-mode) > .content {
+  min-height: 0 !important;
   position: relative !important;
   top: 0 !important;
-  margin: 0 !important;
-  padding-top: 0 !important;
   transform: none !important;
 }
-#dashboard:not(.admin-mode) > .sidebar {
+#dashboard:not(.admin-mode) > .content > .dash-section.hidden,
+#dashboard:not(.admin-mode) > .content > #dash-home.hidden {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
   margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+#dashboard:not(.admin-mode) > .content > .dash-section:not(.hidden),
+#dashboard:not(.admin-mode) > .content > #dash-home:not(.hidden) {
+  display: block;
+  height: auto;
+  min-height: 0;
 }
 
 </style>
@@ -3970,6 +3980,7 @@ function showDashboard(name, email){
   const dashboard = document.getElementById("dashboard");
   if(landing) landing.style.display = "none";
   if(dashboard) dashboard.style.display = "block";
+  window.scrollTo({top:0,left:0,behavior:"instant"});
 
   // Certains éléments de l'ancien profil ne sont plus présents dans la nouvelle maquette.
   // Leur absence ne doit jamais interrompre la restauration de session ni le contrôle admin.
@@ -3991,12 +4002,12 @@ function showDashboard(name, email){
   window.loadTesterApplication?.();
   // Toujours lancer la vérification des droits, même si un bloc du profil manque.
   window.checkAdminAccess?.();
-  window.scrollTo({top:0,left:0,behavior:"instant"});
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 function returnHome(){
   document.getElementById("dashboard").style.display="none";
   document.getElementById("landing").style.display="block";
-  window.scrollTo({top:0,left:0,behavior:"instant"});
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 let adminAccessGranted = false;
 window.setAdminAccessGranted = function(value){
@@ -4225,11 +4236,17 @@ function showDashSection(id){
 ];
   sections.forEach(function(sectionId){
     const section = document.getElementById(sectionId);
-    if(section) section.classList.add("hidden");
+    if(section) {
+      section.classList.add("hidden");
+      // Masquage explicite : empêche une ancienne rubrique de conserver
+      // sa hauteur et de créer un grand espace vide au-dessus du contenu.
+      section.style.display = "none";
+    }
   });
   const selected = document.getElementById(id);
   if(!selected){console.warn("Rubrique introuvable :", id);return;}
   selected.classList.remove("hidden");
+  selected.style.removeProperty("display");
   if(id === "dash-news") window.loadPublicNews?.();
   if(id === "dash-adventures") window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
