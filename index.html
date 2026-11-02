@@ -711,83 +711,28 @@ body.halloween-accueil .home-hero{
 @media(max-width:700px){#public-town-contact{padding:0 12px 25px}#public-town-contact .town-hero{margin:0 -12px}#public-town-contact .town-tabs{margin-left:-12px;margin-right:-12px}}
 
 
-
-/* Administration : navigation horizontale en haut, organisée par rubriques */
-.admin-workspace{
-  display:flex;
-  flex-direction:column;
-  min-height:850px;
-}
-.admin-sidebar{
-  display:flex;
-  flex-direction:row;
-  flex-wrap:wrap;
-  align-items:stretch;
-  gap:8px 10px;
-  padding:14px 18px;
-  border-bottom:3px solid #d7ad45;
-}
-.admin-brand{
-  width:100%;
-  flex-direction:row;
-  justify-content:center;
-  align-items:center;
-  gap:12px;
-  padding:2px 8px 12px;
-  margin:0 0 3px;
-}
-.admin-brand-mark{width:38px;height:38px;font-size:22px}
-.admin-brand strong{font-size:19px}
-.admin-brand small{margin-left:8px}
-.admin-nav-group{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:4px;
-  padding:5px 7px;
-  border:1px solid rgba(255,240,196,.16);
-  border-radius:11px;
-  background:rgba(255,255,255,.035);
-}
-.admin-nav-label{
-  width:100%;
-  padding:2px 7px 4px;
-  color:#e6c875;
-  font-size:9px;
-}
-.admin-nav-item{
-  flex:0 1 auto;
-  min-height:36px;
-  padding:8px 10px;
-  font-size:12px;
-  white-space:normal;
-}
-.admin-nav-item span{font-size:15px}
-.admin-sidebar-bottom{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:8px;
-  margin:0 0 0 auto;
-  padding:7px 0 7px 10px;
-  border-top:0;
-}
-.admin-sidebar-bottom button{
-  width:auto;
-  margin:0;
-  white-space:nowrap;
-}
-.admin-main{width:100%;min-width:0}
+/* Administration : navigation horizontale, sans le menu explorateur à gauche */
+#dashboard.admin-mode > .sidebar{display:none!important}
+#dashboard.admin-mode > .content{margin-left:0!important;width:100%!important;min-height:100vh}
+#dashboard.admin-mode .admin-workspace{display:block!important;grid-template-columns:1fr!important;margin:-28px -30px!important;min-height:100vh;border-radius:0;overflow:visible}
+#dashboard.admin-mode .admin-sidebar{display:flex!important;flex-direction:row!important;align-items:center;flex-wrap:wrap;gap:7px 9px;padding:13px clamp(14px,2vw,28px)!important;background:linear-gradient(110deg,#062b20,#0b3d2c);border-bottom:3px solid #d7ad45}
+#dashboard.admin-mode .admin-brand{display:flex;flex-direction:row;align-items:center;gap:10px;width:auto;padding:0 18px 0 0;margin:0 8px 0 0;border:0;border-right:1px solid #ffffff35;text-align:left}
+#dashboard.admin-mode .admin-brand-mark{width:38px;height:38px;flex:none;font-size:22px}
+#dashboard.admin-mode .admin-brand strong{font-size:16px;white-space:nowrap}
+#dashboard.admin-mode .admin-brand small{display:block;white-space:nowrap;font-size:9px}
+#dashboard.admin-mode .admin-nav-label{display:none!important}
+#dashboard.admin-mode .admin-nav-item{display:inline-flex!important;align-items:center;width:auto;min-height:38px;padding:9px 11px;margin:0;border:1px solid #ffffff20;background:#ffffff0b;border-radius:9px;font-size:12px;white-space:nowrap}
+#dashboard.admin-mode .admin-nav-item:hover,#dashboard.admin-mode .admin-nav-item.active{background:#6d6b25;border-color:#d7ad45;color:#fff8df}
+#dashboard.admin-mode .admin-nav-item span{width:auto;flex:none}
+#dashboard.admin-mode .admin-sidebar-bottom{display:flex;align-items:center;gap:8px;margin:0 0 0 auto;padding:0;border:0;white-space:nowrap}
+#dashboard.admin-mode .admin-sidebar-bottom button{width:auto;margin:0;padding:9px 11px;white-space:nowrap}
+#dashboard.admin-mode .admin-main{padding:24px clamp(16px,2.5vw,34px) 38px}
 @media(max-width:760px){
-  .admin-sidebar{display:flex;padding:10px;gap:7px}
-  .admin-brand{display:flex;flex-wrap:wrap;padding:2px 4px 9px}
-  .admin-brand small{display:inline}
-  .admin-nav-group{width:100%}
-  .admin-nav-item{font-size:11px;padding:8px}
-  .admin-sidebar-bottom{display:flex;width:100%;margin:0;padding:8px 2px 2px}
-}
-@media(max-width:420px){
-  .admin-nav-item{font-size:10px;padding:7px}
+  #dashboard.admin-mode .admin-workspace{margin:-24px -16px!important}
+  #dashboard.admin-mode .admin-sidebar{justify-content:flex-start;padding:12px!important}
+  #dashboard.admin-mode .admin-brand{width:100%;border:0;border-bottom:1px solid #ffffff30;padding:0 0 10px;margin:0 0 4px}
+  #dashboard.admin-mode .admin-nav-item{white-space:normal;font-size:11px;padding:8px 9px}
+  #dashboard.admin-mode .admin-sidebar-bottom{margin:5px 0 0;width:100%;justify-content:space-between}
 }
 
 </style>
@@ -1696,36 +1641,26 @@ body.halloween-accueil .home-hero{
         <strong>Trésors de nos Villages</strong>
         <small>ESPACE ADMINISTRATION</small>
       </div>
-      <div class="admin-nav-group">
-        <div class="admin-nav-label">PILOTAGE</div>
-        <button class="admin-nav-item active" type="button" onclick="adminShowHome()"><span>▦</span> Tableau de bord</button>
-      </div>
-      <div class="admin-nav-group">
-        <div class="admin-nav-label">GESTION DES AVENTURES</div>
+      <div class="admin-nav-label">PILOTAGE</div>
+      <button class="admin-nav-item active" type="button" onclick="adminShowHome()"><span>▦</span> Tableau de bord</button>
+      <div class="admin-nav-label">GESTION DES AVENTURES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenAdventures()"><span>🧩</span> Aventures & énigmes</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenVillages()"><span>⌖</span> Villages</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenPuzzle()"><span>🧩</span> Carte puzzle</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenLevels()"><span>✦</span> Niveaux par village</button>
-        <button class="admin-nav-item" type="button" onclick="adminComingSoon('Mystères & événements')"><span>✨</span> Mystères & événements</button>
-      </div>
-      <div class="admin-nav-group">
-        <div class="admin-nav-label">GESTION DES MEMBRES</div>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Mystères & événements')"><span>✨</span> Mystères & événements</button>
+      <div class="admin-nav-label">GESTION DES MEMBRES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
-        <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des actualités</button>
-      </div>
-      <div class="admin-nav-group">
-        <div class="admin-nav-label">GESTION COMMERCIALE</div>
-        <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')"><span>€</span> Formules & paiements</button>
-      </div>
-      <div class="admin-nav-group">
-        <div class="admin-nav-label">SUIVI DU SITE</div>
+      <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des actualités</button>
+      <div class="admin-nav-label">GESTION COMMERCIALE</div>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')"><span>€</span> Formules & paiements</button>
+      <div class="admin-nav-label">SUIVI DU SITE</div>
       <button class="admin-nav-item" type="button" onclick="adminShowAnalytics()"><span>▥</span> Statistiques</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenSiteStatus()"><span>⚙</span> Statut du site</button>
-        <button class="admin-nav-item" type="button" onclick="adminComingSoon('Récompenses & collections')"><span>🏆</span> Récompenses & collections</button>
-      </div>
+      <button class="admin-nav-item" type="button" onclick="adminComingSoon('Récompenses & collections')"><span>🏆</span> Récompenses & collections</button>
       <div class="admin-sidebar-bottom">
         <span class="admin-online-dot"></span> Espace sécurisé
         <button type="button" onclick="returnHome()">↩ Retour au site</button>
@@ -4182,6 +4117,9 @@ async function validatePlayerGps(adventureId, stepId) {
 }
 
 function showDashSection(id){
+  // En administration, le menu explorateur latéral est masqué et la navigation admin passe en haut.
+  const dashboard = document.getElementById("dashboard");
+  if(dashboard) dashboard.classList.toggle("admin-mode", id === "dash-admin-info");
   // L'espace administration doit toujours s'afficher pendant la vérification
   // des droits : auparavant, le return ci-dessous laissait une page vide.
   if(id === "dash-admin-info" && !adminAccessGranted){
