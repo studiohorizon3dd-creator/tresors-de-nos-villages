@@ -1691,6 +1691,11 @@ body.halloween-accueil .home-hero{
 #dashboard.admin-mode .member-notifications-float{display:none}
 @media(max-width:600px){.member-notifications-float{right:15px;bottom:78px;width:50px;height:50px}}
 
+/* Navigation unifiée du centre de communication */
+.communication-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:10px;border:1px solid #e5d3a4;border-radius:14px;background:#fffaf0}
+.communication-tab{border:1px solid #ddcfad;border-radius:10px;background:#fff;color:#294735;padding:10px 16px;font-weight:700;cursor:pointer}
+.communication-tab:hover{border-color:#c99b2e;background:#fff7df}
+.communication-tab.active{background:#0d4a30;color:#fff;border-color:#d7ad45;box-shadow:0 2px 8px #173b291c}
 /* Messagerie personnelle et administration */
 .mailbox-unread-badge{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 6px;margin-left:5px;border-radius:20px;background:#d7ad45;color:#173b29;font:700 12px Arial,sans-serif}
 .mailbox-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px 28px;border:1px solid #d7ad45;border-radius:18px;background:linear-gradient(120deg,#062c20,#1d6242);color:#fff5d2}
@@ -2694,8 +2699,7 @@ body.halloween-accueil .home-hero{
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
-      <button class="admin-nav-item" type="button" onclick="adminOpenMailboxAdmin()"><span>📬</span> Messagerie des membres</button>
-      <button class="admin-nav-item" type="button" onclick="adminOpenSupport()"><span>✉</span> Support des joueurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenCommunication()"><span>✉</span> Centre de communication</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des actualités</button>
       <div class="admin-nav-label">GESTION COMMERCIALE</div>
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')"><span>€</span> Formules & paiements</button>
@@ -2716,6 +2720,11 @@ body.halloween-accueil .home-hero{
       </header>
 
       <div id="admin-mailbox-view" class="admin-subview" hidden>
+        <div class="communication-tabs" role="tablist" aria-label="Centre de communication">
+          <button type="button" onclick="adminOpenSupport()" class="communication-tab">🎧 Support</button>
+          <button type="button" onclick="adminOpenMailboxAdmin()" class="communication-tab active">✉ Messages membres</button>
+          <button type="button" onclick="adminOpenNotificationsAdmin()" class="communication-tab">🔔 Notifications</button>
+        </div>
         <div class="mailbox-admin-intro"><h3>📨 Messagerie des membres</h3><p>Envoie une information ou un message privé directement dans la boîte aux lettres des membres.</p></div>
         <div class="mailbox-admin-grid">
           <form id="admin-mailbox-form" class="mailbox-compose-card">
@@ -3959,6 +3968,11 @@ body.halloween-accueil .home-hero{
       </div>
 
       <div id="admin-support-view" class="admin-subview" hidden>
+        <div class="communication-tabs" role="tablist" aria-label="Centre de communication">
+          <button type="button" onclick="adminOpenSupport()" class="communication-tab active">🎧 Support</button>
+          <button type="button" onclick="adminOpenMailboxAdmin()" class="communication-tab">✉ Messages membres</button>
+          <button type="button" onclick="adminOpenNotificationsAdmin()" class="communication-tab">🔔 Notifications</button>
+        </div>
         <div class="admin-section-heading"><div><h3>Demandes d'aide des joueurs</h3><p>Répondre aux joueurs et suivre les demandes</p></div></div>
         <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
         <div id="admin-support-area"><div id="admin-support-list"></div></div>
@@ -4382,19 +4396,19 @@ const adminSetView = window.adminSetView = function(view, title) {
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenSupport":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenMailboxAdmin":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenCommunication":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenCommunication":"adminComingSoon"));
   if(active) active.classList.add("active");
 };
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
 function adminShowAnalytics(){adminSetView("admin-analytics-view","Statistiques");window.loadSiteAnalytics?.();}
 async function adminOpenSupport(){
-  adminSetView("admin-support-view","Support des joueurs");
+  adminSetView("admin-support-view","Centre de communication");
   try {
     await window.openAdminPanel?.();
     // openAdminPanel vérifie les droits et charge les demandes.
     // On réaffiche ensuite la rubrique Support, car la vérification ramène au tableau de bord.
     if (window.adminAccessGranted !== false) {
-      adminSetView("admin-support-view","Support des joueurs");
+      adminSetView("admin-support-view","Centre de communication");
     }
   } catch (error) {
     const status = document.getElementById("admin-panel-status");
@@ -6803,7 +6817,7 @@ window.deleteMailboxMessage = async function(id) {
   catch (error) { alert(error.message || "Impossible de supprimer ce message."); }
 };
 window.adminOpenMailboxAdmin = async function() {
-  adminSetView("admin-mailbox-view", "Messagerie des membres");
+  adminSetView("admin-mailbox-view", "Centre de communication");
   const form = document.getElementById("admin-mailbox-form");
   const audience = document.getElementById("admin-mailbox-audience");
   const memberWrap = document.getElementById("admin-mailbox-member-wrap");
@@ -6839,6 +6853,17 @@ window.adminOpenMailboxAdmin = async function() {
     if (memberSelect) memberSelect.innerHTML = '<option value="">Sélectionner un membre…</option>' + (data.recipients || []).map(user => `<option value="${mailboxEscape(user.user_id)}">${mailboxEscape(user.name || "Membre")} — ${mailboxEscape(user.email)}${user.is_tester ? " · Testeur" : ""}</option>`).join("");
   } catch (error) { if (memberSelect) memberSelect.innerHTML = '<option value="">Liste indisponible</option>'; status.textContent = error.message; }
   await window.loadAdminMailboxHistory();
+};
+window.adminOpenCommunication = function() {
+  window.adminOpenMailboxAdmin();
+};
+window.adminOpenNotificationsAdmin = async function() {
+  await window.adminOpenMailboxAdmin();
+  const category = document.getElementById("admin-mailbox-category");
+  if (category) category.value = "Notification";
+  const title = document.getElementById("admin-page-title");
+  if (title) title.textContent = "Centre de communication — Notifications";
+  document.getElementById("admin-mailbox-form")?.scrollIntoView({behavior:"smooth",block:"start"});
 };
 window.loadAdminMailboxHistory = async function() {
   const target = document.getElementById("admin-mailbox-history");
