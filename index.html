@@ -1448,6 +1448,27 @@ body.halloween-accueil .home-hero{
   .account-card-clean .login-btn { min-height: 49px; font-size: 16px; }
 }
 
+
+/* Fil d'actualités public sur la première page, accessible sans compte */
+#landing .public-news-showcase{margin:28px clamp(14px,3vw,42px);padding:clamp(22px,3vw,38px);border:1.5px solid #d8b45d;border-radius:26px;background:linear-gradient(145deg,#fffdf5 0%,#f8edcf 100%);box-shadow:0 8px 22px rgba(69,48,15,.10),inset 0 0 0 4px rgba(255,255,255,.55);color:#123b2b}
+#landing .public-news-heading{display:flex;align-items:center;justify-content:center;gap:17px;margin:0 auto 22px;text-align:left}
+#landing .public-news-heading-icon{display:grid;flex:0 0 58px;width:58px;height:58px;place-items:center;border:2px solid #d3a344;border-radius:18px;background:linear-gradient(145deg,#17613e,#052e20);box-shadow:0 3px 8px #0002;font-size:29px}
+#landing .public-news-kicker{margin:0 0 4px;color:#a87920;font-size:11px;font-weight:800;letter-spacing:2px}
+#landing .public-news-heading h2{margin:0 0 5px;color:#073b2b;font:700 clamp(24px,3vw,34px)/1.15 Georgia,serif}
+#landing .public-news-heading p:last-child{margin:0;color:#536454;font-size:14px}
+#landing .public-home-news-status{margin:12px 0;color:#5f604d;text-align:center}
+#landing .public-home-news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+#landing .public-home-news-card{min-width:0;padding:19px;border:1px solid #e0c783;border-radius:18px;background:rgba(255,255,255,.76);box-shadow:0 4px 12px #5a45151a}
+#landing .public-home-news-card .news-category{display:inline-block;margin:0 0 10px;padding:5px 10px;border-radius:20px;background:#e9d69d;color:#594219;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+#landing .public-home-news-card h3{margin:0 0 9px;color:#0b3d2b;font:700 19px/1.25 Georgia,serif}
+#landing .public-home-news-card p:last-child{margin:0;color:#39483c;font-size:14px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+#landing .public-home-news-more{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+#landing .public-home-news-more[hidden],#landing .public-home-news-toggle[hidden]{display:none!important}
+#landing .public-home-news-toggle{display:block;margin:20px auto 0;padding:11px 22px;border:1px solid #c79a3d;border-radius:24px;background:linear-gradient(120deg,#073322,#17613e);color:#fff5d2;font-weight:700;cursor:pointer}
+#landing .public-home-news-toggle:hover{filter:brightness(1.08)}
+@media(max-width:800px){#landing .public-home-news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){#landing .public-news-showcase{margin:18px 10px;padding:19px 13px;border-radius:19px}#landing .public-news-heading{justify-content:flex-start;gap:12px}#landing .public-news-heading-icon{flex-basis:46px;width:46px;height:46px;font-size:23px}#landing .public-news-heading h2{font-size:23px}#landing .public-news-heading p:last-child{font-size:12px;line-height:1.4}#landing .public-home-news-grid,#landing .public-home-news-more{grid-template-columns:1fr}#landing .public-home-news-card{padding:16px}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1569,6 +1590,24 @@ body.halloween-accueil .home-hero{
     loading="lazy"
     decoding="async">
 </section>
+
+<section class="public-news-showcase" id="public-news-home" aria-labelledby="public-news-home-title">
+  <div class="public-news-heading">
+    <span class="public-news-heading-icon" aria-hidden="true">📰</span>
+    <div>
+      <p class="public-news-kicker">RESTEZ INFORMÉS</p>
+      <h2 id="public-news-home-title">Les actualités de Trésors de nos Villages</h2>
+      <p>Les nouvelles du projet, les préparatifs et les prochaines aventures.</p>
+    </div>
+  </div>
+  <p id="public-home-news-status" class="public-home-news-status" role="status" aria-live="polite">Chargement des actualités…</p>
+  <div id="public-home-news-list" class="public-home-news-grid" aria-live="polite"></div>
+  <div id="public-home-news-more" class="public-home-news-more" hidden></div>
+  <button id="public-home-news-toggle" class="public-home-news-toggle" type="button" aria-expanded="false" hidden>
+    Voir toutes les actualités <span aria-hidden="true">↓</span>
+  </button>
+</section>
+
     <section class="section" id="villages-public">
       <h2 class="section-title">Des aventures au cœur de nos villages</h2>
       <p class="section-intro">Le projet se construit avec les communes pour proposer des parcours de découverte et mettre en valeur le patrimoine local. Les villages et aventures disponibles seront annoncés ici au fur et à mesure de leur confirmation.</p>
@@ -4611,10 +4650,49 @@ window.adminLoadNews=adminLoadNews;
 document.getElementById('admin-news-form')?.addEventListener('submit',async event=>{event.preventDefault();const status=document.getElementById('admin-news-status'),id=document.getElementById('admin-news-id').value;const payload={title:document.getElementById('admin-news-title').value,category:document.getElementById('admin-news-category').value,body:document.getElementById('admin-news-body').value,is_published:document.getElementById('admin-news-publish').checked};try{await adminApi(id?`/api/admin/news/${encodeURIComponent(id)}`:'/api/admin/news',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});adminNewsReset();status.textContent='Actualité enregistrée.';await adminLoadNews();}catch(e){status.textContent=e.message||'Impossible d’enregistrer cette actualité.';}});
 
 window.loadPublicNews=async function(){
- const status=document.getElementById('public-news-status'),list=document.getElementById('public-news-list');if(!status||!list)return;status.textContent='Chargement des actualités…';list.replaceChildren();
- try{const response=await fetch(`${API_BASE}/api/news`);const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Impossible de charger les actualités.');const items=Array.isArray(data.news)?data.news:[];if(!items.length){status.textContent='Aucune actualité pour le moment.';return;}for(const item of items){const card=document.createElement('article');card.className='feature';card.style.margin='18px 0';const eyebrow=document.createElement('p');eyebrow.className='eyebrow';eyebrow.textContent=item.category||'Actualité';const title=document.createElement('h3');title.textContent=item.title;const body=document.createElement('p');body.style.whiteSpace='pre-wrap';body.textContent=item.body;card.append(eyebrow,title,body);list.append(card);}status.textContent=`${items.length} actualité(s).`;
- }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
+ const statusTargets=['public-home-news-status','public-news-status'].map(id=>document.getElementById(id)).filter(Boolean);
+ const homeList=document.getElementById('public-home-news-list');
+ const homeMore=document.getElementById('public-home-news-more');
+ const toggle=document.getElementById('public-home-news-toggle');
+ const dashList=document.getElementById('public-news-list');
+ statusTargets.forEach(el=>el.textContent='Chargement des actualités…');
+ [homeList,homeMore,dashList].filter(Boolean).forEach(el=>el.replaceChildren());
+ if(toggle){toggle.hidden=true;toggle.setAttribute('aria-expanded','false');}
+ try{
+   const response=await fetch(`${API_BASE}/api/news`);
+   const data=await response.json().catch(()=>({}));
+   if(!response.ok)throw new Error(data.error||'Impossible de charger les actualités.');
+   const items=Array.isArray(data.news)?data.news:[];
+   if(!items.length){statusTargets.forEach(el=>el.textContent='Aucune actualité pour le moment.');return;}
+   const makeCard=(item,home)=>{
+     const card=document.createElement('article');card.className=home?'public-home-news-card':'feature';
+     if(!home)card.style.margin='18px 0';
+     const eyebrow=document.createElement('p');eyebrow.className=home?'news-category':'eyebrow';eyebrow.textContent=item.category||'Actualité';
+     const title=document.createElement('h3');title.textContent=item.title||'Actualité';
+     const body=document.createElement('p');body.textContent=item.body||'';if(!home)body.style.whiteSpace='pre-wrap';
+     card.append(eyebrow,title,body);return card;
+   };
+   items.slice(0,3).forEach(item=>{
+     if(homeList)homeList.append(makeCard(item,true));
+     if(dashList)dashList.append(makeCard(item,false));
+   });
+   const older=items.slice(3);
+   older.forEach(item=>{if(homeMore)homeMore.append(makeCard(item,true));});
+   if(toggle&&older.length){
+     toggle.hidden=false;
+     toggle.addEventListener('click',()=>{
+       const expanded=toggle.getAttribute('aria-expanded')==='true';
+       toggle.setAttribute('aria-expanded',expanded?'false':'true');
+       homeMore.hidden=expanded;
+       toggle.innerHTML=expanded?'Voir toutes les actualités <span aria-hidden="true">↓</span>':'Réduire les actualités <span aria-hidden="true">↑</span>';
+     });
+   }
+   statusTargets.forEach(el=>el.textContent=`${items.length} actualité(s) publiée(s).`);
+ }catch(e){statusTargets.forEach(el=>el.textContent=e.message||'Impossible de charger les actualités.');}
 };
+
+// Charge les actualités publiées sur l'accueil public, sans connexion.
+window.loadPublicNews();
 
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
