@@ -1562,7 +1562,7 @@ body.halloween-accueil .home-hero{
           @media(max-width:600px){.puzzle-admin-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.puzzle-admin-board{grid-template-columns:repeat(2,minmax(0,1fr))}.puzzle-admin-form{grid-template-columns:1fr}.puzzle-admin-hero h2{font-size:22px}.puzzle-admin-hero-mark{font-size:36px}}
         
 /* Accueil public — reproduction fidèle de la maquette touristique premium */
-#landing{display:block!important;min-height:100vh;background:#f8f1df;color:#102e24}
+#landing{display:block;min-height:100vh;background:#f8f1df;color:#102e24}
 #landing>.content{margin:0!important;width:100%!important;max-width:none!important;min-height:100vh;background:#fbf4e5}
 #landing .premium-topnav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:8px clamp(18px,3vw,42px);background:linear-gradient(100deg,#03291e,#0b3b2c 55%,#062b20);border-bottom:1px solid #c99d3c;color:#fff4d4;position:relative;z-index:2}
 #landing .premium-logo{display:flex;align-items:center;gap:8px;min-width:235px;color:#ffedb7;text-decoration:none;font-family:Georgia,serif;font-size:22px;font-weight:bold;line-height:.94;text-shadow:0 2px 3px #0008}
@@ -1690,6 +1690,11 @@ body.halloween-accueil .home-hero{
 #landing .premium-section-heading p{color:#423a2b !important}
 #landing .premium-feature-strip strong{color:#173529 !important}
 #landing .premium-feature-strip span{color:#94701e !important}
+
+
+/* Ne pas afficher le menu membre sur l'accueil public.
+   Le script showDashboard() masque l'accueil lors de la connexion. */
+#dashboard{display:none}
 
 </style>
         <div class="puzzle-admin-hero"><div><h2>🧩 Carte Puzzle</h2><p>Gérez les pièces de la carte et programmez leurs révélations.</p></div><div class="puzzle-admin-hero-mark">🏡</div></div>
