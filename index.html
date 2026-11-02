@@ -15,13 +15,13 @@ button,input{font:inherit}
 button{cursor:pointer}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #d7ad45;outline-offset:3px}
 .layout{min-height:100vh}
-.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:linear-gradient(160deg,#05271d,#0a3b2a);color:#fff0b5;padding:24px 16px;display:flex;flex-direction:column;z-index:5}
+.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:linear-gradient(160deg,#05271d,#0a3b2a);color:#fff0b5;padding:24px 16px;display:flex;flex-direction:column;z-index:5;overflow-y:auto}
 .brand-mark{text-align:center;font-size:52px;line-height:1.1;color:var(--gold)}
 .brand-name{text-align:center;font-size:27px;font-weight:bold;line-height:1.05;margin:8px 0 30px}
 .nav-btn{display:block;width:100%;border:0;border-radius:12px;background:transparent;color:#fff4cf;text-align:left;padding:14px 15px;margin:4px 0;font-size:17px}
 .nav-btn:hover,.nav-btn.active{background:#656321}
 /* Menu latéral organisé en catégories repliables */
-.nav-accordion{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:7px;}
+.nav-accordion{display:flex;flex:1;min-height:0;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:7px;overflow-y:auto;}
 .nav-category{border-bottom:1px solid rgba(255,244,207,.18);padding:2px 0 7px;}
 .nav-category>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-radius:10px;color:#ffe49b;font-weight:700;font-size:14px;letter-spacing:1px;user-select:none;}
 .nav-category>summary::-webkit-details-marker{display:none;}
@@ -128,7 +128,7 @@ h1{font-size:clamp(34px,4vw,60px);line-height:1.02;margin:0 0 18px}
 .badge-card span{font-size:32px;display:block}
 .hidden{display:none!important}
 footer{text-align:center;padding:22px;color:#687263;font-size:13px}
-@media(max-width:800px){.sidebar{position:relative;width:100%;height:auto;padding:12px;display:block}.brand-mark{font-size:35px}.brand-name{font-size:22px;margin:6px 0 12px}.nav-list{display:flex;flex-wrap:wrap;justify-content:center}.nav-btn{width:auto;padding:10px 12px;font-size:14px}.sidebar-note{display:none}.content{margin-left:0}.hero{min-height:330px;padding:22px}.hero-copy{padding:24px}.feature-grid{grid-template-columns:1fr}.feature{padding:22px}.dash-hero{min-height:220px;padding:22px}.progress-card{margin:-18px 16px 0}.dash-section{padding:24px 16px}.riddle-list{grid-template-columns:1fr}}
+@media(max-width:800px){.sidebar{position:relative;width:100%;height:auto;padding:12px;display:block;overflow:visible}.nav-accordion{overflow:visible;max-height:none}.brand-mark{font-size:35px}.brand-name{font-size:22px;margin:6px 0 12px}.nav-list{display:flex;flex-wrap:wrap;justify-content:center}.nav-btn{width:auto;padding:10px 12px;font-size:14px}.sidebar-note{display:none}.content{margin-left:0}.hero{min-height:330px;padding:22px}.hero-copy{padding:24px}.feature-grid{grid-template-columns:1fr}.feature{padding:22px}.dash-hero{min-height:220px;padding:22px}.progress-card{margin:-18px 16px 0}.dash-section{padding:24px 16px}.riddle-list{grid-template-columns:1fr}}
 
 .help-item { padding: 12px 14px; margin: 10px 0; background: #f7f4e9; border: 1px solid #e6e1d3; border-radius: 10px; }
 .help-item summary { cursor: pointer; font-weight: 700; color: #234b35; }
@@ -987,28 +987,32 @@ body.halloween-accueil .home-hero{
   <aside class="sidebar">
     <div class="brand-mark">✥</div><div class="brand-name">Trésors<br>de nos Villages</div>
     <nav class="nav-list nav-accordion" aria-label="Menu explorateur">
-      <details class="nav-category"><summary>EXPLORER <span class="nav-arrow">⌄</span></summary>
+      <details class="nav-category" open><summary>EXPLORER <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
           <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
           <button class="nav-btn" onclick="showDashSection('dash-puzzle-map')">🧩 &nbsp; Carte aux pièces mystères</button>
         </div>
       </details>
-      <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
+      <details class="nav-category" open><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
-          <button class="nav-btn" onclick="showDashSection('dash-adventures')">▤ &nbsp; Mes aventures</button>
+          <button class="nav-btn" onclick="showDashSection('dash-adventures')">🧭 &nbsp; Mes aventures</button>
+          <button class="nav-btn" onclick="showDashSection('dash-badges')">🏅 &nbsp; Mes badges</button>
+          <button class="nav-btn" onclick="showDashSection('dash-stars')">⭐ &nbsp; Mes étoiles</button>
+          <button class="nav-btn" onclick="showDashSection('dash-profile');setTimeout(()=>document.getElementById('passport-feature')?.scrollIntoView({behavior:'smooth',block:'center'}),120)">📕 &nbsp; Mon passeport</button>
           <button class="nav-btn" onclick="showDashSection('dash-formulas')">♧ &nbsp; Mes formules</button>
           <button class="nav-btn" onclick="showDashSection('dash-my-puzzle-progress')">🗺️ &nbsp; Ma progression sur la carte</button>
         </div>
       </details>
-      <details class="nav-category"><summary>COMMUNAUTÉ <span class="nav-arrow">⌄</span></summary>
+      <details class="nav-category" open><summary>COMMUNAUTÉ <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
+          <button class="nav-btn" onclick="showDashSection('dash-testers')">🧪 &nbsp; Devenir testeur</button>
           <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
           <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
         </div>
       </details>
-      <details class="nav-category"><summary>INFORMATIONS <span class="nav-arrow">⌄</span></summary>
+      <details class="nav-category" open><summary>INFORMATIONS <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
           <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
@@ -1017,7 +1021,7 @@ body.halloween-accueil .home-hero{
         </div>
       </details>
       <div class="nav-bottom-links">
-        <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" hidden>⚙ &nbsp; Administration</button>
+        <button class="nav-btn" id="admin-nav-button" onclick="showDashSection('dash-admin-info')" title="L’accès est vérifié par le serveur">⚙ &nbsp; Administration</button>
         <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
       </div>
     </nav>
@@ -3880,10 +3884,19 @@ function returnHome(){
 let adminAccessGranted = false;
 window.setAdminAccessGranted = function(value){
   adminAccessGranted = value === true;
+  // Le lien reste visible pour éviter de faire disparaître l'administration
+  // si la vérification automatique échoue temporairement.
+  // L'accès réel reste strictement contrôlé par /api/admin/me côté serveur.
   const adminNav = document.getElementById("admin-nav-button");
   const testerNav = document.getElementById("tester-space-nav");
-  if(adminNav) adminNav.hidden = !adminAccessGranted;
+  if(adminNav) {
+    adminNav.hidden = false;
+    adminNav.setAttribute("aria-label", adminAccessGranted
+      ? "Ouvrir l’administration"
+      : "Administration — accès vérifié lors de l’ouverture");
+  }
   if(adminAccessGranted && testerNav) testerNav.hidden = false;
+  window.adminAccessGranted = adminAccessGranted;
 };
 document.addEventListener("DOMContentLoaded", function(){
   const form = document.getElementById("town-contact-form");
