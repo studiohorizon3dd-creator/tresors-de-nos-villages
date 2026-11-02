@@ -454,12 +454,17 @@ body.halloween-accueil .home-hero{
 @media(max-width:850px){.explorer-profile-grid{grid-template-columns:1fr}.avatar-customizer-layout{grid-template-columns:1fr 220px}.profile-identity-card{min-height:150px}}
 @media(max-width:600px){.explorer-profile-heading{padding:14px}.profile-identity-card{align-items:flex-start;gap:11px}.profile-avatar-frame{width:100px;height:100px;flex-basis:100px}.profile-identity-copy h3{font-size:19px}.profile-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-passport-stamps{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.avatar-customizer-layout{grid-template-columns:1fr}.avatar-type-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.avatar-preview-panel img{width:180px}.avatar-style-fields{grid-template-columns:1fr}}
 
-/* ===== STATUT DU SITE ===== */
-.site-status-banner{display:none;margin:14px 0 18px;padding:15px 18px;border:1px solid #d8b45e;border-radius:14px;background:linear-gradient(110deg,#fff5d8,#fffdf5);color:#173d2c;box-shadow:0 5px 15px #6a4b1712}
-.site-status-banner.is-visible{display:flex;align-items:center;gap:13px}
+/* ===== BANDEAU D’ANNONCE DÉFILANT ===== */
+.site-status-banner{display:none;align-items:center;gap:13px;min-height:58px;margin:14px 0 18px;padding:12px 18px;border:1px solid #d8b45e;border-radius:14px;background:linear-gradient(100deg,#062c20,#174b35);color:#fff5d8;box-shadow:0 5px 15px #062c2025;overflow:hidden}
+.site-status-banner.is-visible{display:flex}
 .site-status-banner .status-symbol{font-size:25px;flex:0 0 auto}
-.site-status-banner strong{display:block;font:700 17px Georgia,serif;margin-bottom:3px}
-.site-status-banner p{margin:0;line-height:1.5}
+.site-status-banner strong{display:block;flex:0 0 auto;font:700 15px Georgia,serif;color:#ffe49b;white-space:nowrap;padding-right:13px;border-right:1px solid #d7ad4580}
+.site-status-ticker{min-width:0;flex:1;overflow:hidden;white-space:nowrap;mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
+.site-status-track{display:flex;width:max-content;align-items:center;animation:siteStatusMarquee 34s linear infinite}
+.site-status-track span{display:block;flex:0 0 auto;padding-right:70px;font:600 15px Georgia,serif;letter-spacing:.2px}
+.site-status-banner:hover .site-status-track{animation-play-state:paused}
+@keyframes siteStatusMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.site-status-track{animation:none;width:auto}.site-status-track span[aria-hidden="true"]{display:none}.site-status-ticker{white-space:normal}}
 .site-status-admin-grid{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(360px,1.4fr);gap:18px}
 .site-status-panel{background:#fffdf7;border:1px solid #e7d6ae;border-radius:16px;padding:17px;box-shadow:0 4px 14px #4b34100b}
 .site-status-options{display:grid;gap:10px}
@@ -529,8 +534,9 @@ body.halloween-accueil .home-hero{
     </header>
 
     <div id="public-site-status-banner" class="site-status-banner" role="status" aria-live="polite">
-      <span class="status-symbol" id="public-site-status-icon">ℹ️</span>
-      <div><strong id="public-site-status-title">Information du site</strong><p id="public-site-status-message"></p></div>
+      <span class="status-symbol" id="public-site-status-icon">✨</span>
+      <strong id="public-site-status-title">Information du site</strong>
+      <div class="site-status-ticker"><div class="site-status-track"><span id="public-site-status-message"></span><span id="public-site-status-message-copy" aria-hidden="true"></span></div></div>
     </div>
     <div class="home-promises" aria-label="Les points forts de l'aventure">
       <div class="home-promise"><span>🗺️</span> Des villages à explorer</div>
@@ -643,6 +649,11 @@ body.halloween-accueil .home-hero{
   <div class="content">
     <div id="dash-home">
       <header class="dash-hero"><div><p class="eyebrow" style="color:#ffe49b">Votre carnet d’explorateur</p><h2>Bienvenue dans l’aventure !</h2></div></header>
+      <div id="member-site-status-banner" class="site-status-banner" role="status" aria-live="polite">
+        <span class="status-symbol" id="member-site-status-icon">✨</span>
+        <strong id="member-site-status-title">Information du site</strong>
+        <div class="site-status-ticker"><div class="site-status-track"><span id="member-site-status-message"></span><span id="member-site-status-message-copy" aria-hidden="true"></span></div></div>
+      </div>
       <div class="progress-card"><div class="progress-top"><span>⭐ Votre progression</span><span id="progress-text">0 / 10 étoiles</span></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div></div>
       <section class="tester-home-card" id="tester-home-card" hidden>
         <div class="tester-home-icon">🧪</div>
@@ -1040,7 +1051,6 @@ body.halloween-accueil .home-hero{
       <p>Parlons ensemble de votre commune et imaginons un parcours pour faire découvrir ses richesses.</p>
     </div>
     <form id="town-contact-form">
-      <div aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden"><label for="town-website">Ne pas remplir</label><input id="town-website" name="website" tabindex="-1" autocomplete="off"></div>
       <label for="town-name">Nom de la mairie / commune</label>
       <input id="town-name" type="text" required maxlength="120" placeholder="Ex. : Mairie de ...">
       <label for="town-person">Votre nom et fonction</label>
@@ -1057,10 +1067,7 @@ body.halloween-accueil .home-hero{
       </select>
       <label for="town-message">Votre message</label>
       <textarea id="town-message" rows="5" maxlength="3000" required placeholder="Présentez votre demande…"></textarea>
-      <label for="town-attachment">Pièce jointe (facultatif)</label>
-      <input id="town-attachment" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.doc,.docx" />
-      <small>PDF, image ou document · 5 Mo maximum</small>
-      <button class="primary-btn" type="submit">✉️ &nbsp; Envoyer ma demande</button>
+      <button class="primary-btn" type="submit">✉️ &nbsp; Préparer mon message</button>
       <p class="status" id="town-contact-status" role="status" aria-live="polite">Le formulaire sera relié à l’adresse de contact du projet dès qu’elle aura été renseignée.</p>
     </form>
   </div>
@@ -1151,7 +1158,6 @@ body.halloween-accueil .home-hero{
         <div class="admin-section-heading"><div><h3>Accès rapides</h3><p>Les outils principaux de votre administration</p></div></div>
         <div class="admin-shortcut-grid">
           <button type="button" class="admin-shortcut" onclick="adminOpenSupport()"><span class="admin-shortcut-icon">✉</span><span><strong>Support des joueurs</strong><small>Lire et traiter les demandes d'aide</small></span><b>→</b></button>
-          <button type="button" class="admin-shortcut" onclick="adminOpenPartnerRequests()"><span class="admin-shortcut-icon">🏛️</span><span><strong>Demandes des partenaires</strong><small>Mairies, rendez-vous et documents reçus</small></span><b>→</b></button>
           <button type="button" class="admin-shortcut" onclick="adminOpenAdventures()"><span class="admin-shortcut-icon">🧩</span><span><strong>Aventures & énigmes</strong><small>Accéder à la gestion des parcours</small></span><b>→</b></button>
           <button type="button" class="admin-shortcut" onclick="adminShowAnalytics()"><span class="admin-shortcut-icon">▥</span><span><strong>Statistiques détaillées</strong><small>Consulter les visites récentes</small></span><b>→</b></button>
           <button type="button" class="admin-shortcut" onclick="adminOpenPlayers()"><span class="admin-shortcut-icon">♙</span><span><strong>Joueurs & administrateurs</strong><small>Consulter les profils des explorateurs</small></span><b>→</b></button>
@@ -1461,8 +1467,8 @@ body.halloween-accueil .home-hero{
               </div>
               <div class="site-status-panel" style="padding:12px">
                 <strong style="font-family:Georgia,serif">🔔 Options d’affichage</strong>
-                <label class="site-status-check"><input type="checkbox" id="site-status-banner-enabled" checked> Afficher le bandeau sur la page d’accueil</label>
-                <label class="site-status-check"><input type="checkbox" id="site-status-notify-members"> Afficher aussi l’information aux membres connectés</label>
+                <label class="site-status-check"><input type="checkbox" id="site-status-banner-enabled" checked> Afficher le bandeau sur l’accueil public</label>
+                <label class="site-status-check"><input type="checkbox" id="site-status-notify-members"> Afficher aussi le bandeau dans l’espace joueur</label>
               </div>
             </div>
             <p class="site-status-help">La notification aux membres est une information affichée dans le site ; elle n’envoie pas d’e-mail ni de notification push. « Mise à jour » laisse les pages accessibles. Les autres statuts affichent également une information, sans bloquer automatiquement l’accès.</p>
@@ -1546,11 +1552,6 @@ body.halloween-accueil .home-hero{
         <div class="admin-section-heading"><div><h3>Demandes d'aide des joueurs</h3><p>Répondre aux joueurs et suivre les demandes</p></div></div>
         <p class="status" id="admin-panel-status" role="status" aria-live="polite">Vérification des droits administrateur…</p>
         <div id="admin-support-area"><div id="admin-support-list"></div></div>
-      </div>
-      <div id="admin-partner-requests-view" class="admin-subview" hidden>
-        <div class="admin-section-heading"><div><h3>Demandes des mairies & partenaires</h3><p>Demandes reçues depuis le formulaire public</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadPartnerRequests()">↻ Actualiser</button></div>
-        <p id="admin-partner-requests-status" class="status" role="status" aria-live="polite">Chargement…</p>
-        <div id="admin-partner-requests-list"></div>
       </div>
       <div id="admin-news-view" class="admin-subview" hidden>
         <div class="admin-section-heading"><div><h3>Gestion des actualités</h3><p>Rédiger, modifier, publier ou archiver les annonces.</p></div></div>
@@ -1965,7 +1966,7 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 function adminSetView(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-partner-requests-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
@@ -2861,18 +2862,26 @@ window.saveSiteStatus=async function(){
 async function loadPublicSiteStatus(){
   try{
     const response=await fetch(`${API_BASE}/api/site-status`,{cache:"no-store"});
-    if(!response.ok)return;
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
     const data=await response.json();
-    const banner=document.getElementById("public-site-status-banner");
-    if(!banner)return;
-    const show=data.banner_enabled===true && data.status!=="online";
-    banner.classList.toggle("is-visible",show);
-    if(show){
-      const meta=SITE_STATUS_META[data.status]||SITE_STATUS_META.online;
-      document.getElementById("public-site-status-icon").textContent=meta.icon;
-      document.getElementById("public-site-status-title").textContent=meta.title;
-      document.getElementById("public-site-status-message").textContent=data.message||meta.message;
-    }
+    const meta=SITE_STATUS_META[data.status]||SITE_STATUS_META.online;
+    const message=String(data.message||meta.message).replace(/\s+/g," ").trim();
+    const updateBanner=(prefix,enabled)=>{
+      const banner=document.getElementById(`${prefix}-site-status-banner`);
+      if(!banner)return;
+      banner.classList.toggle("is-visible",enabled===true);
+      if(!enabled)return;
+      const icon=document.getElementById(`${prefix}-site-status-icon`);
+      const title=document.getElementById(`${prefix}-site-status-title`);
+      const line=document.getElementById(`${prefix}-site-status-message`);
+      const copy=document.getElementById(`${prefix}-site-status-message-copy`);
+      if(icon)icon.textContent=meta.icon;
+      if(title)title.textContent=meta.title;
+      if(line)line.textContent=message;
+      if(copy)copy.textContent=message;
+    };
+    updateBanner("public",data.banner_enabled===true);
+    updateBanner("member",data.notify_members===true);
   }catch(error){console.warn("Statut public indisponible :",error.message);}
 }
 window.loadPublicSiteStatus=loadPublicSiteStatus;
@@ -2948,33 +2957,6 @@ window.loadPublicNews=async function(){
  }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
 };
 
-async function adminOpenPartnerRequests(){
-  adminSetView("admin-partner-requests-view","Demandes des partenaires");
-  await adminLoadPartnerRequests();
-}
-window.adminLoadPartnerRequests=async function(){
-  const status=document.getElementById("admin-partner-requests-status"),list=document.getElementById("admin-partner-requests-list");
-  if(!status||!list)return; status.textContent="Chargement des demandes…"; list.replaceChildren();
-  try{
-    const data=await adminApi("/api/admin/partner-requests"); const items=Array.isArray(data.requests)?data.requests:[];
-    if(!items.length){status.textContent="Aucune demande reçue pour le moment.";return;}
-    status.textContent=`${items.length} demande(s) enregistrée(s).`;
-    for(const item of items){
-      const card=document.createElement("article");card.className="admin-visual-card";card.style.cssText="margin:12px 0;padding:18px";
-      const title=document.createElement("h3");title.textContent=item.subject+" — "+item.municipality;
-      const meta=document.createElement("p");meta.textContent=`${item.contact_name||"Contact non précisé"} · ${item.contact_email} · ${new Date(item.created_at).toLocaleString("fr-FR")}`;
-      const body=document.createElement("p");body.style.whiteSpace="pre-wrap";body.textContent=item.message;
-      const state=document.createElement("select");["en_attente","en_cours","repondu","ferme"].forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=({en_attente:"En attente",en_cours:"En cours",repondu:"Répondu",ferme:"Fermé"})[v];state.append(o)});state.value=item.status;
-      const reply=document.createElement("textarea");reply.rows=3;reply.maxLength=5000;reply.placeholder="Réponse à la mairie / au partenaire…";reply.style.cssText="display:block;width:100%;padding:10px;margin:10px 0";
-      const actions=document.createElement("div");actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap;align-items:center";
-      if(item.attachment_name){const file=document.createElement("button");file.type="button";file.className="admin-secondary-btn";file.textContent="📎 Télécharger : "+item.attachment_name;file.addEventListener("click",async()=>{file.disabled=true;try{const token=await getAdminBearerToken();const response=await fetch(`${API_BASE}/api/admin/partner-requests/${encodeURIComponent(item.id)}/attachment`,{headers:{Authorization:`Bearer ${token}`}});if(!response.ok)throw new Error("Téléchargement impossible.");const blob=await response.blob();const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=item.attachment_name;a.click();URL.revokeObjectURL(url)}catch(e){status.textContent=e.message||"Téléchargement impossible."}finally{file.disabled=false}});actions.append(file)}
-      const save=document.createElement("button");save.className="admin-secondary-btn";save.type="button";save.textContent="Enregistrer le statut";save.addEventListener("click",async()=>{save.disabled=true;try{await adminApi(`/api/admin/partner-requests/${encodeURIComponent(item.id)}`,{method:"PATCH",body:JSON.stringify({status:state.value})});status.textContent="Statut enregistré.";await adminLoadPartnerRequests()}catch(e){status.textContent=e.message||"Erreur.";save.disabled=false}});
-      const send=document.createElement("button");send.className="admin-secondary-btn";send.type="button";send.textContent="Envoyer la réponse par e-mail";send.addEventListener("click",async()=>{if(reply.value.trim().length<2){status.textContent="Écris une réponse avant de l’envoyer.";return}send.disabled=true;try{await adminApi(`/api/admin/partner-requests/${encodeURIComponent(item.id)}/reply`,{method:"POST",body:JSON.stringify({message:reply.value.trim()})});status.textContent="Réponse envoyée et enregistrée.";await adminLoadPartnerRequests()}catch(e){status.textContent=e.message||"Envoi impossible.";send.disabled=false}});
-      actions.append(save,send);card.append(title,meta,body,actions,reply);list.append(card);
-    }
-  }catch(e){status.textContent=e.message||"Impossible de charger les demandes."}
-};
-
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
   const supportArea = document.getElementById("admin-support-area");
@@ -3048,18 +3030,26 @@ window.setAdminAccessGranted = function(value){
   if(adminAccessGranted && testerNav) testerNav.hidden = false;
 };
 document.addEventListener("DOMContentLoaded", function(){
-  const form=document.getElementById("town-contact-form"); if(!form)return;
-  form.addEventListener("submit",async function(event){
-    event.preventDefault(); if(!form.reportValidity())return;
-    const status=document.getElementById("town-contact-status"),button=form.querySelector('button[type="submit"]'),file=document.getElementById("town-attachment")?.files?.[0];
-    if(file && file.size>5*1024*1024){status.textContent="Le document dépasse la limite de 5 Mo.";return;}
-    button.disabled=true;status.textContent="Envoi de votre demande…";
-    try{
-      const payload={municipality:document.getElementById("town-name").value.trim(),contact_name:document.getElementById("town-person").value.trim(),contact_email:document.getElementById("town-email").value.trim(),subject:document.getElementById("town-subject").value,message:document.getElementById("town-message").value.trim(),website:document.getElementById("town-website")?.value||""};
-      if(file){payload.attachment={name:file.name,type:file.type||"application/octet-stream",data:await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(",")[1]||"");reader.onerror=reject;reader.readAsDataURL(file)})};}
-      const response=await fetch(`${API_BASE}/api/partner-requests`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||"Impossible d’envoyer la demande.");
-      status.textContent=data.email_sent?"Merci ! Votre demande est enregistrée et une notification a été envoyée à l’équipe du projet.":"Merci ! Votre demande est bien enregistrée. La notification e-mail reste à configurer par l’administration.";form.reset();
-    }catch(error){status.textContent=error.message||"Une erreur est survenue. Réessayez."}finally{button.disabled=false;}
+  const form = document.getElementById("town-contact-form");
+  if(!form) return;
+  form.addEventListener("submit", async function(event){
+    event.preventDefault();
+    const values = [
+      "Contact mairie – Trésors de nos Villages",
+      "Commune : " + document.getElementById("town-name").value.trim(),
+      "Nom et fonction : " + (document.getElementById("town-person").value.trim() || "Non précisé"),
+      "E-mail : " + document.getElementById("town-email").value.trim(),
+      "Objet : " + document.getElementById("town-subject").value,
+      "",
+      document.getElementById("town-message").value.trim()
+    ].join("\\n");
+    const status = document.getElementById("town-contact-status");
+    try {
+      await navigator.clipboard.writeText(values);
+      status.textContent = "Message copié ! Il ne reste qu’à le coller dans un e-mail. L’adresse de contact du projet reste à configurer pour permettre un envoi direct depuis le site.";
+    } catch(error) {
+      status.textContent = "Ton message est prêt. La copie automatique n’a pas fonctionné ; l’adresse de contact du projet reste à configurer pour l’envoi.";
+    }
   });
 });
 
