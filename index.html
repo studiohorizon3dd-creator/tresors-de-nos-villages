@@ -2055,7 +2055,7 @@ body.halloween-accueil .home-hero{
       <details class="nav-category"><summary>INFORMATIONS <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
-          <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
+          <button class="nav-btn" onclick="showDashSection('dash-news')">📔 &nbsp; Journal du projet</button>
           <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
           <button class="nav-btn" onclick="showDashSection('dash-support')">✉ &nbsp; Poser une question</button>
         </div>
@@ -2562,8 +2562,8 @@ body.halloween-accueil .home-hero{
 
   
 <section class="dash-section hidden" id="dash-news">
-  <h3>📰 Actualités</h3>
-  <p>Retrouve ici les nouvelles de Trésors de nos Villages et les prochains parcours à découvrir.</p>
+  <h3>📔 Journal du projet</h3>
+  <p>Retrouve chaque jour les travaux réalisés, les nouveautés, les bugs corrigés et les prochaines étapes du projet.</p>
   <p id="public-news-status" class="status" role="status" aria-live="polite">Chargement des actualités…</p>
   <div id="public-news-list" aria-live="polite"></div>
 </section>
@@ -2702,7 +2702,8 @@ body.halloween-accueil .home-hero{
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenCommunication()"><span>✉</span> Centre de communication</button>
-      <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📰</span> Gestion des actualités</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenNotificationsAdmin()"><span>🔔</span> Envoyer une notification</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📔</span> Journal du projet</button>
       <div class="admin-nav-label">GESTION COMMERCIALE</div>
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')"><span>€</span> Formules & paiements</button>
       <div class="admin-nav-label">SUIVI DU SITE</div>
@@ -3980,12 +3981,13 @@ body.halloween-accueil .home-hero{
         <div id="admin-support-area"><div id="admin-support-list"></div></div>
       </div>
       <div id="admin-news-view" class="admin-subview" hidden>
-        <div class="admin-section-heading"><div><h3>Gestion des actualités</h3><p>Rédiger, modifier, publier ou archiver les annonces.</p></div></div>
+        <div class="admin-section-heading"><div><h3>📔 Journal du projet</h3><p>Publier le bilan de la journée : travaux réalisés, nouveautés, bugs corrigés et prochaines étapes.</p></div></div>
         <p id="admin-news-status" class="status" role="status" aria-live="polite"></p>
+        <div class="mailbox-admin-side" style="margin:12px 0"><strong>💡 Ton rendez-vous du soir</strong><p>Chaque soir, publie un petit point sur les nouveautés, les améliorations, les bugs corrigés et ce qui reste à faire. Les bilans publiés seront visibles dans le Journal du projet.</p></div>
         <form id="admin-news-form" class="feature" style="display:grid;gap:12px">
           <input id="admin-news-id" type="hidden">
           <label>Titre<input id="admin-news-title" maxlength="180" required style="display:block;width:100%;padding:12px"></label>
-          <label>Rubrique<input id="admin-news-category" maxlength="80" value="Actualité" style="display:block;width:100%;padding:12px"></label>
+          <label>Rubrique<input id="admin-news-category" maxlength="80" value="Bilan quotidien" style="display:block;width:100%;padding:12px"></label>
           <label>Texte<textarea id="admin-news-body" maxlength="12000" required rows="9" style="display:block;width:100%;padding:13px;min-height:220px;font:15px/1.6 Arial,sans-serif"></textarea></label>
           <label><input id="admin-news-publish" type="checkbox"> Publier immédiatement</label>
           <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer l'actualité</button><button class="admin-secondary-btn" type="button" onclick="adminNewsReset()">Nouvelle actualité</button></div>
@@ -5459,9 +5461,9 @@ function renderAdminSupportTable(requests, statusEl, list){
   table.append(tbody);wrap.append(table);list.append(wrap);
 }
 
-function adminOpenNews(){adminSetView('admin-news-view','Gestion des actualités');adminLoadNews();}
+function adminOpenNews(){adminSetView('admin-news-view','Journal du projet');adminLoadNews();}
 window.adminOpenNews=adminOpenNews;
-function adminNewsReset(){document.getElementById('admin-news-form')?.reset();document.getElementById('admin-news-id').value='';document.getElementById('admin-news-category').value='Actualité';}
+function adminNewsReset(){document.getElementById('admin-news-form')?.reset();document.getElementById('admin-news-id').value='';document.getElementById('admin-news-category').value='Bilan quotidien';}
 window.adminNewsReset=adminNewsReset;
 async function adminLoadNews(){
   const status=document.getElementById('admin-news-status'),list=document.getElementById('admin-news-list');if(!status||!list)return;
