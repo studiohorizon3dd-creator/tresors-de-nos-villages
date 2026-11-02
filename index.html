@@ -454,12 +454,17 @@ body.halloween-accueil .home-hero{
 @media(max-width:850px){.explorer-profile-grid{grid-template-columns:1fr}.avatar-customizer-layout{grid-template-columns:1fr 220px}.profile-identity-card{min-height:150px}}
 @media(max-width:600px){.explorer-profile-heading{padding:14px}.profile-identity-card{align-items:flex-start;gap:11px}.profile-avatar-frame{width:100px;height:100px;flex-basis:100px}.profile-identity-copy h3{font-size:19px}.profile-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-passport-stamps{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.avatar-customizer-layout{grid-template-columns:1fr}.avatar-type-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.avatar-preview-panel img{width:180px}.avatar-style-fields{grid-template-columns:1fr}}
 
-/* ===== STATUT DU SITE ===== */
-.site-status-banner{display:none;margin:14px 0 18px;padding:15px 18px;border:1px solid #d8b45e;border-radius:14px;background:linear-gradient(110deg,#fff5d8,#fffdf5);color:#173d2c;box-shadow:0 5px 15px #6a4b1712}
-.site-status-banner.is-visible{display:flex;align-items:center;gap:13px}
+/* ===== BANDEAU D’ANNONCE DÉFILANT ===== */
+.site-status-banner{display:none;align-items:center;gap:13px;min-height:58px;margin:14px 0 18px;padding:12px 18px;border:1px solid #d8b45e;border-radius:14px;background:linear-gradient(100deg,#062c20,#174b35);color:#fff5d8;box-shadow:0 5px 15px #062c2025;overflow:hidden}
+.site-status-banner.is-visible{display:flex}
 .site-status-banner .status-symbol{font-size:25px;flex:0 0 auto}
-.site-status-banner strong{display:block;font:700 17px Georgia,serif;margin-bottom:3px}
-.site-status-banner p{margin:0;line-height:1.5;white-space:pre-line}
+.site-status-banner strong{display:block;flex:0 0 auto;font:700 15px Georgia,serif;color:#ffe49b;white-space:nowrap;padding-right:13px;border-right:1px solid #d7ad4580}
+.site-status-ticker{min-width:0;flex:1;overflow:hidden;white-space:nowrap;mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
+.site-status-track{display:flex;width:max-content;align-items:center;animation:siteStatusMarquee 34s linear infinite}
+.site-status-track span{display:block;flex:0 0 auto;padding-right:70px;font:600 15px Georgia,serif;letter-spacing:.2px}
+.site-status-banner:hover .site-status-track{animation-play-state:paused}
+@keyframes siteStatusMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.site-status-track{animation:none;width:auto}.site-status-track span[aria-hidden="true"]{display:none}.site-status-ticker{white-space:normal}}
 .site-status-admin-grid{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(360px,1.4fr);gap:18px}
 .site-status-panel{background:#fffdf7;border:1px solid #e7d6ae;border-radius:16px;padding:17px;box-shadow:0 4px 14px #4b34100b}
 .site-status-options{display:grid;gap:10px}
@@ -529,8 +534,9 @@ body.halloween-accueil .home-hero{
     </header>
 
     <div id="public-site-status-banner" class="site-status-banner" role="status" aria-live="polite">
-      <span class="status-symbol" id="public-site-status-icon">ℹ️</span>
-      <div><strong id="public-site-status-title">Information du site</strong><p id="public-site-status-message"></p></div>
+      <span class="status-symbol" id="public-site-status-icon">✨</span>
+      <strong id="public-site-status-title">Information du site</strong>
+      <div class="site-status-ticker"><div class="site-status-track"><span id="public-site-status-message"></span><span id="public-site-status-message-copy" aria-hidden="true"></span></div></div>
     </div>
     <div class="home-promises" aria-label="Les points forts de l'aventure">
       <div class="home-promise"><span>🗺️</span> Des villages à explorer</div>
@@ -643,6 +649,11 @@ body.halloween-accueil .home-hero{
   <div class="content">
     <div id="dash-home">
       <header class="dash-hero"><div><p class="eyebrow" style="color:#ffe49b">Votre carnet d’explorateur</p><h2>Bienvenue dans l’aventure !</h2></div></header>
+      <div id="member-site-status-banner" class="site-status-banner" role="status" aria-live="polite">
+        <span class="status-symbol" id="member-site-status-icon">✨</span>
+        <strong id="member-site-status-title">Information du site</strong>
+        <div class="site-status-ticker"><div class="site-status-track"><span id="member-site-status-message"></span><span id="member-site-status-message-copy" aria-hidden="true"></span></div></div>
+      </div>
       <div class="progress-card"><div class="progress-top"><span>⭐ Votre progression</span><span id="progress-text">0 / 10 étoiles</span></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div></div>
       <section class="tester-home-card" id="tester-home-card" hidden>
         <div class="tester-home-icon">🧪</div>
@@ -1456,8 +1467,8 @@ body.halloween-accueil .home-hero{
               </div>
               <div class="site-status-panel" style="padding:12px">
                 <strong style="font-family:Georgia,serif">🔔 Options d’affichage</strong>
-                <label class="site-status-check"><input type="checkbox" id="site-status-banner-enabled" checked> Afficher le bandeau sur la page d’accueil</label>
-                <label class="site-status-check"><input type="checkbox" id="site-status-notify-members"> Afficher aussi l’information aux membres connectés</label>
+                <label class="site-status-check"><input type="checkbox" id="site-status-banner-enabled" checked> Afficher le bandeau sur l’accueil public</label>
+                <label class="site-status-check"><input type="checkbox" id="site-status-notify-members"> Afficher aussi le bandeau dans l’espace joueur</label>
               </div>
             </div>
             <p class="site-status-help">La notification aux membres est une information affichée dans le site ; elle n’envoie pas d’e-mail ni de notification push. « Mise à jour » laisse les pages accessibles. Les autres statuts affichent également une information, sans bloquer automatiquement l’accès.</p>
@@ -2851,18 +2862,26 @@ window.saveSiteStatus=async function(){
 async function loadPublicSiteStatus(){
   try{
     const response=await fetch(`${API_BASE}/api/site-status`,{cache:"no-store"});
-    if(!response.ok)return;
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
     const data=await response.json();
-    const banner=document.getElementById("public-site-status-banner");
-    if(!banner)return;
-    const show=data.banner_enabled===true;
-    banner.classList.toggle("is-visible",show);
-    if(show){
-      const meta=SITE_STATUS_META[data.status]||SITE_STATUS_META.online;
-      document.getElementById("public-site-status-icon").textContent=meta.icon;
-      document.getElementById("public-site-status-title").textContent=meta.title;
-      document.getElementById("public-site-status-message").textContent=(data.message||meta.message).replace(/\*\*/g, "");
-    }
+    const meta=SITE_STATUS_META[data.status]||SITE_STATUS_META.online;
+    const message=String(data.message||meta.message).replace(/\s+/g," ").trim();
+    const updateBanner=(prefix,enabled)=>{
+      const banner=document.getElementById(`${prefix}-site-status-banner`);
+      if(!banner)return;
+      banner.classList.toggle("is-visible",enabled===true);
+      if(!enabled)return;
+      const icon=document.getElementById(`${prefix}-site-status-icon`);
+      const title=document.getElementById(`${prefix}-site-status-title`);
+      const line=document.getElementById(`${prefix}-site-status-message`);
+      const copy=document.getElementById(`${prefix}-site-status-message-copy`);
+      if(icon)icon.textContent=meta.icon;
+      if(title)title.textContent=meta.title;
+      if(line)line.textContent=message;
+      if(copy)copy.textContent=message;
+    };
+    updateBanner("public",data.banner_enabled===true);
+    updateBanner("member",data.notify_members===true);
   }catch(error){console.warn("Statut public indisponible :",error.message);}
 }
 window.loadPublicSiteStatus=loadPublicSiteStatus;
