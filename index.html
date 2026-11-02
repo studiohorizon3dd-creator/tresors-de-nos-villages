@@ -823,6 +823,42 @@ body.halloween-accueil .home-hero{
   min-height: 0;
 }
 
+
+/* Correctif de l'espace administration : la barre doit commencer en haut
+   de la page, sans hériter du padding des autres rubriques. */
+#dashboard.admin-mode > .content > #dash-admin-info {
+  display: block !important;
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh !important;
+  transform: none !important;
+}
+#dashboard.admin-mode > .content > #dash-admin-info > .admin-workspace {
+  display: block !important;
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh !important;
+  transform: none !important;
+}
+#dashboard.admin-mode > .content {
+  display: block !important;
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh !important;
+}
+#dashboard.admin-mode > .content > #dash-admin-info .admin-sidebar {
+  position: relative !important;
+  top: 0 !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -4218,7 +4254,12 @@ function showDashSection(id){
   // des droits : auparavant, le return ci-dessous laissait une page vide.
   if(id === "dash-admin-info" && !adminAccessGranted){
     const adminSection = document.getElementById("dash-admin-info");
-    if(adminSection) adminSection.classList.remove("hidden");
+    if(adminSection) {
+      adminSection.classList.remove("hidden");
+      adminSection.style.removeProperty("display");
+      adminSection.scrollTop = 0;
+    }
+    window.scrollTo({top:0,left:0,behavior:"instant"});
     const adminHome = document.getElementById("admin-home-view");
     if(adminHome) adminHome.hidden = false;
     const adminStatus = document.getElementById("admin-panel-status");
