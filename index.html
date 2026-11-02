@@ -5344,7 +5344,7 @@ function adminRenderVillageMap(containerId,kind){
   const mapped=ADMIN_VILLAGES_CACHE.filter(v=>Number.isFinite(Number(v.latitude))&&Number.isFinite(Number(v.longitude))&&v.latitude!==null&&v.longitude!==null);
   const map=L.map(el,{scrollWheelZoom:false}).setView([46.6,2.4],5);
   ADMIN_VILLAGE_MAPS[kind]=map;
-  L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=VOTRE_CLE_CARTO",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
+  L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_50nx_1_e158a5de31a8b70bc999573e",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
   const colors={available:"#238044",pending_confirmation:"#e5a000",in_progress:"#287da7",suspended:"#c63b35",updating:"#8053b8"};
   mapped.forEach(v=>{const marker=L.circleMarker([Number(v.latitude),Number(v.longitude)],{radius:9,color:"#fff",weight:2,fillColor:colors[v.status]||"#496b4e",fillOpacity:1}).addTo(map);marker.bindPopup("<strong>"+String(v.name).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+"</strong><br>"+(ADMIN_VILLAGE_STATUSES[v.status]||v.status));});
   if(mapped.length)map.fitBounds(L.latLngBounds(mapped.map(v=>[Number(v.latitude),Number(v.longitude)])).pad(.2));
