@@ -735,6 +735,66 @@ body.halloween-accueil .home-hero{
   #dashboard.admin-mode .admin-sidebar-bottom{margin:5px 0 0;width:100%;justify-content:space-between}
 }
 
+/* Navigation globale en haut pour l'espace explorateur et l'administration */
+#dashboard:not(.admin-mode) > .sidebar{
+  position:sticky!important;top:0!important;inset:auto!important;width:100%!important;height:auto!important;
+  min-height:70px;padding:9px clamp(12px,2vw,28px)!important;
+  display:flex!important;flex-direction:row!important;align-items:center!important;gap:12px!important;
+  overflow:visible!important;background:linear-gradient(110deg,#062b20,#0b3d2c)!important;
+  border-bottom:3px solid #d7ad45;box-shadow:0 5px 18px #102b1c22;z-index:100!important;
+}
+#dashboard:not(.admin-mode) > .sidebar .brand-mark{font-size:34px;line-height:1;flex:none}
+#dashboard:not(.admin-mode) > .sidebar .brand-name{font-size:17px;line-height:1.08;margin:0 14px 0 0;white-space:nowrap;flex:none;text-align:left}
+#dashboard:not(.admin-mode) > .sidebar .nav-accordion{
+  display:flex!important;flex:1 1 auto!important;min-width:0;min-height:0!important;
+  flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;
+  gap:6px!important;overflow:visible!important;
+}
+#dashboard:not(.admin-mode) > .sidebar .nav-category{position:relative;flex:none;border:0;padding:0}
+#dashboard:not(.admin-mode) > .sidebar .nav-category>summary{
+  min-height:42px;padding:11px 13px;border:1px solid #ffffff25;border-radius:10px;
+  color:#ffe49b;background:#ffffff09;font-size:12px;white-space:nowrap;
+}
+#dashboard:not(.admin-mode) > .sidebar .nav-category>summary:hover,
+#dashboard:not(.admin-mode) > .sidebar .nav-category[open]>summary{background:#174b35;border-color:#d7ad45}
+#dashboard:not(.admin-mode) > .sidebar .nav-arrow{font-size:15px;margin-left:10px}
+#dashboard:not(.admin-mode) > .sidebar .nav-submenu{
+  position:absolute;top:calc(100% + 8px);left:0;z-index:120;min-width:230px;max-width:290px;
+  padding:8px;background:#082f23;border:1px solid #caa54a;border-radius:12px;
+  box-shadow:0 12px 28px #0004;display:flex;flex-direction:column;gap:3px;
+}
+#dashboard:not(.admin-mode) > .sidebar .nav-submenu .nav-btn{
+  display:block!important;width:100%!important;text-align:left;padding:10px 12px!important;
+  margin:0!important;font-size:14px!important;border-radius:8px;white-space:normal;
+}
+#dashboard:not(.admin-mode) > .sidebar .nav-bottom-links{
+  display:flex;align-items:center;gap:5px;margin:0 0 0 auto;padding:0;border:0;flex:none
+}
+#dashboard:not(.admin-mode) > .sidebar .nav-bottom-links .nav-btn{
+  width:auto!important;white-space:nowrap;padding:10px 12px!important;margin:0;font-size:13px
+}
+#dashboard:not(.admin-mode) > .sidebar .sidebar-note{display:none!important}
+#dashboard:not(.admin-mode) > .content{margin-left:0!important;width:100%!important;min-width:0}
+#dashboard.admin-mode > .sidebar{display:none!important}
+#dashboard.admin-mode > .content{margin-left:0!important;width:100%!important}
+#dashboard.admin-mode .admin-workspace{margin:0!important}
+#dashboard.admin-mode .admin-sidebar{position:sticky;top:0;z-index:100}
+@media(max-width:900px){
+  #dashboard:not(.admin-mode) > .sidebar{flex-wrap:wrap;gap:7px!important;padding:8px 10px!important}
+  #dashboard:not(.admin-mode) > .sidebar .brand-name{font-size:15px;margin-right:4px}
+  #dashboard:not(.admin-mode) > .sidebar .nav-accordion{order:3;flex:1 0 100%;overflow-x:auto!important;overflow-y:visible!important;padding:3px 0 5px;scrollbar-width:thin}
+  #dashboard:not(.admin-mode) > .sidebar .nav-category>summary{font-size:11px;padding:9px 10px}
+  #dashboard:not(.admin-mode) > .sidebar .nav-bottom-links{margin-left:auto}
+}
+@media(max-width:560px){
+  #dashboard:not(.admin-mode) > .sidebar .brand-mark{font-size:27px}
+  #dashboard:not(.admin-mode) > .sidebar .brand-name{font-size:13px}
+  #dashboard:not(.admin-mode) > .sidebar .nav-bottom-links .nav-btn{font-size:11px;padding:8px!important}
+  #dashboard:not(.admin-mode) > .sidebar .nav-submenu{position:fixed;top:auto;left:8px;right:8px;min-width:0;max-width:none}
+  #dashboard.admin-mode .admin-sidebar{position:relative;top:auto}
+}
+
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1012,14 +1072,14 @@ body.halloween-accueil .home-hero{
   <aside class="sidebar">
     <div class="brand-mark">✥</div><div class="brand-name">Trésors<br>de nos Villages</div>
     <nav class="nav-list nav-accordion" aria-label="Menu explorateur">
-      <details class="nav-category" open><summary>EXPLORER <span class="nav-arrow">⌄</span></summary>
+      <details class="nav-category"><summary>EXPLORER <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
           <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
           <button class="nav-btn" onclick="showDashSection('dash-puzzle-map')">🧩 &nbsp; Carte aux pièces mystères</button>
         </div>
       </details>
-      <details class="nav-category" open><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
+      <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
           <button class="nav-btn" onclick="showDashSection('dash-adventures')">🧭 &nbsp; Mes aventures</button>
@@ -1030,14 +1090,14 @@ body.halloween-accueil .home-hero{
           <button class="nav-btn" onclick="showDashSection('dash-my-puzzle-progress')">🗺️ &nbsp; Ma progression sur la carte</button>
         </div>
       </details>
-      <details class="nav-category" open><summary>COMMUNAUTÉ <span class="nav-arrow">⌄</span></summary>
+      <details class="nav-category"><summary>COMMUNAUTÉ <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn" onclick="showDashSection('dash-testers')">🧪 &nbsp; Devenir testeur</button>
           <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
           <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
         </div>
       </details>
-      <details class="nav-category" open><summary>INFORMATIONS <span class="nav-arrow">⌄</span></summary>
+      <details class="nav-category"><summary>INFORMATIONS <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
           <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
