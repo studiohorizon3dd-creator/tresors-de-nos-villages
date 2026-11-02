@@ -1198,6 +1198,256 @@ body.halloween-accueil .home-hero{
   .account-card.account-card-illustrated { width: 100% !important; }
 }
 
+
+/* Formulaire Mon compte : panneau CSS propre, sans image de fond */
+.account-area.account-area-clean {
+  display: none;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 18px 48px;
+  background: transparent !important;
+}
+.account-card.account-card-clean {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  min-height: 0;
+  margin: 0 auto;
+  padding: clamp(22px, 4vw, 42px) clamp(20px, 5vw, 54px) 34px;
+  overflow: hidden;
+  border: 2px solid #c99535;
+  border-radius: 26px;
+  outline: 1px solid #f3dfaa;
+  outline-offset: -8px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #fffdf4 0%, transparent 54%),
+    linear-gradient(145deg, #fffaf0 0%, #f8edcf 100%) !important;
+  box-shadow: 0 12px 30px rgba(69, 48, 15, .13), inset 0 0 0 5px rgba(255,255,255,.58);
+  color: #073b2b;
+}
+.account-clean-heading {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 4px 12px;
+  text-align: center;
+}
+.account-clean-emblem {
+  display: grid;
+  flex: 0 0 62px;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  border: 3px solid #d7a63f;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #17633f, #052d20);
+  box-shadow: 0 3px 8px #5d421c44, inset 0 0 0 3px #fff0c8;
+  color: #ffe8a6;
+  font-size: 30px;
+}
+.account-clean-heading h2 {
+  margin: 0 0 8px !important;
+  color: #073b2b;
+  font: 700 clamp(27px, 4vw, 38px)/1.1 Georgia, serif;
+}
+.account-clean-heading p {
+  max-width: 430px;
+  margin: 0 auto !important;
+  color: #315342;
+  font: italic 600 clamp(14px, 2vw, 18px)/1.45 Georgia, serif;
+}
+.account-clean-leaves {
+  position: absolute;
+  top: -17px;
+  right: 0;
+  color: #6d923f;
+  font-size: 24px;
+  letter-spacing: 3px;
+  opacity: .85;
+}
+.account-clean-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 72%;
+  margin: 12px auto 24px;
+  color: #bd8726;
+  font-size: 25px;
+}
+.account-clean-divider::before,
+.account-clean-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, #bd8726, transparent);
+}
+.account-card-clean #signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+}
+.account-card-clean #signup-form label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 0;
+  color: #123d2c;
+  font: 700 17px Georgia, serif;
+}
+.account-card-clean #signup-form label span {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 1px solid #d5a341;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #17633f, #052d20);
+  color: #ffedb4;
+  font-size: 17px;
+  box-shadow: 0 2px 5px #0002;
+}
+.account-card-clean #signup-form label b { color: #a32920; }
+.account-card-clean #signup-form > input,
+.account-clean-password input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 49px;
+  margin: 0 0 5px;
+  padding: 0 16px;
+  border: 1.5px solid #cbb88e;
+  border-radius: 13px;
+  background: #fffdf7 !important;
+  color: #263b30 !important;
+  font: 16px Georgia, serif;
+  box-shadow: inset 0 1px 3px #4b3a1a12, 0 2px 4px #4b3a1a12;
+  transition: border-color .18s, box-shadow .18s;
+}
+.account-card-clean #signup-form > input:focus,
+.account-clean-password input:focus {
+  border-color: #b78324;
+  outline: none;
+  box-shadow: 0 0 0 3px #d9b65a35;
+}
+.account-card-clean #signup-form input::placeholder {
+  color: #8c806c !important;
+  opacity: 1;
+}
+.account-card-clean #signup-form input:-webkit-autofill,
+.account-card-clean #signup-form input:-webkit-autofill:hover,
+.account-card-clean #signup-form input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #263b30 !important;
+  box-shadow: 0 0 0 1000px #fffdf7 inset !important;
+  transition: background-color 9999s ease-out 0s;
+}
+.account-clean-password {
+  position: relative;
+  width: 100%;
+}
+.account-clean-password input {
+  padding-right: 56px;
+}
+.account-card-clean .account-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  transform: translateY(-50%);
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #174c34;
+  font-size: 22px;
+  cursor: pointer;
+}
+.account-card-clean .create-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  margin: 17px 0 0;
+  padding: 12px 18px;
+  border: 2px solid #d4a13b;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #17643f, #063321) !important;
+  color: #fff5d8 !important;
+  font: 700 20px Georgia, serif;
+  box-shadow: 0 4px 0 #8b601c, 0 7px 12px #392a1730, inset 0 1px 0 #ffffff55;
+  cursor: pointer;
+}
+.account-card-clean .create-btn span { color: #ffe39a; }
+.account-clean-or {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 20px 0 14px;
+  color: #17422f;
+  font: 700 18px Georgia, serif;
+}
+.account-clean-or span {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, #a77a2b, transparent);
+}
+.account-card-clean .login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  margin: 0;
+  padding: 10px 16px;
+  border: 1.5px solid #18543a;
+  border-radius: 999px;
+  background: #fffaf0 !important;
+  color: #123d2c !important;
+  font: 700 17px Georgia, serif;
+  box-shadow: none;
+  cursor: pointer;
+}
+.account-card-clean button:focus-visible {
+  outline: 3px solid #c58d2a;
+  outline-offset: 3px;
+}
+.account-card-clean button:hover { filter: brightness(1.04); }
+.account-auth-status {
+  width: 100%;
+  max-width: 650px;
+  margin: 12px auto 0;
+  color: #17412f;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .account-area.account-area-clean { padding: 18px 12px 34px; }
+  .account-card.account-card-clean {
+    padding: 26px 20px 25px;
+    border-radius: 20px;
+  }
+  .account-clean-heading { gap: 11px; }
+  .account-clean-emblem { width: 48px; height: 48px; flex-basis: 48px; font-size: 24px; }
+  .account-clean-heading h2 { font-size: 27px; }
+  .account-clean-heading p { font-size: 14px; }
+  .account-clean-leaves { display: none; }
+  .account-card-clean #signup-form label { font-size: 15px; }
+  .account-card-clean #signup-form > input,
+  .account-clean-password input { height: 47px; font-size: 15px; }
+  .account-card-clean .create-btn { min-height: 54px; font-size: 18px; }
+  .account-card-clean .login-btn { min-height: 49px; font-size: 16px; }
+}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1420,24 +1670,33 @@ body.halloween-accueil .home-hero{
 
 
     <div class="cta-wrap"><button class="primary-btn" type="button" onclick="showAccount()">Créer mon compte / Me connecter&nbsp; →</button></div>
-    <section class="account-area" id="account-area">
-      <div class="account-card account-card-illustrated" id="account-card">
-        <h2 class="account-accessible-title">Mon compte</h2>
-        <p class="account-accessible-intro">Créez votre compte ou connectez-vous pour commencer l’aventure.</p>
+    <section class="account-area account-area-clean" id="account-area">
+      <div class="account-card account-card-clean" id="account-card">
+        <div class="account-clean-heading">
+          <div class="account-clean-emblem" aria-hidden="true">♟</div>
+          <div>
+            <h2>Mon compte</h2>
+            <p>Créez votre compte ou connectez-vous pour commencer l’aventure.</p>
+          </div>
+          <div class="account-clean-leaves" aria-hidden="true">✦ ❧ ✦</div>
+        </div>
+        <div class="account-clean-divider" aria-hidden="true"><span>✧</span></div>
         <form id="signup-form" method="post" action="" onsubmit="event.preventDefault(); return false;" aria-label="Créer un compte">
-          <label class="account-accessible-label" for="name">Ton prénom</label>
-          <input id="name" name="name" autocomplete="name" required aria-label="Ton prénom" placeholder=" ">
+          <label for="name"><span aria-hidden="true">👤</span> Ton prénom <b>*</b></label>
+          <input id="name" name="name" autocomplete="name" required aria-label="Ton prénom" placeholder="Ex. : Sophie">
 
-          <label class="account-accessible-label" for="email">Ton adresse e-mail</label>
-          <input id="email" name="email" type="email" autocomplete="email" required aria-label="Ton adresse e-mail" placeholder=" ">
+          <label for="email"><span aria-hidden="true">✉</span> Ton adresse e-mail <b>*</b></label>
+          <input id="email" name="email" type="email" autocomplete="email" required aria-label="Ton adresse e-mail" placeholder="Ex. : monadresse@email.fr">
 
-          <label class="account-accessible-label" for="password">Mot de passe</label>
-          <input id="password" name="password" type="password" minlength="8" autocomplete="current-password" required aria-label="Mot de passe" placeholder=" ">
-          <button class="account-password-toggle" id="account-password-toggle" type="button" aria-label="Afficher le mot de passe" title="Afficher ou masquer le mot de passe"></button>
-
-          <button class="create-btn" type="submit">Créer mon compte</button>
+          <label for="password"><span aria-hidden="true">🔒</span> Mot de passe <b>*</b></label>
+          <div class="account-clean-password">
+            <input id="password" name="password" type="password" minlength="8" autocomplete="new-password" required aria-label="Mot de passe" placeholder="Choisis un mot de passe sécurisé">
+            <button class="account-password-toggle" id="account-password-toggle" type="button" aria-label="Afficher le mot de passe" title="Afficher ou masquer le mot de passe">◉</button>
+          </div>
+          <button class="create-btn account-clean-submit" type="submit"><span aria-hidden="true">✥</span> Créer mon compte</button>
         </form>
-        <button class="login-btn" id="login-btn" type="button">J’ai déjà un compte</button>
+        <div class="account-clean-or"><span></span> ou <span></span></div>
+        <button class="login-btn account-clean-login" id="login-btn" type="button"><span aria-hidden="true">➜</span> J’ai déjà un compte</button>
       </div>
       <p class="status account-auth-status" id="auth-status" role="status" aria-live="polite"></p>
     </section>
@@ -5818,15 +6077,19 @@ window.toggleMobileExplorerMenu = function(forceOpen) {
 
 
 
+
+
 <script>
 (function(){
   const toggle = document.getElementById("account-password-toggle");
   const field = document.getElementById("password");
-  if (!toggle || !field) return;
+  if (!toggle || !field || toggle.dataset.bound === "1") return;
+  toggle.dataset.bound = "1";
   toggle.addEventListener("click", function(){
     const reveal = field.type === "password";
     field.type = reveal ? "text" : "password";
     toggle.setAttribute("aria-label", reveal ? "Masquer le mot de passe" : "Afficher le mot de passe");
+    toggle.textContent = reveal ? "◎" : "◉";
   });
 })();
 </script>
