@@ -5770,6 +5770,7 @@ window.loadPublicNews=async function(){
          const more=document.createElement('details');more.style.marginTop='8px';
          const summary=document.createElement('summary');summary.textContent='Lire le détail';summary.style.cssText='cursor:pointer;font-size:13px;font-weight:600;color:#52602a';
          const full=document.createElement('p');full.textContent=clean;full.style.cssText='white-space:pre-wrap;font-size:14px;line-height:1.55;margin:8px 0 0';
+         more.addEventListener('toggle',()=>{body.hidden=more.open;});
          more.append(summary,full);card.append(more);
        }
      } else { if(!home)body.style.whiteSpace='pre-wrap';card.append(eyebrow,title,body); }
