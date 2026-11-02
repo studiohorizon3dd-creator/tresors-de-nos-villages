@@ -1093,48 +1093,47 @@ body.halloween-accueil .home-hero{
       </section>
     </main>
 
-    <section class="concept-showcase" id="concept" aria-labelledby="concept-title">
-      <div class="concept-frame">
-        <div class="concept-leaf concept-leaf-left" aria-hidden="true">🌿</div>
-        <div class="concept-leaf concept-leaf-right" aria-hidden="true">🌿</div>
-        <div class="concept-compass" aria-hidden="true">🧭</div>
-        <div class="concept-title-ribbon">
-          <h2 id="concept-title">Comment fonctionne l’aventure&nbsp;?</h2>
-        </div>
-        <p class="concept-subtitle"><span>✦</span> Un parcours simple, ludique et accessible à tous&nbsp;! <span>✦</span></p>
+    <section class="concept-showcase concept-showcase-new" id="concept" aria-labelledby="concept-title">
+  <div class="concept-frame concept-frame-new">
+    <div class="concept-garland" aria-hidden="true">🌿 🍃 🌿</div>
+    <div class="concept-title-ribbon concept-title-ribbon-new">
+      <span class="concept-compass-new" aria-hidden="true">🧭</span>
+      <h2 id="concept-title">Comment fonctionne l’aventure&nbsp;?</h2>
+    </div>
+    <p class="concept-subtitle concept-subtitle-new"><span>✦</span> Un parcours simple, ludique et accessible à tous&nbsp;! <span>✦</span></p>
 
-        <div class="concept-steps">
-          <article class="concept-step-card">
-            <span class="concept-step-number">1</span>
-            <div class="concept-step-art concept-art-map" aria-hidden="true">🗺️</div>
-            <h3>Explorez</h3>
-            <p>Découvrez le village<br>et ses lieux emblématiques.</p>
-          </article>
-          <span class="concept-step-arrow" aria-hidden="true">❯</span>
-          <article class="concept-step-card">
-            <span class="concept-step-number">2</span>
-            <div class="concept-step-art concept-art-clue" aria-hidden="true">🕵️</div>
-            <h3>Résolvez</h3>
-            <p>Trouvez les réponses<br>aux énigmes.</p>
-          </article>
-          <span class="concept-step-arrow" aria-hidden="true">❯</span>
-          <article class="concept-step-card">
-            <span class="concept-step-number">3</span>
-            <div class="concept-step-art concept-art-star" aria-hidden="true">⭐</div>
-            <h3>Collectionnez</h3>
-            <p>Gagnez des étoiles<br>et des badges.</p>
-          </article>
-          <span class="concept-step-arrow" aria-hidden="true">❯</span>
-          <article class="concept-step-card">
-            <span class="concept-step-number">4</span>
-            <div class="concept-step-art concept-art-chest" aria-hidden="true">🧰</div>
-            <h3>Complétez</h3>
-            <p>Avancez dans l’aventure<br>et remplissez votre passeport&nbsp;!</p>
-          </article>
-        </div>
-        <p class="concept-footer-note">✧ À chaque étape, une nouvelle découverte vous attend ✧</p>
-      </div>
-    </section>
+    <div class="concept-steps concept-steps-new">
+      <article class="concept-step-card concept-step-card-new">
+        <span class="concept-step-number">1</span>
+        <div class="concept-step-art concept-art-map" aria-hidden="true">🗺️</div>
+        <h3>Explorez</h3>
+        <p>Découvrez le village<br>et ses lieux emblématiques.</p>
+      </article>
+      <span class="concept-step-arrow concept-step-arrow-new" aria-hidden="true">❯</span>
+      <article class="concept-step-card concept-step-card-new">
+        <span class="concept-step-number">2</span>
+        <div class="concept-step-art concept-art-clue" aria-hidden="true">🕵️</div>
+        <h3>Résolvez</h3>
+        <p>Trouvez les réponses<br>aux énigmes.</p>
+      </article>
+      <span class="concept-step-arrow concept-step-arrow-new" aria-hidden="true">❯</span>
+      <article class="concept-step-card concept-step-card-new">
+        <span class="concept-step-number">3</span>
+        <div class="concept-step-art concept-art-star" aria-hidden="true">⭐</div>
+        <h3>Collectionnez</h3>
+        <p>Gagnez des étoiles<br>et des badges.</p>
+      </article>
+      <span class="concept-step-arrow concept-step-arrow-new" aria-hidden="true">❯</span>
+      <article class="concept-step-card concept-step-card-new">
+        <span class="concept-step-number">4</span>
+        <div class="concept-step-art concept-art-chest" aria-hidden="true">🧰</div>
+        <h3>Complétez</h3>
+        <p>Avancez dans l’aventure<br>et remplissez votre passeport&nbsp;!</p>
+      </article>
+    </div>
+    <p class="concept-footer-note concept-footer-note-new">✧ À chaque étape, une nouvelle découverte vous attend ✧</p>
+  </div>
+</section>
     <section class="section" id="villages-public">
       <h2 class="section-title">Des aventures au cœur de nos villages</h2>
       <p class="section-intro">Le projet se construit avec les communes pour proposer des parcours de découverte et mettre en valeur le patrimoine local. Les villages et aventures disponibles seront annoncés ici au fur et à mesure de leur confirmation.</p>
@@ -2434,6 +2433,82 @@ body.halloween-accueil .home-hero{
  #landing #concept .concept-footer-note{font-size:11px}
 }
 
+
+/* Nouvelle présentation du concept : ruban, quatre étapes et adaptation mobile */
+#landing #concept.concept-showcase-new{
+  padding:30px clamp(10px,1.5vw,24px) 34px;
+  background:linear-gradient(135deg,#fff8e7 0%,#f5e5bd 100%);
+}
+#landing #concept .concept-frame-new{
+  max-width:1720px;
+  padding:64px clamp(14px,2.5vw,34px) 22px;
+  border:5px double #bd8627;
+  border-radius:30px;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.98),rgba(255,250,232,.94) 58%,rgba(244,226,184,.8));
+  box-shadow:inset 0 0 0 5px rgba(255,255,255,.65),0 9px 24px rgba(67,49,18,.12);
+}
+#landing #concept .concept-garland{
+  position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+  width:60%;text-align:center;font-size:clamp(25px,4vw,48px);
+  letter-spacing:12px;filter:drop-shadow(0 3px 2px #52612c44);pointer-events:none;
+}
+#landing #concept .concept-title-ribbon-new{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  width:min(900px,94%);margin:-30px auto 12px;padding:13px 18px;
+  border:2px solid #bd8627;border-radius:16px 16px 30px 30px;
+  background:linear-gradient(180deg,#fff0bd,#e6bf62 52%,#f7dfa0);
+  box-shadow:0 7px 12px #72501e35,inset 0 2px 0 #fff8dc;
+  clip-path:polygon(3% 0,97% 0,100% 22%,97% 100%,3% 100%,0 22%);
+}
+#landing #concept .concept-title-ribbon-new h2{
+  margin:0;text-align:center;color:#073b2b;
+  font:bold clamp(25px,3vw,43px)/1.15 Georgia,serif;
+}
+#landing #concept .concept-compass-new{
+  flex:none;width:60px;height:60px;display:grid;place-items:center;
+  border:4px solid #c18b2e;border-radius:50%;
+  background:radial-gradient(circle,#fff9e7 0 48%,#e8c56f 50% 57%,#fff2cf 60%);
+  box-shadow:0 3px 8px #51390f44;font-size:31px;
+}
+#landing #concept .concept-subtitle-new{margin:14px 0 40px;font-size:clamp(17px,2vw,25px)}
+#landing #concept .concept-steps-new{
+  grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr) 38px minmax(0,1fr) 38px minmax(0,1fr);
+  gap:7px;align-items:center;
+}
+#landing #concept .concept-step-card-new{
+  min-height:270px;padding:24px 10px 18px;
+  border-radius:42px 42px 32px 32px;
+  background:linear-gradient(145deg,#fffdf5,#fff4d9 68%,#f2dfad);
+}
+#landing #concept .concept-step-card-new .concept-step-art{
+  height:125px;margin-bottom:3px;font-size:clamp(66px,6.5vw,92px);
+}
+#landing #concept .concept-step-card-new h3{font-size:clamp(24px,2.5vw,35px)}
+#landing #concept .concept-step-card-new p{font-size:clamp(14px,1.25vw,18px)}
+#landing #concept .concept-step-arrow-new{width:46px;height:46px;margin:0 -5px}
+#landing #concept .concept-footer-note-new{margin-top:20px}
+@media(max-width:950px){
+  #landing #concept .concept-steps-new{grid-template-columns:repeat(2,minmax(0,1fr));gap:45px 20px}
+  #landing #concept .concept-step-arrow-new{display:none}
+}
+@media(max-width:560px){
+  #landing #concept.concept-showcase-new{padding:25px 9px}
+  #landing #concept .concept-frame-new{padding:52px 12px 18px;border-radius:20px;border-width:3px}
+  #landing #concept .concept-garland{width:100%;top:-15px;font-size:24px;letter-spacing:5px}
+  #landing #concept .concept-title-ribbon-new{width:100%;margin-top:-22px;padding:10px 8px;gap:7px}
+  #landing #concept .concept-title-ribbon-new h2{font-size:22px}
+  #landing #concept .concept-compass-new{width:43px;height:43px;font-size:22px;border-width:3px}
+  #landing #concept .concept-subtitle-new{font-size:15px;line-height:1.4;margin:13px 0 36px}
+  #landing #concept .concept-subtitle-new span{padding:0 3px}
+  #landing #concept .concept-steps-new{grid-template-columns:1fr;gap:36px;padding:0 5px}
+  #landing #concept .concept-step-card-new{min-height:190px;padding:20px 12px 15px;border-radius:28px}
+  #landing #concept .concept-step-card-new .concept-step-art{height:86px;font-size:64px}
+  #landing #concept .concept-step-card-new h3{font-size:25px}
+  #landing #concept .concept-step-card-new p{font-size:15px}
+  #landing #concept .concept-step-number{width:48px;height:48px;top:-25px;font-size:27px}
+  #landing #concept .concept-footer-note-new{font-size:11px;line-height:1.4}
+}
 </style>
         <div class="puzzle-admin-hero"><div><h2>🧩 Carte Puzzle</h2><p>Gérez les pièces de la carte et programmez leurs révélations.</p></div><div class="puzzle-admin-hero-mark">🏡</div></div>
         <div class="puzzle-admin-tabs" role="tablist" aria-label="Rubriques de la carte puzzle">
