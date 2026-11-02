@@ -2819,6 +2819,7 @@ body.halloween-accueil .home-hero{
       <button class="admin-nav-item" type="button" onclick="adminComingSoon('Mystères & événements')"><span>✨</span> Mystères & événements</button>
       <div class="admin-nav-label">GESTION DES MEMBRES</div>
       <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
+      <button class="admin-nav-item" type="button" onclick="adminOpenTeam()"><span>👥</span> Gestion de l'équipe</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenCommunication()"><span>✉</span> Centre de communication</button>
@@ -2962,6 +2963,19 @@ body.halloween-accueil .home-hero{
           </aside>
         </div>
         <p class="admin-footnote">Les données affichées proviennent de la route sécurisée /api/admin/players. La fréquentation est comptée par session authentifiée, sans compter les actualisations rapprochées. Les anciennes visites ne peuvent pas être reconstituées : le compteur démarre après installation.</p>
+      </div>
+
+      <div id="admin-team-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>👥 Gestion de l'équipe</h3><p>Ajoute des modérateurs, limite leurs villages et consulte leur historique.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTeam()">↻ Actualiser</button></div>
+        <div class="mailbox-admin-side"><strong>🛡️ Rôle Modérateur</strong><p>Un modérateur peut traiter le support. Il ne peut pas gérer les comptes, les paiements, les formules, les villages ni les paramètres administrateur.</p></div>
+        <form id="admin-team-form" class="feature" style="display:grid;gap:10px;margin:16px 0">
+          <h4>➕ Ajouter un modérateur</h4>
+          <label>Adresse e-mail du membre<input id="admin-team-email" type="email" required maxlength="180" placeholder="membre@exemple.fr" style="display:block;width:100%;padding:11px"></label>
+          <label>Villages autorisés <small>(facultatif, plusieurs possibles)</small><select id="admin-team-villages" multiple size="4" style="display:block;width:100%;padding:9px"></select></label>
+          <button class="admin-secondary-btn" type="submit">Ajouter / activer le modérateur</button>
+        </form>
+        <p id="admin-team-status" class="status" role="status" aria-live="polite"></p>
+        <div id="admin-team-list" class="admin-recent-list"><p>La liste de l'équipe apparaîtra ici.</p></div>
       </div>
 
       <div id="admin-testers-view" class="admin-subview" hidden>
@@ -4408,7 +4422,8 @@ async function adminApi(path, options = {}) {
 
 window.checkAdminAccess = async function(){
   try{
-    await adminApi("/api/admin/me");
+    const staffInfo = await adminApi("/api/admin/me");
+    window.adminCurrentRole = staffInfo.role || "admin";
     window.setAdminAccessGranted(true);
   }catch(_error){
     window.setAdminAccessGranted(false);
@@ -4514,7 +4529,7 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 const adminSetView = window.adminSetView = function(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view","admin-team-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
@@ -5548,6 +5563,7 @@ function adminComingSoon(name){
 window.adminShowHome = adminShowHome;
 window.adminShowAnalytics = adminShowAnalytics;
 window.adminOpenSupport = adminOpenSupport;
+window.adminOpenTeam = window.adminOpenTeam;
 window.adminOpenAdventures = adminOpenAdventures;
 window.adminComingSoon = adminComingSoon;
 window.adminOpenSiteStatus = window.adminOpenSiteStatus;
@@ -5683,6 +5699,82 @@ window.openAdminPanel = async function() {
   }
 };
 
+window.adminLoadTeam = async function() {
+  const status = document.getElementById("admin-team-status");
+  const list = document.getElementById("admin-team-list");
+  const villageSelect = document.getElementById("admin-team-villages");
+  if (!status || !list) return;
+  status.textContent = "Chargement de l'équipe…";
+  try {
+    const [teamData, villageData] = await Promise.all([
+      adminApi("/api/admin/team"),
+      adminApi("/api/admin/villages")
+    ]);
+    if (villageSelect) {
+      villageSelect.replaceChildren();
+      (villageData.villages || []).forEach(v => {
+        const option = document.createElement("option");
+        option.value = v.slug; option.textContent = v.name;
+        villageSelect.append(option);
+      });
+    }
+    const moderators = (teamData.members || []).filter(m => m.role === "moderator");
+    if (!moderators.length) { list.innerHTML = "<p>Aucun modérateur pour le moment.</p>"; status.textContent = "Aucun membre de l'équipe."; return; }
+    list.replaceChildren();
+    moderators.forEach(member => {
+      const card = document.createElement("article");
+      card.className = "feature";
+      card.style.cssText = "padding:15px;margin:10px 0";
+      const title = document.createElement("strong");
+      title.textContent = `${member.name || "Membre"} — ${member.email}`;
+      const meta = document.createElement("p");
+      meta.textContent = `Modérateur · ${member.status === "active" ? "Actif" : "Suspendu"} · Villages : ${(member.allowed_villages || []).join(", ") || "Non précisés"}`;
+      const controls = document.createElement("div");
+      controls.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+      const statusBtn = document.createElement("button");
+      statusBtn.type = "button"; statusBtn.className = "admin-secondary-btn";
+      statusBtn.textContent = member.status === "active" ? "Suspendre" : "Réactiver";
+      statusBtn.addEventListener("click", async () => {
+        try {
+          await adminApi(`/api/admin/team/${encodeURIComponent(member.user_id)}`, {
+            method: "PATCH", body: JSON.stringify({ status: member.status === "active" ? "suspended" : "active", allowed_villages: member.allowed_villages || [] })
+          });
+          await window.adminLoadTeam();
+        } catch (error) { status.textContent = error.message || "Modification impossible."; }
+      });
+      const historyBtn = document.createElement("button");
+      historyBtn.type = "button"; historyBtn.className = "admin-secondary-btn"; historyBtn.textContent = "Historique";
+      historyBtn.addEventListener("click", async () => {
+        try {
+          const result = await adminApi(`/api/admin/team/${encodeURIComponent(member.user_id)}/history`);
+          const entries = result.history || [];
+          alert(entries.length ? entries.map(item => `${new Date(item.created_at).toLocaleString("fr-FR")} — ${item.action} — ${item.performed_by}`).join("\n") : "Aucune activité enregistrée.");
+        } catch (error) { alert(error.message || "Historique indisponible."); }
+      });
+      controls.append(statusBtn, historyBtn);
+      card.append(title, meta, controls); list.append(card);
+    });
+    status.textContent = `${moderators.length} modérateur(s) enregistré(s).`;
+  } catch (error) { status.textContent = error.message || "Impossible de charger l'équipe."; }
+};
+window.adminOpenTeam = async function() {
+  if (window.adminCurrentRole === "moderator") return;
+  adminSetView("admin-team-view", "Gestion de l'équipe");
+  await window.adminLoadTeam();
+};
+document.getElementById("admin-team-form")?.addEventListener("submit", async event => {
+  event.preventDefault();
+  const status = document.getElementById("admin-team-status");
+  const email = document.getElementById("admin-team-email")?.value.trim();
+  const allowed_villages = Array.from(document.getElementById("admin-team-villages")?.selectedOptions || []).map(o => o.value);
+  try {
+    const result = await adminApi("/api/admin/team", { method: "POST", body: JSON.stringify({ email, role: "moderator", allowed_villages }) });
+    status.textContent = `Modérateur ajouté : ${result.member?.email || email}`;
+    event.target.reset();
+    await window.adminLoadTeam();
+  } catch (error) { status.textContent = error.message || "Impossible d'ajouter le modérateur."; }
+});
+
 window.signOutAndHome = async function() {
   try { if (auth.signOut) await auth.signOut(); } catch(e) {}
   window.setAdminAccessGranted(false);
@@ -5736,12 +5828,23 @@ window.setAdminAccessGranted = function(value){
   adminAccessGranted = value === true;
   const adminNav = document.getElementById("admin-nav-button");
   const testerNav = document.getElementById("tester-space-nav");
-  // Le lien Administration n'est visible qu'après validation serveur de /api/admin/me.
+  const isModerator = window.adminCurrentRole === "moderator";
   if(adminNav) {
     adminNav.hidden = !adminAccessGranted;
-    adminNav.setAttribute("aria-label", "Administration — réservé aux administrateurs autorisés");
+    adminNav.setAttribute("aria-label", "Administration — accès équipe autorisé");
   }
   if(adminAccessGranted && testerNav) testerNav.hidden = false;
+  document.querySelectorAll(".admin-nav-item").forEach(button => {
+    const action = button.getAttribute("onclick") || "";
+    const supportAllowed = action.includes("adminOpenSupport");
+    const teamOnly = action.includes("adminOpenTeam");
+    button.hidden = isModerator ? (!supportAllowed && !teamOnly) : false;
+    if (isModerator && teamOnly) button.hidden = true;
+  });
+  document.querySelectorAll(".communication-tab").forEach(button => {
+    const action = button.getAttribute("onclick") || "";
+    button.hidden = isModerator && !action.includes("adminOpenSupport");
+  });
   window.adminAccessGranted = adminAccessGranted;
 };
 document.addEventListener("DOMContentLoaded", function(){
