@@ -2189,12 +2189,18 @@ body.halloween-accueil .home-hero{
 
 <article class="tester-dash-card tester-feedback-card">
       <h3>🐞 Signalement & retours</h3><p>Un problème, une idée ou une remarque ? Fais-nous-en part.</p>
+      <div class="tester-feedback-shortcuts">
+        <button type="button" onclick="testerQuickFeedback('bug')"><span>🐞</span><span><strong>Signaler un bug</strong><small>Un problème technique ou un dysfonctionnement.</small></span><b>›</b></button>
+        <button type="button" onclick="testerQuickFeedback('idee')"><span>💡</span><span><strong>Proposer une amélioration</strong><small>Une idée pour rendre le site ou les parcours meilleurs.</small></span><b>›</b></button>
+        <button type="button" onclick="testerQuickFeedback('experience')"><span>💬</span><span><strong>Retour général</strong><small>Donner ton avis sur ton expérience de test.</small></span><b>›</b></button>
+      </div>
+      <details class="tester-feedback-details" id="tester-feedback-details"><summary>Ouvrir le formulaire de retour</summary>
       <form id="tester-feedback-form" class="tester-dash-form">
         <label>Village et niveau autorisés<select id="tester-feedback-access" required><option value="">Chargement des accès…</option></select></label>
         <label>Type de retour<select id="tester-feedback-category" required><option value="bug">🐞 Signaler un bug</option><option value="idee">💡 Proposer une idée</option><option value="experience">⭐ Donner mon avis</option><option value="autre">📝 Autre remarque</option></select></label>
         <label>Ton message<textarea id="tester-feedback-message" required minlength="5" maxlength="3000" rows="3" placeholder="Décris ce que tu as remarqué…"></textarea></label>
         <button type="submit" class="tester-dash-action" id="tester-feedback-submit">📨 Envoyer mon retour</button><p id="tester-feedback-form-status" class="status" role="status" aria-live="polite"></p>
-      </form>
+      </form></details>
     </article>
 
 <article class="tester-dash-card tester-history-card">
@@ -3169,6 +3175,54 @@ body.halloween-accueil .home-hero{
   #landing #concept .concept-step-number{width:48px;height:48px;top:-25px;font-size:27px}
   #landing #concept .concept-footer-note-new{font-size:11px;line-height:1.4}
 }
+
+/* Ajustement fidèle à la maquette de référence : largeur, bannière et cartes compactes */
+#dash-tester-space.tester-dashboard{width:100%;max-width:1050px;margin:0 auto;padding:8px 12px 24px;background:#f6efdc;color:#173a29}
+#dash-tester-space .tester-dashboard-hero{min-height:68px;padding:8px 18px;border-radius:13px;background:linear-gradient(90deg,rgba(255,248,225,.96),rgba(255,248,225,.72) 43%,rgba(255,248,225,.08)),url('images/admin-dashboard-banner.jpg') center 47%/cover;color:#173a29}
+#dash-tester-space .tester-dashboard-brand h2{color:#102f21;font-size:clamp(25px,3vw,35px);text-shadow:none}
+#dash-tester-space .tester-dashboard-brand p{color:#354b3b;text-shadow:none}
+#dash-tester-space .tester-dashboard-flask{font-size:36px;filter:none}
+#dash-tester-space .tester-dashboard-topstats{grid-template-columns:1.45fr repeat(5,minmax(0,1fr));margin:8px 0 10px;padding:6px;gap:4px}
+#dash-tester-space .tester-avatar{width:52px;height:52px;font-size:29px}
+#dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:stretch}
+#dash-tester-space .tester-dash-card{padding:10px 11px;border-radius:13px;min-height:0}
+#dash-tester-space .tester-dash-card h3{font-size:16px;margin:0 0 6px;line-height:1.15}
+#dash-tester-space .tester-dash-card>p{font-size:11px;line-height:1.3;margin:3px 0 6px}
+#dash-tester-space .tester-announcement-card{grid-column:span 5;min-height:118px}
+#dash-tester-space .tester-progression-card{grid-column:span 7;min-height:118px}
+#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card{grid-column:span 4;min-height:190px}
+#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4;min-height:128px}
+#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3;min-height:116px}
+#dash-tester-space .tester-rank-track{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}
+#dash-tester-space .tester-rank-item{padding:6px 3px}
+#dash-tester-space .tester-rank-item b{font-size:19px}
+#dash-tester-space .tester-announcement-art{min-width:76px;min-height:72px;font-size:34px}
+#dash-tester-space .tester-dash-form{gap:5px}
+#dash-tester-space .tester-dash-form label{gap:3px;font-size:11px}
+#dash-tester-space .tester-dash-form select{padding:7px 9px;font-size:11px}
+#dash-tester-space .tester-dash-form textarea{min-height:38px;height:38px;padding:7px 9px;font-size:11px}
+#dash-tester-space .tester-dash-action{margin-top:4px;padding:7px 10px;font-size:11px}
+#dash-tester-space .tester-feedback-shortcuts{display:grid;gap:5px;margin-top:5px}
+#dash-tester-space .tester-feedback-shortcuts button{width:100%;display:flex;align-items:center;gap:8px;text-align:left;padding:6px 8px;border:1px solid #e2d1a6;border-radius:9px;background:#fffaf0;color:#173a29;min-width:0}
+#dash-tester-space .tester-feedback-shortcuts button>span:first-child{font-size:21px;flex:none}
+#dash-tester-space .tester-feedback-shortcuts button>span:nth-child(2){display:flex;flex-direction:column;gap:2px;min-width:0}
+#dash-tester-space .tester-feedback-shortcuts strong{font:700 11px Georgia,serif}
+#dash-tester-space .tester-feedback-shortcuts small{font:10px/1.2 Georgia,serif;color:#536253}
+#dash-tester-space .tester-feedback-shortcuts button>b{margin-left:auto;font-size:20px;color:#a77a1d}
+#dash-tester-space .tester-feedback-details{margin-top:6px;font-size:11px}
+#dash-tester-space .tester-feedback-details summary{cursor:pointer;color:#24543a;font-weight:bold}
+#dash-tester-space .tester-feedback-details[open]{padding:7px;border:1px solid #e3d1a2;border-radius:9px;background:#fffaf0}
+#dash-tester-space .tester-mini-stats div{padding:5px 3px}
+#dash-tester-space .tester-mini-stats strong{font-size:18px}
+#dash-tester-space .tester-mini-stats small{font-size:9px}
+#dash-tester-space .tester-journal{min-height:46px!important;height:46px}
+#dash-tester-space .tester-badge-row{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+#dash-tester-space .tester-mini-badge{padding:5px 3px;font-size:10px}
+#dash-tester-space .tester-mini-badge span{font-size:20px}
+#dash-tester-space .tester-dashboard-footnote{font-size:10px;margin-top:8px}
+@media(max-width:1050px){#dash-tester-space.tester-dashboard{max-width:100%}#dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr))}#dash-tester-space .tester-announcement-card{grid-column:span 5!important}#dash-tester-space .tester-progression-card{grid-column:span 7!important}#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4!important}#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3!important}}
+@media(max-width:700px){#dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))}#dash-tester-space .tester-identity-card{grid-column:1/-1}#dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1!important;min-height:0}#dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:1/-1!important}#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 1!important}}
+@media(max-width:480px){#dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr}#dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}#dash-tester-space .tester-rank-track{grid-template-columns:repeat(4,minmax(0,1fr))}#dash-tester-space .tester-feedback-shortcuts small{font-size:10px}}
 </style>
         <div class="puzzle-admin-hero"><div><h2>🧩 Carte Puzzle</h2><p>Gérez les pièces de la carte et programmez leurs révélations.</p></div><div class="puzzle-admin-hero-mark">🏡</div></div>
         <div class="puzzle-admin-tabs" role="tablist" aria-label="Rubriques de la carte puzzle">
@@ -6415,6 +6469,17 @@ window.togglePublicContact = function(btn){
   btn.textContent = isOpen ? "Refermer le contact ↑" : "Afficher le contact ↓";
   if(isOpen){ setTimeout(function(){ content.scrollIntoView({behavior:"smooth", block:"start"}); }, 100); }
 };
+</script>
+
+<script>
+function testerQuickFeedback(type){
+  const category=document.getElementById('tester-feedback-category');
+  const details=document.getElementById('tester-feedback-details');
+  if(category) category.value=type;
+  if(details) details.open=true;
+  const message=document.getElementById('tester-feedback-message');
+  if(message){message.focus();}
+}
 </script>
 </body>
 </html>
