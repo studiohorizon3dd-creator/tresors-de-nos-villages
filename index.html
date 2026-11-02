@@ -2175,11 +2175,16 @@ body.halloween-accueil .home-hero{
     </article>
 
 <article class="tester-dash-card tester-missions-card">
-      <h3>🎯 Mes missions de test</h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div><strong class="tester-subheading">Mes parcours autorisés</strong><div id="tester-space-access-list"><p>Chargement…</p></div>
+      <h3>🎯 Mes missions de test</h3>
+      <div class="tester-mission-visual"><img src="images/accueil-aventure.jpg" alt="Illustration d'une aventure dans un village"><div><strong>Prêt pour l’exploration ?</strong><span>Retrouve ici les parcours qui te sont confiés.</span></div></div>
+      <p>Ta progression est enregistrée avec ton compte personnel.</p>
+      <div id="tester-space-missions"><p>Chargement de tes missions…</p></div>
+      <strong class="tester-subheading">🗺️ Mes parcours autorisés</strong><div id="tester-space-access-list"><p>Chargement…</p></div>
     </article>
 
 <article class="tester-dash-card tester-validation-card">
       <h3>🏁 Validation de mon niveau</h3><p>Lorsque tu as terminé un parcours, envoie ton bilan à l’administration.</p>
+      <div class="tester-validation-steps" aria-label="Les trois étapes de validation"><div class="is-current"><span>1</span><strong>Terminer</strong></div><i></i><div><span>2</span><strong>Envoyer</strong></div><i></i><div><span>3</span><strong>Valider</strong></div></div>
       <form id="tester-level-review-form" class="tester-dash-form">
         <label>Village et niveau terminé<select id="tester-level-review-access" required><option value="">Chargement des missions…</option></select></label>
         <label>Ton bilan de fin de test (facultatif)<textarea id="tester-level-review-report" maxlength="3000" rows="3" placeholder="Explique comment s’est passé le parcours…"></textarea></label>
@@ -3177,11 +3182,11 @@ body.halloween-accueil .home-hero{
 }
 
 /* Ajustement fidèle à la maquette de référence : largeur, bannière et cartes compactes */
-#dash-tester-space.tester-dashboard{width:100%;max-width:1600px;margin:0 auto;padding:8px 14px 24px;background:#f6efdc;color:#173a29}
-#dash-tester-space .tester-dashboard-hero{min-height:76px;padding:9px 20px;border-radius:13px;background:linear-gradient(90deg,rgba(4,43,31,.96),rgba(4,43,31,.72) 52%,rgba(4,43,31,.25)),url('images/espace-testeur.png') center 45%/cover;color:#fff4d5;border:1px solid #d7ad45;box-shadow:0 5px 14px #173b2818}
-#dash-tester-space .tester-dashboard-brand h2{color:#fff2c9;font-size:clamp(25px,3vw,35px);text-shadow:0 2px 5px #10291d}
-#dash-tester-space .tester-dashboard-brand p{color:#fff8e8;text-shadow:0 1px 3px #10291d}
-#dash-tester-space .tester-dashboard-flask{font-size:38px;filter:drop-shadow(0 2px 2px #0005)}
+#dash-tester-space.tester-dashboard{width:100%;max-width:1050px;margin:0 auto;padding:8px 12px 24px;background:#f6efdc;color:#173a29}
+#dash-tester-space .tester-dashboard-hero{min-height:68px;padding:8px 18px;border-radius:13px;background:linear-gradient(90deg,rgba(255,248,225,.96),rgba(255,248,225,.72) 43%,rgba(255,248,225,.08)),url('images/admin-dashboard-banner.jpg') center 47%/cover;color:#173a29}
+#dash-tester-space .tester-dashboard-brand h2{color:#102f21;font-size:clamp(25px,3vw,35px);text-shadow:none}
+#dash-tester-space .tester-dashboard-brand p{color:#354b3b;text-shadow:none}
+#dash-tester-space .tester-dashboard-flask{font-size:36px;filter:none}
 #dash-tester-space .tester-dashboard-topstats{grid-template-columns:1.45fr repeat(5,minmax(0,1fr));margin:8px 0 10px;padding:6px;gap:4px}
 #dash-tester-space .tester-avatar{width:52px;height:52px;font-size:29px}
 #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:stretch}
@@ -3224,33 +3229,47 @@ body.halloween-accueil .home-hero{
 @media(max-width:700px){#dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))}#dash-tester-space .tester-identity-card{grid-column:1/-1}#dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1!important;min-height:0}#dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:1/-1!important}#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 1!important}}
 @media(max-width:480px){#dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr}#dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}#dash-tester-space .tester-rank-track{grid-template-columns:repeat(4,minmax(0,1fr))}#dash-tester-space .tester-feedback-shortcuts small{font-size:10px}}
 
-/* Correction finale : l'Espace Testeur reprend la composition large de la maquette de référence. */
-#dash-tester-space.tester-dashboard{width:100%;max-width:1600px;margin:0 auto;padding:8px 14px 24px;background:#f6efdc}
-#dash-tester-space .tester-dashboard-hero{min-height:76px;background:linear-gradient(90deg,rgba(4,43,31,.96),rgba(4,43,31,.72) 52%,rgba(4,43,31,.25)),url('images/espace-testeur.png') center 45%/cover;color:#fff4d5}
-#dash-tester-space .tester-dashboard-brand h2{color:#fff2c9;text-shadow:0 2px 5px #10291d}
-#dash-tester-space .tester-dashboard-brand p{color:#fff8e8;text-shadow:0 1px 3px #10291d}
-#dash-tester-space .tester-dashboard-flask{filter:drop-shadow(0 2px 2px #0005)}
-#dash-tester-space .tester-dashboard-topstats{grid-template-columns:1.45fr repeat(5,minmax(0,1fr))}
-#dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr))}
-#dash-tester-space .tester-announcement-card{grid-column:span 5}
-#dash-tester-space .tester-progression-card{grid-column:span 7}
-#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card{grid-column:span 4}
-#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4}
-#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3}
+/* Refonte visible de l'espace testeur : visuels de missions et parcours de validation */
+#dash-tester-space.tester-dashboard{max-width:1600px!important;width:100%;padding:14px clamp(12px,1.4vw,22px) 28px!important}
+#dash-tester-space .tester-dashboard-hero{background-image:linear-gradient(90deg,rgba(5,43,31,.94),rgba(5,43,31,.76) 48%,rgba(5,43,31,.22)),url('images/espace-testeur.png')!important;background-position:center 45%!important;background-size:cover!important;min-height:92px!important}
+#dash-tester-space .tester-dashboard-brand h2{color:#fff2c9!important;text-shadow:0 2px 5px #10291d!important}
+#dash-tester-space .tester-dashboard-brand p{color:#fff8e8!important;text-shadow:0 1px 3px #10291d!important}
+#dash-tester-space .tester-dashboard-flask{filter:drop-shadow(0 2px 3px #0006)!important}
+#dash-tester-space .tester-dashboard-grid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:12px!important;align-items:stretch!important}
+#dash-tester-space .tester-dash-card{border:1px solid #dfc77f!important;border-radius:16px!important;background:linear-gradient(145deg,#fffdf7,#f8efd9)!important;box-shadow:0 5px 16px rgba(35,54,39,.08)!important;padding:15px!important;min-height:175px}
+#dash-tester-space .tester-announcement-card{grid-column:span 5!important;min-height:135px!important}
+#dash-tester-space .tester-progression-card{grid-column:span 7!important;min-height:135px!important}
+#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card{grid-column:span 4!important;min-height:250px!important}
+#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4!important;min-height:185px!important}
+#dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3!important;min-height:155px!important}
+#dash-tester-space .tester-mission-visual{display:flex;align-items:center;gap:12px;margin:8px 0 10px;padding:8px;border-radius:12px;background:#f2e6c6;border:1px solid #e2cb88}
+#dash-tester-space .tester-mission-visual img{width:94px;height:66px;object-fit:cover;border-radius:9px;border:2px solid #fff7e5;flex:none}
+#dash-tester-space .tester-mission-visual strong{display:block;color:#174b35;font:700 15px Georgia,serif;margin-bottom:4px}
+#dash-tester-space .tester-mission-visual span{display:block;color:#5d685b;font:12px/1.4 Georgia,serif}
+#dash-tester-space .tester-validation-steps{display:flex;align-items:center;justify-content:space-between;gap:5px;margin:12px 0;padding:9px 8px;border:1px solid #e4d4aa;border-radius:12px;background:#f7f0df}
+#dash-tester-space .tester-validation-steps div{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:54px;color:#687267}
+#dash-tester-space .tester-validation-steps span{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#e3ddca;color:#5e6558;font:bold 13px Arial,sans-serif}
+#dash-tester-space .tester-validation-steps strong{font:700 11px Georgia,serif}
+#dash-tester-space .tester-validation-steps .is-current span{background:#07512f;color:#fff4d5;border:2px solid #d7ad45}
+#dash-tester-space .tester-validation-steps .is-current strong{color:#07512f}
+#dash-tester-space .tester-validation-steps i{height:2px;flex:1;background:#d9c58d}
+#dash-tester-space .tester-feedback-shortcuts button{background:#fffaf0!important;border:1px solid #e4d4aa!important;border-radius:11px!important;margin:6px 0!important;padding:10px!important}
+#dash-tester-space .tester-badge-row>*{border-radius:12px!important}
 @media(max-width:1050px){
-  #dash-tester-space.tester-dashboard{max-width:100%;padding-left:12px;padding-right:12px}
-  #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(12,minmax(0,1fr))}
+ #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+ #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 3!important}
+ #dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 2!important}
+ #dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3!important}
 }
 @media(max-width:700px){
-  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #dash-tester-space .tester-identity-card{grid-column:1/-1}
-  #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1!important;min-height:0}
-  #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:1/-1!important}
+ #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:span 1!important;min-height:0!important}
+ #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:1/-1!important}
+ #dash-tester-space .tester-mission-visual img{width:78px;height:60px}
 }
 @media(max-width:480px){
-  #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr}
-  #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}
+ #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr!important}
+ #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}
 }
 
 </style>
