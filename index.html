@@ -1718,6 +1718,19 @@ body.halloween-accueil .home-hero{
 .communication-tab{border:1px solid #ddcfad;border-radius:10px;background:#fff;color:#294735;padding:10px 16px;font-weight:700;cursor:pointer}
 .communication-tab:hover{border-color:#c99b2e;background:#fff7df}
 .communication-tab.active{background:#0d4a30;color:#fff;border-color:#d7ad45;box-shadow:0 2px 8px #173b291c}
+.admin-nav-label{margin:18px 8px 7px;padding-top:10px;border-top:1px solid rgba(215,173,69,.25);font-size:10px;letter-spacing:1.5px;font-weight:800;color:#d8bb70}
+.admin-nav-item{width:calc(100% - 12px);margin:3px 6px;border-radius:9px}
+.admin-inbox-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0;padding:14px 16px;background:#fffaf0;border:1px solid #e5d3a4;border-radius:13px}
+.admin-inbox-toolbar label{font-weight:700;color:#244b36}
+.admin-inbox-toolbar select{min-width:220px;max-width:100%;padding:10px 12px;border:1px solid #d7c69b;border-radius:9px;background:#fff;color:#173d2b}
+.admin-inbox-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:16px 18px;border:1px solid #e5d3a4;border-radius:13px;background:#fffdf7}
+.admin-inbox-item h4{margin:4px 0 7px;color:#173d2b}
+.admin-inbox-item p{margin:6px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.admin-inbox-meta{display:flex;gap:8px;flex-wrap:wrap;color:#697568;font-size:12px}
+.admin-inbox-tag{display:inline-flex;align-items:center;border-radius:20px;padding:4px 9px;background:#f3ead3;color:#31523d;font-size:12px;font-weight:700}
+.admin-inbox-item small{color:#687466}
+.admin-inbox-empty{padding:24px;text-align:center;background:#fffaf0;border:1px dashed #d7c69b;border-radius:13px;color:#687466}
+@media(max-width:650px){.admin-inbox-item{grid-template-columns:1fr}}
 /* Messagerie personnelle et administration */
 .mailbox-unread-badge{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 6px;margin-left:5px;border-radius:20px;background:#d7ad45;color:#173b29;font:700 12px Arial,sans-serif}
 .mailbox-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px 28px;border:1px solid #d7ad45;border-radius:18px;background:linear-gradient(120deg,#062c20,#1d6242);color:#fff5d2}
@@ -2083,7 +2096,6 @@ body.halloween-accueil .home-hero{
         </div>
       </details>
       <div class="nav-bottom-links">
-        <button class="nav-btn" id="moderator-space-nav" hidden onclick="openModeratorSpace()" title="Accès réservé aux modérateurs">🛡️ &nbsp; Espace Modérateur</button>
         <button class="nav-btn" id="admin-nav-button" hidden onclick="showDashSection('dash-admin-info')" title="Réservé aux administrateurs autorisés">⚙ &nbsp; Administration</button>
         <button class="nav-btn" onclick="returnHome()">↩ &nbsp; Retour à l’accueil</button>
       </div>
@@ -2823,6 +2835,7 @@ body.halloween-accueil .home-hero{
       <button class="admin-nav-item" type="button" onclick="adminOpenTeam()"><span>👥</span> Gestion de l'équipe</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
+      <button class="admin-nav-item" type="button" onclick="window.adminOpenInbox()"><span>📥</span> Boîte de réception</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenCommunication()"><span>✉</span> Centre de communication</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenNotificationsAdmin()"><span>🔔</span> Envoyer une notification</button>
       <button class="admin-nav-item" type="button" onclick="adminOpenNews()"><span>📔</span> Journal du projet</button>
@@ -2844,6 +2857,26 @@ body.halloween-accueil .home-hero{
         <div class="admin-top-actions"><span class="admin-secure-pill">● Administration active</span><button type="button" class="admin-refresh" onclick="loadSiteAnalytics()">↻ Actualiser</button></div>
       </header>
 
+      <div id="admin-inbox-view" class="admin-subview" hidden>
+        <div class="mailbox-admin-intro">
+          <h3>📥 Boîte de réception générale</h3>
+          <p>Retrouve au même endroit les demandes des joueurs, des testeurs et des mairies/partenaires.</p>
+        </div>
+        <div class="admin-inbox-toolbar">
+          <label for="admin-inbox-filter">Afficher</label>
+          <select id="admin-inbox-filter">
+            <option value="all">Toutes les catégories</option>
+            <option value="support">Support des joueurs</option>
+            <option value="testers">Demandes testeurs</option>
+            <option value="feedback">Retours des testeurs</option>
+            <option value="reviews">Validations de niveaux</option>
+            <option value="partners">Mairies et partenaires</option>
+          </select>
+          <button type="button" class="admin-refresh" onclick="window.loadAdminInbox()">↻ Actualiser la réception</button>
+        </div>
+        <div id="admin-inbox-summary" class="mailbox-admin-side" role="status">Chargement de la réception…</div>
+        <div id="admin-inbox-list" class="mailbox-list"><p class="mailbox-empty">Chargement…</p></div>
+      </div>
       <div id="admin-mailbox-view" class="admin-subview" hidden>
         <div class="communication-tabs" role="tablist" aria-label="Centre de communication">
           <button type="button" onclick="adminOpenSupport()" class="communication-tab">🎧 Support</button>
@@ -4427,37 +4460,7 @@ window.checkAdminAccess = async function(){
     window.adminCurrentRole = staffInfo.role || "admin";
     window.setAdminAccessGranted(true);
   }catch(_error){
-    window.adminCurrentRole = null;
     window.setAdminAccessGranted(false);
-  }
-};
-
-// Espace séparé : le modérateur ne passe jamais par le tableau de bord administrateur.
-window.openModeratorSpace = async function(){
-  const status = document.getElementById("admin-panel-status");
-  try {
-    const staffInfo = await adminApi("/api/admin/me");
-    if (staffInfo.role !== "moderator") throw new Error("Cet espace est réservé aux modérateurs.");
-    window.adminCurrentRole = "moderator";
-    window.setAdminAccessGranted(true);
-    window.showDashSection("dash-admin-info");
-    const brand = document.querySelector(".admin-brand small");
-    if (brand) brand.textContent = "ESPACE MODÉRATION";
-    document.querySelectorAll(".admin-nav-item").forEach(button => {
-      const action = button.getAttribute("onclick") || "";
-      button.hidden = !action.includes("adminOpenSupport");
-    });
-    document.querySelectorAll(".communication-tab").forEach(button => {
-      button.hidden = !((button.getAttribute("onclick") || "").includes("adminOpenSupport"));
-    });
-    adminSetView("admin-support-view", "Espace Modérateur · Support");
-    if (status) status.textContent = "Chargement des demandes de support…";
-    const result = await adminApi("/api/admin/support");
-    renderAdminSupportTable(result.requests || [], status, document.getElementById("admin-support-list"));
-    const area = document.getElementById("admin-support-area");
-    if (area) area.hidden = false;
-  } catch (error) {
-    if (status) status.textContent = error.message || "Impossible d’ouvrir l’espace modérateur.";
   }
 };
 
@@ -4560,7 +4563,7 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 const adminSetView = window.adminSetView = function(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view","admin-team-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view","admin-inbox-view","admin-team-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
@@ -5701,12 +5704,7 @@ window.openAdminPanel = async function() {
   supportArea.hidden = true;
   try {
     await adminApi("/api/admin/me");
-    window.adminCurrentRole = "admin";
     window.setAdminAccessGranted(true);
-    const brand = document.querySelector(".admin-brand small");
-    if (brand) brand.textContent = "ESPACE ADMINISTRATION";
-    document.querySelectorAll(".admin-nav-item").forEach(button => { button.hidden = false; });
-    document.querySelectorAll(".communication-tab").forEach(button => { button.hidden = false; });
     document.getElementById("admin-access-error")?.remove();
     window.showDashSection("dash-admin-info");
     adminShowHome();
@@ -5863,14 +5861,12 @@ let adminAccessGranted = false;
 window.setAdminAccessGranted = function(value){
   adminAccessGranted = value === true;
   const adminNav = document.getElementById("admin-nav-button");
-  const moderatorNav = document.getElementById("moderator-space-nav");
   const testerNav = document.getElementById("tester-space-nav");
   const isModerator = window.adminCurrentRole === "moderator";
   if(adminNav) {
-    adminNav.hidden = !adminAccessGranted || isModerator;
-    adminNav.setAttribute("aria-label", "Administration — accès administrateur uniquement");
+    adminNav.hidden = !adminAccessGranted;
+    adminNav.setAttribute("aria-label", "Administration — accès équipe autorisé");
   }
-  if(moderatorNav) moderatorNav.hidden = !adminAccessGranted || !isModerator;
   if(adminAccessGranted && testerNav) testerNav.hidden = false;
   document.querySelectorAll(".admin-nav-item").forEach(button => {
     const action = button.getAttribute("onclick") || "";
@@ -7064,10 +7060,10 @@ window.loadMemberMailbox = async function() {
     if (!messages.length) {
       list.innerHTML = '<div class="mailbox-empty"><div style="font-size:38px">📭</div><strong>Ta boîte aux lettres est vide.</strong><p>Tu trouveras ici les prochains messages de l’administration.</p></div>';
     } else {
-      list.innerHTML = messages.map(message => `<article class="mailbox-message ${message.read_at ? "" : "unread"}" ${String(message.category || "").toLocaleLowerCase("fr") === "notification" ? 'data-category-notification="1"' : ""}>
+      list.innerHTML = messages.map(message => `<article class="mailbox-message ${message.read_at ? "" : "unread"}" data-mailbox-id="${Number(message.id)}" ${String(message.category || "").toLocaleLowerCase("fr") === "notification" ? 'data-category-notification="1"' : ""}>
         <div class="mailbox-message-head"><div><small>${mailboxEscape(message.category || "Message")} · ${mailboxEscape(mailboxDate(message.created_at))}</small><h4>${mailboxEscape(message.title)}</h4></div>${message.read_at ? '<span>✓ Lu</span>' : '<span class="mailbox-unread-badge">Nouveau</span>'}</div>
         <p>${mailboxEscape(message.body)}</p>
-        <div class="mailbox-message-actions">${message.read_at ? "" : `<button type="button" onclick="markMailboxMessageRead(${Number(message.id)})">✓ Marquer comme lu</button>`}<button type="button" onclick="deleteMailboxMessage(${Number(message.id)})">🗑 Supprimer</button></div>
+        <div class="mailbox-message-actions">${message.read_at ? "" : `<button type="button" data-action="mark-read" onclick="window.markMailboxMessageRead(${Number(message.id)})">✓ Marquer comme lu</button>`}<button type="button" onclick="deleteMailboxMessage(${Number(message.id)})">🗑 Supprimer</button></div>
       </article>`).join("");
     }
     await window.refreshMailboxUnread();
@@ -7091,10 +7087,10 @@ window.loadMemberNotifications = async function() {
     if (!notifications.length) {
       list.innerHTML = '<div class="mailbox-empty"><div style="font-size:38px">🔕</div><strong>Aucune notification pour le moment.</strong><p>Les annonces importantes de l’administration apparaîtront ici.</p></div>';
     } else {
-      list.innerHTML = notifications.map(message => `<article class="mailbox-message ${message.read_at ? "" : "unread"}" data-notification-id="${Number(message.id)}">
+      list.innerHTML = notifications.map(message => `<article class="mailbox-message ${message.read_at ? "" : "unread"}" data-mailbox-id="${Number(message.id)}" data-notification-id="${Number(message.id)}">
         <div class="mailbox-message-head"><div><small>🔔 Notification · ${mailboxEscape(mailboxDate(message.created_at))}</small><h4>${mailboxEscape(message.title)}</h4></div>${message.read_at ? '<span>✓ Lu</span>' : '<span class="mailbox-unread-badge">Nouveau</span>'}</div>
         <p>${mailboxEscape(message.body)}</p>
-        <div class="mailbox-message-actions">${message.read_at ? "" : `<button type="button" onclick="markMailboxMessageRead(${Number(message.id)})">✓ Marquer comme lue</button>`}<button type="button" onclick="deleteMailboxMessage(${Number(message.id)})">🗑 Supprimer</button></div>
+        <div class="mailbox-message-actions">${message.read_at ? "" : `<button type="button" data-action="mark-read" onclick="window.markMailboxMessageRead(${Number(message.id)})">✓ Marquer comme lue</button>`}<button type="button" onclick="deleteMailboxMessage(${Number(message.id)})">🗑 Supprimer</button></div>
       </article>`).join("");
     }
     await window.refreshMailboxUnread();
@@ -7104,14 +7100,103 @@ window.loadMemberNotifications = async function() {
   }
 };
 window.markMailboxMessageRead = async function(id) {
-  try { await mailboxApi(`/api/mailbox/${id}/read`, { method:"PATCH", body:"{}" }); if (!document.getElementById("dash-notifications")?.classList.contains("hidden")) await window.loadMemberNotifications(); else await window.loadMemberMailbox(); }
-  catch (error) { alert(error.message || "Impossible de modifier ce message."); }
+  const card = document.querySelector(`[data-mailbox-id="${Number(id)}"]`);
+  const button = card?.querySelector('[data-action="mark-read"]');
+  if (button) { button.disabled = true; button.textContent = "Enregistrement…"; }
+  try {
+    await mailboxApi(`/api/mailbox/${encodeURIComponent(Number(id))}/read`, {
+      method: "PATCH", body: JSON.stringify({})
+    });
+    if (card) {
+      card.querySelector(".mailbox-unread-badge")?.remove();
+      const head = card.querySelector(".mailbox-message-head");
+      if (head && !head.querySelector("[data-read-label]")) {
+        const label = document.createElement("span");
+        label.dataset.readLabel = "1";
+        label.textContent = "✓ Lu";
+        head.appendChild(label);
+      }
+      button?.remove();
+    }
+    const notificationsOpen = !document.getElementById("dash-notifications")?.classList.contains("hidden");
+    if (notificationsOpen) await window.loadMemberNotifications();
+    else await window.loadMemberMailbox();
+    await window.refreshMailboxUnread();
+  } catch (error) {
+    if (button) { button.disabled = false; button.textContent = "✓ Marquer comme lu"; }
+    alert(error.message || "Impossible de marquer ce message comme lu.");
+  }
 };
 window.deleteMailboxMessage = async function(id) {
   if (!confirm("Supprimer ce message de ta boîte aux lettres ?")) return;
   try { await mailboxApi(`/api/mailbox/${id}`, { method:"DELETE" }); if (!document.getElementById("dash-notifications")?.classList.contains("hidden")) await window.loadMemberNotifications(); else await window.loadMemberMailbox(); }
   catch (error) { alert(error.message || "Impossible de supprimer ce message."); }
 };
+window.adminOpenInbox = async function() {
+  adminSetView("admin-inbox-view", "Boîte de réception");
+  await window.loadAdminInbox();
+};
+window.loadAdminInbox = async function() {
+  const list = document.getElementById("admin-inbox-list");
+  const summary = document.getElementById("admin-inbox-summary");
+  const filter = document.getElementById("admin-inbox-filter")?.value || "all";
+  if (!list) return;
+  list.innerHTML = '<p class="mailbox-empty">Chargement de tous les messages…</p>';
+  if (summary) summary.textContent = "Récupération des demandes…";
+  const buckets = [];
+  const failures = [];
+  const load = async (label, path, key, category, map) => {
+    try {
+      const data = await mailboxApi(path);
+      (data[key] || []).forEach(item => buckets.push(map(item, category, label)));
+    } catch (error) { failures.push(label + " : " + (error.message || "indisponible")); }
+  };
+  await Promise.all([
+    load("Support", "/api/admin/support", "requests", "support", x=>({
+      category:"support", label:"Support", id:x.id, title:x.subject || "Demande de support",
+      body:x.message || "", sender:x.user_email || x.email || ("Membre " + String(x.user_id || "")),
+      date:x.created_at, status:x.status || "en_attente", detail:"Demande d'aide d'un joueur"
+    })),
+    load("Testeurs", "/api/admin/testers", "applications", "testers", x=>({
+      category:"testers", label:"Testeurs", id:x.id, title:x.pseudo || x.name || "Demande testeur",
+      body:x.message || x.motivation || x.reason || "Nouvelle demande de candidature testeur.",
+      sender:x.email || x.user_email || "Membre", date:x.created_at || x.applied_at,
+      status:x.status || "en_attente", detail:"Candidature testeur"
+    })),
+    load("Mairies et partenaires", "/api/admin/partner-requests", "requests", "partners", x=>({
+      category:"partners", label:"Mairies / partenaires", id:x.id,
+      title:x.subject || "Demande partenaire — " + (x.municipality || ""),
+      body:x.message || "", sender:[x.contact_name,x.contact_email,x.municipality].filter(Boolean).join(" · "),
+      date:x.created_at, status:x.status || "en_attente", detail:"Demande d'une mairie ou d'un partenaire"
+    }))
+,
+    load("Retours des testeurs", "/api/admin/tester-feedback", "feedback", "feedback", x=>({
+      category:"feedback", label:"Retours testeurs", id:x.id,
+      title:x.category || "Retour de testeur",
+      body:x.message || "", sender:[x.tester_name,x.tester_email,x.village_name].filter(Boolean).join(" · "),
+      date:x.created_at, status:x.status || "en_attente", detail:"Retour ou signalement d'un testeur"
+    })),
+    load("Validations de niveaux", "/api/admin/tester-level-reviews", "reviews", "reviews", x=>({
+      category:"reviews", label:"Validations de niveaux", id:x.id,
+      title:"Validation demandée — " + (x.village_name || x.village_slug || "Village"),
+      body:x.report || "", sender:[x.tester_name,x.tester_email,x.formula].filter(Boolean).join(" · "),
+      date:x.created_at, status:x.status || "en_attente", detail:"Demande de validation d'un parcours"
+    }))
+  ]);
+  buckets.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+  const visible = filter === "all" ? buckets : buckets.filter(x=>x.category===filter);
+  const pending = buckets.filter(x=>!["repondu","ferme","accepte","refuse","traite","clos"].includes(String(x.status).toLowerCase())).length;
+  if (summary) summary.textContent = `${buckets.length} élément(s) reçu(s) · ${pending} demande(s) à suivre` + (failures.length ? " · Certaines rubriques n'ont pas pu être chargées." : "");
+  if (!visible.length) list.innerHTML = '<div class="admin-inbox-empty">Aucun message dans cette catégorie pour le moment.</div>';
+  else list.innerHTML = visible.map(item => `<article class="admin-inbox-item">
+    <div><div class="admin-inbox-meta"><span class="admin-inbox-tag">${mailboxEscape(item.label)}</span><span>${mailboxEscape(item.detail)}</span><span>${mailboxEscape(mailboxDate(item.date))}</span></div>
+    <h4>${mailboxEscape(item.title)}</h4><small>Expéditeur : ${mailboxEscape(item.sender)}</small>
+    <p>${mailboxEscape(item.body)}</p><small>Statut : ${mailboxEscape(item.status)}</small></div>
+    <div><button type="button" class="admin-secondary-btn" onclick="${item.category==="support"?"adminOpenSupport()":item.category==="testers"?"adminOpenTesters()":"adminOpenCommunication()"}">Ouvrir la rubrique</button></div>
+    </article>`).join("");
+  if (failures.length) list.insertAdjacentHTML("beforeend", `<div class="admin-inbox-empty">${failures.map(mailboxEscape).join("<br>")}</div>`);
+};
+document.getElementById("admin-inbox-filter")?.addEventListener("change", () => window.loadAdminInbox());
 window.adminOpenMailboxAdmin = async function() {
   adminSetView("admin-mailbox-view", "Centre de communication");
   const form = document.getElementById("admin-mailbox-form");
