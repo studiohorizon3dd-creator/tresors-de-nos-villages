@@ -207,6 +207,84 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 @media(max-width:650px){.village-proposal-banner{align-items:stretch}.village-proposal-banner .primary-btn{width:100%}}
 
 
+
+/* Accueil public illustré — mise en page inspirée de la maquette validée */
+#landing>.sidebar{display:none}
+#landing>.content{margin-left:0;width:100%;max-width:none}
+#landing .home-hero{min-height:275px;padding:20px clamp(18px,3vw,42px);background-image:linear-gradient(90deg,rgba(2,35,23,.88),rgba(2,35,23,.5) 42%,rgba(2,35,23,.05)),url("images/image-01.jpg");background-position:center 48%;background-size:cover}
+#landing .home-hero-inner{width:100%;max-width:1500px;margin:0 auto;display:flex;align-items:center;gap:30px}
+#landing .home-brand-ribbon{align-self:flex-start;flex:none;margin:2px 0 0;padding:13px 23px;text-align:center;background:linear-gradient(135deg,#fff0bd,#d8ad4c);color:#173b29;border:2px solid #8d6926;border-radius:10px 10px 24px 24px;box-shadow:0 5px 14px #0004;font-weight:bold;font-size:17px;line-height:1.12;transform:rotate(-2deg)}
+#landing .home-brand-ribbon strong{font-size:22px}
+#landing .home-hero-copy{max-width:570px;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;backdrop-filter:none;color:#fff8df}
+#landing .home-hero-copy .eyebrow{color:#f2d36e;letter-spacing:2px}
+#landing .home-hero-copy h1{font-size:clamp(35px,4vw,54px);font-style:italic;line-height:1.02;margin:0;color:#fff7df;text-shadow:0 3px 8px #14291d}
+#landing .home-hero-copy p{font-size:16px;line-height:1.4;color:#fff9e9;text-shadow:0 2px 4px #14291d}
+#landing .home-hero-copy .gold-line{height:4px;width:230px;margin:13px 0;background:#e4b52e;border-radius:50%}
+#landing .home-hero-actions{margin-top:15px;gap:10px}
+#landing .home-hero-actions .primary-btn{padding:11px 20px;font-size:15px}
+#landing .home-secondary-btn{padding:11px 19px;font-size:15px}
+#landing .site-status-banner{margin:5px 15px 0;border-radius:22px;border:1px solid #d7ad45;box-shadow:0 3px 9px #0002}
+#landing .home-promises{padding:16px clamp(15px,3vw,38px);background:linear-gradient(180deg,#fff8e6,#f5e7c5);color:#173b29;border-bottom:1px solid #dfc27a;gap:8px}
+#landing .home-promise{font-size:15px;min-height:48px;border-right:1px solid #ddc58d}
+#landing .home-promise:last-child{border-right:0}
+#landing .home-promise span{font-size:31px}
+#landing .home-formulas{padding:22px clamp(14px,2vw,28px) 14px;background:#fff7e7}
+#landing .home-section-heading{display:flex;align-items:center;justify-content:center;gap:12px;text-align:center;margin:0 auto 14px}
+#landing .home-section-heading>span{color:#c18a13;font-size:30px;font-weight:bold}
+#landing .home-section-heading .section-title{font-size:clamp(24px,2.5vw,31px);margin:0 0 3px;color:#092f22}
+#landing .home-section-heading .section-intro{font-size:14px;line-height:1.35;margin:0 auto;color:#263d2e}
+#landing .home-formula-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+#landing .home-formula{position:relative;display:flex;flex-direction:column;min-height:185px;padding:0 0 12px;border:1px solid #e3c77c;border-radius:19px;background:linear-gradient(145deg,#fffdf4,#f7e9c8);box-shadow:0 4px 9px #55411b20}
+#landing .home-formula-art{height:76px;display:flex;align-items:center;justify-content:center;gap:12px;overflow:hidden;background:radial-gradient(ellipse at 50% 100%,#d9e5a2 0,#f3e8c3 55%,transparent 56%)}
+#landing .home-formula-art span{font-size:47px;filter:drop-shadow(0 3px 2px #5b4a25)}
+#landing .home-formula-art i{font-style:normal;font-size:34px}
+#landing .home-formula-child .home-formula-art{background:linear-gradient(135deg,#d5e7a7,#fff0c6)}
+#landing .home-formula-family .home-formula-art{background:linear-gradient(135deg,#b9d9a2,#fff0c6)}
+#landing .home-formula-easy .home-formula-art{background:linear-gradient(135deg,#d7e8b1,#f9e6b4)}
+#landing .home-formula-top{padding:0 14px 7px;justify-content:center;gap:9px}
+#landing .home-formula-icon{width:42px;height:42px;flex:0 0 42px;font-size:22px}
+#landing .home-formula h3{font-size:20px}
+#landing .home-formula p{padding:0 16px 9px;text-align:center;font-size:14px;line-height:1.35;flex:1}
+#landing .home-formula-button{align-self:center;margin:0 12px;padding:9px 14px;width:calc(100% - 24px);border:1px solid #d7ad45;border-radius:24px;background:linear-gradient(120deg,#073322,#17613e);color:#fff5d2;font-weight:bold;font-size:13px;box-shadow:0 3px 7px #0002}
+#landing .home-formula-button:hover{filter:brightness(1.12)}
+#landing .home-rewards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:5px 18px 20px;padding:14px 10px;border:2px solid #d4a94a;border-radius:22px;background:linear-gradient(120deg,#f6e2a9,#fff3cf,#efd38c);box-shadow:0 4px 12px #6b512222}
+#landing .home-rewards>div{display:flex;align-items:center;justify-content:center;gap:9px;text-align:left;border-right:1px solid #c9a75c;padding:3px 7px;color:#1c3025}
+#landing .home-rewards>div:last-child{border-right:0}
+#landing .home-rewards span{font-size:32px}
+#landing .home-rewards strong{font-size:13px;line-height:1.25}
+#landing .home-rewards small{display:block;font-size:10px;font-weight:normal}
+#landing .home-how{background:#fff7e7}
+@media(max-width:800px){
+  #landing .home-hero{min-height:300px;padding:18px}
+  #landing .home-hero-inner{gap:14px}
+  #landing .home-brand-ribbon{font-size:13px;padding:10px}
+  #landing .home-brand-ribbon strong{font-size:17px}
+  #landing .home-promises{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #landing .home-promise:nth-child(2){border-right:0}
+  #landing .home-formula-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #landing .home-rewards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #landing .home-rewards>div:nth-child(2){border-right:0}
+}
+@media(max-width:560px){
+  #landing .home-hero{min-height:430px;background-position:58% center;padding:16px}
+  #landing .home-hero-inner{align-items:flex-start;flex-direction:column;gap:13px}
+  #landing .home-brand-ribbon{align-self:flex-start;margin-left:5px}
+  #landing .home-hero-copy{max-width:100%}
+  #landing .home-hero-copy h1{font-size:38px}
+  #landing .home-hero-actions{flex-direction:column;align-items:stretch}
+  #landing .home-hero-actions button{width:100%}
+  #landing .home-promises{padding:12px 8px}
+  #landing .home-promise{font-size:12px;gap:5px}
+  #landing .home-promise span{font-size:24px}
+  #landing .home-section-heading>span{display:none}
+  #landing .home-formula-grid{grid-template-columns:1fr}
+  #landing .home-formula{min-height:0}
+  #landing .home-rewards{margin:5px 10px 18px;grid-template-columns:1fr 1fr;padding:9px 5px}
+  #landing .home-rewards>div{justify-content:flex-start;font-size:11px}
+  #landing .home-rewards span{font-size:25px}
+  #landing .home-rewards strong{font-size:11px}
+}
+
 /* Nouvelle page d'accueil immersive */
 .home-hero{position:relative;min-height:430px;padding:48px clamp(18px,4vw,56px);display:flex;align-items:center;background:linear-gradient(90deg,rgba(2,28,20,.82),rgba(2,28,20,.38) 56%,rgba(2,28,20,.08)),url("images/accueil-aventure.jpg") center/cover no-repeat;color:#fff7dc}
 .home-hero-copy{max-width:620px;padding:26px 30px;background:rgba(4,38,27,.78);border:1px solid #d7ad45;border-radius:18px;box-shadow:0 12px 34px #0005;backdrop-filter:blur(2px)}
@@ -546,14 +624,17 @@ body.halloween-accueil .home-hero{
   </aside>
   <div class="content">
     <header class="home-hero" id="accueil">
-      <div class="home-hero-copy">
-        <p class="eyebrow">Bienvenue dans votre prochaine aventure</p>
-        <h1>Trésors de nos Villages</h1>
-        <div class="gold-line"></div>
-        <p><strong>Et si votre village cachait un trésor ?</strong><br>Explorez des lieux, résolvez des énigmes et découvrez les petites histoires qui rendent chaque village unique.</p>
-        <div class="home-hero-actions">
-          <button class="primary-btn" type="button" onclick="showAccount()">Découvrir les aventures&nbsp; →</button>
-          <button class="home-secondary-btn" type="button" onclick="goTo('formules-public')">Voir les formules</button>
+      <div class="home-hero-inner">
+        <div class="home-brand-ribbon">Bienvenue dans<br><strong>Trésors de nos Villages</strong></div>
+        <div class="home-hero-copy">
+          <p class="eyebrow">Partez à la découverte</p>
+          <h1>Et si votre village<br>cachait un trésor&nbsp;?</h1>
+          <div class="gold-line"></div>
+          <p>Explorez des lieux, résolvez des énigmes et découvrez les petites histoires qui rendent chaque village unique.</p>
+          <div class="home-hero-actions">
+            <button class="primary-btn" type="button" onclick="showAccount()">🧭 &nbsp; Découvrir les aventures&nbsp; →</button>
+            <button class="home-secondary-btn" type="button" onclick="goTo('formules-public')">🗝️ &nbsp; Voir les formules&nbsp; →</button>
+          </div>
         </div>
       </div>
     </header>
@@ -570,18 +651,40 @@ body.halloween-accueil .home-hero{
       <div class="home-promise"><span>👨‍👩‍👧‍👦</span> Une aventure pour tous</div>
     </div>
     <section class="home-formulas" id="formules-public">
-      <h2 class="section-title">Choisissez votre façon de partir à l'aventure</h2>
-      <p class="section-intro">En solo, en famille ou entre amis, il existe une formule pour chaque envie. Découvrez les univers et choisissez celui qui vous ressemble.</p>
-      <div class="home-formula-grid">
-        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🧒</div><h3>Mode Enfant</h3></div><p>Des jeux d'observation, des devinettes et des découvertes pour apprendre en s'amusant.</p></article>
-        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">👨‍👩‍👧</div><h3>Mode Famille</h3></div><p>Une aventure à partager, où petits et grands mettent leurs idées en commun.</p></article>
-        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🌿</div><h3>Mode Facile</h3></div><p>Une première exploration tranquille, avec des indices accessibles et des énigmes simples.</p></article>
-        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🧩</div><h3>Mode Moyen</h3></div><p>Des défis qui demandent réflexion, observation et un peu de logique.</p></article>
-        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🔥</div><h3>Mode Extrême</h3></div><p>Un grand défi pour les explorateurs qui aiment se creuser les méninges.</p></article>
-        <article class="home-formula"><div class="home-formula-top"><div class="home-formula-icon">🌙</div><h3>Mode Nuit</h3></div><p>Une ambiance mystérieuse, des histoires et des énigmes pour changer de décor.</p></article>
+      <div class="home-section-heading">
+        <span>⟶</span>
+        <div>
+          <h2 class="section-title">Choisissez votre façon de partir à l’aventure</h2>
+          <p class="section-intro">En solo, en famille ou entre amis, il existe une formule pour chaque envie.<br>Découvrez les univers et choisissez celui qui vous ressemble.</p>
+        </div>
+        <span>⟵</span>
       </div>
-      <p class="home-formula-foot">Chaque formule possède son ambiance, ses défis et ses récompenses. Les détails se découvrent dans votre espace aventurier.</p>
-      <div class="cta-wrap" style="padding:20px 0 0"><button class="primary-btn" type="button" onclick="showAccount()">Je découvre mon aventure&nbsp; →</button></div>
+      <div class="home-formula-grid">
+        <article class="home-formula home-formula-child">
+          <div class="home-formula-art"><span>🧰</span><i>🌼</i></div>
+          <div class="home-formula-top"><div class="home-formula-icon">🧒</div><h3>Mode Enfant</h3></div>
+          <p>Des aventures ludiques et adaptées aux plus jeunes pour découvrir les villages en s’amusant&nbsp;!</p>
+          <button class="home-formula-button" type="button" onclick="showAccount()">Je découvre le mode Enfant&nbsp; →</button>
+        </article>
+        <article class="home-formula home-formula-family">
+          <div class="home-formula-art"><span>🥾</span><i>🌳</i></div>
+          <div class="home-formula-top"><div class="home-formula-icon">👨‍👩‍👧</div><h3>Mode Famille</h3></div>
+          <p>Vivez une aventure conviviale et collaborative, idéale pour partager un moment en famille&nbsp;!</p>
+          <button class="home-formula-button" type="button" onclick="showAccount()">Je découvre le mode Famille&nbsp; →</button>
+        </article>
+        <article class="home-formula home-formula-easy">
+          <div class="home-formula-art"><span>🪧</span><i>🌿</i></div>
+          <div class="home-formula-top"><div class="home-formula-icon">🌱</div><h3>Mode Facile</h3></div>
+          <p>Une première aventure accessible à tous pour découvrir le concept et les trésors de nos villages&nbsp;!</p>
+          <button class="home-formula-button" type="button" onclick="showAccount()">Je découvre le mode Facile&nbsp; →</button>
+        </article>
+      </div>
+    </section>
+    <section class="home-rewards" aria-label="Les récompenses de l’aventure">
+      <div><span>🏆</span><strong>Collectionnez<br>des badges</strong></div>
+      <div><span>📕</span><strong>Complétez votre<br>passeport du voyageur</strong></div>
+      <div><span>🗓️</span><strong>Participez aux<br>événements saisonniers<small>(Noël, Pâques, Halloween…)</small></strong></div>
+      <div><span>🏅</span><strong>Obtenez votre<br>certificat d’explorateur</strong></div>
     </section>
     <section class="home-how" id="concept">
       <h2 class="section-title">Comment fonctionne l'aventure ?</h2>
