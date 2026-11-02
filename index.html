@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -1068,7 +1067,7 @@ body.halloween-accueil .home-hero{
       <label for="town-message">Votre message</label>
       <textarea id="town-message" rows="5" maxlength="3000" required placeholder="Présentez votre demande…"></textarea>
       <button class="primary-btn" type="submit">✉️ &nbsp; Préparer mon message</button>
-      <p class="status" id="town-contact-status" role="status" aria-live="polite">Le formulaire sera relié à l’adresse de contact du projet dès qu’elle aura été renseignée.</p>
+      <p class="status" id="town-contact-status" role="status" aria-live="polite">Le bouton prépare un e-mail à destination de l’équipe du projet. Vous devrez confirmer son envoi depuis votre messagerie.</p>
     </form>
   </div>
 </section>
@@ -3032,24 +3031,36 @@ window.setAdminAccessGranted = function(value){
 document.addEventListener("DOMContentLoaded", function(){
   const form = document.getElementById("town-contact-form");
   if(!form) return;
-  form.addEventListener("submit", async function(event){
+  form.addEventListener("submit", function(event){
     event.preventDefault();
-    const values = [
-      "Contact mairie – Trésors de nos Villages",
-      "Commune : " + document.getElementById("town-name").value.trim(),
-      "Nom et fonction : " + (document.getElementById("town-person").value.trim() || "Non précisé"),
-      "E-mail : " + document.getElementById("town-email").value.trim(),
-      "Objet : " + document.getElementById("town-subject").value,
+    if(!form.reportValidity()) return;
+
+    const recipient = "studio.horizon3dd@gmail.com";
+    const commune = document.getElementById("town-name").value.trim();
+    const person = document.getElementById("town-person").value.trim() || "Non précisé";
+    const senderEmail = document.getElementById("town-email").value.trim();
+    const subjectChoice = document.getElementById("town-subject").value;
+    const message = document.getElementById("town-message").value.trim();
+    const subject = "Contact mairie – " + commune + " – Trésors de nos Villages";
+    const body = [
+      "Nouvelle demande depuis le site Trésors de nos Villages",
       "",
-      document.getElementById("town-message").value.trim()
-    ].join("\\n");
+      "Commune : " + commune,
+      "Nom et fonction : " + person,
+      "Adresse e-mail : " + senderEmail,
+      "Objet : " + subjectChoice,
+      "",
+      "Message :",
+      message
+    ].join("\n");
+
     const status = document.getElementById("town-contact-status");
-    try {
-      await navigator.clipboard.writeText(values);
-      status.textContent = "Message copié ! Il ne reste qu’à le coller dans un e-mail. L’adresse de contact du projet reste à configurer pour permettre un envoi direct depuis le site.";
-    } catch(error) {
-      status.textContent = "Ton message est prêt. La copie automatique n’a pas fonctionné ; l’adresse de contact du projet reste à configurer pour l’envoi.";
-    }
+    const mailto = "mailto:" + recipient +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+
+    status.textContent = "Votre message est préparé. Votre logiciel de messagerie va s’ouvrir : vérifiez le message puis cliquez sur Envoyer. Aucun e-mail n’est envoyé tant que vous ne l’avez pas confirmé.";
+    window.location.href = mailto;
   });
 });
 
@@ -4271,4 +4282,3 @@ document.getElementById("players-next")?.addEventListener("click",()=>{adminPlay
 
 </body>
 </html>
-```
