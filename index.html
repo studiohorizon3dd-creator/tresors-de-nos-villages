@@ -3539,6 +3539,21 @@ body.halloween-accueil .home-hero{
 #dash-tester-space .tester-rank-item{height:70px!important;min-height:70px!important;overflow:visible!important}
 #dash-tester-space .tester-rank-item img{width:60px!important;height:70px!important;object-fit:contain!important}
 #dash-tester-space .tester-xp-track span{width:0!important}
+
+/* CORRECTION VISUELLE : écussons et badges sans texte superposé */
+#dash-tester-space .tester-rank-item{min-height:82px!important;height:82px!important;padding:2px!important;gap:0!important;overflow:hidden!important}
+#dash-tester-space .tester-rank-item img{display:block!important;width:78px!important;height:78px!important;max-width:100%!important;object-fit:contain!important;margin:0 auto!important}
+#dash-tester-space .tester-rank-item strong{display:none!important}
+#dash-tester-space .tester-mini-badge{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:3px!important;min-width:0!important;min-height:92px!important;padding:6px 4px!important;overflow:hidden!important;box-sizing:border-box!important}
+#dash-tester-space .tester-mini-badge img{display:block!important;flex:0 0 52px!important;width:52px!important;height:52px!important;max-width:100%!important;object-fit:contain!important;margin:0 auto!important}
+#dash-tester-space .tester-mini-badge span{display:block!important;position:static!important;clip-path:none!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;background:none!important;color:#173a29!important;font:700 10px/1.15 Georgia,serif!important;text-shadow:none!important;overflow-wrap:anywhere!important}
+#dash-tester-space .tester-mini-badge small{display:block!important;font:9px/1.1 Georgia,serif!important;color:#765a20!important}
+@media(max-width:700px){
+ #dash-tester-space .tester-rank-item{height:70px!important;min-height:70px!important}
+ #dash-tester-space .tester-rank-item img{width:64px!important;height:64px!important}
+ #dash-tester-space .tester-mini-badge{min-height:84px!important}
+ #dash-tester-space .tester-mini-badge img{flex-basis:44px!important;width:44px!important;height:44px!important}
+}
 </style>
         <div class="puzzle-admin-hero"><div><h2>🧩 Carte Puzzle</h2><p>Gérez les pièces de la carte et programmez leurs révélations.</p></div><div class="puzzle-admin-hero-mark">🏡</div></div>
         <div class="puzzle-admin-tabs" role="tablist" aria-label="Rubriques de la carte puzzle">
