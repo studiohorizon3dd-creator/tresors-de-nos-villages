@@ -2036,6 +2036,7 @@ body.halloween-accueil .home-hero{
       <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn" onclick="showDashSection('dash-mailbox');loadMemberMailbox()">📬 &nbsp; Ma boîte aux lettres <span id="mailbox-unread-nav" class="mailbox-unread-badge" hidden>0</span></button>
+          <button class="nav-btn" onclick="showDashSection('dash-notifications');loadMemberNotifications()">🔔 &nbsp; Mes notifications <span id="notifications-unread-nav" class="mailbox-unread-badge" hidden>0</span></button>
           <button class="nav-btn" onclick="showDashSection('dash-profile')">♙ &nbsp; Mon profil</button>
           <button class="nav-btn" onclick="showDashSection('dash-adventures')">🧭 &nbsp; Mes aventures</button>
           <button class="nav-btn" onclick="showDashSection('dash-badges')">🏅 &nbsp; Mes badges</button>
@@ -2169,6 +2170,13 @@ body.halloween-accueil .home-hero{
       <div class="mailbox-toolbar"><div><strong id="mailbox-unread-summary">Chargement des messages…</strong><p>Seuls tes messages personnels sont visibles dans cet espace.</p></div><button type="button" class="small-btn" onclick="loadMemberMailbox()">↻ Actualiser</button></div>
       <div id="member-mailbox-list" class="mailbox-list" aria-live="polite"><p class="mailbox-empty">Ouverture de ta boîte aux lettres…</p></div>
       <p id="member-mailbox-status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="dash-section hidden" id="dash-notifications">
+      <div class="mailbox-hero"><div><p class="eyebrow">TON ESPACE PERSONNEL</p><h2>🔔 Mes notifications</h2><p>Retrouve ici les annonces importantes et les informations envoyées par l’administration.</p></div><span class="mailbox-hero-icon">🔔</span></div>
+      <div class="mailbox-toolbar"><div><strong id="notifications-unread-summary">Chargement des notifications…</strong><p>Cette page affiche uniquement les notifications, séparées de tes messages personnels.</p></div><button type="button" class="small-btn" onclick="loadMemberNotifications()">↻ Actualiser</button></div>
+      <div id="member-notifications-list" class="mailbox-list" aria-live="polite"><p class="mailbox-empty">Ouverture de tes notifications…</p></div>
+      <p id="member-notifications-status" class="status" role="status" aria-live="polite"></p>
     </section>
 
     <section class="dash-section hidden explorer-profile-page" id="dash-profile">
@@ -5884,6 +5892,7 @@ function showDashSection(id){
   selected.classList.remove("hidden");
   selected.style.removeProperty("display");
   if(id === "dash-news") window.loadPublicNews?.();
+  if(id === "dash-notifications") window.loadMemberNotifications?.();
   if(id === "dash-mailbox") window.loadMemberMailbox?.();
   if(id === "dash-adventures") window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
@@ -6754,6 +6763,7 @@ window.refreshMailboxUnread = async function() {
   const badge = document.getElementById("mailbox-unread-nav");
   const floatingBadge = document.getElementById("mailbox-unread-float");
   const notificationBadge = document.getElementById("notifications-unread-float");
+  const notificationNavBadge = document.getElementById("notifications-unread-nav");
   try {
     const data = await mailboxApi("/api/mailbox");
     const messages = data.messages || [];
@@ -6765,17 +6775,15 @@ window.refreshMailboxUnread = async function() {
       item.textContent = unreadMessages > 99 ? "99+" : String(unreadMessages);
       item.hidden = unreadMessages < 1;
     });
-    if (notificationBadge) {
-      notificationBadge.textContent = unreadNotifications > 99 ? "99+" : String(unreadNotifications);
-      notificationBadge.hidden = unreadNotifications < 1;
-    }
+    [notificationBadge, notificationNavBadge].filter(Boolean).forEach(item => {
+      item.textContent = unreadNotifications > 99 ? "99+" : String(unreadNotifications);
+      item.hidden = unreadNotifications < 1;
+    });
   } catch (error) { console.warn("Compteur de boîte aux lettres indisponible :", error.message); }
 };
 window.openMemberNotifications = async function() {
-  showDashSection("dash-mailbox");
-  await window.loadMemberMailbox?.();
-  const first = document.querySelector("#member-mailbox-list [data-category-notification]");
-  if (first) first.scrollIntoView({ behavior:"smooth", block:"center" });
+  showDashSection("dash-notifications");
+  await window.loadMemberNotifications?.();
 };
 window.openMemberMailbox = function() {
   if (typeof window.showDashSection !== "function" && typeof showDashSection !== "function") {
@@ -6811,13 +6819,40 @@ window.loadMemberMailbox = async function() {
     if (status) status.textContent = error.message || "Erreur de chargement.";
   }
 };
+window.loadMemberNotifications = async function() {
+  const list = document.getElementById("member-notifications-list");
+  const summary = document.getElementById("notifications-unread-summary");
+  const status = document.getElementById("member-notifications-status");
+  if (!list) return;
+  list.innerHTML = '<p class="mailbox-empty">Chargement de tes notifications…</p>';
+  if (status) status.textContent = "";
+  try {
+    const data = await mailboxApi("/api/mailbox");
+    const notifications = (data.messages || []).filter(message => String(message.category || "").toLocaleLowerCase("fr") === "notification");
+    const unread = notifications.filter(message => !message.read_at).length;
+    if (summary) summary.textContent = `${unread} notification(s) non lue(s) · ${notifications.length} au total`;
+    if (!notifications.length) {
+      list.innerHTML = '<div class="mailbox-empty"><div style="font-size:38px">🔕</div><strong>Aucune notification pour le moment.</strong><p>Les annonces importantes de l’administration apparaîtront ici.</p></div>';
+    } else {
+      list.innerHTML = notifications.map(message => `<article class="mailbox-message ${message.read_at ? "" : "unread"}" data-notification-id="${Number(message.id)}">
+        <div class="mailbox-message-head"><div><small>🔔 Notification · ${mailboxEscape(mailboxDate(message.created_at))}</small><h4>${mailboxEscape(message.title)}</h4></div>${message.read_at ? '<span>✓ Lu</span>' : '<span class="mailbox-unread-badge">Nouveau</span>'}</div>
+        <p>${mailboxEscape(message.body)}</p>
+        <div class="mailbox-message-actions">${message.read_at ? "" : `<button type="button" onclick="markMailboxMessageRead(${Number(message.id)})">✓ Marquer comme lue</button>`}<button type="button" onclick="deleteMailboxMessage(${Number(message.id)})">🗑 Supprimer</button></div>
+      </article>`).join("");
+    }
+    await window.refreshMailboxUnread();
+  } catch (error) {
+    list.innerHTML = `<p class="mailbox-empty">${mailboxEscape(error.message || "Impossible de charger les notifications.")}</p>`;
+    if (status) status.textContent = error.message || "Erreur de chargement.";
+  }
+};
 window.markMailboxMessageRead = async function(id) {
-  try { await mailboxApi(`/api/mailbox/${id}/read`, { method:"PATCH", body:"{}" }); await window.loadMemberMailbox(); }
+  try { await mailboxApi(`/api/mailbox/${id}/read`, { method:"PATCH", body:"{}" }); if (!document.getElementById("dash-notifications")?.classList.contains("hidden")) await window.loadMemberNotifications(); else await window.loadMemberMailbox(); }
   catch (error) { alert(error.message || "Impossible de modifier ce message."); }
 };
 window.deleteMailboxMessage = async function(id) {
   if (!confirm("Supprimer ce message de ta boîte aux lettres ?")) return;
-  try { await mailboxApi(`/api/mailbox/${id}`, { method:"DELETE" }); await window.loadMemberMailbox(); }
+  try { await mailboxApi(`/api/mailbox/${id}`, { method:"DELETE" }); if (!document.getElementById("dash-notifications")?.classList.contains("hidden")) await window.loadMemberNotifications(); else await window.loadMemberMailbox(); }
   catch (error) { alert(error.message || "Impossible de supprimer ce message."); }
 };
 window.adminOpenMailboxAdmin = async function() {
