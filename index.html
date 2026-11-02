@@ -2155,11 +2155,11 @@ body.halloween-accueil .home-hero{
 
   <div class="tester-dashboard-topstats">
     <div class="tester-identity-card"><div class="tester-avatar">🧑‍🚀</div><div><strong>Testeur officiel</strong><span class="tester-validated-pill">Accès validé</span></div></div>
-    <div class="tester-topstat"><span>🎯</span><strong id="tester-stat-missions">0</strong><small>Missions confiées</small></div>
-    <div class="tester-topstat"><span>✅</span><strong id="tester-stat-completed">0</strong><small>Parcours terminés</small></div>
-    <div class="tester-topstat"><span>💬</span><strong id="tester-stat-feedback">0</strong><small>Retours envoyés</small></div>
-    <div class="tester-topstat"><span>🏅</span><strong id="tester-stat-badges">0</strong><small>Badges obtenus</small></div>
-    <div class="tester-topstat"><span>⭐</span><strong id="tester-stat-stars">0</strong><small>Étoiles possibles</small></div>
+    <div class="tester-topstat"><span>🎯</span><strong id="tester-stat-missions">0</strong><small>Missions en cours</small></div>
+    <div class="tester-topstat"><span>📋</span><strong id="tester-stat-feedback">0</strong><small>Retours envoyés</small></div>
+    <div class="tester-topstat"><span>📊</span><strong id="tester-stat-completed">0</strong><small>Tests validés</small></div>
+    <div class="tester-topstat"><span>⭐</span><strong id="tester-stat-badges">0</strong><small>Contributions</small></div>
+    <div class="tester-topstat tester-rank-summary"><span>🏆</span><strong id="tester-stat-stars">Niv. 1</strong><small id="tester-rank-summary-label">Testeur Découverte</small><div class="tester-xp-track"><i id="tester-xp-fill"></i></div><small id="tester-xp-label">0 / 250 XP</small></div>
   </div>
 
   <div class="tester-dashboard-grid">
@@ -2171,7 +2171,7 @@ body.halloween-accueil .home-hero{
 <article class="tester-dash-card tester-progression-card">
       <h3>🎯 Ma progression explorateur</h3>
       <p id="tester-explorer-level-text">Niveau actuel : Débutant. Termine des parcours pour atteindre le rang suivant.</p>
-      <div class="tester-rank-track"><div class="tester-rank-item" data-explorer-rank="0"><b>🏅</b><strong>Débutant</strong></div><div class="tester-rank-item" data-explorer-rank="1"><b>🧭</b><strong>Aventurier</strong></div><div class="tester-rank-item" data-explorer-rank="2"><b>⭐</b><strong>Expert</strong></div><div class="tester-rank-item" data-explorer-rank="3"><b>👑</b><strong>Légende</strong></div></div>
+      <div class="tester-rank-track tester-rank-track-five"><div class="tester-rank-item" data-explorer-rank="0"><b>🟢</b><strong>Niv. 1<br>Découverte</strong></div><div class="tester-rank-item" data-explorer-rank="1"><b>🧭</b><strong>Niv. 2<br>Explorateur</strong></div><div class="tester-rank-item" data-explorer-rank="2"><b>🏅</b><strong>Niv. 3<br>Contributeur</strong></div><div class="tester-rank-item" data-explorer-rank="3"><b>⭐</b><strong>Niv. 4<br>Expert</strong></div><div class="tester-rank-item" data-explorer-rank="4"><b>👑</b><strong>Niv. 5<br>Ambassadeur</strong></div></div>
     </article>
 
 <article class="tester-dash-card tester-missions-card">
@@ -3232,7 +3232,7 @@ body.halloween-accueil .home-hero{
 }
 #dash-tester-space .tester-dashboard-hero{
   min-height:70px!important;padding:8px 18px!important;border-radius:13px!important;
-  background:linear-gradient(90deg,rgba(5,48,34,.94),rgba(5,48,34,.70) 58%,rgba(5,48,34,.18)),url('images/admin-dashboard-banner.jpg') center 47%/cover!important;
+  background:linear-gradient(90deg,rgba(5,48,34,.94),rgba(5,48,34,.70) 58%,rgba(5,48,34,.18)),url('images/espace-testeur.png') center 48%/cover!important;
   border:1px solid #d7ad45!important;color:#fff4d5!important;
 }
 #dash-tester-space .tester-dashboard-brand h2{color:#fff2c9!important;font-size:clamp(25px,3vw,34px)!important;text-shadow:0 2px 4px #14291d!important}
@@ -3298,6 +3298,68 @@ body.halloween-accueil .home-hero{
  #dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 1!important}
 }
 @media(max-width:480px){#dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr!important}#dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}#dash-tester-space .tester-badge-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+
+
+/* Maquette de référence : finitions illustrées de l’Espace Testeur */
+#dash-tester-space .tester-dashboard-hero{
+ background:linear-gradient(90deg,rgba(4,39,27,.78),rgba(4,39,27,.25) 58%,rgba(4,39,27,.05)),url('images/espace-testeur.png') center 48%/cover!important;
+ min-height:78px!important;border:1px solid #d7ad45!important;color:#fff4d5!important;
+}
+#dash-tester-space .tester-dashboard-brand h2{color:#fff4d5!important;text-shadow:0 2px 4px #10291d!important}
+#dash-tester-space .tester-dashboard-brand p{color:#fff9e9!important;text-shadow:0 1px 3px #10291d!important}
+#dash-tester-space .tester-dashboard-topstats{grid-template-columns:1.35fr repeat(5,minmax(0,1fr))!important;background:linear-gradient(145deg,#fff9e8,#f2e4bd)!important;border:1px solid #d9b65d!important}
+#dash-tester-space .tester-identity-card{display:flex!important;align-items:center!important;gap:10px!important}
+#dash-tester-space .tester-avatar{width:64px!important;height:64px!important;border:3px solid #d7ad45!important;box-shadow:0 2px 5px #63491d55!important}
+#dash-tester-space .tester-topstat span{font-size:30px!important;filter:drop-shadow(0 1px 1px #7c5b1a55)}
+#dash-tester-space .tester-topstat strong{font-size:25px!important;color:#173a29!important}
+#dash-tester-space .tester-topstat small{font-size:11px!important}
+#dash-tester-space .tester-announcement-card{background:linear-gradient(110deg,#fff9e7,#f3e2b5)!important}
+#dash-tester-space .tester-announcement-art{background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(4,54,36,.2)),url('images/image-01.jpg') center/cover!important;color:transparent!important;position:relative;min-width:90px!important;min-height:76px!important}
+#dash-tester-space .tester-announcement-art{font-size:0!important}
+#dash-tester-space .tester-announcement-art:after{content:'🧭';position:absolute;right:6px;bottom:4px;font-size:25px;filter:drop-shadow(0 1px 2px #fff)}
+#dash-tester-space .tester-rank-track-five{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important}
+#dash-tester-space .tester-rank-track-five .tester-rank-item{min-height:72px!important;justify-content:center!important;border:1px solid #d8c28b!important;background:linear-gradient(145deg,#f4efdf,#e9e1cd)!important;color:#23392c!important;clip-path:polygon(50% 0,91% 14%,100% 45%,84% 84%,50% 100%,16% 84%,0 45%,9% 14%)!important;border-radius:0!important;padding:9px 3px!important}
+#dash-tester-space .tester-rank-track-five .tester-rank-item b{font-size:22px!important}
+#dash-tester-space .tester-rank-track-five .tester-rank-item strong{font-size:9px!important;line-height:1.1!important}
+#dash-tester-space .tester-rank-track-five .tester-rank-item.active{background:linear-gradient(145deg,#0b633d,#063e2b)!important;color:#fff5d8!important;border:2px solid #d7ad45!important}
+#dash-tester-space .tester-assigned-mission-card{display:flex;align-items:center;gap:9px;margin:6px 0;padding:6px;border:1px solid #dfc77f;border-radius:10px;background:linear-gradient(110deg,#fffdf5,#f6ebcf);min-width:0}
+#dash-tester-space .tester-assigned-mission-thumb{width:88px;height:48px;flex:0 0 88px;object-fit:cover;border-radius:7px;border:1px solid #d7c18a}
+#dash-tester-space .tester-assigned-mission-info{min-width:0;flex:1;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 6px}
+#dash-tester-space .tester-assigned-mission-info>strong{font:700 12px Georgia,serif;color:#173a29;overflow-wrap:anywhere}
+#dash-tester-space .tester-assigned-mission-level{justify-self:end;padding:3px 9px;border-radius:12px;background:#8bd45c;color:#163b21;font:700 10px Georgia,serif}
+#dash-tester-space .tester-assigned-mission-info p{grid-column:1/-1;margin:1px 0;font:10px/1.2 Georgia,serif;color:#56624e}
+#dash-tester-space .tester-assigned-mission-progress{grid-column:1/-1;height:5px;border-radius:10px;background:#e5ddc9;overflow:hidden}
+#dash-tester-space .tester-assigned-mission-progress span{display:block;height:100%;background:linear-gradient(90deg,#0d633d,#83c74c);border-radius:10px}
+#dash-tester-space .tester-validation-steps{background:linear-gradient(145deg,#f8f2df,#eee4c8)!important}
+#dash-tester-space .tester-mini-badge{background:linear-gradient(145deg,#fff9e8,#f1e4c1)!important;border-color:#d7b75d!important;box-shadow:0 2px 4px #7c5b1a18}
+#dash-tester-space .tester-mini-badge span{width:42px!important;height:48px!important;background:linear-gradient(145deg,#eec64d,#b77a18)!important;border:1px solid #f8e29b;clip-path:polygon(50% 0,94% 18%,88% 72%,50% 100%,12% 72%,6% 18%)!important;text-shadow:0 1px 2px #6d4b0c}
+#dash-tester-space .tester-mini-badge:nth-child(2) span{background:linear-gradient(145deg,#c7cbd0,#68727c)!important}
+#dash-tester-space .tester-mini-badge:nth-child(3) span{background:linear-gradient(145deg,#e45b43,#8f1c19)!important}
+#dash-tester-space .tester-mini-badge:nth-child(4) span{background:linear-gradient(145deg,#b8c0c2,#6b7778)!important}
+#dash-tester-space .tester-mini-badge:nth-child(5) span{background:linear-gradient(145deg,#d8bd79,#a17a36)!important}
+#dash-tester-space .tester-dash-action{background:linear-gradient(110deg,#07512f,#137143)!important;box-shadow:0 2px 3px #173a2922}
+#dash-tester-space .tester-community-people{font-size:24px!important;text-align:center!important;margin:5px 0!important}
+#dash-tester-space .tester-journal{min-height:48px!important;height:48px!important}
+@media(max-width:700px){
+ #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #dash-tester-space .tester-rank-track-five{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+ #dash-tester-space .tester-assigned-mission-thumb{width:72px;flex-basis:72px}
+}
+@media(max-width:480px){#dash-tester-space .tester-rank-track-five .tester-rank-item{min-height:62px!important}#dash-tester-space .tester-rank-track-five .tester-rank-item strong{font-size:8px!important}}
+
+
+/* Derniers détails de la maquette : compteurs, XP et vignette de mission */
+#dash-tester-space .tester-rank-summary{gap:1px!important}
+#dash-tester-space .tester-rank-summary>span{font-size:31px!important}
+#dash-tester-space .tester-rank-summary>strong{font-size:18px!important;line-height:1!important}
+#dash-tester-space .tester-rank-summary>small{font-size:9px!important;line-height:1.1!important}
+#dash-tester-space .tester-xp-track{width:90%;height:7px;margin:2px auto;border:1px solid #b5a77e;border-radius:10px;background:#eee8d7;overflow:hidden}
+#dash-tester-space .tester-xp-track i{display:block;width:0;height:100%;background:linear-gradient(90deg,#2b9a36,#9dd84b);border-radius:10px}
+#dash-tester-space .tester-mission-empty-art{background:linear-gradient(135deg,rgba(214,229,180,.2),rgba(244,213,138,.1)),url('images/image-02.jpg') center/cover!important;color:transparent!important;position:relative}
+#dash-tester-space .tester-mission-empty-art:after{content:'🧭';position:absolute;right:3px;bottom:1px;font-size:23px;filter:drop-shadow(0 1px 2px #fff)}
+#dash-tester-space .tester-announcement-body{min-height:78px}
+#dash-tester-space .tester-announcement-body h4{font-size:17px!important}
+#dash-tester-space .tester-announcement-body p{font-size:11px!important}
 
 </style>
         <div class="puzzle-admin-hero"><div><h2>🧩 Carte Puzzle</h2><p>Gérez les pièces de la carte et programmez leurs révélations.</p></div><div class="puzzle-admin-hero-mark">🏡</div></div>
@@ -4187,13 +4249,16 @@ function renderTesterPersonalFeatures(missions,feedback,reviews){
   const feedbackCount=feedback.length;
   const totalStars=missions.reduce((sum,m)=>sum+(Number(m.total_stars)||0),0);
   const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value);};
-  put("tester-stat-missions",missions.length);put("tester-stat-completed",completed);put("tester-stat-feedback",feedbackCount);put("tester-stat-stars",totalStars);put("tester-stat-missions-copy",missions.length);put("tester-stat-completed-copy",completed);put("tester-stat-feedback-copy",feedbackCount);
+  put("tester-stat-missions",missions.filter(m=>!m.completed).length);put("tester-stat-completed",completed);put("tester-stat-feedback",feedbackCount);put("tester-stat-badges",completed+feedbackCount);put("tester-stat-missions-copy",missions.length);put("tester-stat-completed-copy",completed);put("tester-stat-feedback-copy",feedbackCount);
   const earned=[completed>0,feedbackCount>0,feedback.some(f=>f.category==="bug"),completed>=3,feedbackCount>=5];
   const badges=[ ["🧭","Premier parcours",earned[0]],["💬","Voix utile",earned[1]],["🐞","Œil attentif",earned[2]],["🏅","Explorateur régulier",earned[3]],["🌟","Ambassadeur",earned[4]] ];
-  put("tester-stat-badges",earned.filter(Boolean).length);
+  // Le compteur Contributions est calculé à partir des parcours terminés et des retours envoyés.
   const badgeBox=document.getElementById("tester-exclusive-badges");if(badgeBox){badgeBox.replaceChildren();badges.forEach(([icon,label,ok])=>{const item=document.createElement("div");item.className="tester-mini-badge";item.innerHTML=`<span>${ok?icon:"🔒"}</span>${label}`;badgeBox.appendChild(item);});}
   const reward=document.getElementById("tester-reward-status");if(reward){reward.replaceChildren();[["🧪","Testeur engagé",feedbackCount>=1],["🐛","Chasseur de bugs",feedback.some(f=>f.category==="bug")],["🏆","Testeur confirmé",completed>=2]].forEach(([icon,label,ok])=>{const item=document.createElement("div");item.className="tester-mini-badge";item.innerHTML=`<span>${ok?icon:"🔒"}</span>${label}<br><small>${ok?"Obtenu":"À débloquer"}</small>`;reward.appendChild(item);});}
-  const rank=completed>=8?3:completed>=5?2:completed>=2?1:0;const rankNames=["Débutant","Aventurier","Expert","Légende"];
+  const rank=completed>=12?4:completed>=8?3:completed>=5?2:completed>=2?1:0;const rankNames=["Découverte","Explorateur","Contributeur","Expert","Ambassadeur"];
+  const xp=completed*60+feedbackCount*20, xpStep=xp%250;
+  put("tester-stat-stars",`Niv. ${rank+1}`);put("tester-rank-summary-label",`Testeur ${rankNames[rank]}`);put("tester-xp-label",`${xpStep} / 250 XP`);
+  const xpFill=document.getElementById("tester-xp-fill");if(xpFill)xpFill.style.width=`${Math.min(100,xpStep/250*100)}%`;
   put("tester-explorer-level-text",`Niveau actuel : ${rankNames[rank]}. Termine des parcours pour atteindre le rang suivant.`);
   document.querySelectorAll("[data-explorer-rank]").forEach(el=>{el.classList.toggle("active",Number(el.dataset.explorerRank)===rank);});
   const month=new Date().toLocaleDateString("fr-FR",{month:"long",year:"numeric"});put("tester-month-label","Défi de "+month.charAt(0).toUpperCase()+month.slice(1));
@@ -4232,13 +4297,17 @@ window.loadTesterSpace = async function(){
       const missions=Array.isArray(missionData.missions)?missionData.missions:[];
       if(!missions.length){missionsBox.innerHTML='<div class="tester-mission-empty"><span class="tester-mission-empty-art">🏡🧭</span><div><strong>Prêt pour l’exploration ?</strong><p>Retrouve ici les parcours qui te sont confiés.</p><small>Aucune mission attribuée pour le moment. L’administration pourra t’en confier une dès que ton accès sera prêt.</small></div></div>'; }
       missions.forEach(mission=>{
-        const card=document.createElement("article");card.style.cssText="padding:14px;margin:9px 0;border:1px solid #e4dcc8;border-radius:11px;background:#fffefa";
-        const title=document.createElement("strong");title.textContent=`${mission.village_name||mission.village_slug} — ${testerFormulaLabels[mission.level_key]||mission.level_name||mission.level_key}`;
-        const detail=document.createElement("p");detail.style.cssText="margin:7px 0;color:#53624f;font-size:13px";
-        detail.textContent=mission.adventure_id?`${mission.title} · ${mission.validated_steps}/${mission.total_steps} étapes validées · ${mission.total_stars} étoiles possibles · ${mission.state}`:"Parcours en préparation : ta mission est attribuée, mais le parcours n'est pas encore créé.";
-        const progress=document.createElement("div");progress.style.cssText="height:9px;background:#eee8d9;border-radius:20px;overflow:hidden;margin:10px 0";
-        const fill=document.createElement("div");fill.style.cssText=`height:100%;width:${mission.total_steps?Math.min(100,mission.validated_steps/mission.total_steps*100):0}%;background:#28704d;border-radius:20px`;progress.appendChild(fill);
-        card.append(title,detail,progress);
+        const card=document.createElement("article");card.className="tester-assigned-mission-card";
+        const thumb=document.createElement("img");thumb.className="tester-assigned-mission-thumb";thumb.alt="Illustration du parcours";thumb.loading="lazy";
+        const imageIndex=(missions.indexOf(mission)%9)+1;thumb.src=`images/image-0${imageIndex}.jpg`;
+        thumb.onerror=()=>{thumb.onerror=null;thumb.src="images/accueil-aventure.jpg";};
+        const info=document.createElement("div");info.className="tester-assigned-mission-info";
+        const title=document.createElement("strong");title.textContent=`Parcours : ${mission.village_name||mission.village_slug}`;
+        const level=document.createElement("span");level.className="tester-assigned-mission-level";level.textContent=testerFormulaLabels[mission.level_key]||mission.level_name||mission.level_key||"Test";
+        const detail=document.createElement("p");detail.textContent=mission.adventure_id?`${mission.title} · ${mission.validated_steps}/${mission.total_steps} étapes · ${mission.total_stars} étoiles possibles`:"Parcours en préparation : ta mission est attribuée, mais le parcours n'est pas encore créé.";
+        const progress=document.createElement("div");progress.className="tester-assigned-mission-progress";
+        const fill=document.createElement("span");fill.style.width=`${mission.total_steps?Math.min(100,mission.validated_steps/mission.total_steps*100):0}%`;progress.appendChild(fill);
+        info.append(title,level,detail,progress);card.append(thumb,info);
         if(mission.adventure_id){
           const timerInfo=document.createElement("p");timerInfo.style.cssText="font-size:13px;line-height:1.5;margin:8px 0;color:#53624f";
           const timer=mission.timer;
