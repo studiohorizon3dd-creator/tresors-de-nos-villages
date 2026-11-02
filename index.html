@@ -859,6 +859,103 @@ body.halloween-accueil .home-hero{
   margin: 0 !important;
 }
 
+
+/* Menu mobile accessible : bouton MENU et rubriques verticales sans défilement horizontal */
+.mobile-menu-toggle { display:none; }
+@media (max-width: 900px) {
+  #dashboard:not(.admin-mode) > .sidebar {
+    display:flex !important;
+    flex-wrap:wrap !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:8px 12px !important;
+    min-height:68px !important;
+    padding:10px 14px !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .brand-mark {
+    order:1; font-size:30px !important; margin:0 !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .brand-name {
+    order:2; flex:1 1 auto !important; margin:0 !important;
+    font-size:16px !important; white-space:normal !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .mobile-menu-toggle {
+    order:3; display:inline-flex !important; align-items:center;
+    justify-content:center; gap:8px; flex:0 0 auto;
+    min-height:44px; padding:9px 16px;
+    border:1px solid #d7ad45; border-radius:12px;
+    background:linear-gradient(135deg,#174b35,#062b20);
+    color:#ffe8a9; font:bold 14px Georgia,serif;
+    box-shadow:0 3px 8px #0003; cursor:pointer;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .mobile-menu-icon {font-size:19px;line-height:1}
+  #dashboard:not(.admin-mode) > .sidebar .nav-accordion {
+    order:4 !important; display:none !important;
+    flex:1 0 100% !important; width:100% !important;
+    min-width:0 !important; flex-direction:column !important;
+    align-items:stretch !important; gap:7px !important;
+    padding:10px 0 2px !important; margin:0 !important;
+    overflow:visible !important; border-top:1px solid #d7ad4560;
+  }
+  #dashboard:not(.admin-mode) > .sidebar.mobile-menu-open .nav-accordion {
+    display:flex !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .nav-category {
+    display:block !important; width:100% !important;
+    position:relative !important; margin:0 !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .nav-category > summary {
+    display:flex !important; align-items:center; justify-content:space-between;
+    width:100%; min-height:46px; padding:12px 14px !important;
+    border:1px solid #ffffff28 !important; border-radius:10px !important;
+    background:#ffffff0b !important; color:#ffe49b !important;
+    font-size:14px !important; font-weight:bold; white-space:normal !important;
+    cursor:pointer; list-style:none;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .nav-category > summary::-webkit-details-marker {display:none}
+  #dashboard:not(.admin-mode) > .sidebar .nav-category[open] > summary {
+    background:#174b35 !important; border-color:#d7ad45 !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .nav-submenu,
+  #dashboard:not(.admin-mode) > .sidebar .nav-category[open] .nav-submenu {
+    position:static !important; inset:auto !important;
+    display:none !important; width:100% !important;
+    min-width:0 !important; max-width:none !important;
+    margin:5px 0 3px !important; padding:6px !important;
+    border:1px solid #d7ad4560 !important; border-radius:10px !important;
+    background:#041f18 !important; box-shadow:none !important;
+    flex-direction:column !important; gap:3px !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .nav-category[open] .nav-submenu {
+    display:flex !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .nav-submenu .nav-btn {
+    display:block !important; width:100% !important;
+    min-height:42px; margin:0 !important; padding:10px 12px !important;
+    text-align:left !important; white-space:normal !important;
+    font-size:14px !important; border-radius:8px !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .nav-bottom-links {
+    display:flex !important; flex-direction:column !important;
+    align-items:stretch !important; gap:6px !important;
+    width:100% !important; margin:8px 0 0 !important; padding:8px 0 0 !important;
+    border-top:1px solid #d7ad4560 !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .nav-bottom-links .nav-btn {
+    display:block !important; width:100% !important; min-height:42px;
+    margin:0 !important; padding:10px 12px !important;
+    text-align:left !important; white-space:normal !important;
+    font-size:13px !important;
+  }
+  #dashboard:not(.admin-mode) > .sidebar .sidebar-note {display:none !important}
+}
+@media (max-width: 560px) {
+  #dashboard:not(.admin-mode) > .sidebar .brand-mark {font-size:27px !important}
+  #dashboard:not(.admin-mode) > .sidebar .brand-name {font-size:15px !important}
+  #dashboard:not(.admin-mode) > .sidebar .mobile-menu-toggle {min-height:42px;padding:8px 12px}
+}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1135,7 +1232,12 @@ body.halloween-accueil .home-hero{
 <section class="dashboard" id="dashboard">
   <aside class="sidebar">
     <div class="brand-mark">✥</div><div class="brand-name">Trésors<br>de nos Villages</div>
-    <nav class="nav-list nav-accordion" aria-label="Menu explorateur">
+    <button class="mobile-menu-toggle" id="mobile-explorer-menu-toggle" type="button"
+      aria-expanded="false" aria-controls="explorer-main-navigation"
+      onclick="toggleMobileExplorerMenu()" aria-label="Ouvrir le menu">
+      <span class="mobile-menu-icon">☰</span><span class="mobile-menu-label">MENU</span>
+    </button>
+    <nav class="nav-list nav-accordion" id="explorer-main-navigation" aria-label="Menu explorateur">
       <details class="nav-category"><summary>EXPLORER <span class="nav-arrow">⌄</span></summary>
         <div class="nav-submenu">
           <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
@@ -5376,6 +5478,28 @@ document.getElementById("players-next")?.addEventListener("click",()=>{adminPlay
   };
 })();
 </script>
+
+
+/* Ouverture/fermeture du menu mobile explorateur */
+window.toggleMobileExplorerMenu = function(forceOpen) {
+  const sidebar = document.querySelector("#dashboard:not(.admin-mode) > .sidebar");
+  const toggle = document.getElementById("mobile-explorer-menu-toggle");
+  if (!sidebar || !toggle) return;
+  const shouldOpen = typeof forceOpen === "boolean"
+    ? forceOpen
+    : !sidebar.classList.contains("mobile-menu-open");
+  sidebar.classList.toggle("mobile-menu-open", shouldOpen);
+  toggle.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+  toggle.setAttribute("aria-label", shouldOpen ? "Fermer le menu" : "Ouvrir le menu");
+  const icon = toggle.querySelector(".mobile-menu-icon");
+  if (icon) icon.textContent = shouldOpen ? "✕" : "☰";
+};
+document.addEventListener("click", function(event) {
+  const navButton = event.target.closest("#explorer-main-navigation .nav-btn");
+  if (navButton && window.matchMedia("(max-width: 900px)").matches) {
+    window.toggleMobileExplorerMenu(false);
+  }
+});
 
 </body>
 </html>
