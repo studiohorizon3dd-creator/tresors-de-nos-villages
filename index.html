@@ -848,28 +848,101 @@ body.halloween-accueil .home-hero{
     <div class="sidebar-note">Bonne exploration !</div>
   </aside>
   <div class="content">
-    <div id="dash-home">
-      <header class="dash-hero"><div><p class="eyebrow" style="color:#ffe49b">Votre carnet d’explorateur</p><h2>Bienvenue dans l’aventure !</h2></div></header>
-      <div id="member-site-status-banner" class="site-status-banner" role="status" aria-live="polite">
-        <span class="status-symbol" id="member-site-status-icon">✨</span>
-        <strong id="member-site-status-title">Information du site</strong>
-        <div class="site-status-ticker"><div class="site-status-track"><span id="member-site-status-message"></span><span id="member-site-status-message-copy" aria-hidden="true"></span></div></div>
+    <div id="dash-home" class="explorer-home-page">
+  <header class="explorer-welcome-hero">
+    <div class="explorer-welcome-copy">
+      <p class="explorer-welcome-kicker">🌿 Mon carnet d’explorateur</p>
+      <h2>Bienvenue, Explorateur&nbsp;!</h2>
+      <p>Prêt(e) pour une nouvelle aventure&nbsp;?<br>Retrouve ta progression, tes aventures et tes récompenses ici&nbsp;!</p>
+    </div>
+    <div class="explorer-welcome-user">
+      <span class="explorer-user-medal">♙</span>
+      <strong>Bonjour<br><span id="dash-welcome-name">Explorateur</span></strong>
+      <span class="explorer-rank">Explorateur en herbe</span>
+    </div>
+  </header>
+
+  <div id="member-site-status-banner" class="site-status-banner explorer-member-status" role="status" aria-live="polite">
+    <span class="status-symbol" id="member-site-status-icon">✨</span>
+    <strong id="member-site-status-title">Information du site</strong>
+    <div class="site-status-ticker"><div class="site-status-track"><span id="member-site-status-message"></span><span id="member-site-status-message-copy" aria-hidden="true"></span></div></div>
+  </div>
+
+  <div class="explorer-home-toprow">
+    <section class="progress-card explorer-progress-card">
+      <div class="progress-top"><span>⭐ Votre progression</span><span id="progress-text">0 / 10 étoiles</span></div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </section>
+    <article class="explorer-resume-card">
+      <div class="explorer-resume-icon">🗺️</div>
+      <div class="explorer-resume-copy">
+        <h3>Reprendre votre aventure</h3>
+        <p>Continuez là où vous vous êtes arrêté(e)&nbsp;!</p>
       </div>
-      <div class="progress-card"><div class="progress-top"><span>⭐ Votre progression</span><span id="progress-text">0 / 10 étoiles</span></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div></div>
-      <section class="tester-home-card" id="tester-home-card" hidden>
-        <div class="tester-home-icon">🧪</div>
-        <div class="tester-home-copy">
-          <p class="eyebrow">PARTICIPE À L’AVENTURE</p>
-          <h3>Et si tu devenais testeur ?</h3>
-          <p>Aide-nous à tester les parcours, les énigmes et le GPS avant l’ouverture officielle.</p>
-          <p class="tester-home-status" id="tester-home-status">Les candidatures sont ouvertes.</p>
-        </div>
-        <button class="primary-btn" id="tester-home-button" type="button" onclick="showDashSection('dash-testers')">Découvrir et candidater</button>
-      </section>
-<section class="dash-section">
-  <h3>Le parcours d’indices</h3>
-  <p>Résolvez les énigmes pour gagner des étoiles. Les étapes se découvrent dans l’aventure, pas sur cette page.</p>
-</section>      <section class="dash-section"><h3>Comment fonctionne l’aventure ?</h3><div class="feature-grid"><article class="feature"><div class="feature-icon">🏡</div><h3>Explorez</h3><p>Découvrez le village.</p></article><article class="feature"><div class="feature-icon">🔎</div><h3>Résolvez</h3><p>Trouvez les réponses.</p></article><article class="feature"><div class="feature-icon">⭐</div><h3>Collectionnez</h3><p>Gagnez des étoiles et des badges.</p></article></div></section>
+      <button type="button" onclick="showDashSection('dash-adventures');window.loadPlayerAdventures?.()">Continuer l’aventure&nbsp; →</button>
+    </article>
+  </div>
+
+  <section class="explorer-shortcuts" aria-label="Accès rapides à votre espace">
+    <article class="explorer-shortcut-card">
+      <div class="explorer-shortcut-photo explorer-photo-adventures" role="img" aria-label="Carte et boussole d'explorateur"></div>
+      <div class="explorer-shortcut-body">
+        <h3>Mes aventures</h3>
+        <p>Reprenez, suivez et gérez vos parcours.</p>
+        <button type="button" onclick="showDashSection('dash-adventures');window.loadPlayerAdventures?.()">Voir mes aventures&nbsp; →</button>
+      </div>
+    </article>
+    <article class="explorer-shortcut-card">
+      <div class="explorer-shortcut-photo explorer-photo-badges" role="img" aria-label="Récompense et badge d'explorateur"></div>
+      <div class="explorer-shortcut-body">
+        <h3>Mes badges</h3>
+        <p>Découvrez et collectionnez vos badges.</p>
+        <button type="button" onclick="showDashSection('dash-badges')">Voir mes badges&nbsp; →</button>
+      </div>
+    </article>
+    <article class="explorer-shortcut-card">
+      <div class="explorer-shortcut-photo explorer-photo-stars" role="img" aria-label="Étoile de récompense"></div>
+      <div class="explorer-shortcut-body">
+        <h3>Mes étoiles</h3>
+        <p>Suivez votre progression et vos étoiles gagnées.</p>
+        <button type="button" onclick="showDashSection('dash-stars')">Voir mes étoiles&nbsp; →</button>
+      </div>
+    </article>
+    <article class="explorer-shortcut-card">
+      <div class="explorer-shortcut-photo explorer-photo-passport" role="img" aria-label="Passeport du voyageur"></div>
+      <div class="explorer-shortcut-body">
+        <h3>Mon passeport</h3>
+        <p>Collectionnez les tampons de vos villages visités.</p>
+        <button type="button" onclick="showDashSection('dash-profile');setTimeout(()=>document.getElementById('passport-feature')?.scrollIntoView({behavior:'smooth',block:'center'}),120)">Voir mon passeport&nbsp; →</button>
+      </div>
+    </article>
+  </section>
+
+  <div class="explorer-home-bottom">
+    <section class="explorer-how-card">
+      <h3>🧭 Comment fonctionne l’aventure&nbsp;?</h3>
+      <div class="explorer-how-steps">
+        <article><span>🏡</span><strong>Explorez</strong><p>Découvrez le village et ses lieux emblématiques.</p></article>
+        <b aria-hidden="true">➜</b>
+        <article><span>🔎</span><strong>Résolvez</strong><p>Trouvez les réponses aux énigmes.</p></article>
+        <b aria-hidden="true">➜</b>
+        <article><span>⭐</span><strong>Collectionnez</strong><p>Gagnez des étoiles et des badges&nbsp;!</p></article>
+      </div>
+    </section>
+
+    <section class="tester-home-card explorer-tester-card" id="tester-home-card" hidden>
+      <div class="tester-home-icon">👥</div>
+      <div class="tester-home-copy">
+        <p class="eyebrow">PARTICIPE À L’AVENTURE</p>
+        <h3>Et si tu devenais testeur&nbsp;?</h3>
+        <p>Aide-nous à tester les parcours, les énigmes et le GPS avant l’ouverture officielle.</p>
+        <p class="tester-home-status" id="tester-home-status">Les candidatures sont ouvertes.</p>
+      </div>
+      <button class="primary-btn" id="tester-home-button" type="button" onclick="showDashSection('dash-testers')">Découvrir et candidater&nbsp; →</button>
+      <span class="explorer-tester-ribbon">Testeurs<br>recherchés&nbsp;!</span>
+    </section>
+  </div>
+</div>
     </div>
     <section class="dash-section hidden explorer-profile-page" id="dash-profile">
       <div class="explorer-profile-heading"><div><p class="eyebrow">TON ESPACE PERSONNEL</p><h2>Mon profil</h2><p>Suis ta progression, tes badges et ton passeport !</p></div><span class="profile-leaf">✦</span></div>
@@ -1695,6 +1768,88 @@ body.halloween-accueil .home-hero{
 /* Ne pas afficher le menu membre sur l'accueil public.
    Le script showDashboard() masque l'accueil lors de la connexion. */
 #dashboard{display:none}
+
+
+/* Accueil de l'espace Explorer — style carnet d'explorateur */
+#dashboard #dash-home.explorer-home-page{padding:0 0 28px;background:#f8efd9;color:#123629;min-height:100vh}
+#dashboard #dash-home .explorer-welcome-hero{position:relative;min-height:174px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px clamp(20px,3vw,42px);background:linear-gradient(90deg,rgba(2,38,27,.88),rgba(2,38,27,.5) 55%,rgba(2,38,27,.12)),url("images/image-01.jpg") center 48%/cover;border-bottom:3px solid #d8ad45;color:#fff7e3}
+#dashboard #dash-home .explorer-welcome-copy{max-width:760px}
+#dashboard #dash-home .explorer-welcome-kicker{margin:0 0 3px;color:#ffe19a;font:bold 12px Georgia,serif;letter-spacing:2px}
+#dashboard #dash-home .explorer-welcome-copy h2{margin:0 0 7px;color:#fffaf0;font:bold clamp(30px,3.3vw,45px)/1.08 Georgia,serif;text-shadow:0 3px 6px #0008}
+#dashboard #dash-home .explorer-welcome-copy>p:last-child{margin:0;color:#fff6e4;font:16px/1.4 Georgia,serif;text-shadow:0 2px 4px #0008}
+#dashboard #dash-home .explorer-welcome-user{position:relative;flex:0 0 190px;min-height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:16px 12px 12px;border:2px solid #d8ad45;border-radius:18px;background:linear-gradient(145deg,#fff9e9,#f2dfae);color:#17382b;text-align:center;box-shadow:0 5px 15px #0004}
+#dashboard #dash-home .explorer-user-medal{position:absolute;top:-18px;width:38px;height:38px;display:grid;place-items:center;border:2px solid #d8ad45;border-radius:50%;background:#0a3d2b;color:#ffe4a0;font-size:22px}
+#dashboard #dash-home .explorer-welcome-user strong{font:bold 19px/1.15 Georgia,serif}
+#dashboard #dash-home .explorer-welcome-user strong span{font-size:20px}
+#dashboard #dash-home .explorer-rank{padding:5px 12px;border-radius:20px;background:#0b4931;color:#fff2cf;font:bold 12px Georgia,serif}
+#dashboard #dash-home .explorer-member-status{margin:9px 12px 12px!important;border-radius:12px!important;min-height:40px;padding:8px 14px!important}
+#dashboard #dash-home .explorer-home-toprow{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(380px,1.2fr);gap:14px;margin:12px 18px 18px;align-items:stretch}
+#dashboard #dash-home .explorer-progress-card{max-width:none;margin:0;min-height:88px;display:flex;flex-direction:column;justify-content:center;padding:17px 20px;border-radius:18px;background:linear-gradient(120deg,#063526,#0d4a31);box-shadow:0 5px 14px #243d2d24}
+#dashboard #dash-home .explorer-progress-card .progress-top{font-size:19px}
+#dashboard #dash-home .explorer-resume-card{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid #d8ad45;border-radius:18px;background:linear-gradient(110deg,#fffdf4,#f5e8c9);box-shadow:0 4px 12px #5b47231c}
+#dashboard #dash-home .explorer-resume-icon{flex:0 0 72px;text-align:center;font-size:48px}
+#dashboard #dash-home .explorer-resume-copy{flex:1;min-width:0}
+#dashboard #dash-home .explorer-resume-copy h3{margin:0 0 4px;color:#123629;font:bold 20px Georgia,serif}
+#dashboard #dash-home .explorer-resume-copy p{margin:0;color:#403a2b;font:14px Georgia,serif}
+#dashboard #dash-home .explorer-resume-card button{flex:0 0 auto;border:1px solid #d8ad45;border-radius:24px;padding:12px 17px;background:linear-gradient(#0b5939,#063a29);color:#fff4d6;font:bold 15px Georgia,serif;box-shadow:0 3px 8px #0002}
+#dashboard #dash-home .explorer-shortcuts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 18px 18px}
+#dashboard #dash-home .explorer-shortcut-card{overflow:hidden;min-width:0;border:1px solid #d7b45e;border-radius:18px;background:#fff8e8;box-shadow:0 4px 10px #4b3b211c}
+#dashboard #dash-home .explorer-shortcut-photo{height:94px;background-size:cover;background-position:center}
+#dashboard #dash-home .explorer-photo-adventures{background-image:linear-gradient(0deg,#092c1d1a,#092c1d00),url("images/image-02.jpg")}
+#dashboard #dash-home .explorer-photo-badges{background-image:linear-gradient(0deg,#092c1d1a,#092c1d00),url("images/image-03.jpg")}
+#dashboard #dash-home .explorer-photo-stars{background-image:linear-gradient(0deg,#092c1d1a,#092c1d00),url("images/image-04.jpg")}
+#dashboard #dash-home .explorer-photo-passport{background-image:linear-gradient(0deg,#092c1d1a,#092c1d00),url("images/image-05.jpg")}
+#dashboard #dash-home .explorer-shortcut-body{padding:8px 12px 12px;text-align:center;background:linear-gradient(180deg,#fff9e9,#f6e9c9)}
+#dashboard #dash-home .explorer-shortcut-body h3{margin:0 0 5px;color:#102f24;font:bold 21px Georgia,serif}
+#dashboard #dash-home .explorer-shortcut-body p{min-height:34px;margin:0 auto 9px;max-width:230px;color:#2f2b22;font:14px/1.25 Georgia,serif}
+#dashboard #dash-home .explorer-shortcut-body button{border:1px solid #d8ad45;border-radius:24px;padding:8px 15px;background:linear-gradient(#0c5a39,#073a29);color:#fff2cf;font:bold 14px Georgia,serif;box-shadow:0 2px 5px #0002}
+#dashboard #dash-home .explorer-home-bottom{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin:0 18px}
+#dashboard #dash-home .explorer-how-card{padding:14px 16px;border:1px solid #e1c780;border-radius:18px;background:linear-gradient(135deg,#fffaf0,#f5e7c7);box-shadow:0 4px 12px #59421c1a}
+#dashboard #dash-home .explorer-how-card>h3{margin:0 0 12px;color:#123629;font:bold 21px Georgia,serif}
+#dashboard #dash-home .explorer-how-steps{display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;align-items:center;gap:4px;text-align:center}
+#dashboard #dash-home .explorer-how-steps article{display:flex;flex-direction:column;align-items:center;gap:3px}
+#dashboard #dash-home .explorer-how-steps article span{width:48px;height:48px;display:grid;place-items:center;border:2px solid #d8ad45;border-radius:50%;background:#073b2b;color:#ffe4a0;font-size:25px}
+#dashboard #dash-home .explorer-how-steps article strong{color:#123629;font:bold 16px Georgia,serif}
+#dashboard #dash-home .explorer-how-steps article p{margin:0;color:#393426;font:12px/1.25 Georgia,serif}
+#dashboard #dash-home .explorer-how-steps>b{color:#bd8420;font-size:25px}
+#dashboard #dash-home .explorer-tester-card{position:relative;align-items:center;gap:13px;margin:0;padding:17px 18px;border:1px solid #dfc27e;border-radius:18px;background:linear-gradient(120deg,#fff9e9,#f2dfb5);box-shadow:0 4px 12px #59421c1a}
+#dashboard #dash-home .explorer-tester-card .tester-home-icon{width:58px;height:58px;flex:0 0 58px;font-size:27px}
+#dashboard #dash-home .explorer-tester-card .tester-home-copy{flex:1;min-width:150px}
+#dashboard #dash-home .explorer-tester-card .tester-home-copy h3{font:bold 19px Georgia,serif}
+#dashboard #dash-home .explorer-tester-card .tester-home-copy>p:not(.eyebrow){font:13px/1.35 Georgia,serif}
+#dashboard #dash-home .explorer-tester-card .primary-btn{border-radius:24px;padding:11px 15px;background:linear-gradient(#0b5939,#063a29);border:1px solid #d8ad45;color:#fff2cf;font:bold 14px Georgia,serif}
+#dashboard #dash-home .explorer-tester-ribbon{position:absolute;right:8px;top:-9px;padding:5px 12px;background:#a91e28;color:#fff;font:bold 12px Georgia,serif;transform:rotate(5deg);box-shadow:0 2px 5px #0003}
+@media(max-width:1100px){
+ #dashboard #dash-home .explorer-home-toprow{grid-template-columns:1fr}
+ #dashboard #dash-home .explorer-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #dashboard #dash-home .explorer-home-bottom{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+ #dashboard #dash-home .explorer-welcome-hero{min-height:220px;align-items:flex-start;padding:22px 16px}
+ #dashboard #dash-home .explorer-welcome-copy{padding-right:0}
+ #dashboard #dash-home .explorer-welcome-copy h2{font-size:30px}
+ #dashboard #dash-home .explorer-welcome-copy>p:last-child{font-size:13px}
+ #dashboard #dash-home .explorer-welcome-user{position:absolute;right:12px;bottom:12px;min-height:78px;width:120px;flex-basis:120px;padding:12px 6px 7px}
+ #dashboard #dash-home .explorer-welcome-user strong{font-size:14px}
+ #dashboard #dash-home .explorer-welcome-user strong span{font-size:15px}
+ #dashboard #dash-home .explorer-rank{font-size:9px}
+ #dashboard #dash-home .explorer-home-toprow{margin:10px 10px 14px;gap:9px}
+ #dashboard #dash-home .explorer-resume-card{flex-wrap:wrap}
+ #dashboard #dash-home .explorer-resume-icon{flex-basis:45px;font-size:34px}
+ #dashboard #dash-home .explorer-resume-copy h3{font-size:17px}
+ #dashboard #dash-home .explorer-resume-card button{width:100%}
+ #dashboard #dash-home .explorer-shortcuts{grid-template-columns:1fr 1fr;gap:9px;margin:0 10px 14px}
+ #dashboard #dash-home .explorer-shortcut-photo{height:78px}
+ #dashboard #dash-home .explorer-shortcut-body{padding:7px 7px 9px}
+ #dashboard #dash-home .explorer-shortcut-body h3{font-size:16px}
+ #dashboard #dash-home .explorer-shortcut-body p{font-size:11px;min-height:42px}
+ #dashboard #dash-home .explorer-shortcut-body button{font-size:11px;padding:7px 9px}
+ #dashboard #dash-home .explorer-home-bottom{margin:0 10px;gap:10px}
+ #dashboard #dash-home .explorer-how-steps{grid-template-columns:1fr;gap:8px}
+ #dashboard #dash-home .explorer-how-steps>b{transform:rotate(90deg)}
+ #dashboard #dash-home .explorer-tester-card{flex-wrap:wrap}
+ #dashboard #dash-home .explorer-tester-card .primary-btn{width:100%}
+}
 
 </style>
         <div class="puzzle-admin-hero"><div><h2>🧩 Carte Puzzle</h2><p>Gérez les pièces de la carte et programmez leurs révélations.</p></div><div class="puzzle-admin-hero-mark">🏡</div></div>
@@ -3398,6 +3553,8 @@ function showDashboard(name, email){
 
   const firstName = document.getElementById("player-firstname");
   if(firstName) firstName.textContent = name || "Non renseigné";
+  const dashboardWelcomeName = document.getElementById("dash-welcome-name");
+  if(dashboardWelcomeName) dashboardWelcomeName.textContent = name || "Explorateur";
 
   const playerEmail = document.getElementById("player-email");
   if(playerEmail) playerEmail.textContent = email || "Non renseignée";
