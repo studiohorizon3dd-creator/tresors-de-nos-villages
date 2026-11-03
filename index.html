@@ -2173,6 +2173,103 @@ body.halloween-accueil .home-hero{
 }
 
 </style>
+<style>
+
+
+/* CORRECTION 03/11 — séparation admin/testeur + espace testeur plus aéré */
+#dashboard.admin-mode > #dash-tester-space,
+#dashboard.admin-mode > .content > #dash-tester-space {
+  display: none !important;
+}
+#dash-tester-space.tester-dashboard {
+  display: block;
+  width: min(calc(100vw - 56px), 1680px) !important;
+  max-width: 1680px !important;
+  box-sizing: border-box !important;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 auto !important;
+  padding: 22px clamp(18px, 2.2vw, 36px) 38px !important;
+  background: #f7efdd;
+  color: #173a29;
+}
+#dash-tester-space .tester-dashboard-hero {
+  min-height: 104px;
+  padding: 18px clamp(20px, 2.5vw, 38px);
+  border-radius: 18px;
+}
+#dash-tester-space .tester-dashboard-brand h2 {
+  font-size: clamp(30px, 3vw, 42px);
+}
+#dash-tester-space .tester-dashboard-topstats {
+  gap: 12px;
+  margin: 16px 0 18px;
+  padding: 14px;
+  border-radius: 18px;
+}
+#dash-tester-space .tester-identity-card,
+#dash-tester-space .tester-topstat {
+  min-height: 92px;
+  padding: 10px 12px;
+}
+#dash-tester-space .tester-avatar {
+  width: 68px;
+  height: 68px;
+}
+#dash-tester-space .tester-dashboard-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+#dash-tester-space .tester-dash-card {
+  min-width: 0;
+  padding: 20px;
+  border-radius: 17px;
+}
+#dash-tester-space .tester-dash-card h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #e7d7b2;
+}
+#dash-tester-space .tester-dash-card > p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 8px 0 14px;
+}
+#dash-tester-space .tester-progression-card { grid-column: span 2; }
+#dash-tester-space .tester-missions-card,
+#dash-tester-space .tester-validation-card,
+#dash-tester-space .tester-feedback-card { min-height: 300px; }
+#dash-tester-space .tester-history-card,
+#dash-tester-space .tester-badges-card,
+#dash-tester-space .tester-version-card { min-height: 235px; }
+#dash-tester-space .tester-rank-track { gap: 12px; margin-top: 16px; }
+#dash-tester-space .tester-rank-item { min-height: 92px; padding: 12px 8px; }
+#dash-tester-space .tester-dash-form { gap: 12px; }
+#dash-tester-space .tester-dash-form select,
+#dash-tester-space .tester-dash-form textarea { padding: 12px 14px; font-size: 14px; }
+#dash-tester-space .tester-dash-form textarea { min-height: 92px; }
+@media (max-width: 1050px) {
+  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #dash-tester-space .tester-dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #dash-tester-space .tester-progression-card { grid-column: span 1; }
+}
+@media (max-width: 680px) {
+  #dash-tester-space.tester-dashboard {
+    width: calc(100vw - 24px) !important;
+    left: 50%;
+    padding: 12px 8px 24px !important;
+  }
+  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #dash-tester-space .tester-dashboard-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  #dash-tester-space .tester-progression-card { grid-column: auto; }
+  #dash-tester-space .tester-dash-card { padding: 16px; min-height: 0; }
+  #dash-tester-space .tester-dashboard-hero { min-height: 86px; padding: 12px 14px; }
+}
+
+</style>
 </head>
 <body>
 
@@ -6979,6 +7076,15 @@ function showDashSection(id){
   // En administration, le menu explorateur latéral est masqué et la navigation admin passe en haut.
   const dashboard = document.getElementById("dashboard");
   if(dashboard) dashboard.classList.toggle("admin-mode", id === "dash-admin-info");
+  // L'espace testeur est un enfant direct de #dashboard (pas de .content) :
+  // on le masque explicitement lorsque l'administration est ouverte.
+  if(id === "dash-admin-info"){
+    const testerSpace = document.getElementById("dash-tester-space");
+    if(testerSpace){
+      testerSpace.classList.add("hidden");
+      testerSpace.style.display = "none";
+    }
+  }
 
   // L'administration est déplacée au début de la zone de contenu au moment
   // de son ouverture. Elle ne reste donc plus après toutes les rubriques joueur.
