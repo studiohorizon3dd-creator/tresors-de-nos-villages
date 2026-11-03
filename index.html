@@ -3174,6 +3174,20 @@ body.halloween-accueil .home-hero{
           <h4>➕ Ajouter un modérateur</h4>
           <label>Adresse e-mail du membre<input id="admin-team-email" type="email" required maxlength="180" placeholder="membre@exemple.fr" style="display:block;width:100%;padding:11px"></label>
           <label>Villages autorisés <small>(facultatif, plusieurs possibles)</small><select id="admin-team-villages" multiple size="4" style="display:block;width:100%;padding:9px"></select></label>
+          <fieldset style="border:1px solid #dfd2b4;border-radius:10px;padding:12px;background:#fffdf7">
+            <legend><strong>Fonctions autorisées</strong></legend>
+            <p style="font-size:12px;color:#687267;margin:4px 0 10px">Coche les missions que tu souhaites confier à ce modérateur.</p>
+            <div id="admin-team-permissions" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px">
+              <label><input type="checkbox" value="support"> 💬 Messages et support</label>
+              <label><input type="checkbox" value="map"> 🗺️ Carte des villages</label>
+              <label><input type="checkbox" value="puzzle"> 🧩 Carte aux pièces mystères</label>
+              <label><input type="checkbox" value="leaderboard"> 🏆 Classement général</label>
+              <label><input type="checkbox" value="reports"> 🚩 Signalements des joueurs</label>
+              <label><input type="checkbox" value="testers"> 🧪 Gestion des testeurs</label>
+              <label><input type="checkbox" value="news"> 📰 Actualités et publications</label>
+              <label><input type="checkbox" value="adventures"> 🧭 Suivi des aventures</label>
+            </div>
+          </fieldset>
           <button class="admin-secondary-btn" type="submit">Ajouter / activer le modérateur</button>
         </form>
         <p id="admin-team-status" class="status" role="status" aria-live="polite"></p>
@@ -6030,6 +6044,15 @@ window.openAdminPanel = async function() {
   }
 };
 
+const TEAM_PERMISSION_LABELS = {
+  support: "💬 Messages et support", map: "🗺️ Carte des villages",
+  puzzle: "🧩 Carte aux pièces mystères", leaderboard: "🏆 Classement général",
+  reports: "🚩 Signalements des joueurs", testers: "🧪 Gestion des testeurs",
+  news: "📰 Actualités et publications", adventures: "🧭 Suivi des aventures"
+};
+function getTeamPermissionChoices(root=document) {
+  return Array.from(root.querySelectorAll('#admin-team-permissions input[type="checkbox"]:checked')).map(input=>input.value);
+}
 window.adminLoadTeam = async function() {
   const status = document.getElementById("admin-team-status");
   const list = document.getElementById("admin-team-list");
@@ -6037,73 +6060,42 @@ window.adminLoadTeam = async function() {
   if (!status || !list) return;
   status.textContent = "Chargement de l'équipe…";
   try {
-    const [teamData, villageData] = await Promise.all([
-      adminApi("/api/admin/team"),
-      adminApi("/api/admin/villages")
-    ]);
+    const [teamData, villageData] = await Promise.all([adminApi("/api/admin/team"), adminApi("/api/admin/villages")]);
     if (villageSelect) {
+      const selected = new Set(Array.from(villageSelect.selectedOptions).map(o=>o.value));
       villageSelect.replaceChildren();
-      (villageData.villages || []).forEach(v => {
-        const option = document.createElement("option");
-        option.value = v.slug; option.textContent = v.name;
-        villageSelect.append(option);
-      });
+      (villageData.villages || []).forEach(v => { const option=document.createElement("option"); option.value=v.slug; option.textContent=v.name; option.selected=selected.has(v.slug); villageSelect.append(option); });
     }
-    const moderators = (teamData.members || []).filter(m => m.role === "moderator");
-    if (!moderators.length) { list.innerHTML = "<p>Aucun modérateur pour le moment.</p>"; status.textContent = "Aucun membre de l'équipe."; return; }
+    const moderators=(teamData.members||[]).filter(m=>m.role==="moderator");
     list.replaceChildren();
-    moderators.forEach(member => {
-      const card = document.createElement("article");
-      card.className = "feature";
-      card.style.cssText = "padding:15px;margin:10px 0";
-      const title = document.createElement("strong");
-      title.textContent = `${member.name || "Membre"} — ${member.email}`;
-      const meta = document.createElement("p");
-      meta.textContent = `Modérateur · ${member.status === "active" ? "Actif" : "Suspendu"} · Villages : ${(member.allowed_villages || []).join(", ") || "Non précisés"}`;
-      const controls = document.createElement("div");
-      controls.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
-      const statusBtn = document.createElement("button");
-      statusBtn.type = "button"; statusBtn.className = "admin-secondary-btn";
-      statusBtn.textContent = member.status === "active" ? "Suspendre" : "Réactiver";
-      statusBtn.addEventListener("click", async () => {
-        try {
-          await adminApi(`/api/admin/team/${encodeURIComponent(member.user_id)}`, {
-            method: "PATCH", body: JSON.stringify({ status: member.status === "active" ? "suspended" : "active", allowed_villages: member.allowed_villages || [] })
-          });
-          await window.adminLoadTeam();
-        } catch (error) { status.textContent = error.message || "Modification impossible."; }
-      });
-      const historyBtn = document.createElement("button");
-      historyBtn.type = "button"; historyBtn.className = "admin-secondary-btn"; historyBtn.textContent = "Historique";
-      historyBtn.addEventListener("click", async () => {
-        try {
-          const result = await adminApi(`/api/admin/team/${encodeURIComponent(member.user_id)}/history`);
-          const entries = result.history || [];
-          alert(entries.length ? entries.map(item => `${new Date(item.created_at).toLocaleString("fr-FR")} — ${item.action} — ${item.performed_by}`).join("\n") : "Aucune activité enregistrée.");
-        } catch (error) { alert(error.message || "Historique indisponible."); }
-      });
-      controls.append(statusBtn, historyBtn);
-      card.append(title, meta, controls); list.append(card);
+    if (!moderators.length) { list.innerHTML="<p>Aucun modérateur pour le moment.</p>"; status.textContent="Aucun membre de l'équipe."; return; }
+    moderators.forEach(member=>{
+      const card=document.createElement("article"); card.className="feature"; card.style.cssText="padding:15px;margin:10px 0;text-align:left";
+      const title=document.createElement("strong"); title.textContent=`${member.name||"Membre"} — ${member.email}`;
+      const meta=document.createElement("p"); meta.textContent=`Modérateur · ${member.status==="active"?"Actif":"Suspendu"} · Villages : ${(member.allowed_villages||[]).join(", ")||"Tous / non précisés"}`;
+      const permissionTitle=document.createElement("strong"); permissionTitle.textContent="Autorisations de ce modérateur";
+      const permissionGrid=document.createElement("div"); permissionGrid.style.cssText="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:10px 0";
+      Object.entries(TEAM_PERMISSION_LABELS).forEach(([key,label])=>{const lab=document.createElement("label");lab.style.cssText="font-size:13px;display:flex;gap:7px;align-items:center";const cb=document.createElement("input");cb.type="checkbox";cb.value=key;cb.checked=(member.permissions||[]).includes(key);lab.append(cb,document.createTextNode(label));permissionGrid.append(lab);});
+      const villages=document.createElement("select"); villages.multiple=true; villages.size=3; villages.style.cssText="display:block;width:100%;padding:8px;margin:8px 0";
+      (villageData.villages||[]).forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;o.selected=(member.allowed_villages||[]).includes(v.slug);villages.append(o);});
+      const controls=document.createElement("div");controls.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px";
+      const save=document.createElement("button");save.type="button";save.className="admin-secondary-btn";save.textContent="✓ Valider les autorisations";
+      save.addEventListener("click",async()=>{try{save.disabled=true;await adminApi(`/api/admin/team/${encodeURIComponent(member.user_id)}`,{method:"PATCH",body:JSON.stringify({permissions:Array.from(permissionGrid.querySelectorAll('input:checked')).map(x=>x.value),allowed_villages:Array.from(villages.selectedOptions).map(x=>x.value)})});status.textContent=`Autorisations enregistrées pour ${member.email}.`;await window.adminLoadTeam();}catch(e){status.textContent=e.message||"Enregistrement impossible.";}finally{save.disabled=false;}});
+      const toggle=document.createElement("button");toggle.type="button";toggle.className="admin-secondary-btn";toggle.textContent=member.status==="active"?"Suspendre":"Réactiver";
+      toggle.addEventListener("click",async()=>{try{await adminApi(`/api/admin/team/${encodeURIComponent(member.user_id)}`,{method:"PATCH",body:JSON.stringify({status:member.status==="active"?"suspended":"active"})});await window.adminLoadTeam();}catch(e){status.textContent=e.message||"Modification impossible.";}});
+      const history=document.createElement("button");history.type="button";history.className="admin-secondary-btn";history.textContent="Historique";
+      history.addEventListener("click",async()=>{try{const r=await adminApi(`/api/admin/team/${encodeURIComponent(member.user_id)}/history`);const entries=r.history||[];alert(entries.length?entries.map(x=>`${new Date(x.created_at).toLocaleString("fr-FR")} — ${x.action} — ${x.performed_by}`).join("\n"):"Aucune activité enregistrée.");}catch(e){alert(e.message||"Historique indisponible.");}});
+      controls.append(save,toggle,history);card.append(title,meta,permissionTitle,permissionGrid,document.createTextNode("Villages autorisés"),villages,controls);list.append(card);
     });
-    status.textContent = `${moderators.length} modérateur(s) enregistré(s).`;
-  } catch (error) { status.textContent = error.message || "Impossible de charger l'équipe."; }
+    status.textContent=`${moderators.length} modérateur(s) enregistré(s).`;
+  } catch(error){status.textContent=error.message||"Impossible de charger l'équipe.";}
 };
-window.adminOpenTeam = async function() {
-  if (window.adminCurrentRole === "moderator") return;
-  adminSetView("admin-team-view", "Gestion de l'équipe");
-  await window.adminLoadTeam();
-};
-document.getElementById("admin-team-form")?.addEventListener("submit", async event => {
-  event.preventDefault();
-  const status = document.getElementById("admin-team-status");
-  const email = document.getElementById("admin-team-email")?.value.trim();
-  const allowed_villages = Array.from(document.getElementById("admin-team-villages")?.selectedOptions || []).map(o => o.value);
-  try {
-    const result = await adminApi("/api/admin/team", { method: "POST", body: JSON.stringify({ email, role: "moderator", allowed_villages }) });
-    status.textContent = `Modérateur ajouté : ${result.member?.email || email}`;
-    event.target.reset();
-    await window.adminLoadTeam();
-  } catch (error) { status.textContent = error.message || "Impossible d'ajouter le modérateur."; }
+window.adminOpenTeam=async function(){if(window.adminCurrentRole==="moderator")return;adminSetView("admin-team-view","Gestion de l'équipe");await window.adminLoadTeam();};
+document.getElementById("admin-team-form")?.addEventListener("submit",async event=>{
+  event.preventDefault();const status=document.getElementById("admin-team-status");const email=document.getElementById("admin-team-email")?.value.trim();
+  const allowed_villages=Array.from(document.getElementById("admin-team-villages")?.selectedOptions||[]).map(o=>o.value);const permissions=getTeamPermissionChoices();
+  try{const result=await adminApi("/api/admin/team",{method:"POST",body:JSON.stringify({email,role:"moderator",allowed_villages,permissions})});status.textContent=`Modérateur ajouté : ${result.member?.email||email}`;event.target.reset();await window.adminLoadTeam();}
+  catch(error){status.textContent=error.message||"Impossible d'ajouter le modérateur.";}
 });
 
 window.signOutAndHome = async function() {
