@@ -1815,6 +1815,52 @@ body.halloween-accueil .home-hero{
 @media(max-width:700px){#recompenses-public .public-rewards-panel{padding:12px}.public-ranking-table th,.public-ranking-table td{padding:11px 9px;font-size:12px}}
 </style>
 
+
+<style id="admin-dashboard-visual-refresh">
+#admin-home-view{max-width:1680px;margin:0 auto}
+#admin-home-view .admin-home-banner{min-height:148px;padding:25px 30px;border-radius:18px;background-image:linear-gradient(90deg,rgba(3,42,30,.98) 0%,rgba(4,54,37,.88) 43%,rgba(4,54,37,.12) 100%),url('images/admin-dashboard-banner.jpg');background-position:center 48%;background-size:cover;border:1px solid #d5b65e;box-shadow:0 10px 26px rgba(16,48,32,.16)}
+#admin-home-view .admin-home-banner>div{max-width:720px}
+#admin-home-view .admin-home-banner .admin-kicker{font:800 10px Arial,sans-serif;letter-spacing:1.8px;text-transform:uppercase;color:#f1ce70}
+#admin-home-view .admin-home-banner h3{font:700 clamp(25px,3vw,37px) Georgia,serif;line-height:1.12;margin:8px 0;color:#fff3d1;text-shadow:0 2px 12px #001e16}
+#admin-home-view .admin-home-banner p{font:14px/1.55 Arial,sans-serif;color:#fff8e8;max-width:590px}
+#admin-home-view .admin-home-toolbar{margin:20px 0 12px}
+#admin-home-view .admin-section-heading h3{font:700 22px Georgia,serif;color:#123d2c}
+#admin-home-view .admin-section-heading p{font:12px Arial,sans-serif;color:#77715f}
+#admin-home-view .admin-live-pill{box-shadow:0 2px 8px rgba(29,92,53,.08);border:1px solid #cfe4c9}
+#admin-home-view .admin-metric-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:16px}
+#admin-home-view .admin-metric{min-height:122px;display:grid;grid-template-columns:48px minmax(0,1fr);grid-template-rows:auto auto auto;align-content:center;column-gap:12px;row-gap:2px;padding:17px 18px;border-radius:16px;background:linear-gradient(145deg,#fffefa,#f5f1e5);border:1px solid #e6d4a8;box-shadow:0 6px 17px rgba(39,55,34,.07);transition:transform .18s ease,box-shadow .18s ease}
+#admin-home-view .admin-metric:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(39,55,34,.11)}
+#admin-home-view .admin-metric-icon{grid-row:1/4;width:46px;height:46px;margin:0;border-radius:50%;font-size:22px;background:#e6f0df;color:#17633e}
+#admin-home-view .admin-metric:nth-child(2) .admin-metric-icon{background:#eee4f5;color:#70449b}
+#admin-home-view .admin-metric:nth-child(3) .admin-metric-icon{background:#f9edcf;color:#b27a16}
+#admin-home-view .admin-metric:nth-child(4) .admin-metric-icon{background:#e1edf9;color:#2875b9}
+#admin-home-view .admin-metric-label{min-height:0;font:700 12px Arial,sans-serif;color:#4f5e50}
+#admin-home-view .admin-metric strong{font:700 31px Georgia,serif;line-height:1.05;color:#103d2b;margin:2px 0}
+#admin-home-view .admin-metric small{font:10px Arial,sans-serif;color:#817968}
+#admin-home-view .admin-visual-grid{grid-template-columns:minmax(0,1.25fr) minmax(280px,1fr) minmax(280px,1fr);gap:14px;margin:16px 0 20px}
+#admin-home-view .admin-visual-card{min-height:218px;padding:17px;border-radius:16px;background:linear-gradient(150deg,#fffefa,#f8f4e9);border:1px solid #e4d5b4;box-shadow:0 6px 17px rgba(39,55,34,.07)}
+#admin-home-view .admin-visual-title{font:700 18px Georgia,serif;color:#153f2d;padding-bottom:10px;border-bottom:1px solid #eadfc9}
+#admin-home-view .admin-visual-title span{color:#b18a31}
+#admin-home-view .admin-chart-placeholder{height:132px;margin-top:5px}
+#admin-home-view .admin-donut-wrap{height:135px}
+#admin-home-view .admin-france-map{min-height:145px}
+#admin-home-view .admin-section-heading{margin:18px 0 11px}
+#admin-home-view .admin-shortcut-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#admin-home-view .admin-shortcut{min-height:84px;padding:14px;border-radius:15px;border:1px solid #e2d2ad;background:linear-gradient(145deg,#fffefa,#f7f0df);box-shadow:0 5px 14px rgba(39,55,34,.06)}
+#admin-home-view .admin-shortcut:hover{transform:translateY(-2px);border-color:#c5a24b;box-shadow:0 8px 18px rgba(39,55,34,.1)}
+#admin-home-view .admin-shortcut-icon{width:43px;height:43px;font-size:21px;background:#e9f1e2}
+#admin-home-view .admin-shortcut strong{font:700 13px Arial,sans-serif;color:#173d2d}
+#admin-home-view .admin-shortcut small{font:11px/1.4 Arial,sans-serif;color:#756f60}
+#admin-home-view .admin-bottom-grid{grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);gap:14px;margin-top:16px}
+#admin-home-view .admin-info-panel{min-height:145px;border:1px solid #e4d5b4;border-radius:16px;padding:18px;background:linear-gradient(145deg,#fffefa,#f8f4e9);box-shadow:0 5px 15px rgba(39,55,34,.06)}
+#admin-home-view .admin-info-panel h3{font:700 19px Georgia,serif;color:#173e2d}
+#admin-home-view .admin-project-status span{font-size:10px;border:1px solid #e0e7d7}
+#admin-home-view .admin-test-panel .admin-secondary-btn{border-radius:10px}
+@media(max-width:1100px){#admin-home-view .admin-visual-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-home-view .admin-visual-card:last-child{grid-column:1/-1}#admin-home-view .admin-shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){#admin-home-view .admin-home-banner{min-height:132px;padding:19px 17px;background-position:62% center}#admin-home-view .admin-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#admin-home-view .admin-metric{grid-template-columns:36px minmax(0,1fr);column-gap:8px;min-height:105px;padding:11px}#admin-home-view .admin-metric-icon{width:34px;height:34px;font-size:17px}#admin-home-view .admin-metric strong{font-size:25px}#admin-home-view .admin-visual-grid{grid-template-columns:1fr}#admin-home-view .admin-visual-card:last-child{grid-column:auto}#admin-home-view .admin-shortcut-grid{grid-template-columns:1fr}#admin-home-view .admin-bottom-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){#admin-home-view .admin-metric,#admin-home-view .admin-shortcut{transition:none}}
+</style>
+
 </head>
 <body>
 
@@ -3062,10 +3108,10 @@ body.halloween-accueil .home-hero{
 
       <div id="admin-home-view">
         <div class="admin-home-banner">
-          <div><span class="admin-kicker">BIENVENUE DANS VOTRE ESPACE</span><h3>Gardez un œil sur votre aventure.</h3><p>Retrouvez les informations essentielles et accédez rapidement à la gestion du projet.</p></div>
+          <div><span class="admin-kicker">BIENVENUE DANS VOTRE ESPACE ADMINISTRATION</span><h3>Gardez un œil sur votre aventure.</h3><p>Suivez les visiteurs, les villages, les aventures et votre équipe depuis un seul endroit.</p></div>
         </div>
 
-        <div class="admin-home-toolbar"><div class="admin-section-heading"><div><h3>Vue d'ensemble</h3><p>Indicateurs actuellement disponibles sur le serveur</p></div></div><span class="admin-live-pill">Données en direct</span></div>
+        <div class="admin-home-toolbar"><div class="admin-section-heading"><div><h3>Vue d'ensemble</h3><p>Les chiffres de fréquentation sont actualisés depuis le serveur.</p></div></div><span class="admin-live-pill">Données en direct</span></div>
         <div class="admin-metric-grid">
           <article class="admin-metric"><span class="admin-metric-icon">👥</span><span class="admin-metric-label">Visiteurs actifs</span><strong id="analytics-active">—</strong><small>Sur les 5 dernières minutes</small></article>
           <article class="admin-metric"><span class="admin-metric-icon">🧭</span><span class="admin-metric-label">Explorateurs connectés</span><strong id="analytics-members">—</strong><small>Visiteurs identifiés</small></article>
