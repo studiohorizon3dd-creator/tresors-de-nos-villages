@@ -8480,15 +8480,11 @@ document.addEventListener('DOMContentLoaded',()=>loadPublicExplorerRewards("publ
 <script id="admin-dashboard-live-data">
 window.loadAdminDashboardOverview = async function(){
   const root=document.getElementById("admin-home-view");
-  if(!root || root.hidden) return;
+  if(!root) return;
   const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value??"—");};
-  const api=async(path)=>{
-    const token=await window.getAdminBearerToken();
-    const response=await fetch("https://tresors-de-nos-villages-serveur.onrender.com"+path,{headers:{Authorization:"Bearer "+token,Accept:"application/json"},cache:"no-store"});
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(data.error||("Erreur "+response.status));
-    return data;
-  };
+  // Réutilise exactement le client sécurisé déjà utilisé par l'administration.
+  // Il récupère le jeton Neon, ajoute les en-têtes et gère les erreurs comme les autres pages.
+  const api=async(path)=>await adminApi(path);
   const [analyticsR,playersR,teamR,villagesR,adventuresR,testersR]=await Promise.allSettled([
     api("/api/admin/analytics"),api("/api/admin/players"),api("/api/admin/team"),
     api("/api/admin/villages"),api("/api/admin/adventures"),api("/api/admin/testers")
@@ -8500,7 +8496,7 @@ window.loadAdminDashboardOverview = async function(){
   const adventures=adventuresR.status==="fulfilled"?(adventuresR.value.adventures||[]):[];
   const applications=testersR.status==="fulfilled"?(testersR.value.applications||[]):[];
 
-  put("dash-total-players",playersR.status==="fulfilled"?players.length:"—");
+  put("dash-total-players",playersR.status==="fulfilled"?(playersR.value.count??players.length):"Erreur");
   put("dash-total-team",teamR.status==="fulfilled"?team.filter(x=>x.status!=="suspended").length:"—");
   put("dash-total-villages",villagesR.status==="fulfilled"?villages.length:"—");
   put("dash-total-adventures",adventuresR.status==="fulfilled"?adventures.length:"—");
@@ -8511,7 +8507,7 @@ window.loadAdminDashboardOverview = async function(){
   const pendingTotal=pendingTesters.length+pendingVillages.length+pendingAdventures.length;
   put("dash-total-pending",pendingTotal);
   put("dash-pending-badge",pendingTotal);
-  put("dash-players-note",playersR.status==="fulfilled"?"Comptes enregistrés dans Neon":"Données indisponibles");
+  put("dash-players-note",playersR.status==="fulfilled"?"Comptes inscrits dans Neon":(playersR.reason?.message||"Chargement impossible"));
   put("dash-team-note",teamR.status==="fulfilled"?"Équipe active":"Données indisponibles");
   put("dash-villages-note",villagesR.status==="fulfilled"?"Villages enregistrés":"Données indisponibles");
   put("dash-adventures-note",adventuresR.status==="fulfilled"?"Parcours enregistrés":"Données indisponibles");
@@ -8598,7 +8594,7 @@ window.loadAdminDashboardOverview = async function(){
 
   const failures=[analyticsR,playersR,teamR,villagesR,adventuresR,testersR].filter(x=>x.status==="rejected").length;
   const note=document.getElementById("dash-dashboard-load-note");
-  if(note)note.textContent=failures?`${failures} rubrique(s) n'ont pas pu être actualisée(s).`:"Toutes les données disponibles ont été actualisées.";
+  if(note)note.textContent=failures?`${failures} rubrique(s) indisponible(s) — vérifie les accès API.`:"Données actualisées depuis le serveur.";
 };
 </script>
 
