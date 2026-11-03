@@ -8918,5 +8918,51 @@ window.loadAdminDashboardOverview = async function(){
 };
 </script>
 
-<style id="tester-space-visibility-fix">#dash-tester-space.hidden{display:none!important}</style>\n</body>
+<style id="tester-space-visibility-fix">#dash-tester-space.hidden{display:none!important}</style>\n
+<style id="tester-space-layout-final-fix">
+/* Correction définitive : l'espace testeur reprend toute la largeur disponible.
+   On annule l'ancien centrage par left:50% qui le décalait vers la droite. */
+#dashboard:not(.admin-mode) > #dash-tester-space,
+#dashboard:not(.admin-mode) > .content > #dash-tester-space {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  float: none !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 1600px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+#dash-tester-space.tester-dashboard {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: 1600px !important;
+  margin: 0 auto !important;
+  padding: 14px clamp(12px, 2vw, 28px) 30px !important;
+  box-sizing: border-box !important;
+}
+#dash-tester-space .tester-dashboard-hero,
+#dash-tester-space .tester-dashboard-topstats,
+#dash-tester-space .tester-dashboard-grid {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+@media (max-width: 900px) {
+  #dash-tester-space.tester-dashboard {
+    padding: 10px 12px 24px !important;
+  }
+}
+@media (max-width: 650px) {
+  #dash-tester-space.tester-dashboard {
+    padding: 8px 10px 20px !important;
+  }
+}
+</style>
+
+</body>
 </html>
