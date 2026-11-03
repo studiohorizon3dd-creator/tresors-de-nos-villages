@@ -1784,17 +1784,20 @@ body.halloween-accueil .home-hero{
 
 
 <style>
-#recompenses-public{padding:34px clamp(16px,3vw,42px);scroll-margin-top:20px;background:linear-gradient(180deg,#f7f0df,#fffaf0)}
-#recompenses-public .public-rewards-panel{max-width:1100px;margin:0 auto;padding:20px;background:#fffdf6;border:1px solid #dfc995;border-radius:18px;box-shadow:0 8px 24px #26351c12}
+#recompenses-public{padding:18px 14px 22px;scroll-margin-top:20px;background:#f7f0df}
+#recompenses-public .premium-section-heading{margin:0 auto 10px;max-width:760px}
+#recompenses-public .premium-section-heading h2{font-size:clamp(20px,2.2vw,26px);margin:0}
+#recompenses-public .premium-section-heading p{font-size:13px;margin:4px 0 0}
+#recompenses-public .public-rewards-panel{max-width:760px;margin:0 auto;padding:10px 12px;background:#fffdf6;border:1px solid #dfc995;border-radius:12px;box-shadow:0 3px 10px #26351c0c}
 .public-ranking-table-wrap{width:100%;overflow-x:auto}
-.public-ranking-table{width:100%;border-collapse:collapse;min-width:520px;color:#243b2d}
-.public-ranking-table th,.public-ranking-table td{padding:13px 14px;text-align:left;border-bottom:1px solid #eee3c9}
-.public-ranking-table th{background:#f3ead3;color:#31523b;font-size:13px;font-weight:800}
-.public-ranking-table td:first-child,.public-ranking-table th:first-child{text-align:center;width:54px}
+.public-ranking-table{width:100%;border-collapse:collapse;min-width:420px;color:#243b2d;font-size:13px}
+.public-ranking-table th,.public-ranking-table td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee3c9}
+.public-ranking-table th{background:#f3ead3;color:#31523b;font-size:12px;font-weight:800}
+.public-ranking-table td:first-child,.public-ranking-table th:first-child{text-align:center;width:42px}
 .public-ranking-table tbody tr:last-child td{border-bottom:0}
 .public-ranking-table tbody tr:nth-child(even){background:#fffaf0}
-#recompenses-public .public-rewards-note{text-align:center;color:#6b715f;font-size:12px;margin:16px 0 0}
-@media(max-width:700px){#recompenses-public .public-rewards-panel{padding:12px}.public-ranking-table th,.public-ranking-table td{padding:11px 9px;font-size:12px}}
+#recompenses-public .public-rewards-note{text-align:center;color:#6b715f;font-size:11px;margin:8px 0 0}
+@media(max-width:700px){#recompenses-public{padding:14px 10px}#recompenses-public .public-rewards-panel{padding:8px}.public-ranking-table th,.public-ranking-table td{padding:8px 7px;font-size:11px}}
 </style>
 
 </head>
@@ -7887,9 +7890,9 @@ async function loadPublicExplorerRewards(view="public"){
   if(!body)return;
   const showError=(message)=>{body.replaceChildren();const row=document.createElement('tr');const cell=document.createElement('td');cell.colSpan=5;cell.textContent=message;row.append(cell);body.append(row);};
   try{
-    let response=await fetch(`${API_BASE}/api/public/rewards`,{headers:{Accept:'application/json'},cache:'no-store'});
-    // Compatibilité avec les anciennes versions du serveur.
-    if(response.status===404) response=await fetch(`${API_BASE}/api/leaderboard`,{headers:{Accept:'application/json'},cache:'no-store'});
+    let response=await fetch(`${API_BASE}/api/leaderboard`,{headers:{Accept:'application/json'},cache:'no-store'});
+    // Repli vers l'ancienne route publique si le serveur déployé utilise cette adresse.
+    if(response.status===404) response=await fetch(`${API_BASE}/api/public/rewards`,{headers:{Accept:'application/json'},cache:'no-store'});
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||'Chargement impossible.');
     const players=Array.isArray(data.leaderboard)?data.leaderboard:[];
