@@ -2052,6 +2052,129 @@ body.halloween-accueil .home-hero{
 @media(max-width:700px){#admin-home-view .adm-hero{min-height:130px;padding:18px}.adm-hero-mark{font-size:42px!important}#admin-home-view .adm-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}#admin-home-view .adm-kpi{min-height:80px;padding:9px;gap:8px}#admin-home-view .adm-kpi-icon{flex-basis:35px;width:35px;height:35px;font-size:18px}#admin-home-view .adm-kpi strong{font-size:23px}#admin-home-view .adm-main-grid{grid-template-columns:1fr;grid-template-areas:"chart" "donut" "villages" "recent" "quick" "pending"}#admin-home-view .adm-donut-row{gap:14px}#admin-home-view .adm-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-home-view .adm-dashboard-footer{align-items:flex-start;flex-wrap:wrap}#admin-home-view .adm-dashboard-footer button{margin-left:0}}
 </style>
 
+
+<style id="tester-dashboard-clean-layout">
+/* Espace Testeur — mise en page aérée, harmonisée avec le tableau de bord admin */
+#dash-tester-space.tester-dashboard{
+  width:calc(100% - 36px)!important;
+  max-width:1560px!important;
+  margin:0 auto!important;
+  padding:12px 18px 30px!important;
+  background:#f4f1e8!important;
+  color:#183326!important;
+}
+#dash-tester-space .tester-dashboard-hero{
+  min-height:86px!important;height:auto!important;
+  padding:14px 24px!important;
+  border:1px solid #d7ad45!important;border-radius:16px!important;
+  box-shadow:0 7px 18px rgba(6,44,32,.10)!important;
+}
+#dash-tester-space .tester-dashboard-brand h2{
+  font:700 clamp(25px,2.4vw,36px)/1.05 Georgia,serif!important;
+  margin:0 0 3px!important;
+}
+#dash-tester-space .tester-dashboard-brand p{font:13px/1.4 Arial,sans-serif!important;margin:0!important}
+#dash-tester-space .tester-dashboard-topstats{
+  display:grid!important;
+  grid-template-columns:1.35fr repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin:12px 0 14px!important;
+  padding:8px!important;
+  border:1px solid #dfc77f!important;border-radius:15px!important;
+  background:linear-gradient(120deg,#fffaf0,#f4e8c9)!important;
+  box-shadow:0 4px 12px rgba(6,44,32,.06)!important;
+}
+#dash-tester-space .tester-identity-card,#dash-tester-space .tester-topstat{
+  min-width:0!important;min-height:68px!important;
+  padding:7px 10px!important;border-right:1px solid #e2d2aa!important;
+}
+#dash-tester-space .tester-topstat:last-of-type{border-right:0!important}
+#dash-tester-space .tester-dashboard-grid{
+  display:grid!important;
+  grid-template-columns:repeat(12,minmax(0,1fr))!important;
+  gap:12px!important;align-items:stretch!important;
+}
+#dash-tester-space .tester-dash-card{
+  min-width:0!important;min-height:0!important;
+  padding:15px 16px!important;
+  border:1px solid #e2c77e!important;border-radius:14px!important;
+  background:linear-gradient(145deg,#fffdf7,#f8efd9)!important;
+  box-shadow:0 4px 12px rgba(6,44,32,.07)!important;
+}
+#dash-tester-space .tester-dash-card h3{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:8px!important;
+  padding-bottom:9px!important;margin:0 0 9px!important;
+  border-bottom:1px solid #eadbb7!important;
+  font:700 19px/1.15 Georgia,serif!important;color:#123d2b!important;
+}
+#dash-tester-space .tester-dash-card>p{
+  font:13px/1.45 Arial,sans-serif!important;color:#536253!important;
+  margin:5px 0 10px!important;
+}
+#dash-tester-space .tester-announcement-card{grid-column:span 5!important;min-height:150px!important}
+#dash-tester-space .tester-progression-card{grid-column:span 7!important;min-height:150px!important}
+#dash-tester-space .tester-missions-card,
+#dash-tester-space .tester-validation-card,
+#dash-tester-space .tester-feedback-card,
+#dash-tester-space .tester-history-card,
+#dash-tester-space .tester-badges-card,
+#dash-tester-space .tester-version-card{grid-column:span 4!important}
+#dash-tester-space .tester-stats-card,
+#dash-tester-space .tester-community-card,
+#dash-tester-space .tester-journal-card,
+#dash-tester-space .tester-rewards-card{grid-column:span 3!important}
+#dash-tester-space .tester-announcement-card h3{
+  display:flex!important;width:auto!important;padding:0 0 9px!important;
+  margin:0 0 9px!important;background:transparent!important;color:#123d2b!important;
+  border-radius:0!important;
+}
+#dash-tester-space .tester-announcement-body{gap:14px!important}
+#dash-tester-space .tester-announcement-art{max-width:145px!important;height:92px!important}
+#dash-tester-space .tester-rank-track{gap:9px!important}
+#dash-tester-space .tester-rank-item{min-height:78px!important;height:78px!important}
+#dash-tester-space .tester-rank-item img{width:58px!important;height:68px!important;object-fit:contain!important}
+#dash-tester-space .tester-dash-form{gap:9px!important}
+#dash-tester-space .tester-feedback-shortcuts{gap:8px!important}
+#dash-tester-space .tester-feedback-shortcuts button{min-height:54px!important;padding:10px 12px!important}
+#dash-tester-space .tester-extra-challenges{
+  margin-top:13px!important;padding:14px 17px!important;
+  border:1px solid #dfc77f!important;border-radius:14px!important;
+  background:#fffaf0!important;
+}
+#dash-tester-space .tester-extra-challenges>summary{
+  font:700 15px Georgia,serif!important;color:#174b35!important;cursor:pointer!important;
+}
+#dash-tester-space .tester-dashboard-footnote{
+  margin:12px 2px 0!important;padding:10px 13px!important;
+  border-radius:10px!important;background:#e9eddf!important;
+  color:#637064!important;font:11px/1.45 Arial,sans-serif!important;
+}
+@media(max-width:1100px){
+  #dash-tester-space.tester-dashboard{width:calc(100% - 24px)!important;padding:10px!important}
+  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #dash-tester-space .tester-identity-card{grid-column:span 3!important}
+  #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 3!important}
+  #dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,
+  #dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 2!important}
+  #dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3!important}
+}
+@media(max-width:700px){
+  #dash-tester-space.tester-dashboard{width:100%!important;padding:8px!important}
+  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #dash-tester-space .tester-identity-card{grid-column:1/-1!important}
+  #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr!important}
+  #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}
+  #dash-tester-space .tester-dashboard-hero{padding:12px!important}
+  #dash-tester-space .tester-dashboard-hero-art{display:none!important}
+  #dash-tester-space .tester-announcement-body{flex-direction:row!important}
+  #dash-tester-space .tester-rank-track{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+  #dash-tester-space .tester-rank-item img{width:42px!important;height:52px!important}
+  #dash-tester-space .tester-dash-card{padding:13px!important}
+}
+</style>
+
 </head>
 <body>
 
@@ -4975,8 +5098,6 @@ async function adminApi(path, options = {}) {
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
   return data;
 }
-// Expose le client API à la fenêtre : le tableau de bord est dans un script classique.
-window.adminApi = adminApi;
 
 window.checkAdminAccess = async function(){
   try{
@@ -8486,7 +8607,7 @@ window.loadAdminDashboardOverview = async function(){
   const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value??"—");};
   // Réutilise exactement le client sécurisé déjà utilisé par l'administration.
   // Il récupère le jeton Neon, ajoute les en-têtes et gère les erreurs comme les autres pages.
-  const api=async(path)=>await window.adminApi(path);
+  const api=async(path)=>await adminApi(path);
   const [analyticsR,playersR,teamR,villagesR,adventuresR,testersR,supportR]=await Promise.allSettled([
     api("/api/admin/analytics"),api("/api/admin/players"),api("/api/admin/team"),
     api("/api/admin/villages"),api("/api/admin/adventures"),api("/api/admin/testers"),api("/api/admin/support")
