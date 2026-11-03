@@ -4323,11 +4323,22 @@ body.halloween-accueil .home-hero{
       <div id="admin-news-view" class="admin-subview" hidden>
         <div class="admin-section-heading"><div><h3>📰 Gestion des informations</h3><p>Rédige et publie les actualités et les mises à jour visibles par les visiteurs et les membres.</p></div></div>
         <p id="admin-news-status" class="status" role="status" aria-live="polite"></p>
-        <div class="mailbox-admin-side" style="margin:12px 0"><strong>💡 Deux types de publications</strong><p><b>Actualité :</b> annonces et nouvelles du projet. <b>Mise à jour :</b> nouveautés du site et corrections. <b>Attention :</b> information importante. <b>Urgent :</b> alerte nécessitant une réaction rapide. Tu peux enregistrer un brouillon avant publication.</p></div>
+        <div class="mailbox-admin-side" style="margin:12px 0"><strong>💡 Types de publications</strong><p><b>En préparation :</b> contenu en préparation. <b>À venir :</b> nouveauté annoncée. <b>En développement :</b> fonctionnalité en cours de création. <b>Disponible :</b> nouveauté accessible. <b>Actualités :</b> annonces et nouvelles du projet. <b>Prochainement :</b> annonce d’une arrivée prochaine. <b>Actualité :</b> information du projet. <b>Mise à jour :</b> nouveautés et corrections. <b>Attention :</b> information importante. <b>Urgent :</b> alerte nécessitant une réaction rapide. Tu peux enregistrer un brouillon avant publication.</p></div>
         <form id="admin-news-form" class="feature" style="display:grid;gap:12px">
           <input id="admin-news-id" type="hidden">
           <label>Titre<input id="admin-news-title" maxlength="180" required style="display:block;width:100%;padding:12px"></label>
-          <label>Type de publication<select id="admin-news-category" required style="display:block;width:100%;padding:12px"><option value="Actualité">📰 Actualité</option><option value="Mise à jour">🔄 Mise à jour</option><option value="Attention">⚠️ Attention</option><option value="Urgent">🚨 Urgent</option></select></label>
+          <label>Type de publication<select id="admin-news-category" required style="display:block;width:100%;padding:12px">
+            <option value="En préparation">🛠️ En préparation</option>
+            <option value="À venir">🗓️ À venir</option>
+            <option value="En développement">⚙️ En développement</option>
+            <option value="Disponible">✅ Disponible</option>
+            <option value="Actualités">📰 Actualités</option>
+            <option value="Prochainement">🔜 Prochainement</option>
+            <option value="Actualité">📰 Actualité</option>
+            <option value="Mise à jour">🔄 Mise à jour</option>
+            <option value="Attention">⚠️ Attention</option>
+            <option value="Urgent">🚨 Urgent</option>
+          </select></label>
           <label>Texte<textarea id="admin-news-body" maxlength="12000" required rows="9" style="display:block;width:100%;padding:13px;min-height:220px;font:15px/1.6 Arial,sans-serif"></textarea></label>
           <label><input id="admin-news-publish" type="checkbox"> Publier immédiatement</label>
           <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer la publication</button><button class="admin-secondary-btn" type="button" onclick="adminNewsReset()">Nouvelle publication</button></div>
@@ -5522,7 +5533,7 @@ function adminRenderVillageMap(containerId,kind){
   const mapped=ADMIN_VILLAGES_CACHE.filter(v=>Number.isFinite(Number(v.latitude))&&Number.isFinite(Number(v.longitude))&&v.latitude!==null&&v.longitude!==null);
   const map=L.map(el,{scrollWheelZoom:false}).setView([46.6,2.4],5);
   ADMIN_VILLAGE_MAPS[kind]=map;
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+  L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=VOTRE_CLE_CARTO",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'}).addTo(map);
   const colors={available:"#238044",pending_confirmation:"#e5a000",in_progress:"#287da7",suspended:"#c63b35",updating:"#8053b8"};
   mapped.forEach(v=>{const marker=L.circleMarker([Number(v.latitude),Number(v.longitude)],{radius:9,color:"#fff",weight:2,fillColor:colors[v.status]||"#496b4e",fillOpacity:1}).addTo(map);marker.bindPopup("<strong>"+String(v.name).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+"</strong><br>"+(ADMIN_VILLAGE_STATUSES[v.status]||v.status));});
   if(mapped.length)map.fitBounds(L.latLngBounds(mapped.map(v=>[Number(v.latitude),Number(v.longitude)])).pad(.2));
@@ -5895,7 +5906,7 @@ async function adminLoadNews(){
     const heading=document.createElement('h4');heading.textContent=item.title;
     const meta=document.createElement('p');meta.textContent=`${item.category} · ${item.archived_at?'Archivée':item.is_published?'Publiée':'Brouillon'}`;
     const preview=document.createElement('p');preview.textContent=item.body.length>260?item.body.slice(0,260)+'…':item.body;
-    const edit=document.createElement('button');edit.type='button';edit.className='admin-secondary-btn';edit.textContent='Modifier';edit.addEventListener('click',()=>{document.getElementById('admin-news-id').value=item.id;document.getElementById('admin-news-title').value=item.title;document.getElementById('admin-news-category').value=['Actualité','Mise à jour','Attention','Urgent'].find(value=>value.toLocaleLowerCase('fr')===String(item.category||'').trim().toLocaleLowerCase('fr'))||'Actualité';document.getElementById('admin-news-body').value=item.body;document.getElementById('admin-news-publish').checked=!!item.is_published;document.getElementById('admin-news-form').scrollIntoView({behavior:'smooth',block:'start'});});
+    const edit=document.createElement('button');edit.type='button';edit.className='admin-secondary-btn';edit.textContent='Modifier';edit.addEventListener('click',()=>{document.getElementById('admin-news-id').value=item.id;document.getElementById('admin-news-title').value=item.title;document.getElementById('admin-news-category').value=['En préparation','À venir','En développement','Disponible','Actualités','Prochainement','Actualité','Mise à jour','Attention','Urgent'].find(value=>value.toLocaleLowerCase('fr')===String(item.category||'').trim().toLocaleLowerCase('fr'))||'Actualité';document.getElementById('admin-news-body').value=item.body;document.getElementById('admin-news-publish').checked=!!item.is_published;document.getElementById('admin-news-form').scrollIntoView({behavior:'smooth',block:'start'});});
     const archive=document.createElement('button');archive.type='button';archive.className='admin-secondary-btn';archive.textContent=item.archived_at?'Restaurer':'Archiver';archive.addEventListener('click',async()=>{archive.disabled=true;try{await adminApi(`/api/admin/news/${encodeURIComponent(item.id)}/archive`,{method:'PATCH',body:JSON.stringify({archived:!item.archived_at})});await adminLoadNews();}catch(e){status.textContent=e.message;archive.disabled=false;}});
     const remove=document.createElement('button');remove.type='button';remove.className='admin-secondary-btn';remove.textContent='Supprimer';remove.style.marginLeft='8px';
     remove.addEventListener('click',async()=>{
@@ -6590,8 +6601,8 @@ function actualiserCarteVillages(){
   }
   if(!villageMapInstance){
     villageMapInstance=L.map("village-map").setView([50.4982,1.8925],12);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-      maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=VOTRE_CLE_CARTO",{
+      maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(villageMapInstance);
     villageMapMarkers.humbert=L.circleMarker([50.50379,1.9064],{radius:10,color:"#ffffff",weight:2,fillColor:"#23834a",fillOpacity:1}).addTo(villageMapInstance);
     villageMapMarkers.sempy=L.circleMarker([50.49291,1.87896],{radius:10,color:"#ffffff",weight:2,fillColor:"#8b9290",fillOpacity:1}).addTo(villageMapInstance);
@@ -6650,8 +6661,8 @@ function initialiserCarte(){
   const zoneCarte = document.getElementById("carteGPS");
   if(!zoneCarte || typeof L === "undefined") return;
   carteGPS = L.map("carteGPS").setView([50.5038, 1.9073], 16);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  L.tileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=VOTRE_CLE_CARTO", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
   }).addTo(carteGPS);
   L.marker([50.50510, 1.90770]).addTo(carteGPS)
     .bindPopup("📍 Départ : mairie d’Humbert");
@@ -7887,8 +7898,8 @@ async function loadPublicExplorerRewards(view="public"){
   if(!body)return;
   const showError=(message)=>{body.replaceChildren();const row=document.createElement('tr');const cell=document.createElement('td');cell.colSpan=5;cell.textContent=message;row.append(cell);body.append(row);};
   try{
-    let response=await fetch(`${API_BASE}/api/leaderboard`,{headers:{Accept:'application/json'},cache:'no-store'});
-    if(response.status===404) response=await fetch(`${API_BASE}/api/public/rewards`,{headers:{Accept:'application/json'},cache:'no-store'});
+    let response=await fetch('https://tresors-de-nos-villages-serveur.onrender.com/api/leaderboard',{headers:{Accept:'application/json'},cache:'no-store'});
+    if(response.status===404) response=await fetch('https://tresors-de-nos-villages-serveur.onrender.com/api/public/rewards',{headers:{Accept:'application/json'},cache:'no-store'});
     const data=await response.json().catch(()=>({}));
     if(!response.ok)throw new Error(data.error||`Erreur serveur (${response.status}).`);
     const players=Array.isArray(data.leaderboard)?data.leaderboard:[];
