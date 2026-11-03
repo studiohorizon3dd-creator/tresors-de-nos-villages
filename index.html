@@ -1710,6 +1710,20 @@ body.halloween-accueil .home-hero{
   #dashboard.admin-mode .admin-category-links{padding:6px}
 }
 
+
+/* Classement général compact */
+.compact-public-ranking{max-width:980px;margin:24px auto;padding:14px 16px;background:#fffdf7;border:1px solid #dfc77f;border-radius:14px;box-shadow:0 4px 13px #263b250c}
+.compact-public-ranking h2{margin:0 0 11px;color:#123d2b;font:700 21px Georgia,serif}
+.compact-ranking-scroll{overflow-x:auto}
+.compact-ranking-table{width:100%;border-collapse:collapse;font:14px Arial,sans-serif}
+.compact-ranking-table th{padding:9px 10px;background:#07512f;color:#fff8e5;text-align:left;white-space:nowrap}
+.compact-ranking-table th:first-child{border-radius:7px 0 0 7px}.compact-ranking-table th:last-child{border-radius:0 7px 7px 0}
+.compact-ranking-table td{padding:9px 10px;border-bottom:1px solid #eee4cf;color:#24392d}
+.compact-ranking-table tbody tr:nth-child(-n+3) td:first-child{font-weight:800;color:#9b741b}
+.compact-ranking-note{margin:9px 0 0;text-align:center;color:#687267;font-size:11px}
+#landing .public-rewards-section{padding:4px 18px 18px;background:#f7efdd}
+@media(max-width:600px){.compact-public-ranking{padding:11px 9px}.compact-ranking-table{font-size:12px}.compact-ranking-table th,.compact-ranking-table td{padding:8px 6px}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1869,18 +1883,7 @@ body.halloween-accueil .home-hero{
     </div>
 
     <main class="premium-main">
-      <section class="public-rewards-section" id="recompenses-public">
-        <div class="premium-section-heading"><span></span><div><h2>🏆 Les récompenses des explorateurs</h2><p>Découvrez les explorateurs qui font briller nos villages et les récompenses remportées.</p></div><span></span></div>
-        <div class="public-rewards-panel">
-          <div class="public-rewards-panel-heading"><h3>🥇 Le podium des explorateurs</h3><span>Classement public</span></div>
-          <div id="public-rewards-podium" class="public-rewards-podium"><p>Chargement du classement…</p></div>
-          <div class="public-rewards-lists">
-            <div><h3>📊 Classement général</h3><div id="public-rewards-ranking"><p>Chargement…</p></div></div>
-            <div><h3>🎁 Dernières récompenses</h3><div id="public-rewards-history"><p>Chargement…</p></div></div>
-          </div>
-          <p class="public-rewards-note">Seuls les explorateurs ayant choisi de participer au classement apparaissent publiquement. Aucune adresse e-mail n’est affichée.</p>
-        </div>
-      </section>
+      
 
       <section class="home-formulas premium-formulas" id="formules-public">
         <div class="premium-section-heading">
@@ -1988,6 +1991,16 @@ body.halloween-accueil .home-hero{
       <p class="section-intro">Mairies, associations et acteurs locaux : construisons ensemble des parcours pour faire découvrir les richesses de vos villages.</p>
       <div class="cta-wrap"><button class="primary-btn" type="button" onclick="document.getElementById('public-town-contact').scrollIntoView({behavior:'smooth',block:'start'})">Nous contacter&nbsp; →</button></div>
     </section>
+<section class="public-rewards-section" id="recompenses-public">
+  <div class="compact-public-ranking">
+    <h2>📊 Classement général</h2>
+    <div class="compact-ranking-scroll"><table class="compact-ranking-table">
+      <thead><tr><th>#</th><th>Explorateur</th><th>Aventures</th><th>Étoiles</th><th>Badges</th></tr></thead>
+      <tbody id="public-rewards-ranking"><tr><td colspan="5">Chargement du classement…</td></tr></tbody>
+    </table></div>
+    <p class="compact-ranking-note">Seuls les explorateurs ayant choisi de participer au classement apparaissent publiquement.</p>
+  </div>
+</section>
 <section class="public-town-contact-section" id="public-town-contact" aria-labelledby="public-town-contact-title">
   <div class="town-hero">
     <div class="town-hero-mark">🤝</div>
@@ -2140,6 +2153,7 @@ body.halloween-accueil .home-hero{
           <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
           <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
           <button class="nav-btn" onclick="showDashSection('dash-puzzle-map')">🧩 &nbsp; Carte aux pièces mystères</button>
+          <button class="nav-btn" onclick="showDashSection('dash-public-ranking');loadPublicExplorerRewards()">🏆 &nbsp; Classement général</button>
         </div>
       </details>
       <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
@@ -2785,6 +2799,16 @@ body.halloween-accueil .home-hero{
   <div id="public-updates-list" aria-live="polite"></div>
 </section>
 
+<section class="dash-section hidden" id="dash-public-ranking">
+  <div class="compact-public-ranking">
+    <h2>📊 Classement général</h2>
+    <div class="compact-ranking-scroll"><table class="compact-ranking-table">
+      <thead><tr><th>#</th><th>Explorateur</th><th>Aventures</th><th>Étoiles</th><th>Badges</th></tr></thead>
+      <tbody id="dashboard-public-rewards-ranking"><tr><td colspan="5">Chargement du classement…</td></tr></tbody>
+    </table></div>
+    <p class="compact-ranking-note">Seuls les explorateurs ayant choisi de participer au classement apparaissent publiquement.</p>
+  </div>
+</section>
 <section class="dash-section hidden" id="dash-town-contact">
   <div class="town-hero">
     <div class="town-hero-mark">🤝</div>
@@ -6389,7 +6413,7 @@ function showDashSection(id){
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
-  "dash-home", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges",
+  "dash-home", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-public-ranking", "dash-my-puzzle-progress", "dash-badges",
   "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-updates", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
@@ -7853,31 +7877,25 @@ function testerQuickFeedback(type){
 
 <script>
 async function loadPublicExplorerRewards(){
-  const podium=document.getElementById('public-rewards-podium');
-  const ranking=document.getElementById('public-rewards-ranking');
-  const history=document.getElementById('public-rewards-history');
-  if(!podium||!ranking||!history)return;
+  const tables=[document.getElementById('public-rewards-ranking'),document.getElementById('dashboard-public-rewards-ranking')].filter(Boolean);
+  if(!tables.length)return;
   try{
-    const response=await fetch(`${API_BASE}/api/public/rewards`,{headers:{Accept:'application/json'},cache:'no-store'});
+    const response=await fetch(`${API_BASE}/api/leaderboard`,{headers:{Accept:'application/json'},cache:'no-store'});
     const data=await response.json();
     if(!response.ok)throw new Error(data.error||'Chargement impossible.');
     const players=Array.isArray(data.leaderboard)?data.leaderboard:[];
-    podium.replaceChildren();
-    if(!players.length){const p=document.createElement('p');p.textContent='Le podium apparaîtra dès que des explorateurs participeront au classement.';podium.append(p);}
-    else players.slice(0,3).forEach((player,index)=>{
-      const card=document.createElement('article');card.className='public-podium-card'+(index===0?' first':'');
-      const medal=document.createElement('span');medal.className='public-podium-medal';medal.textContent=['🥇','🥈','🥉'][index];
-      const name=document.createElement('strong');name.textContent=player.pseudo||'Explorateur';
-      const count=document.createElement('small');count.textContent=`${Number(player.villages_count)||0} aventure(s) terminée(s)`;
-      card.append(medal,name,count);podium.append(card);
+    tables.forEach(table=>{
+      table.replaceChildren();
+      if(!players.length){const row=document.createElement('tr'),cell=document.createElement('td');cell.colSpan=5;cell.textContent='Aucun explorateur classé pour le moment.';row.append(cell);table.append(row);return;}
+      players.forEach((player,index)=>{
+        const row=document.createElement('tr');
+        [index+1,player.pseudo||'Explorateur',Number(player.villages_count)||0,'—','—'].forEach(value=>{const cell=document.createElement('td');cell.textContent=String(value);row.append(cell);});
+        table.append(row);
+      });
     });
-    ranking.replaceChildren();
-    if(!players.length){const p=document.createElement('p');p.textContent='Aucun explorateur classé pour le moment.';ranking.append(p);}
-    else players.forEach((player,index)=>{const row=document.createElement('div');row.className='public-ranking-row';const rank=document.createElement('strong');rank.textContent=`${index+1}.`;const name=document.createElement('span');name.textContent=player.pseudo||'Explorateur';const count=document.createElement('span');count.textContent=`${Number(player.villages_count)||0} aventure(s)`;row.append(rank,name,count);ranking.append(row);});
-    const rewards=Array.isArray(data.rewards)?data.rewards:[];history.replaceChildren();
-    if(!rewards.length){const p=document.createElement('p');p.textContent='Les premières récompenses apparaîtront ici lorsqu’elles auront été attribuées.';history.append(p);}
-    else rewards.forEach(reward=>{const row=document.createElement('div');row.className='public-reward-row';const icon=document.createElement('span');icon.textContent=reward.icon||'🏅';const copy=document.createElement('div');const title=document.createElement('strong');title.textContent=reward.title||'Récompense';const note=document.createElement('small');const date=reward.created_at?new Date(reward.created_at).toLocaleDateString('fr-FR'):'';note.textContent=`${reward.pseudo||'Explorateur'}${date?' · '+date:''}`;copy.append(title,note);row.append(icon,copy);history.append(row);});
-  }catch(error){for(const box of [podium,ranking,history]){box.replaceChildren();const p=document.createElement('p');p.textContent='Le classement est momentanément indisponible.';box.append(p);}}
+  }catch(error){
+    tables.forEach(table=>{table.replaceChildren();const row=document.createElement('tr'),cell=document.createElement('td');cell.colSpan=5;cell.textContent='Le classement est momentanément indisponible.';row.append(cell);table.append(row);});
+  }
 }
 document.addEventListener('DOMContentLoaded',loadPublicExplorerRewards);
 </script>
