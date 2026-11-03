@@ -2053,128 +2053,126 @@ body.halloween-accueil .home-hero{
 </style>
 
 
-<style id="tester-dashboard-clean-layout">
-/* Espace Testeur — mise en page aérée, harmonisée avec le tableau de bord admin */
+<style>
+/* ===== Espace Testeur : mise en page finale alignée sur la maquette ===== */
 #dash-tester-space.tester-dashboard{
-  width:calc(100% - 36px)!important;
-  max-width:1560px!important;
-  margin:0 auto!important;
-  padding:12px 18px 30px!important;
-  background:#f4f1e8!important;
-  color:#183326!important;
+  display:block!important;width:100%!important;max-width:1700px!important;margin:0 auto!important;
+  padding:12px clamp(12px,2vw,28px) 28px!important;box-sizing:border-box!important;
+  background:#f7efdc!important;color:#173a29!important;
 }
 #dash-tester-space .tester-dashboard-hero{
-  min-height:86px!important;height:auto!important;
-  padding:14px 24px!important;
+  width:100%!important;min-height:82px!important;height:auto!important;padding:12px 24px!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
   border:1px solid #d7ad45!important;border-radius:16px!important;
-  box-shadow:0 7px 18px rgba(6,44,32,.10)!important;
+  background-image:linear-gradient(90deg,rgba(4,45,31,.94),rgba(4,45,31,.55) 48%,rgba(4,45,31,.08)),url('tester_assets/banner_background.png')!important;
+  background-size:cover!important;background-position:center 48%!important;background-repeat:no-repeat!important;
+  box-shadow:0 5px 16px #1b33251c!important;overflow:hidden!important;
 }
-#dash-tester-space .tester-dashboard-brand h2{
-  font:700 clamp(25px,2.4vw,36px)/1.05 Georgia,serif!important;
-  margin:0 0 3px!important;
-}
-#dash-tester-space .tester-dashboard-brand p{font:13px/1.4 Arial,sans-serif!important;margin:0!important}
+#dash-tester-space .tester-dashboard-brand{display:flex!important;align-items:center!important;gap:14px!important}
+#dash-tester-space .tester-dashboard-flask{width:48px!important;height:52px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:none!important}
+#dash-tester-space .tester-dashboard-flask img{width:46px!important;height:50px!important;object-fit:contain!important}
+#dash-tester-space .tester-dashboard-brand h2{font:bold clamp(27px,3vw,39px) Georgia,serif!important;color:#fff4d5!important;text-shadow:0 2px 4px #102d20!important;margin:0!important}
+#dash-tester-space .tester-dashboard-brand p{font:13px Georgia,serif!important;color:#fff9e9!important;text-shadow:0 1px 3px #102d20!important;margin:3px 0 0!important}
+#dash-tester-space .tester-dashboard-hero-art{display:none!important}
 #dash-tester-space .tester-dashboard-topstats{
-  display:grid!important;
-  grid-template-columns:1.35fr repeat(5,minmax(0,1fr))!important;
-  gap:8px!important;
-  margin:12px 0 14px!important;
-  padding:8px!important;
-  border:1px solid #dfc77f!important;border-radius:15px!important;
-  background:linear-gradient(120deg,#fffaf0,#f4e8c9)!important;
-  box-shadow:0 4px 12px rgba(6,44,32,.06)!important;
+  display:grid!important;grid-template-columns:1.45fr repeat(5,minmax(0,1fr))!important;gap:0!important;
+  width:100%!important;margin:12px 0 14px!important;padding:9px!important;
+  background:linear-gradient(120deg,#fff9e8,#f1e2bd)!important;border:1px solid #dfbd65!important;
+  border-radius:16px!important;box-shadow:0 4px 13px #273b2410!important;
 }
-#dash-tester-space .tester-identity-card,#dash-tester-space .tester-topstat{
-  min-width:0!important;min-height:68px!important;
-  padding:7px 10px!important;border-right:1px solid #e2d2aa!important;
-}
+#dash-tester-space .tester-identity-card,#dash-tester-space .tester-topstat{min-width:0!important;min-height:76px!important;padding:7px 10px!important;border-right:1px solid #d8bd7b!important}
+#dash-tester-space .tester-identity-card{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important}
+#dash-tester-space .tester-avatar{width:68px!important;height:68px!important;flex:none!important;border:3px solid #d7ad45!important;border-radius:50%!important;overflow:hidden!important}
+#dash-tester-space .tester-avatar img{width:100%!important;height:100%!important;object-fit:cover!important}
+#dash-tester-space .tester-identity-card strong{display:block!important;font:bold 19px Georgia,serif!important;color:#123b2a!important}
+#dash-tester-space .tester-validated-pill{display:inline-block!important;margin-top:5px!important;padding:6px 13px!important;border-radius:18px!important;background:linear-gradient(#159b50,#08703a)!important;color:white!important;font:bold 11px Arial,sans-serif!important}
+#dash-tester-space .tester-topstat{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:1px!important;text-align:center!important}
+#dash-tester-space .tester-topstat>span{font-size:27px!important}
+#dash-tester-space .tester-topstat strong{font:bold 25px Georgia,serif!important;color:#0b3928!important}
+#dash-tester-space .tester-topstat small{font:11px Georgia,serif!important;color:#294536!important}
 #dash-tester-space .tester-topstat:last-of-type{border-right:0!important}
-#dash-tester-space .tester-dashboard-grid{
-  display:grid!important;
-  grid-template-columns:repeat(12,minmax(0,1fr))!important;
-  gap:12px!important;align-items:stretch!important;
+#dash-tester-space .tester-top-xp{width:88%!important;height:9px!important;margin-top:4px!important;border:1px solid #a88b4b!important;border-radius:20px!important;background:#eee1bd!important;overflow:hidden!important}
+#dash-tester-space .tester-top-xp i{display:block!important;height:100%!important;background:linear-gradient(90deg,#128849,#d7b333)!important}
+#dash-tester-space .tester-dashboard-grid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:14px!important;align-items:stretch!important;width:100%!important}
+#dash-tester-space .tester-dash-card{position:relative!important;min-width:0!important;padding:17px 18px!important;border:1px solid #dfc477!important;border-radius:16px!important;background:linear-gradient(145deg,#fffdf7,#f8edcf)!important;box-shadow:0 5px 15px #273b2410!important;overflow:hidden!important}
+#dash-tester-space .tester-dash-card:before{content:""!important;position:absolute!important;inset:5px!important;border:1px solid rgba(207,169,79,.16)!important;border-radius:12px!important;pointer-events:none!important}
+#dash-tester-space .tester-dash-card h3{position:relative!important;display:flex!important;align-items:center!important;gap:9px!important;margin:0 0 10px!important;padding-bottom:8px!important;border-bottom:1px solid #eadbb7!important;color:#102f22!important;font:bold 20px Georgia,serif!important}
+#dash-tester-space .tester-dash-card>p{position:relative!important;font:13px/1.5 Georgia,serif!important;color:#4b5949!important;margin:6px 0 11px!important}
+#dash-tester-space .tester-announcement-card{grid-column:span 5!important;min-height:190px!important;background:linear-gradient(110deg,#fff8e3,#f0dca9)!important}
+#dash-tester-space .tester-progression-card{grid-column:span 7!important;min-height:190px!important}
+#dash-tester-space .tester-announcement-card h3{display:inline-flex!important;padding:7px 15px!important;border:0!important;border-radius:9px!important;background:linear-gradient(110deg,#06432d,#087b4a)!important;color:#fff5d8!important}
+#dash-tester-space .tester-announcement-body{display:flex!important;align-items:center!important;gap:14px!important}
+#dash-tester-space .tester-announcement-art{flex:0 0 38%!important;min-width:0!important;min-height:112px!important;border:1px solid #d3a83c!important;border-radius:12px!important;background:#e8d49a!important;overflow:hidden!important}
+#dash-tester-space .tester-announcement-art img{width:100%!important;height:112px!important;object-fit:cover!important;border-radius:10px!important}
+#dash-tester-space .tester-announcement-body h4{font:bold 20px Georgia,serif!important;color:#123a29!important;margin:4px 0!important}
+#dash-tester-space .tester-announcement-body p{font:13px/1.4 Georgia,serif!important;color:#344638!important}
+#dash-tester-space .tester-rank-track{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;margin:10px 0 8px!important;height:auto!important;overflow:visible!important}
+#dash-tester-space .tester-rank-item{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;min-height:95px!important;height:auto!important;padding:5px 3px!important;border:0!important;background:transparent!important;color:#3e4c40!important}
+#dash-tester-space .tester-rank-item img{display:block!important;width:76px!important;height:76px!important;object-fit:contain!important}
+#dash-tester-space .tester-rank-item strong{display:block!important;font:bold 11px Georgia,serif!important}
+#dash-tester-space .tester-rank-item.active{background:radial-gradient(ellipse,#087346 0%,#087346 55%,transparent 58%)!important;color:#fff7d7!important}
+#dash-tester-space .tester-xp-track{height:12px!important;margin:3px 12px 16px!important;border:1px solid #b99a4c!important;border-radius:20px!important;background:#e9dfc6!important;overflow:visible!important;position:relative!important}
+#dash-tester-space .tester-xp-track span{display:block!important;height:100%!important;border-radius:20px!important;background:linear-gradient(90deg,#15904b,#e7b82f)!important}
+#dash-tester-space .tester-xp-track b{position:absolute!important;right:0!important;top:13px!important;font:10px Georgia,serif!important;color:#5a4b25!important}
+#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-access-card{grid-column:span 3!important;min-height:260px!important}
+#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4!important;min-height:190px!important}
+#dash-tester-space .tester-mission-count{display:inline-block!important;margin-left:auto!important;padding:5px 10px!important;border-radius:15px!important;background:#f7df82!important;color:#4b3b13!important;font:bold 11px Georgia,serif!important}
+#dash-tester-space .tester-dash-form{display:grid!important;gap:9px!important}
+#dash-tester-space .tester-dash-form label{display:grid!important;gap:5px!important;font:bold 13px Georgia,serif!important;color:#294b35!important}
+#dash-tester-space .tester-dash-form select,#dash-tester-space .tester-dash-form textarea,#dash-tester-space .tester-journal{width:100%!important;min-width:0!important;padding:10px 11px!important;border:1px solid #d6bd7e!important;border-radius:10px!important;background:#fffdf6!important;color:#293e30!important;font:13px Georgia,serif!important}
+#dash-tester-space .tester-dash-form textarea{min-height:66px!important;height:auto!important;resize:vertical!important}
+#dash-tester-space .tester-validation-steps{display:flex!important;justify-content:space-around!important;gap:8px!important;padding:10px 6px!important;margin:5px 0 10px!important;border:1px solid #d9bd72!important;border-radius:13px!important;background:#f8efd7!important}
+#dash-tester-space .tester-validation-steps span{display:flex!important;flex:1!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:4px!important}
+#dash-tester-space .tester-validation-steps b{display:grid!important;place-items:center!important;width:32px!important;height:32px!important;border:2px solid #caa34a!important;border-radius:50%!important;background:#fff9e9!important;color:#31503a!important;font:bold 16px Georgia,serif!important}
+#dash-tester-space .tester-validation-steps span:first-child b{background:#087346!important;color:white!important;border-color:#d9b34e!important}
+#dash-tester-space .tester-validation-steps small{font:bold 11px Georgia,serif!important;color:#38503c!important}
+#dash-tester-space .tester-dash-action{display:flex!important;width:100%!important;justify-content:center!important;padding:11px 14px!important;margin-top:7px!important;border:1px solid #d5ad45!important;border-radius:24px!important;background:linear-gradient(110deg,#06432d,#087849)!important;color:#fff6d9!important;font:bold 13px Georgia,serif!important;box-shadow:0 3px 0 #b18b37!important}
+#dash-tester-space .tester-feedback-shortcuts{display:grid!important;gap:9px!important}
+#dash-tester-space .tester-feedback-shortcuts button{display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;padding:11px!important;border:1px solid #dfc47d!important;border-radius:12px!important;background:#fffaf0!important;color:#173728!important;text-align:left!important}
+#dash-tester-space .tester-feedback-shortcuts button>span:first-child{font-size:25px!important}
+#dash-tester-space .tester-feedback-shortcuts button>span:nth-child(2){display:grid!important;gap:2px!important;flex:1!important}
+#dash-tester-space .tester-feedback-shortcuts strong{font:bold 13px Georgia,serif!important}
+#dash-tester-space .tester-feedback-shortcuts small{font:11px Georgia,serif!important;color:#58634f!important}
+#dash-tester-space .tester-feedback-shortcuts button>b{color:#b17d16!important;font-size:22px!important}
+#dash-tester-space .tester-feedback-details{margin-top:10px!important}
+#dash-tester-space .tester-feedback-details summary{cursor:pointer!important;color:#145235!important;font:bold 12px Georgia,serif!important}
+#dash-tester-space .tester-badge-row{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important}
+#dash-tester-space .tester-mini-badge{min-width:0!important;padding:8px 4px!important;text-align:center!important;border:1px solid #d8b24e!important;border-radius:12px!important;background:linear-gradient(145deg,#fff9e7,#f2dfad)!important;font:11px/1.2 Georgia,serif!important}
+#dash-tester-space .tester-mini-badge img{display:block!important;width:58px!important;height:62px!important;object-fit:contain!important;margin:0 auto 4px!important}
+#dash-tester-space .tester-history-list{max-height:180px!important;overflow:auto!important}
+#dash-tester-space .tester-version-pill{display:inline-block!important;padding:7px 12px!important;border-radius:20px!important;background:#eee3c5!important;color:#76531a!important;font:bold 12px Georgia,serif!important}
+#dash-tester-space .tester-check-list{padding-left:19px!important;margin:7px 0!important;font:13px/1.55 Georgia,serif!important;color:#4b594d!important}
+#dash-tester-space .tester-extra-tools{margin:14px 0 0!important;padding:13px 16px!important;border:1px solid #d8b75e!important;border-radius:14px!important;background:#fff8e7!important}
+#dash-tester-space .tester-extra-tools>summary{cursor:pointer!important;color:#174b35!important;font:bold 14px Georgia,serif!important}
+#dash-tester-space .tester-extra-tools-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;margin-top:12px!important}
+#dash-tester-space .tester-extra-tools-grid>.tester-dash-card{grid-column:auto!important;min-height:0!important}
+#dash-tester-space .tester-extra-challenges{margin-top:10px!important}
+@media(max-width:1050px){
+ #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #dash-tester-space .tester-identity-card{grid-column:1/-1!important;justify-content:center!important;border-right:0!important;border-bottom:1px solid #d8bd7b!important}
+ #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+ #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 3!important}
+ #dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-access-card{grid-column:span 3!important}
+ #dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 2!important}
+ #dash-tester-space .tester-extra-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
-#dash-tester-space .tester-dash-card{
-  min-width:0!important;min-height:0!important;
-  padding:15px 16px!important;
-  border:1px solid #e2c77e!important;border-radius:14px!important;
-  background:linear-gradient(145deg,#fffdf7,#f8efd9)!important;
-  box-shadow:0 4px 12px rgba(6,44,32,.07)!important;
+@media(max-width:650px){
+ #dash-tester-space.tester-dashboard{padding:8px!important}
+ #dash-tester-space .tester-dashboard-hero{min-height:78px!important;padding:9px 12px!important}
+ #dash-tester-space .tester-dashboard-brand{gap:8px!important}
+ #dash-tester-space .tester-dashboard-brand h2{font-size:25px!important}
+ #dash-tester-space .tester-dashboard-brand p{font-size:10px!important}
+ #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:6px!important}
+ #dash-tester-space .tester-identity-card{grid-column:1/-1!important;justify-content:flex-start!important}
+ #dash-tester-space .tester-topstat{border-right:1px solid #d5b96e!important;border-bottom:1px solid #d5b96e!important;padding:8px 3px!important}
+ #dash-tester-space .tester-topstat:last-of-type{grid-column:1/-1!important;border:0!important}
+ #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr!important;gap:9px!important}
+ #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important;min-height:0!important}
+ #dash-tester-space .tester-rank-item img{width:54px!important;height:58px!important}
+ #dash-tester-space .tester-extra-tools-grid{grid-template-columns:1fr!important}
 }
-#dash-tester-space .tester-dash-card h3{
-  display:flex!important;align-items:center!important;justify-content:space-between!important;
-  gap:8px!important;
-  padding-bottom:9px!important;margin:0 0 9px!important;
-  border-bottom:1px solid #eadbb7!important;
-  font:700 19px/1.15 Georgia,serif!important;color:#123d2b!important;
-}
-#dash-tester-space .tester-dash-card>p{
-  font:13px/1.45 Arial,sans-serif!important;color:#536253!important;
-  margin:5px 0 10px!important;
-}
-#dash-tester-space .tester-announcement-card{grid-column:span 5!important;min-height:150px!important}
-#dash-tester-space .tester-progression-card{grid-column:span 7!important;min-height:150px!important}
-#dash-tester-space .tester-missions-card,
-#dash-tester-space .tester-validation-card,
-#dash-tester-space .tester-feedback-card,
-#dash-tester-space .tester-history-card,
-#dash-tester-space .tester-badges-card,
-#dash-tester-space .tester-version-card{grid-column:span 4!important}
-#dash-tester-space .tester-stats-card,
-#dash-tester-space .tester-community-card,
-#dash-tester-space .tester-journal-card,
-#dash-tester-space .tester-rewards-card{grid-column:span 3!important}
-#dash-tester-space .tester-announcement-card h3{
-  display:flex!important;width:auto!important;padding:0 0 9px!important;
-  margin:0 0 9px!important;background:transparent!important;color:#123d2b!important;
-  border-radius:0!important;
-}
-#dash-tester-space .tester-announcement-body{gap:14px!important}
-#dash-tester-space .tester-announcement-art{max-width:145px!important;height:92px!important}
-#dash-tester-space .tester-rank-track{gap:9px!important}
-#dash-tester-space .tester-rank-item{min-height:78px!important;height:78px!important}
-#dash-tester-space .tester-rank-item img{width:58px!important;height:68px!important;object-fit:contain!important}
-#dash-tester-space .tester-dash-form{gap:9px!important}
-#dash-tester-space .tester-feedback-shortcuts{gap:8px!important}
-#dash-tester-space .tester-feedback-shortcuts button{min-height:54px!important;padding:10px 12px!important}
-#dash-tester-space .tester-extra-challenges{
-  margin-top:13px!important;padding:14px 17px!important;
-  border:1px solid #dfc77f!important;border-radius:14px!important;
-  background:#fffaf0!important;
-}
-#dash-tester-space .tester-extra-challenges>summary{
-  font:700 15px Georgia,serif!important;color:#174b35!important;cursor:pointer!important;
-}
-#dash-tester-space .tester-dashboard-footnote{
-  margin:12px 2px 0!important;padding:10px 13px!important;
-  border-radius:10px!important;background:#e9eddf!important;
-  color:#637064!important;font:11px/1.45 Arial,sans-serif!important;
-}
-@media(max-width:1100px){
-  #dash-tester-space.tester-dashboard{width:calc(100% - 24px)!important;padding:10px!important}
-  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #dash-tester-space .tester-identity-card{grid-column:span 3!important}
-  #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
-  #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 3!important}
-  #dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,
-  #dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 2!important}
-  #dash-tester-space .tester-stats-card,#dash-tester-space .tester-community-card,#dash-tester-space .tester-journal-card,#dash-tester-space .tester-rewards-card{grid-column:span 3!important}
-}
-@media(max-width:700px){
-  #dash-tester-space.tester-dashboard{width:100%!important;padding:8px!important}
-  #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  #dash-tester-space .tester-identity-card{grid-column:1/-1!important}
-  #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr!important}
-  #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important}
-  #dash-tester-space .tester-dashboard-hero{padding:12px!important}
-  #dash-tester-space .tester-dashboard-hero-art{display:none!important}
-  #dash-tester-space .tester-announcement-body{flex-direction:row!important}
-  #dash-tester-space .tester-rank-track{grid-template-columns:repeat(5,minmax(0,1fr))!important}
-  #dash-tester-space .tester-rank-item img{width:42px!important;height:52px!important}
-  #dash-tester-space .tester-dash-card{padding:13px!important}
-}
-</style>
 
+</style>
 </head>
 <body>
 
@@ -2811,7 +2809,13 @@ body.halloween-accueil .home-hero{
 <article class="tester-dash-card tester-progression-card"><h3>🎯 Ma progression Testeur</h3><p id="tester-explorer-level-text">Niveau actuel : Débutant. Termine des parcours pour atteindre le rang suivant.</p><div class="tester-rank-track"><div class="tester-rank-item" data-explorer-rank="0"><img src="tester_assets/rank_level_1.png" alt="Écusson niveau 1"><strong>Niv. 1<br>Découverte</strong></div><div class="tester-rank-item" data-explorer-rank="1"><img src="tester_assets/rank_level_2.png" alt="Écusson niveau 2"><strong>Niv. 2<br>Explorateur</strong></div><div class="tester-rank-item" data-explorer-rank="2"><img src="tester_assets/rank_level_3.png" alt="Écusson niveau 3"><strong>Niv. 3<br>Contributeur</strong></div><div class="tester-rank-item" data-explorer-rank="3"><img src="tester_assets/rank_level_4.png" alt="Écusson niveau 4"><strong>Niv. 4<br>Expert</strong></div><div class="tester-rank-item" data-explorer-rank="4"><img src="tester_assets/rank_level_5.png" alt="Écusson niveau 5"><strong>Niv. 5<br>Ambassadeur</strong></div></div><div class="tester-xp-track"><span></span><b id="tester-xp-label">0 / 250 XP</b></div></article>
 
 <article class="tester-dash-card tester-missions-card">
-      <h3>🎯 Mes missions de test <span class="tester-mission-count" id="tester-mission-count">0 mission en cours</span></h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div><strong class="tester-subheading">Mes parcours autorisés</strong><div id="tester-space-access-list"><p>Chargement…</p></div>
+      <h3>🎯 Mes missions de test <span class="tester-mission-count" id="tester-mission-count">0 mission en cours</span></h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div>
+    </article>
+
+<article class="tester-dash-card tester-access-card">
+      <h3>🗺️ Mes parcours autorisés</h3>
+      <p>Retrouve les villages et les niveaux qui te sont confiés par l’administration.</p>
+      <div id="tester-space-access-list"><p>Chargement…</p></div>
     </article>
 
 <article class="tester-dash-card tester-validation-card">
@@ -2852,22 +2856,28 @@ body.halloween-accueil .home-hero{
       <h3>🧪 Version de test</h3><p class="tester-version-pill">Espace de test — version en évolution</p><strong class="tester-subheading">Les points à vérifier</strong><ul class="tester-check-list"><li>Les énigmes sont-elles compréhensibles ?</li><li>Les indices et les réponses fonctionnent-ils ?</li><li>La carte et la validation GPS fonctionnent-elles à l’arrivée ?</li><li>Le parcours est-il agréable et adapté à son niveau ?</li></ul>
     </article>
 
+
+
+
+  </div>
+  <details class="tester-extra-tools">
+    <summary>⚙️ Mes outils complémentaires (statistiques, communauté, carnet et récompenses)</summary>
+    <div class="tester-extra-tools-grid">
+
 <article class="tester-dash-card tester-stats-card">
       <h3>📊 Statistiques de mes tests</h3><div class="tester-mini-stats"><div><strong id="tester-stat-missions-copy">0</strong><small>Missions</small></div><div><strong id="tester-stat-completed-copy">0</strong><small>Parcours terminés</small></div><div><strong id="tester-stat-feedback-copy">0</strong><small>Retours envoyés</small></div></div><p id="tester-space-status" class="status" role="status" aria-live="polite">Chargement de tes autorisations…</p>
     </article>
-
 <article class="tester-dash-card tester-community-card">
       <h3>👥 Communauté Testeurs</h3><p>Partage tes idées, tes observations et tes astuces pour aider à améliorer les parcours.</p><div class="tester-community-people" aria-hidden="true">🧑‍🌾 🧭 🧑‍🚀</div>
     </article>
-
 <article class="tester-dash-card tester-journal-card">
       <h3>📔 Mon carnet personnel</h3><p>Note tes découvertes et tes souvenirs. Tes notes restent privées sur cet appareil.</p><textarea id="tester-personal-journal" class="tester-journal" maxlength="5000" placeholder="Aujourd’hui, j’ai découvert…"></textarea><button type="button" class="tester-dash-action" id="tester-journal-save">✍️ Enregistrer mon carnet</button><span id="tester-journal-status" class="tester-space-note" role="status"></span>
     </article>
-
 <article class="tester-dash-card tester-rewards-card">
       <h3>🎁 Récompenses Testeurs</h3><p>Des badges spéciaux remercient les testeurs qui participent aux essais et aident à améliorer les aventures.</p><div id="tester-reward-status" class="tester-badge-row"></div><button type="button" class="tester-dash-action" onclick="document.getElementById('tester-reward-status')?.scrollIntoView({behavior:'smooth',block:'center'})">🏷️ Voir les récompenses</button>
     </article>
-  </div>
+    </div>
+  </details>
   <details class="tester-extra-challenges">
     <summary>🧭 Mes défis complémentaires : missions quotidiennes & défi du mois</summary>
     <div class="tester-extra-challenges-grid"><article class="tester-dash-card">
@@ -5098,6 +5108,8 @@ async function adminApi(path, options = {}) {
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
   return data;
 }
+// Expose le client API à la fenêtre : le tableau de bord est dans un script classique.
+window.adminApi = adminApi;
 
 window.checkAdminAccess = async function(){
   try{
@@ -8607,7 +8619,7 @@ window.loadAdminDashboardOverview = async function(){
   const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value??"—");};
   // Réutilise exactement le client sécurisé déjà utilisé par l'administration.
   // Il récupère le jeton Neon, ajoute les en-têtes et gère les erreurs comme les autres pages.
-  const api=async(path)=>await adminApi(path);
+  const api=async(path)=>await window.adminApi(path);
   const [analyticsR,playersR,teamR,villagesR,adventuresR,testersR,supportR]=await Promise.allSettled([
     api("/api/admin/analytics"),api("/api/admin/players"),api("/api/admin/team"),
     api("/api/admin/villages"),api("/api/admin/adventures"),api("/api/admin/testers"),api("/api/admin/support")
