@@ -5,7 +5,7 @@ import helmet from "helmet";
 import { neon } from "@neondatabase/serverless";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 import Stripe from "stripe";
-import { createHash, randomUUID } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
 import nodemailer from "nodemailer";
 
 const app = express();
@@ -237,7 +237,7 @@ app.use(cors({
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Admin-Test-Mode"]
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 const adminEmails = new Set(
@@ -292,72 +292,7 @@ async function ensureTeamTables() {
     id BIGSERIAL PRIMARY KEY, user_id TEXT NOT NULL, email TEXT NOT NULL, action TEXT NOT NULL,
     performed_by TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )`;
-  await sql`CREATE TABLE IF NOT EXISTS public.team_shared_notes (
-    id BIGSERIAL PRIMARY KEY, title TEXT NOT NULL, body TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'todo', village_slug TEXT NOT NULL DEFAULT '',
-    created_by TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-  )`;
-  await sql`CREATE TABLE IF NOT EXISTS public.team_chat_messages (
-    id BIGSERIAL PRIMARY KEY, body TEXT NOT NULL, author_email TEXT NOT NULL,
-    author_name TEXT NOT NULL DEFAULT '', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-  )`;
-  await sql`CREATE TABLE IF NOT EXISTS public.team_player_reports (
-    id BIGSERIAL PRIMARY KEY, player_label TEXT NOT NULL, reason TEXT NOT NULL,
-    description TEXT NOT NULL, village_slug TEXT NOT NULL DEFAULT '',
-    reported_by TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending',
-    admin_decision TEXT NOT NULL DEFAULT '', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-  )`;
 }
-
-async function ensureAdventureAnswerTable() {
-  await sql`CREATE TABLE IF NOT EXISTS public.user_step_answers (
-    user_id TEXT NOT NULL,
-    adventure_id BIGINT NOT NULL,
-    step_id BIGINT NOT NULL,
-    answered_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (user_id, step_id)
-  )`;
-}
-
-// Colonnes complémentaires des étapes : migration additive, sans toucher aux données existantes.
-async function ensureAdventureStepEnhancements() {
-  await sql`ALTER TABLE public.adventure_steps ADD COLUMN IF NOT EXISTS next_hint TEXT NOT NULL DEFAULT ''`;
-  await sql`ALTER TABLE public.adventure_steps ADD COLUMN IF NOT EXISTS stars_awarded INTEGER NOT NULL DEFAULT 1`;
-  await sql`ALTER TABLE public.adventure_steps ADD COLUMN IF NOT EXISTS gps_radius_meters INTEGER NOT NULL DEFAULT 100`;
-}
-
-// Progression isolée des simulations administrateur : aucune étoile ni réponse
-// de test ne doit entrer dans les tables de progression des vrais joueurs.
-async function ensureAdminAdventureTestTables() {
-  await sql`CREATE TABLE IF NOT EXISTS public.admin_test_step_validations (
-    user_id TEXT NOT NULL,
-    adventure_id BIGINT NOT NULL,
-    step_id BIGINT NOT NULL,
-    gps_accuracy_meters DOUBLE PRECISION NOT NULL DEFAULT 1,
-    distance_meters DOUBLE PRECISION NOT NULL DEFAULT 0,
-    validated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (user_id, step_id)
-  )`;
-  await sql`CREATE TABLE IF NOT EXISTS public.admin_test_step_answers (
-    user_id TEXT NOT NULL,
-    adventure_id BIGINT NOT NULL,
-    step_id BIGINT NOT NULL,
-    answered_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (user_id, step_id)
-  )`;
-}
-
-function normalizeAdventureAnswer(value) {
-  return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
-}
-
-function isAdminAdventureTestMode(req) {
-  return adminEmails.has(req.user?.email) && String(req.headers["x-admin-test-mode"] || "").toLowerCase() === "true";
-}
-
 // Un compte administrateur est identifié exclusivement par ADMIN_EMAILS.
 // Un modérateur doit exister dans moderator_team et ses permissions sont
 // relues en base à chaque requête protégée (aucun droit implicite).
@@ -400,12 +335,6 @@ function requirePermission(permission) {
     }
     return next();
   };
-}
-function requireTeamSpaceAccess(req, res, next) {
-  if (req.staffRole === "admin") return next();
-  const permissions = Array.isArray(req.staffPermissions) ? req.staffPermissions : [];
-  if (permissions.includes("team_communication") || permissions.includes("player_reports")) return next();
-  return res.status(403).json({ error: "L'accès à la Vie de l'équipe ne t'a pas été attribué." });
 }
 
 /* ===== MESSAGERIE PRIVÉE DES MEMBRES ===== */
@@ -697,8 +626,8 @@ app.post("/api/admin/cloudinary/signature", requireUser, requireAdmin, (req, res
   }
   const timestamp = Math.floor(Date.now() / 1000);
   const folder = "tresors-de-nos-villages/etapes";
-  const signature = createHash("sha1")
-    .update(`folder=${folder}&timestamp=${timestamp}${apiSecret}`)
+  const signature = createHmac("sha1", apiSecret)
+    .update(`folder=${folder}&timestamp=${timestamp}`)
     .digest("hex");
   return res.json({ cloud_name: cloudName, api_key: apiKey, timestamp, folder, signature });
 });
@@ -764,32 +693,15 @@ app.get("/api/admin/analytics", requireUser, requireAdmin, async (_req, res) => 
         COUNT(*) FILTER (WHERE first_seen >= NOW() - INTERVAL '24 hours')::int AS visits_24h
       FROM public.site_visitors
     `;
-    const registrations = await sql`
-      SELECT
-        COUNT(*)::int AS registered_total,
-        COUNT(*) FILTER (WHERE u."createdAt" >= NOW() - INTERVAL '7 days')::int AS registered_7d
-      FROM neon_auth."user" u
-    `;
-    const recentRegistrations = await sql`
-      SELECT u.id::text AS user_id,
-             COALESCE(NULLIF(BTRIM(u.name), ''), NULLIF(BTRIM(p.pseudo), ''), 'Explorateur') AS display_name,
-             u.email,
-             u."createdAt" AS registered_at
-      FROM neon_auth."user" u
-      LEFT JOIN public.explorer_profiles p ON p.user_id::text = u.id::text
-      ORDER BY u."createdAt" DESC
-      LIMIT 20
-    `;
     const recent = await sql`
       SELECT
         CASE WHEN v.user_id IS NULL THEN 'Visiteur anonyme'
-             ELSE COALESCE(NULLIF(BTRIM(p.pseudo), ''), NULLIF(BTRIM(u.name), ''), 'Explorateur inscrit')
+             ELSE COALESCE(p.pseudo, 'Explorateur inscrit')
         END AS visitor_label,
         (v.user_id IS NOT NULL) AS is_member,
         v.page_path, v.village, v.formula, v.first_seen, v.last_seen
       FROM public.site_visitors v
-      LEFT JOIN public.explorer_profiles p ON p.user_id::text = v.user_id::text
-      LEFT JOIN neon_auth."user" u ON u.id::text = v.user_id::text
+      LEFT JOIN public.explorer_profiles p ON p.user_id = v.user_id
       ORDER BY v.last_seen DESC
       LIMIT 30
     `;
@@ -810,7 +722,7 @@ app.get("/api/admin/analytics", requireUser, requireAdmin, async (_req, res) => 
       ORDER BY visits DESC
       LIMIT 10
     `;
-    res.json({ totals: { ...(totals[0] || {}), ...(registrations[0] || {}) }, recent, recent_registrations: recentRegistrations, daily, village_visits });
+    res.json({ totals: totals[0] || {}, recent, daily, village_visits });
   } catch (error) {
     console.error("Read site analytics failed:", error.message);
     res.status(500).json({ error: "Impossible de charger les statistiques." });
@@ -837,7 +749,7 @@ app.get("/api/admin/team", requireUser, requireAdmin, async (_req,res)=>{
 app.post("/api/admin/team", requireUser, requireAdmin, async(req,res)=>{
   const email=String(req.body?.email||"").trim().toLowerCase();
   const villages=Array.isArray(req.body?.allowed_villages)?req.body.allowed_villages.filter(x=>typeof x==="string").slice(0,100):[];
-  const allowed=new Set(["support","map","puzzle","leaderboard","reports","testers","news","adventures","team_communication","player_reports"]);
+  const allowed=new Set(["support","map","puzzle","leaderboard","reports","testers","news","adventures"]);
   const permissions=Array.isArray(req.body?.permissions)?[...new Set(req.body.permissions.filter(x=>allowed.has(x)))]:[];
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>180)return res.status(400).json({error:"Adresse e-mail invalide."});
   try{await ensureTeamTables();const rows=await sql`INSERT INTO public.moderator_team(user_id,email,name,role,status,allowed_villages,permissions,created_by,updated_at) VALUES(${`email:${email}`},${email},'', 'moderator','active',${JSON.stringify(villages)}::jsonb,${JSON.stringify(permissions)}::jsonb,${req.user.email},NOW()) ON CONFLICT(email) DO UPDATE SET status='active',allowed_villages=EXCLUDED.allowed_villages,permissions=EXCLUDED.permissions,updated_at=NOW() RETURNING user_id,email,name,role,status,allowed_villages,permissions,created_at,updated_at`;await sql`INSERT INTO public.moderator_team_history(user_id,email,action,performed_by) VALUES(${rows[0].user_id},${email},'Modérateur ajouté ou réactivé',${req.user.email})`;res.json({member:rows[0]});}
@@ -845,7 +757,7 @@ app.post("/api/admin/team", requireUser, requireAdmin, async(req,res)=>{
 });
 app.patch("/api/admin/team/:id", requireUser, requireAdmin, async(req,res)=>{
   const id=String(req.params.id||"");const status=req.body?.status;const allowedStatuses=["active","suspended"];
-  const permissionKeys=new Set(["support","map","puzzle","leaderboard","reports","testers","news","adventures","team_communication","player_reports"]);
+  const permissionKeys=new Set(["support","map","puzzle","leaderboard","reports","testers","news","adventures"]);
   const hasPermissions=Array.isArray(req.body?.permissions);const hasVillages=Array.isArray(req.body?.allowed_villages);
   if(status!==undefined&&!allowedStatuses.includes(status))return res.status(400).json({error:"Statut invalide."});
   if(hasPermissions&&req.body.permissions.some(x=>!permissionKeys.has(x)))return res.status(400).json({error:"Autorisation inconnue."});
@@ -863,56 +775,6 @@ app.patch("/api/admin/team/:id", requireUser, requireAdmin, async(req,res)=>{
 });
 app.get("/api/admin/team/:id/history",requireUser,requireAdmin,async(req,res)=>{try{await ensureTeamTables();const history=await sql`SELECT action,performed_by,created_at FROM public.moderator_team_history WHERE user_id=${String(req.params.id)} ORDER BY created_at DESC LIMIT 100`;res.json({history});}catch(error){console.error("Team history failed:",error.message);res.status(500).json({error:"Historique indisponible."});}});
 
-/* ===== ESPACE PRIVÉ : VIE DE L'ÉQUIPE ===== */
-app.get("/api/team-space/overview", requireUser, requireStaff, requireTeamSpaceAccess, async (req,res)=>{
-  try {
-    await ensureTeamTables();
-    const members = await sql`SELECT name,email,role,status,allowed_villages,permissions FROM public.moderator_team WHERE status='active' ORDER BY name,email`;
-    const me = members.find(m => String(m.email).toLowerCase() === req.user.email) || null;
-    res.set("Cache-Control","no-store");
-    res.json({ role:req.staffRole, permissions:req.staffPermissions||[], me, members });
-  } catch(error) { console.error("Team space overview failed:",error.message); res.status(500).json({error:"Impossible de charger l'équipe."}); }
-});
-app.get("/api/team-space/notes", requireUser, requireStaff, requirePermission("team_communication"), async (_req,res)=>{
-  try { await ensureTeamTables(); const notes=await sql`SELECT id,title,body,status,village_slug,created_by,created_at,updated_at FROM public.team_shared_notes ORDER BY CASE status WHEN 'todo' THEN 0 WHEN 'doing' THEN 1 ELSE 2 END, updated_at DESC LIMIT 200`; res.set("Cache-Control","no-store"); res.json({notes}); }
-  catch(error){console.error("Team notes read failed:",error.message);res.status(500).json({error:"Notes indisponibles."});}
-});
-app.post("/api/team-space/notes", requireUser, requireStaff, requirePermission("team_communication"), async(req,res)=>{
-  const title=String(req.body?.title||"").trim().slice(0,160), body=String(req.body?.body||"").trim().slice(0,3000), village=String(req.body?.village_slug||"").trim().slice(0,100);
-  if(!title||!body)return res.status(400).json({error:"Ajoute un titre et une note."});
-  try{await ensureTeamTables();const rows=await sql`INSERT INTO public.team_shared_notes(title,body,village_slug,created_by) VALUES(${title},${body},${village},${req.user.email}) RETURNING id,title,body,status,village_slug,created_by,created_at,updated_at`;res.status(201).json({note:rows[0]});}
-  catch(error){console.error("Team note create failed:",error.message);res.status(500).json({error:"Impossible d'enregistrer la note."});}
-});
-app.patch("/api/team-space/notes/:id", requireUser, requireStaff, requirePermission("team_communication"), async(req,res)=>{
-  const status=String(req.body?.status||""); if(!["todo","doing","done"].includes(status))return res.status(400).json({error:"Statut invalide."});
-  try{await ensureTeamTables();const rows=await sql`UPDATE public.team_shared_notes SET status=${status},updated_at=NOW() WHERE id=${Number(req.params.id)} RETURNING id,status,updated_at`;if(!rows.length)return res.status(404).json({error:"Note introuvable."});res.json({note:rows[0]});}
-  catch(error){console.error("Team note update failed:",error.message);res.status(500).json({error:"Impossible de modifier la note."});}
-});
-app.get("/api/team-space/chat", requireUser, requireStaff, requirePermission("team_communication"), async (_req,res)=>{
-  try{await ensureTeamTables();const messages=await sql`SELECT id,body,author_email,author_name,created_at FROM public.team_chat_messages ORDER BY created_at DESC LIMIT 100`;res.set("Cache-Control","no-store");res.json({messages:messages.reverse()});}
-  catch(error){console.error("Team chat read failed:",error.message);res.status(500).json({error:"Discussion indisponible."});}
-});
-app.post("/api/team-space/chat", requireUser, requireStaff, requirePermission("team_communication"), async(req,res)=>{
-  const body=String(req.body?.body||"").trim().slice(0,2000);if(!body)return res.status(400).json({error:"Écris un message."});
-  try{await ensureTeamTables();const rows=await sql`INSERT INTO public.team_chat_messages(body,author_email,author_name) VALUES(${body},${req.user.email},${req.user.name||""}) RETURNING id,body,author_email,author_name,created_at`;res.status(201).json({message:rows[0]});}
-  catch(error){console.error("Team chat send failed:",error.message);res.status(500).json({error:"Impossible d'envoyer le message."});}
-});
-app.get("/api/team-space/reports", requireUser, requireStaff, requirePermission("player_reports"), async(_req,res)=>{
-  try{await ensureTeamTables();const reports=await sql`SELECT id,player_label,reason,description,village_slug,reported_by,status,admin_decision,created_at,updated_at FROM public.team_player_reports ORDER BY created_at DESC LIMIT 200`;res.set("Cache-Control","no-store");res.json({reports});}
-  catch(error){console.error("Player reports read failed:",error.message);res.status(500).json({error:"Signalements indisponibles."});}
-});
-app.post("/api/team-space/reports", requireUser, requireStaff, requirePermission("player_reports"), async(req,res)=>{
-  const player=String(req.body?.player_label||"").trim().slice(0,160), reason=String(req.body?.reason||"").trim().slice(0,100), description=String(req.body?.description||"").trim().slice(0,3000), village=String(req.body?.village_slug||"").trim().slice(0,100);
-  if(!player||!reason||!description)return res.status(400).json({error:"Renseigne le joueur, le motif et les faits observés."});
-  try{await ensureTeamTables();const rows=await sql`INSERT INTO public.team_player_reports(player_label,reason,description,village_slug,reported_by) VALUES(${player},${reason},${description},${village},${req.user.email}) RETURNING id,player_label,reason,description,village_slug,reported_by,status,created_at`;res.status(201).json({report:rows[0]});}
-  catch(error){console.error("Player report create failed:",error.message);res.status(500).json({error:"Impossible d'envoyer le signalement."});}
-});
-app.patch("/api/team-space/reports/:id", requireUser, requireAdmin, async(req,res)=>{
-  const status=String(req.body?.status||""), decision=String(req.body?.admin_decision||"").trim().slice(0,2000);
-  if(!["pending","reviewing","resolved"].includes(status))return res.status(400).json({error:"Statut invalide."});
-  try{await ensureTeamTables();const rows=await sql`UPDATE public.team_player_reports SET status=${status},admin_decision=${decision},updated_at=NOW() WHERE id=${Number(req.params.id)} RETURNING id,status,admin_decision,updated_at`;if(!rows.length)return res.status(404).json({error:"Signalement introuvable."});res.json({report:rows[0]});}
-  catch(error){console.error("Player report update failed:",error.message);res.status(500).json({error:"Impossible de traiter le signalement."});}
-});
 
 /* ===== STATUT PUBLIC DU SITE ===== */
 app.get("/api/site-status", async (_req, res) => {
@@ -950,9 +812,7 @@ app.get("/api/admin/site-status", requireUser, requireAdmin, async (_req, res) =
 
 app.put("/api/admin/site-status", requireUser, requireAdmin, async (req, res) => {
   const allowed = new Set(["online", "maintenance", "update", "works", "suspended"]);
-  // L'interface appelle ce statut "in_progress" ; la base utilise déjà "online".
-  const requestedStatus = String(req.body?.status || "online");
-  const status = requestedStatus === "in_progress" ? "online" : requestedStatus;
+  const status = String(req.body?.status || "online");
   const message = String(req.body?.message || "").trim().slice(0, 500);
   const bannerEnabled = req.body?.banner_enabled !== false;
   const notifyMembers = req.body?.notify_members === true;
@@ -993,10 +853,27 @@ app.put("/api/admin/site-status", requireUser, requireAdmin, async (req, res) =>
 
 
 /* ===== GESTION DES VILLAGES ===== */
-app.get("/api/admin/villages", requireUser, requireStaff, requirePermission("testers"), async (_req, res) => {
+// Liste publique : utilisée par la carte Explorer. Les villages ne sont jamais modifiables ici.
+app.get("/api/villages", async (_req, res) => {
   try {
     const villages = await sql`
-      SELECT id, name, slug, postal_code, description, status, created_at, updated_at
+      SELECT id, name, slug, postal_code, description, status,
+             latitude, longitude, photo_url, created_at, updated_at
+      FROM public.villages
+      ORDER BY name ASC
+    `;
+    res.json({ villages });
+  } catch (error) {
+    console.error("Public villages list failed:", error.message);
+    res.status(500).json({ error: "Impossible de charger la carte des villages." });
+  }
+});
+
+app.get("/api/admin/villages", requireUser, requireAdmin, async (_req, res) => {
+  try {
+    const villages = await sql`
+      SELECT id, name, slug, postal_code, description, status,
+             latitude, longitude, photo_url, created_at, updated_at
       FROM public.villages
       ORDER BY name ASC
     `;
@@ -1007,21 +884,41 @@ app.get("/api/admin/villages", requireUser, requireStaff, requirePermission("tes
   }
 });
 
+const ADMIN_VILLAGE_STATUSES = new Set([
+  "pending_confirmation", "in_progress", "available", "suspended", "updating"
+]);
+function readVillagePayload(body = {}) {
+  const name = String(body.name ?? "").trim();
+  const slug = String(body.slug ?? "").trim().toLowerCase();
+  const postalCode = String(body.postal_code ?? "").trim();
+  const description = String(body.description ?? "").trim();
+  const status = String(body.status ?? "pending_confirmation");
+  const photoUrl = String(body.photo_url ?? "").trim();
+  const latitude = body.latitude === null || body.latitude === "" || body.latitude === undefined ? null : Number(body.latitude);
+  const longitude = body.longitude === null || body.longitude === "" || body.longitude === undefined ? null : Number(body.longitude);
+
+  if (name.length < 2 || name.length > 150) return { error: "Le nom doit contenir entre 2 et 150 caractères." };
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slug.length > 100) return { error: "Identifiant du village invalide. Utilise des minuscules et des tirets." };
+  if (postalCode.length > 10 || description.length > 3000 || !ADMIN_VILLAGE_STATUSES.has(status)) return { error: "Informations du village invalides." };
+  if (latitude !== null && (!Number.isFinite(latitude) || latitude < -90 || latitude > 90)) return { error: "La latitude GPS doit être comprise entre -90 et 90." };
+  if (longitude !== null && (!Number.isFinite(longitude) || longitude < -180 || longitude > 180)) return { error: "La longitude GPS doit être comprise entre -180 et 180." };
+  if (photoUrl.length > 1000 || (photoUrl && !/^https?:\/\//i.test(photoUrl))) return { error: "L’adresse de la photo doit commencer par https:// ou http://." };
+  return { value: { name, slug, postalCode, description, status, latitude, longitude, photoUrl: photoUrl || null } };
+}
+
 app.post("/api/admin/villages", requireUser, requireAdmin, async (req, res) => {
-  const name = String(req.body?.name ?? "").trim();
-  const slug = String(req.body?.slug ?? "").trim().toLowerCase();
-  const postalCode = String(req.body?.postal_code ?? "").trim();
-  const description = String(req.body?.description ?? "").trim();
-  const status = String(req.body?.status ?? "pending_confirmation");
-  const allowedStatuses = new Set(["pending_confirmation", "preparing", "available", "inactive"]);
-  if (name.length < 2 || name.length > 150) return res.status(400).json({ error: "Le nom doit contenir entre 2 et 150 caractères." });
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slug.length > 100) return res.status(400).json({ error: "Identifiant du village invalide. Utilise des minuscules et des tirets." });
-  if (postalCode.length > 10 || description.length > 3000 || !allowedStatuses.has(status)) return res.status(400).json({ error: "Informations du village invalides." });
+  const parsed = readVillagePayload(req.body);
+  if (parsed.error) return res.status(400).json({ error: parsed.error });
+  const { name, slug, postalCode, description, status, latitude, longitude, photoUrl } = parsed.value;
   try {
     const rows = await sql`
-      INSERT INTO public.villages (name, slug, postal_code, description, status)
-      VALUES (${name}, ${slug}, ${postalCode || null}, ${description}, ${status})
-      RETURNING id, name, slug, postal_code, description, status, created_at, updated_at
+      INSERT INTO public.villages
+        (name, slug, postal_code, description, status, latitude, longitude, photo_url)
+      VALUES
+        (${name}, ${slug}, ${postalCode || null}, ${description}, ${status},
+         ${latitude}, ${longitude}, ${photoUrl})
+      RETURNING id, name, slug, postal_code, description, status,
+                latitude, longitude, photo_url, created_at, updated_at
     `;
     res.status(201).json({ village: rows[0] });
   } catch (error) {
@@ -1034,22 +931,19 @@ app.post("/api/admin/villages", requireUser, requireAdmin, async (req, res) => {
 app.patch("/api/admin/villages/:id", requireUser, requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isSafeInteger(id) || id < 1) return res.status(400).json({ error: "Identifiant de village invalide." });
-  const name = String(req.body?.name ?? "").trim();
-  const slug = String(req.body?.slug ?? "").trim().toLowerCase();
-  const postalCode = String(req.body?.postal_code ?? "").trim();
-  const description = String(req.body?.description ?? "").trim();
-  const status = String(req.body?.status ?? "pending_confirmation");
-  const allowedStatuses = new Set(["pending_confirmation", "preparing", "available", "inactive"]);
-  if (name.length < 2 || name.length > 150) return res.status(400).json({ error: "Le nom doit contenir entre 2 et 150 caractères." });
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slug.length > 100) return res.status(400).json({ error: "Identifiant du village invalide." });
-  if (postalCode.length > 10 || description.length > 3000 || !allowedStatuses.has(status)) return res.status(400).json({ error: "Informations du village invalides." });
+  const parsed = readVillagePayload(req.body);
+  if (parsed.error) return res.status(400).json({ error: parsed.error });
+  const { name, slug, postalCode, description, status, latitude, longitude, photoUrl } = parsed.value;
   try {
     const rows = await sql`
       UPDATE public.villages
       SET name = ${name}, slug = ${slug}, postal_code = ${postalCode || null},
-          description = ${description}, status = ${status}, updated_at = NOW()
+          description = ${description}, status = ${status},
+          latitude = ${latitude}, longitude = ${longitude}, photo_url = ${photoUrl},
+          updated_at = NOW()
       WHERE id = ${id}
-      RETURNING id, name, slug, postal_code, description, status, created_at, updated_at
+      RETURNING id, name, slug, postal_code, description, status,
+                latitude, longitude, photo_url, created_at, updated_at
     `;
     if (!rows.length) return res.status(404).json({ error: "Village introuvable." });
     res.json({ village: rows[0] });
@@ -1060,7 +954,18 @@ app.patch("/api/admin/villages/:id", requireUser, requireAdmin, async (req, res)
   }
 });
 
-
+app.delete("/api/admin/villages/:id", requireUser, requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isSafeInteger(id) || id < 1) return res.status(400).json({ error: "Identifiant de village invalide." });
+  try {
+    const rows = await sql`DELETE FROM public.villages WHERE id = ${id} RETURNING id`;
+    if (!rows.length) return res.status(404).json({ error: "Village introuvable." });
+    res.json({ deleted: true, id: rows[0].id });
+  } catch (error) {
+    console.error("Delete village failed:", error.message);
+    res.status(500).json({ error: "Impossible de supprimer ce village. Vérifie qu’aucune aventure ne lui est rattachée." });
+  }
+});
 
 /* ===== CANDIDATURES TESTEURS ===== */
 // Un utilisateur connecté peut déposer ou consulter sa demande avec son compte Neon existant.
@@ -1105,7 +1010,7 @@ app.post("/api/testers/apply", requireUser, async (req, res) => {
   }
 });
 
-app.get("/api/admin/testers", requireUser, requireStaff, requirePermission("testers"), async (_req, res) => {
+app.get("/api/admin/testers", requireUser, requireAdmin, async (_req, res) => {
   try {
     const applications = await sql`
       SELECT a.id, a.user_id, u.name, u.email, a.motivation,
@@ -1124,7 +1029,7 @@ app.get("/api/admin/testers", requireUser, requireStaff, requirePermission("test
   }
 });
 
-app.patch("/api/admin/testers/:id", requireUser, requireStaff, requirePermission("testers"), async (req, res) => {
+app.patch("/api/admin/testers/:id", requireUser, requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
   const status = String(req.body?.status ?? "");
   if (!Number.isSafeInteger(id) || id < 1) return res.status(400).json({ error: "Identifiant de demande invalide." });
@@ -1282,7 +1187,7 @@ app.get("/api/testers/level-reviews/mine", requireUser, async (req, res) => {
   }
 });
 
-app.get("/api/admin/tester-level-reviews", requireUser, requireStaff, requirePermission("testers"), async (_req, res) => {
+app.get("/api/admin/tester-level-reviews", requireUser, requireAdmin, async (_req, res) => {
   try {
     const rows = await sql`
       SELECT r.id, r.user_id, u.name AS tester_name, u.email AS tester_email,
@@ -1301,7 +1206,7 @@ app.get("/api/admin/tester-level-reviews", requireUser, requireStaff, requirePer
   }
 });
 
-app.patch("/api/admin/tester-level-reviews/:id", requireUser, requireStaff, requirePermission("testers"), async (req, res) => {
+app.patch("/api/admin/tester-level-reviews/:id", requireUser, requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
   const status = String(req.body?.status || "");
   const adminNote = String(req.body?.admin_note || "").trim();
@@ -1423,7 +1328,7 @@ app.get("/api/testers/feedback/mine", requireUser, async (req, res) => {
 });
 
 // Vue admin des accès attribués.
-app.get("/api/admin/testers/:userId/access", requireUser, requireStaff, requirePermission("testers"), async (req, res) => {
+app.get("/api/admin/testers/:userId/access", requireUser, requireAdmin, async (req, res) => {
   const userId = String(req.params.userId || "").trim();
   if (!userId || userId.length > 200) return res.status(400).json({ error: "Compte testeur invalide." });
   try {
@@ -1443,7 +1348,7 @@ app.get("/api/admin/testers/:userId/access", requireUser, requireStaff, requireP
 });
 
 // L'admin attribue ou retire un couple village/niveau à un testeur accepté.
-app.put("/api/admin/testers/:userId/access", requireUser, requireStaff, requirePermission("testers"), async (req, res) => {
+app.put("/api/admin/testers/:userId/access", requireUser, requireAdmin, async (req, res) => {
   const userId = String(req.params.userId || "").trim();
   const village = String(req.body?.village || "").trim().toLowerCase();
   const formula = String(req.body?.formula || "").trim().toLowerCase();
@@ -1495,7 +1400,7 @@ app.put("/api/admin/testers/:userId/access", requireUser, requireStaff, requireP
 });
 
 // Tous les retours sont visibles uniquement par l'administration.
-app.get("/api/admin/tester-feedback", requireUser, requireStaff, requirePermission("testers"), async (req, res) => {
+app.get("/api/admin/tester-feedback", requireUser, requireAdmin, async (req, res) => {
   const status = String(req.query?.status || "").trim();
   if (status && !TESTER_FEEDBACK_STATUSES.has(status)) {
     return res.status(400).json({ error: "Filtre de statut invalide." });
@@ -1519,7 +1424,7 @@ app.get("/api/admin/tester-feedback", requireUser, requireStaff, requirePermissi
   }
 });
 
-app.patch("/api/admin/tester-feedback/:id", requireUser, requireStaff, requirePermission("testers"), async (req, res) => {
+app.patch("/api/admin/tester-feedback/:id", requireUser, requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
   const status = String(req.body?.status || "");
   const adminResponse = String(req.body?.admin_response || "").trim();
@@ -1633,27 +1538,6 @@ app.post("/api/admin/rewards", requireUser, requireAdmin, async (req,res)=>{
       RETURNING id,title,icon,created_at`;
     res.status(201).json({reward:inserted[0],message:`Récompense attribuée : ${finalTitle}.`});
   }catch(error){console.error("Admin reward grant failed:",error.message);res.status(500).json({error:"Impossible d'attribuer cette récompense. Vérifie la table user_formula_access."});}
-});
-
-app.get("/api/admin/registrations", requireUser, requireAdmin, async (_req, res) => {
-  try {
-    const rows = await sql`
-      SELECT u.id::text AS user_id,
-             COALESCE(NULLIF(BTRIM(u.name), ''), NULLIF(BTRIM(p.pseudo), ''), 'Explorateur') AS display_name,
-             u.email,
-             u."createdAt" AS created_at
-      FROM neon_auth."user" u
-      LEFT JOIN public.explorer_profiles p ON p.user_id::text = u.id::text
-      WHERE u."createdAt" >= NOW() - INTERVAL '30 days'
-      ORDER BY u."createdAt" DESC
-      LIMIT 100
-    `;
-    res.set("Cache-Control", "no-store");
-    res.json({ registrations: rows, count: rows.length });
-  } catch (error) {
-    console.error("Admin registrations failed:", error.message);
-    res.status(500).json({ error: "Impossible de charger les nouvelles inscriptions." });
-  }
 });
 
 app.get("/api/admin/players", requireUser, requireAdmin, async (req, res) => {
@@ -1824,6 +1708,7 @@ app.post("/api/adventures/:id/steps/:stepId/validate-gps", requireUser, async (r
   const latitude = Number(req.body?.latitude);
   const longitude = Number(req.body?.longitude);
   const accuracy = Number(req.body?.accuracy);
+  const MAX_DISTANCE_METERS = 100;
   const MAX_ACCURACY_METERS = 50;
 
   if (!Number.isSafeInteger(adventureId) || adventureId < 1 || !Number.isSafeInteger(stepId) || stepId < 1) {
@@ -1839,7 +1724,7 @@ app.post("/api/adventures/:id/steps/:stepId/validate-gps", requireUser, async (r
 
   try {
     const rows = await sql`
-      SELECT s.id, s.adventure_id, s.step_number, s.latitude, s.longitude, s.gps_radius_meters,
+      SELECT s.id, s.adventure_id, s.step_number, s.latitude, s.longitude,
              a.village_slug, a.level_key, a.is_published
       FROM public.adventure_steps s
       JOIN public.adventures a ON a.id = s.adventure_id
@@ -1848,30 +1733,11 @@ app.post("/api/adventures/:id/steps/:stepId/validate-gps", requireUser, async (r
     `;
     if (!rows.length) return res.status(404).json({ error: "Étape introuvable." });
     const target = rows[0];
-    if (!target.is_published && !isAdminAdventureTestMode(req) && !(await hasAcceptedTesterAccess(req.user.id, target.village_slug, target.level_key))) {
+    if (!target.is_published && !(await hasAcceptedTesterAccess(req.user.id, target.village_slug, target.level_key))) {
       return res.status(404).json({ error: "Cette étape est réservée aux testeurs autorisés." });
     }
-    if (target.is_published && !isAdminAdventureTestMode(req) && !(await playerCanAccessAdventure(req.user.id, target))) {
+    if (target.is_published && !(await playerCanAccessAdventure(req.user.id, target))) {
       return res.status(403).json({ error: "Tu n’as pas accès à cette aventure." });
-    }
-    const adminTestMode = isAdminAdventureTestMode(req);
-    await ensureAdventureAnswerTable();
-    if (adminTestMode) await ensureAdminAdventureTestTables();
-    if (Number(target.step_number) > 1) {
-      const previous = adminTestMode
-        ? await sql`
-            SELECT s.id FROM public.adventure_steps s
-            JOIN public.admin_test_step_answers ua ON ua.step_id = s.id AND ua.adventure_id = s.adventure_id AND ua.user_id = ${req.user.id}
-            WHERE s.adventure_id = ${adventureId} AND s.step_number = ${Number(target.step_number) - 1}
-            LIMIT 1
-          `
-        : await sql`
-            SELECT s.id FROM public.adventure_steps s
-            JOIN public.user_step_answers ua ON ua.step_id = s.id AND ua.adventure_id = s.adventure_id AND ua.user_id = ${req.user.id}
-            WHERE s.adventure_id = ${adventureId} AND s.step_number = ${Number(target.step_number) - 1}
-            LIMIT 1
-          `;
-      if (!previous.length) return res.status(403).json({ error: "Résous d’abord l’énigme précédente pour débloquer ce lieu." });
     }
     if (target.latitude == null || target.longitude == null) {
       return res.status(409).json({ error: "Le GPS n'est pas configuré pour cette étape." });
@@ -1885,29 +1751,21 @@ app.post("/api/adventures/:id/steps/:stepId/validate-gps", requireUser, async (r
       )) AS distance_meters
     `;
     const distance = Number(distanceRows[0].distance_meters);
-    const requiredDistance = Math.max(10, Math.min(500, Number(target.gps_radius_meters) || 100));
-    if (distance > requiredDistance) {
+    if (distance > MAX_DISTANCE_METERS) {
       return res.status(403).json({
         validated: false,
         error: "Tu n'es pas encore assez proche du lieu.",
         distance_meters: Math.round(distance),
-        required_distance_meters: requiredDistance
+        required_distance_meters: MAX_DISTANCE_METERS
       });
     }
 
-    const saved = adminTestMode
-      ? await sql`
-          INSERT INTO public.admin_test_step_validations (user_id, adventure_id, step_id, gps_accuracy_meters, distance_meters)
-          VALUES (${req.user.id}, ${adventureId}, ${stepId}, ${accuracy}, ${distance})
-          ON CONFLICT (user_id, step_id) DO NOTHING
-          RETURNING step_id, validated_at
-        `
-      : await sql`
-          INSERT INTO public.user_step_validations (user_id, adventure_id, step_id, gps_accuracy_meters, distance_meters)
-          VALUES (${req.user.id}, ${adventureId}, ${stepId}, ${accuracy}, ${distance})
-          ON CONFLICT (user_id, step_id) DO NOTHING
-          RETURNING id, validated_at
-        `;
+    const saved = await sql`
+      INSERT INTO public.user_step_validations (user_id, adventure_id, step_id, gps_accuracy_meters, distance_meters)
+      VALUES (${req.user.id}, ${adventureId}, ${stepId}, ${accuracy}, ${distance})
+      ON CONFLICT (user_id, step_id) DO NOTHING
+      RETURNING id, validated_at
+    `;
     res.json({
       validated: true,
       already_validated: saved.length === 0,
@@ -1918,102 +1776,6 @@ app.post("/api/adventures/:id/steps/:stepId/validate-gps", requireUser, async (r
   } catch (error) {
     console.error("GPS step validation failed:", error.message);
     res.status(500).json({ error: "Impossible de valider cette étape pour le moment." });
-  }
-});
-
-// Simulation d'arrivée GPS réservée aux administrateurs en mode test.
-// Le serveur vérifie ADMIN_EMAILS : un testeur ne peut pas activer ce contournement.
-app.post("/api/admin/adventures/:id/steps/:stepId/simulate-gps", requireUser, requireAdmin, async (req, res) => {
-  if (!isAdminAdventureTestMode(req)) return res.status(403).json({ error: "Active le mode test GPS dans l'administration pour simuler cette arrivée." });
-  const adventureId = Number(req.params.id);
-  const stepId = Number(req.params.stepId);
-  if (!Number.isSafeInteger(adventureId) || adventureId < 1 || !Number.isSafeInteger(stepId) || stepId < 1)
-    return res.status(400).json({ error: "Étape ou aventure invalide." });
-  try {
-    const rows = await sql`
-      SELECT id, step_number FROM public.adventure_steps
-      WHERE id = ${stepId} AND adventure_id = ${adventureId} LIMIT 1
-    `;
-    if (!rows.length) return res.status(404).json({ error: "Étape introuvable." });
-    const step = rows[0];
-    if (Number(step.step_number) > 1) {
-      await ensureAdminAdventureTestTables();
-      const previous = await sql`
-        SELECT s.id FROM public.adventure_steps s
-        JOIN public.admin_test_step_answers ua ON ua.step_id = s.id AND ua.adventure_id = s.adventure_id AND ua.user_id = ${req.user.id}
-        WHERE s.adventure_id = ${adventureId} AND s.step_number = ${Number(step.step_number) - 1}
-        LIMIT 1
-      `;
-      if (!previous.length) return res.status(403).json({ error: "Résous d’abord l’énigme précédente pour débloquer ce lieu." });
-    }
-    await ensureAdminAdventureTestTables();
-    const saved = await sql`
-      INSERT INTO public.admin_test_step_validations (user_id, adventure_id, step_id, gps_accuracy_meters, distance_meters)
-      VALUES (${req.user.id}, ${adventureId}, ${stepId}, 1, 0)
-      ON CONFLICT (user_id, step_id) DO NOTHING
-      RETURNING step_id, validated_at
-    `;
-    return res.json({ validated: true, simulated: true, already_validated: saved.length === 0, step_number: step.step_number, message: "🧪 Arrivée simulée pour le test administrateur." });
-  } catch (error) {
-    console.error("Admin GPS simulation failed:", error.message);
-    return res.status(500).json({ error: "Impossible de simuler cette arrivée." });
-  }
-});
-
-// Une réponse correcte débloque le lieu suivant. La réponse attendue reste côté serveur.
-app.post("/api/adventures/:id/steps/:stepId/answer", requireUser, async (req, res) => {
-  const adventureId = Number(req.params.id);
-  const stepId = Number(req.params.stepId);
-  const submitted = normalizeAdventureAnswer(req.body?.answer);
-  if (!Number.isSafeInteger(adventureId) || adventureId < 1 || !Number.isSafeInteger(stepId) || stepId < 1)
-    return res.status(400).json({ error: "Étape ou aventure invalide." });
-  if (!submitted) return res.status(400).json({ error: "Saisis ta réponse avant de valider." });
-  try {
-    await ensureAdventureAnswerTable();
-    await ensureAdventureStepEnhancements();
-    const rows = await sql`
-      SELECT s.id, s.step_number, s.answer, s.next_hint, s.stars_awarded, a.village_slug, a.level_key, a.is_published
-      FROM public.adventure_steps s JOIN public.adventures a ON a.id = s.adventure_id
-      WHERE s.id = ${stepId} AND s.adventure_id = ${adventureId} LIMIT 1
-    `;
-    if (!rows.length) return res.status(404).json({ error: "Étape introuvable." });
-    const step = rows[0];
-    const testerAllowed = !step.is_published && await hasAcceptedTesterAccess(req.user.id, step.village_slug, step.level_key);
-    if (!step.is_published && !testerAllowed && !isAdminAdventureTestMode(req)) return res.status(404).json({ error: "Ce parcours est réservé aux testeurs autorisés." });
-    if (step.is_published && !isAdminAdventureTestMode(req) && !(await playerCanAccessAdventure(req.user.id, step)))
-      return res.status(403).json({ error: "Tu n’as pas accès à cette aventure." });
-    const adminTestMode = isAdminAdventureTestMode(req);
-    if (adminTestMode) await ensureAdminAdventureTestTables();
-    const arrived = adminTestMode
-      ? await sql`
-          SELECT 1 FROM public.admin_test_step_validations
-          WHERE user_id = ${req.user.id} AND adventure_id = ${adventureId} AND step_id = ${stepId} LIMIT 1
-        `
-      : await sql`
-          SELECT 1 FROM public.user_step_validations
-          WHERE user_id = ${req.user.id} AND adventure_id = ${adventureId} AND step_id = ${stepId} LIMIT 1
-        `;
-    if (!arrived.length) return res.status(403).json({ error: "Valide d’abord ton arrivée avec le GPS pour découvrir l’énigme." });
-    if (normalizeAdventureAnswer(step.answer) !== submitted)
-      return res.status(400).json({ correct: false, error: "Ce n’est pas la bonne réponse. Relis l’indice et réessaie." });
-    if (adminTestMode) {
-      await sql`
-        INSERT INTO public.admin_test_step_answers (user_id, adventure_id, step_id)
-        VALUES (${req.user.id}, ${adventureId}, ${stepId})
-        ON CONFLICT (user_id, step_id) DO NOTHING
-      `;
-    } else {
-      await sql`
-        INSERT INTO public.user_step_answers (user_id, adventure_id, step_id)
-        VALUES (${req.user.id}, ${adventureId}, ${stepId})
-        ON CONFLICT (user_id, step_id) DO NOTHING
-      `;
-    }
-    const next = await sql`SELECT id FROM public.adventure_steps WHERE adventure_id = ${adventureId} AND step_number = ${Number(step.step_number) + 1} LIMIT 1`;
-    res.json({ correct: true, answered: true, stars_awarded: adminTestMode ? 0 : Number(step.stars_awarded || 0), next_step_unlocked: next.length > 0, next_hint: step.next_hint || "", message: next.length ? "Bravo ! Bonne réponse. Voici ton nouvel indice pour poursuivre l’aventure." : "Bravo ! Tu as terminé toutes les énigmes du parcours." });
-  } catch (error) {
-    console.error("Adventure answer validation failed:", error.message);
-    res.status(500).json({ error: "Impossible de vérifier ta réponse pour le moment." });
   }
 });
 
@@ -2077,7 +1839,6 @@ app.get("/api/admin/support", requireUser, requireStaff, requirePermission("supp
   try {
     const rows = await sql`
       SELECT r.id, r.user_id, r.subject, r.message, r.status, r.created_at, r.updated_at,
-        u.name AS user_name, u.email AS user_email,
         COALESCE(
           json_agg(
             json_build_object(
@@ -2091,8 +1852,7 @@ app.get("/api/admin/support", requireUser, requireStaff, requirePermission("supp
         ) AS replies
       FROM public.support_requests r
       LEFT JOIN public.support_replies p ON p.request_id = r.id
-      LEFT JOIN neon_auth."user" u ON u.id::text = r.user_id::text
-      GROUP BY r.id, u.name, u.email
+      GROUP BY r.id
       ORDER BY r.created_at DESC
       LIMIT 200
     `;
@@ -2263,8 +2023,8 @@ app.post("/api/admin/adventures", requireUser, requireAdmin, async (req, res) =>
     `;
     if (!configured.length) return res.status(400).json({ error: "Ce niveau n'est pas configuré pour ce village." });
     const rows = await sql`
-      INSERT INTO public.adventures (title, village, village_slug, level_key, description, status)
-      VALUES (${title}, ${village}, ${villageSlug}, ${levelKey}, ${description}, 'brouillon')
+      INSERT INTO public.adventures (title, village, village_slug, level_key, description)
+      VALUES (${title}, ${village}, ${villageSlug}, ${levelKey}, ${description})
       RETURNING id, title, village, village_slug, level_key, description, status, is_validated, is_published, created_at, updated_at
     `;
     res.status(201).json({ adventure: rows[0] });
@@ -2280,8 +2040,8 @@ app.patch("/api/admin/adventures/:id", requireUser, requireAdmin, async (req, re
   const title = String(req.body?.title ?? "").trim();
   const village = String(req.body?.village ?? "").trim();
   const description = String(req.body?.description ?? "").trim();
-  const status = String(req.body?.status ?? "brouillon");
-  const allowedStatuses = new Set(["brouillon", "a_valider", "en_attente", "en_travaux", "mise_a_jour", "publie", "suspendu"]);
+  const status = String(req.body?.status ?? "en_creation");
+  const allowedStatuses = new Set(["en_creation", "a_valider", "en_attente", "en_travaux", "mise_a_jour", "en_ligne", "suspendue"]);
   if (!Number.isSafeInteger(id) || id < 1) return res.status(400).json({ error: "Identifiant d’aventure invalide." });
   if (title.length < 2 || title.length > 150 || village.length < 2 || village.length > 150 || description.length > 3000 || !allowedStatuses.has(status))
     return res.status(400).json({ error: "Informations ou statut de l’aventure invalides." });
@@ -2289,7 +2049,7 @@ app.patch("/api/admin/adventures/:id", requireUser, requireAdmin, async (req, re
     const rows = await sql`
       UPDATE public.adventures
       SET title = ${title}, village = ${village}, description = ${description}, status = ${status},
-          is_published = CASE WHEN ${status} = 'suspendu' THEN FALSE ELSE is_published END,
+          is_published = CASE WHEN ${status} = 'suspendue' THEN FALSE ELSE is_published END,
           updated_at = NOW()
       WHERE id = ${id}
       RETURNING id, title, village, village_slug, level_key, description, status, is_validated, is_published, created_at, updated_at
@@ -2308,7 +2068,7 @@ app.post("/api/admin/adventures/:id/validate", requireUser, requireAdmin, async 
   if (!Number.isSafeInteger(id) || id < 1) return res.status(400).json({ error: "Identifiant d’aventure invalide." });
   try {
     const rows = await sql`
-      UPDATE public.adventures SET is_validated = TRUE, status = CASE WHEN status = 'brouillon' THEN 'a_valider' ELSE status END, updated_at = NOW()
+      UPDATE public.adventures SET is_validated = TRUE, status = CASE WHEN status = 'en_creation' THEN 'a_valider' ELSE status END, updated_at = NOW()
       WHERE id = ${id}
       RETURNING id, title, status, is_validated, is_published
     `;
@@ -2326,14 +2086,14 @@ app.post("/api/admin/adventures/:id/publish", requireUser, requireAdmin, async (
   if (!Number.isSafeInteger(id) || id < 1) return res.status(400).json({ error: "Identifiant d’aventure invalide." });
   try {
     const rows = await sql`
-      UPDATE public.adventures SET is_published = TRUE, status = 'publie', updated_at = NOW()
-      WHERE id = ${id} AND is_validated = TRUE AND status <> 'suspendu'
+      UPDATE public.adventures SET is_published = TRUE, status = 'en_ligne', updated_at = NOW()
+      WHERE id = ${id} AND is_validated = TRUE AND status <> 'suspendue'
       RETURNING id, title, status, is_validated, is_published
     `;
     if (!rows.length) {
       const existing = await sql`SELECT id, is_validated, status FROM public.adventures WHERE id = ${id} LIMIT 1`;
       if (!existing.length) return res.status(404).json({ error: "Aventure introuvable." });
-      return res.status(409).json({ error: existing[0].status === "suspendu" ? "Cette aventure est suspendue. Réactive son statut avant publication." : "Valide d’abord l’aventure avant de la mettre en ligne." });
+      return res.status(409).json({ error: existing[0].status === "suspendue" ? "Cette aventure est suspendue. Réactive son statut avant publication." : "Valide d’abord l’aventure avant de la mettre en ligne." });
     }
     res.json({ adventure: rows[0], message: "Aventure mise en ligne." });
   } catch (error) {
@@ -2350,7 +2110,6 @@ app.get("/api/admin/adventures/:id/steps", requireUser, requireAdmin, async (req
   }
 
   try {
-    await ensureAdventureStepEnhancements();
     const adventures = await sql`
       SELECT a.id, a.level_key, a.village_slug, l.riddle_count, l.star_count, l.display_name
       FROM public.adventures a
@@ -2364,7 +2123,7 @@ app.get("/api/admin/adventures/:id/steps", requireUser, requireAdmin, async (req
 
     const steps = await sql`
       SELECT id, adventure_id, step_number, place_name,
-             latitude, longitude, photo_url, riddle, answer, hint, next_hint, stars_awarded, gps_radius_meters
+             latitude, longitude, photo_url, riddle, answer, hint
       FROM public.adventure_steps
       WHERE adventure_id = ${id}
       ORDER BY step_number ASC
@@ -2411,7 +2170,6 @@ app.post("/api/admin/adventures/:id/steps", requireUser, requireAdmin, async (re
   }
 
   try {
-    await ensureAdventureStepEnhancements();
     const levelInfo = await sql`
       SELECT l.riddle_count FROM public.adventures a
       LEFT JOIN public.village_level_settings l ON l.village_slug = a.village_slug AND l.level_key = a.level_key
@@ -2423,12 +2181,12 @@ app.post("/api/admin/adventures/:id/steps", requireUser, requireAdmin, async (re
     }
     const rows = await sql`
       INSERT INTO public.adventure_steps
-        (adventure_id, step_number, place_name, latitude, longitude, photo_url, riddle, answer, hint, next_hint, stars_awarded, gps_radius_meters)
-      SELECT id, ${stepNumber}, ${placeName}, ${latitude}, ${longitude}, ${photoUrl || null}, ${riddle}, ${answer}, ${hint}, ${String(req.body?.next_hint ?? '').trim()}, ${Math.max(0, Math.min(10, Number(req.body?.stars_awarded ?? 1)))}, ${Math.max(10, Math.min(500, Number(req.body?.gps_radius_meters ?? 100)))}
+        (adventure_id, step_number, place_name, latitude, longitude, photo_url, riddle, answer, hint)
+      SELECT id, ${stepNumber}, ${placeName}, ${latitude}, ${longitude}, ${photoUrl || null}, ${riddle}, ${answer}, ${hint}
       FROM public.adventures
       WHERE id = ${adventureId}
       RETURNING id, adventure_id, step_number, place_name,
-                latitude, longitude, photo_url, riddle, answer, hint, next_hint, stars_awarded, gps_radius_meters
+                latitude, longitude, photo_url, riddle, answer, hint
     `;
 
     if (!rows.length) {
@@ -2442,33 +2200,6 @@ app.post("/api/admin/adventures/:id/steps", requireUser, requireAdmin, async (re
       return res.status(409).json({ error: "Ce numéro d’étape existe déjà pour cette aventure." });
     }
     res.status(500).json({ error: "Impossible d’enregistrer l’étape." });
-  }
-});
-
-// Modifier une étape existante sans la supprimer ni perdre sa photo ou ses données.
-app.patch("/api/admin/adventures/:id/steps/:stepId", requireUser, requireAdmin, async (req, res) => {
-  const adventureId = Number(req.params.id), stepId = Number(req.params.stepId);
-  const stepNumber = Number(req.body?.step_number);
-  const placeName = String(req.body?.place_name ?? "").trim();
-  const latitude = req.body?.latitude == null || req.body.latitude === "" ? null : Number(req.body.latitude);
-  const longitude = req.body?.longitude == null || req.body.longitude === "" ? null : Number(req.body.longitude);
-  const photoUrl = String(req.body?.photo_url ?? "").trim();
-  if (!Number.isSafeInteger(adventureId) || adventureId < 1 || !Number.isSafeInteger(stepId) || stepId < 1) return res.status(400).json({error:"Identifiant invalide."});
-  if (!Number.isSafeInteger(stepNumber) || stepNumber < 1 || !placeName || placeName.length > 200) return res.status(400).json({error:"Numéro d'étape ou nom du lieu invalide."});
-  if (latitude !== null && (!Number.isFinite(latitude) || latitude < -90 || latitude > 90)) return res.status(400).json({error:"Latitude invalide."});
-  if (longitude !== null && (!Number.isFinite(longitude) || longitude < -180 || longitude > 180)) return res.status(400).json({error:"Longitude invalide."});
-  if (photoUrl.length > 2000 || (photoUrl && !/^https:\/\//i.test(photoUrl))) return res.status(400).json({error:"La photo doit être une adresse HTTPS valide."});
-  const stars = Number(req.body?.stars_awarded ?? 1), radius = Number(req.body?.gps_radius_meters ?? 100);
-  if (!Number.isInteger(stars) || stars < 0 || stars > 10 || !Number.isInteger(radius) || radius < 10 || radius > 500) return res.status(400).json({error:"Nombre d'étoiles ou rayon GPS invalide."});
-  try {
-    await ensureAdventureStepEnhancements();
-    const rows = await sql`UPDATE public.adventure_steps SET step_number=${stepNumber}, place_name=${placeName}, latitude=${latitude}, longitude=${longitude}, photo_url=${photoUrl || null}, riddle=${String(req.body?.riddle ?? '').trim()}, answer=${String(req.body?.answer ?? '').trim()}, hint=${String(req.body?.hint ?? '').trim()}, next_hint=${String(req.body?.next_hint ?? '').trim()}, stars_awarded=${stars}, gps_radius_meters=${radius} WHERE id=${stepId} AND adventure_id=${adventureId} RETURNING id, adventure_id, step_number, place_name, latitude, longitude, photo_url, riddle, answer, hint, next_hint, stars_awarded, gps_radius_meters`;
-    if (!rows.length) return res.status(404).json({error:"Étape introuvable."});
-    res.json({step:rows[0], updated:true});
-  } catch(error) {
-    console.error("Update adventure step failed:", error.message);
-    if (error.code === "23505") return res.status(409).json({error:"Ce numéro d'étape existe déjà."});
-    res.status(500).json({error:"Impossible de modifier cette étape."});
   }
 });
 
@@ -2549,14 +2280,13 @@ app.get('/api/adventures', requireUser, async (req, res) => {
   }
 });
 
-// Progression séquentielle : GPS d'arrivée -> énigme -> bonne réponse -> prochain point GPS.
+// Les coordonnées servent au GPS. L'énigme et l'indice ne sont révélés qu'après validation GPS.
+// La réponse n'est jamais envoyée au navigateur.
 app.get('/api/adventures/:id/steps', requireUser, async (req, res) => {
   const adventureId = Number(req.params.id);
   if (!Number.isSafeInteger(adventureId) || adventureId < 1)
     return res.status(400).json({ error: 'Identifiant d’aventure invalide.' });
   try {
-    await ensureAdventureAnswerTable();
-    await ensureAdventureStepEnhancements();
     const adventures = await sql`
       SELECT id, title, village_slug, level_key, is_published FROM public.adventures
       WHERE id = ${adventureId} LIMIT 1
@@ -2564,53 +2294,22 @@ app.get('/api/adventures/:id/steps', requireUser, async (req, res) => {
     if (!adventures.length) return res.status(404).json({ error: 'Aventure introuvable.' });
     const adventure = adventures[0];
     const testerAllowed = !adventure.is_published && await hasAcceptedTesterAccess(req.user.id, adventure.village_slug, adventure.level_key);
-    if (!adventure.is_published && !testerAllowed && !isAdminAdventureTestMode(req))
+    if (!adventure.is_published && !testerAllowed)
       return res.status(404).json({ error: 'Ce parcours est réservé aux testeurs autorisés.' });
-    if (adventure.is_published && !isAdminAdventureTestMode(req) && !(await playerCanAccessAdventure(req.user.id, adventure)))
+    if (adventure.is_published && !(await playerCanAccessAdventure(req.user.id, adventure)))
       return res.status(403).json({ error: 'Tu n’as pas accès à cette aventure.' });
-    const adminTestMode = isAdminAdventureTestMode(req);
-    if (adminTestMode) await ensureAdminAdventureTestTables();
-    const rows = adminTestMode
-      ? await sql`
-          SELECT s.id, s.step_number, s.place_name, s.latitude, s.longitude, s.photo_url, s.gps_radius_meters, s.riddle, s.hint, s.next_hint, s.stars_awarded,
-                 (uv.step_id IS NOT NULL) AS validated,
-                 (ua.step_id IS NOT NULL) AS answered
-          FROM public.adventure_steps s
-          LEFT JOIN public.admin_test_step_validations uv
-            ON uv.step_id = s.id AND uv.adventure_id = s.adventure_id AND uv.user_id = ${req.user.id}
-          LEFT JOIN public.admin_test_step_answers ua
-            ON ua.step_id = s.id AND ua.adventure_id = s.adventure_id AND ua.user_id = ${req.user.id}
-          WHERE s.adventure_id = ${adventureId}
-          ORDER BY s.step_number ASC
-        `
-      : await sql`
-          SELECT s.id, s.step_number, s.place_name, s.latitude, s.longitude, s.photo_url, s.gps_radius_meters, s.riddle, s.hint, s.next_hint, s.stars_awarded,
-                 (uv.step_id IS NOT NULL) AS validated,
-                 (ua.step_id IS NOT NULL) AS answered
-          FROM public.adventure_steps s
-          LEFT JOIN public.user_step_validations uv
-            ON uv.step_id = s.id AND uv.adventure_id = s.adventure_id AND uv.user_id = ${req.user.id}
-          LEFT JOIN public.user_step_answers ua
-            ON ua.step_id = s.id AND ua.adventure_id = s.adventure_id AND ua.user_id = ${req.user.id}
-          WHERE s.adventure_id = ${adventureId}
-          ORDER BY s.step_number ASC
-        `;
-    let previousAnswered = true;
-    const steps = rows.map(row => {
-      const unlocked = previousAnswered;
-      const validated = Boolean(row.validated);
-      const answered = Boolean(row.answered);
-      const showRiddle = unlocked && validated;
-      const showTarget = unlocked && !validated;
-      previousAnswered = answered;
-      return {
-        id: row.id, step_number: row.step_number, place_name: row.place_name, photo_url: showTarget || showRiddle ? row.photo_url : null, stars_awarded: Number(row.stars_awarded || 0), next_hint: answered ? row.next_hint : null,
-        latitude: showTarget ? row.latitude : null, longitude: showTarget ? row.longitude : null,
-        riddle: showRiddle ? row.riddle : null, hint: showRiddle ? row.hint : null,
-        unlocked, validated, answered, show_target: showTarget, show_riddle: showRiddle
-      };
-    });
-    res.json({ adventure, steps });
+    const rows = await sql`
+      SELECT s.id, s.step_number, s.place_name, s.latitude, s.longitude,
+             CASE WHEN uv.step_id IS NOT NULL THEN s.riddle ELSE NULL END AS riddle,
+             CASE WHEN uv.step_id IS NOT NULL THEN s.hint ELSE NULL END AS hint,
+             (uv.step_id IS NOT NULL) AS validated
+      FROM public.adventure_steps s
+      LEFT JOIN public.user_step_validations uv
+        ON uv.step_id = s.id AND uv.adventure_id = s.adventure_id AND uv.user_id = ${req.user.id}
+      WHERE s.adventure_id = ${adventureId}
+      ORDER BY s.step_number ASC
+    `;
+    res.json({ adventure: adventures[0], steps: rows });
   } catch (error) {
     console.error('Read player adventure steps failed:', error.message);
     res.status(500).json({ error: 'Impossible de charger les étapes.' });
@@ -2642,70 +2341,36 @@ app.get("/api/adventures/:id/progress", requireUser, async (req, res) => {
     }
     const adventureAccess = adventures[0];
     const testerAllowed = !adventureAccess.is_published && await hasAcceptedTesterAccess(req.user.id, adventureAccess.village_slug, adventureAccess.level_key);
-    if (!adventureAccess.is_published && !testerAllowed && !isAdminAdventureTestMode(req)) {
+    if (!adventureAccess.is_published && !testerAllowed) {
       return res.status(404).json({ error: "Ce parcours est réservé aux testeurs autorisés." });
     }
-    if (adventureAccess.is_published && !isAdminAdventureTestMode(req) && !(await playerCanAccessAdventure(req.user.id, adventureAccess))) {
+    if (adventureAccess.is_published && !(await playerCanAccessAdventure(req.user.id, adventureAccess))) {
       return res.status(403).json({ error: "Tu n’as pas accès à cette aventure." });
     }
 
-    const adminTestMode = isAdminAdventureTestMode(req);
-    if (adminTestMode) await ensureAdminAdventureTestTables();
-    const validations = adminTestMode
-      ? await sql`
-          SELECT uv.step_id, s.step_number, uv.validated_at
-          FROM public.admin_test_step_validations uv
-          JOIN public.adventure_steps s
-            ON s.id = uv.step_id AND s.adventure_id = uv.adventure_id
-          WHERE uv.user_id = ${req.user.id}
-            AND uv.adventure_id = ${adventureId}
-          ORDER BY s.step_number ASC
-        `
-      : await sql`
-          SELECT uv.step_id, s.step_number, uv.validated_at
-          FROM public.user_step_validations uv
-          JOIN public.adventure_steps s
-            ON s.id = uv.step_id AND s.adventure_id = uv.adventure_id
-          WHERE uv.user_id = ${req.user.id}
-            AND uv.adventure_id = ${adventureId}
-          ORDER BY s.step_number ASC
-        `;
+    const validations = await sql`
+      SELECT uv.step_id, s.step_number, uv.validated_at
+      FROM public.user_step_validations uv
+      JOIN public.adventure_steps s
+        ON s.id = uv.step_id AND s.adventure_id = uv.adventure_id
+      WHERE uv.user_id = ${req.user.id}
+        AND uv.adventure_id = ${adventureId}
+      ORDER BY s.step_number ASC
+    `;
 
-    await ensureAdventureAnswerTable();
-    const answeredRows = adminTestMode
-      ? await sql`
-          SELECT COUNT(*)::int AS total FROM public.admin_test_step_answers
-          WHERE user_id = ${req.user.id} AND adventure_id = ${adventureId}
-        `
-      : await sql`
-          SELECT COUNT(*)::int AS total FROM public.user_step_answers
-          WHERE user_id = ${req.user.id} AND adventure_id = ${adventureId}
-        `;
     const adventure = adventures[0];
     const validatedSteps = validations.length;
-    const answeredSteps = Number(answeredRows[0]?.total || 0);
-    await ensureAdventureStepEnhancements();
-    const starRows = adminTestMode ? [{earned:0,total:0}] : await sql`
-      SELECT COALESCE(SUM(CASE WHEN ua.step_id IS NOT NULL THEN s.stars_awarded ELSE 0 END),0)::int AS earned,
-             COALESCE(SUM(s.stars_awarded),0)::int AS total
-      FROM public.adventure_steps s
-      LEFT JOIN public.user_step_answers ua ON ua.step_id=s.id AND ua.adventure_id=s.adventure_id AND ua.user_id=${req.user.id}
-      WHERE s.adventure_id=${adventureId}
-    `;
-    const starsEarned = adminTestMode ? 0 : Number(starRows[0]?.earned || 0);
-    const totalStars = adminTestMode ? Number(adventure.star_count || 0) : Number(starRows[0]?.total || 0);
+    const starsEarned = Math.min(validatedSteps, Number(adventure.star_count || 0));
     res.json({
       adventure_id: adventureId,
       village_slug: adventure.village_slug,
       level_key: adventure.level_key,
       validated_steps: validatedSteps,
-      answered_steps: answeredSteps,
       total_steps: Number(adventure.riddle_count || 0),
       stars_earned: starsEarned,
-      total_stars: totalStars,
+      total_stars: Number(adventure.star_count || 0),
       completed: Number(adventure.riddle_count || 0) > 0 &&
-        validatedSteps >= Number(adventure.riddle_count) && answeredSteps >= Number(adventure.riddle_count),
-      test_mode: adminTestMode,
+        validatedSteps >= Number(adventure.riddle_count),
       validated_step_ids: validations.map((item) => Number(item.step_id)),
       validated_step_numbers: validations.map((item) => Number(item.step_number))
     });
