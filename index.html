@@ -5171,7 +5171,7 @@ showDashboard(
     status.textContent = error.message || "Impossible de se connecter.";
   }
 });
-const API_BASE = "https://tresors-de-nos-villages-serveur.onrender.com";
+window.API_BASE = "https://tresors-de-nos-villages-serveur.onrender.com";
 async function getAdminBearerToken() {
   // Neon Better Auth exposes the short-lived JWT at /token (not /get-jwt-token).
   // The browser session cookie is sent only to Neon Auth; it is never copied to Render.
@@ -5191,7 +5191,7 @@ window.getAdminBearerToken = getAdminBearerToken;
   
 async function adminApi(path, options = {}) {
   const token = await getAdminBearerToken();
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${window.API_BASE}${path}`, {
     ...options,
     headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", ...(options.headers || {}) }
   });
@@ -5220,7 +5220,7 @@ window.checkAdminAccess = async function(){
 
 async function profileApi(path, options = {}) {
   const token = await getAdminBearerToken();
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${window.API_BASE}${path}`, {
     ...options,
     headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", ...(options.headers || {}) }
   });
@@ -5273,7 +5273,7 @@ window.loadLeaderboard = async function() {
   loading.textContent = "Chargement du classement…";
   list.appendChild(loading);
   try {
-    const response = await fetch(`${API_BASE}/api/leaderboard`, { headers: { "Accept": "application/json" }, cache: "no-store" });
+    const response = await fetch(`${window.API_BASE}/api/leaderboard`, { headers: { "Accept": "application/json" }, cache: "no-store" });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
     list.replaceChildren();
@@ -6452,7 +6452,7 @@ window.saveSiteStatus=async function(){
 };
 async function loadPublicSiteStatus(){
   try{
-    const response=await fetch(`${API_BASE}/api/site-status`,{cache:"no-store"});
+    const response=await fetch(`${window.API_BASE}/api/site-status`,{cache:"no-store"});
     if(!response.ok)throw new Error(`HTTP ${response.status}`);
     const data=await response.json();
     const meta=SITE_STATUS_META[data.status]||SITE_STATUS_META.online;
@@ -6561,7 +6561,7 @@ window.loadPublicNews=async function(){
  [homeList,homeMore,dashList,updatesList].filter(Boolean).forEach(el=>el.replaceChildren());
  if(toggle){toggle.hidden=true;toggle.setAttribute('aria-expanded','false');}
  try{
-   const response=await fetch(`${API_BASE}/api/news`);
+   const response=await fetch(`${window.API_BASE}/api/news`);
    const data=await response.json().catch(()=>({}));
    if(!response.ok)throw new Error(data.error||'Impossible de charger les publications.');
    const items=Array.isArray(data.news)?data.news:[];
@@ -6744,7 +6744,7 @@ window.adminLoadTeamByVillage = async function(){
   status.textContent="Chargement des villages et des modérateurs…";
   root.replaceChildren();
   try{
-    const [data,villageData]=await Promise.all([adminApi("/api/team-space/overview"),adminApi("/api/admin/villages")]);
+    const [data,villageData]=await Promise.all([adminApi("/api/admin/team"),adminApi("/api/admin/villages")]);
     const villageNames=new Map((villageData.villages||[]).map(v=>[v.slug,v.name]));
     const groups=new Map();
     (data.members||[]).filter(m=>m.role==="moderator"&&m.status==="active").forEach(m=>{
@@ -6784,7 +6784,7 @@ window.adminLoadTeamSpace = async function(){
   const canComm=isAdmin||perms.includes("team_communication"), canReports=isAdmin||perms.includes("player_reports");
   document.getElementById("team-space-notes-area").hidden=!canComm;document.getElementById("team-space-chat-area").hidden=!canComm;document.getElementById("team-space-reports-area").hidden=!canReports;
   try{
-    const overview=await adminApi("/api/team-space/overview");
+    const overview=await adminApi("/api/admin/team");
     const root=document.getElementById("team-space-villages");root.replaceChildren();
     const groups=new Map();(overview.members||[]).forEach(m=>(m.allowed_villages||[]).forEach(v=>{if(!groups.has(v))groups.set(v,[]);groups.get(v).push(m.name||m.email);}));
     if(!groups.size){const p=document.createElement("p");p.textContent="Aucun village n'est encore attribué à un modérateur.";root.append(p);}
@@ -6996,7 +6996,7 @@ function ouvrirPropositionVillage(){
 
 async function playerApi(path, options = {}) {
   const token = await getAdminBearerToken();
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${window.API_BASE}${path}`, {
     ...options,
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json', ...(options.headers || {}) }
   });
@@ -7334,7 +7334,7 @@ async function actualiserCarteVillages(){
   const mapEl=document.getElementById("village-map"),listEl=document.getElementById("map-village-list");
   if(typeof L==="undefined"){if(mapEl)mapEl.textContent="La carte n’a pas pu être chargée. Vérifie ta connexion internet.";return;}
   try{
-    const response=await fetch(`${API_BASE}/api/villages`,{cache:"no-store"});
+    const response=await fetch(`${window.API_BASE}/api/villages`,{cache:"no-store"});
     const data=await response.json().catch(()=>({}));
     if(!response.ok)throw new Error(data.error||"Impossible de charger les villages.");
     const villages=Array.isArray(data.villages)?data.villages:[];
@@ -8918,5 +8918,5 @@ window.loadAdminDashboardOverview = async function(){
 };
 </script>
 
-</body>
+<style id="tester-space-visibility-fix">#dash-tester-space.hidden{display:none!important}</style>\n</body>
 </html>
