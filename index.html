@@ -4914,6 +4914,10 @@ body.halloween-accueil .home-hero{
 
       <div id="admin-adventures-view" class="admin-subview" hidden>
         <div class="admin-adventure-hero"><div class="hero-symbol">🗺️</div><div><div class="admin-kicker" style="color:#f0d27b">ATELIER DE CRÉATION</div><h3>Aventures & Énigmes</h3><p>Crée, organise et prépare tes parcours avant leur publication.</p></div></div>
+        <section id="admin-gps-test-panel" hidden style="display:none;align-items:center;gap:14px;flex-wrap:wrap;padding:13px 16px;margin:0 0 14px;border:1px solid #d9bd6b;border-radius:13px;background:linear-gradient(100deg,#fff8e5,#f4edda)">
+          <div style="font-size:27px">🧪</div><div style="flex:1;min-width:220px"><strong style="display:block;color:#0b5033">Mode test GPS — administration uniquement</strong><small id="admin-gps-test-status" style="color:#665d4b">Désactivé. Active-le pour simuler les arrivées depuis ton PC, sans te déplacer.</small></div>
+          <button type="button" class="admin-secondary-btn" id="admin-gps-test-toggle" onclick="window.toggleAdminGpsTestMode()">Activer le mode test</button>
+        </section>
         <div class="admin-adventure-tabs" role="tablist" aria-label="Filtres des aventures">
           <button type="button" class="admin-adventure-tab" data-adventure-filter="all" aria-selected="true">🗺️ Aventures</button>
           <button type="button" class="admin-adventure-tab" data-adventure-filter="riddles" aria-selected="false">🧩 Énigmes</button>
@@ -4950,7 +4954,7 @@ body.halloween-accueil .home-hero{
             <label>Titre de l’aventure<input id="admin-adventure-edit-title" required maxlength="150" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></label>
             <label>Village<input id="admin-adventure-edit-village" required maxlength="150" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></label>
             <label style="grid-column:1/-1">Description<textarea id="admin-adventure-edit-description" rows="3" maxlength="3000" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></textarea></label>
-            <label>Statut de l’aventure<select id="admin-adventure-edit-status-select" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"><option value="en_creation">En cours de création</option><option value="a_valider">À valider</option><option value="en_attente">En attente</option><option value="en_travaux">En travaux</option><option value="mise_a_jour">Mise à jour</option><option value="en_ligne">En ligne</option><option value="suspendue">Suspendue</option></select></label>
+            <label>Statut de l’aventure<select id="admin-adventure-edit-status-select" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"><option value="brouillon">En cours de création</option><option value="a_valider">À valider</option><option value="en_attente">En attente</option><option value="en_travaux">En travaux</option><option value="mise_a_jour">Mise à jour</option><option value="publie">En ligne</option><option value="suspendu">Suspendue</option></select></label>
             <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer</button><button class="admin-secondary-btn" id="admin-adventure-edit-cancel" type="button">Annuler</button></div>
           </form>
           <p style="font-size:12px;color:#66736a;margin-bottom:0">« Valider » confirme le contenu sans le publier. « Mettre en ligne » reste une action distincte.</p>
@@ -5326,6 +5330,7 @@ window.checkAdminAccess = async function(){
     window.adminCurrentRole = staffInfo.role;
     window.adminCurrentPermissions = Array.isArray(staffInfo.permissions) ? staffInfo.permissions : [];
     window.setAdminAccessGranted(true);
+    window.refreshAdminGpsTestMode?.();
     if (window.adminCurrentRole === "admin") window.startAdminNotificationPolling?.();
     else window.stopAdminNotificationPolling?.();
   }catch(_error){
@@ -5460,8 +5465,31 @@ async function adminOpenSupport(){
     if (status) status.textContent = error.message || "Impossible de charger le support.";
   }
 }
+window.refreshAdminGpsTestMode=function(){
+  const allowed=window.adminAccessGranted===true && window.adminCurrentRole==="admin";
+  const enabled=allowed && localStorage.getItem("modeTestAventure")==="true";
+  const panel=document.getElementById("admin-gps-test-panel");
+  const status=document.getElementById("admin-gps-test-status");
+  const button=document.getElementById("admin-gps-test-toggle");
+  if(panel) { panel.hidden=!allowed; panel.style.display=allowed?"flex":"none"; }
+  if(status) status.textContent=enabled?"Activé : les administrateurs peuvent simuler chaque arrivée GPS depuis leur PC. Les testeurs et joueurs gardent le vrai GPS.":"Désactivé. Active-le pour simuler les arrivées depuis ton PC, sans te déplacer.";
+  if(button) button.textContent=enabled?"Désactiver le mode test":"Activer le mode test";
+};
+window.toggleAdminGpsTestMode=function(){
+  if(window.adminAccessGranted!==true || window.adminCurrentRole!=="admin") { alert("Cette option est réservée aux administrateurs."); return; }
+  if(localStorage.getItem("modeTestAventure")==="true") localStorage.removeItem("modeTestAventure");
+  else localStorage.setItem("modeTestAventure","true");
+  window.refreshAdminGpsTestMode();
+  if(typeof adminRenderAdventureList==="function") adminRenderAdventureList();
+};
+window.adminPreviewAdventure=async function(id){
+  if(window.adminAccessGranted!==true || window.adminCurrentRole!=="admin" || localStorage.getItem("modeTestAventure")!=="true") { alert("Active d’abord le mode test GPS réservé à l’administration."); return; }
+  showDashSection("dash-adventures");
+  await openPlayerAdventure(id,false);
+};
 async function adminOpenAdventures(){
   adminSetView("admin-adventures-view","Aventures & énigmes");
+  window.refreshAdminGpsTestMode?.();
   await window.adminLoadAdventures();
 }
 let adminPlayersCache=[];
@@ -6320,7 +6348,7 @@ window.adminLoadVillageLevels = async function(){
 const levelsCustomForm=document.getElementById("levels-custom-form");if(levelsCustomForm)levelsCustomForm.addEventListener("submit",async e=>{e.preventDefault();const village=document.getElementById("admin-level-village").value,status=document.getElementById("admin-levels-status"),name=document.getElementById("levels-custom-name").value.trim(),key=adminLevelSlug(name);if(!village){status.textContent="Choisis d’abord un village.";return;}if(!key){status.textContent="Nom de niveau invalide.";return;}if(adminLevelCache.some(x=>x.level_key===key)){status.textContent="Ce niveau existe déjà pour ce village.";return;}const payload={village_slug:village,level_key:key,display_name:name,riddle_count:Number(document.getElementById("levels-custom-riddles").value),star_count:Number(document.getElementById("levels-custom-stars").value),access_type:document.getElementById("levels-custom-access").value,price_eur:Number(document.getElementById("levels-custom-price").value),status:document.getElementById("levels-custom-status").value,sort_order:adminLevelCache.length};try{await adminApi("/api/admin/village-levels",{method:"PUT",body:JSON.stringify(payload)});levelsCustomForm.reset();document.getElementById("levels-custom-riddles").value=10;document.getElementById("levels-custom-stars").value=10;document.getElementById("levels-custom-price").value="1.99";status.textContent="Niveau personnalisé ajouté.";await window.adminLoadVillageLevels();}catch(err){status.textContent=err.message||"Impossible d’ajouter le niveau.";}});
 
 window.adminSelectedAdventureId = null;
-const ADVENTURE_STATUS_LABELS={en_creation:"En cours de création",a_valider:"À valider",en_attente:"En attente",en_travaux:"En travaux",mise_a_jour:"Mise à jour",en_ligne:"En ligne",suspendue:"Suspendue"};
+const ADVENTURE_STATUS_LABELS={brouillon:"En cours de création",a_valider:"À valider",en_attente:"En attente",en_travaux:"En travaux",mise_a_jour:"Mise à jour",publie:"En ligne",suspendu:"Suspendue"};
 let adminAdventureCache=[];
 let adminAdventureCurrentFilter="all";
 function adminAdventureStatusPill(a){
@@ -6332,7 +6360,7 @@ function adminAdventureMatchesFilter(a,filter){
   if(filter==="drafts")return !a.is_published&&!a.is_validated;
   if(filter==="validation")return !a.is_validated&&!a.is_published && ["a_valider","en_attente"].includes(a.status);
   if(filter==="online")return !!a.is_published;
-  if(filter==="archives")return a.status==="suspendue";
+  if(filter==="archives")return a.status==="suspendu";
   return true;
 }
 function adminRenderAdventureList(){
@@ -6349,6 +6377,7 @@ function adminRenderAdventureList(){
     const actions=document.createElement("div");actions.className="admin-adventure-actions";
     const make=(icon,label,fn,disabled=false)=>{const b=document.createElement("button");b.type="button";b.disabled=disabled;const i=document.createElement("span");i.textContent=icon;b.append(i,document.createTextNode(label));b.addEventListener("click",fn);return b;};
     actions.append(make("✏️","Modifier",()=>window.adminEditAdventure(a)),make("🧩","Gérer les énigmes",()=>window.adminLoadAdventureSteps(a.id,a.title)),make("☑","Valider",()=>window.adminAdventureAction(a.id,"validate"),!!a.is_validated),make("🌐","Mettre en ligne",()=>window.adminAdventureAction(a.id,"publish"),!!a.is_published||!a.is_validated));
+    if(window.adminAccessGranted===true && window.adminCurrentRole==="admin" && localStorage.getItem("modeTestAventure")==="true") actions.append(make("🧪","Tester",()=>window.adminPreviewAdventure(a.id)));
     const more=make("•••","Plus",()=>{
       const existing=actions.querySelector(".admin-adventure-more-menu");
       if(existing){existing.remove();return;}
@@ -6380,7 +6409,7 @@ window.adminEditAdventure=function(a){
   document.getElementById("admin-adventure-edit-title").value=a.title||"";
   document.getElementById("admin-adventure-edit-village").value=a.village||"";
   document.getElementById("admin-adventure-edit-description").value=a.description||"";
-  document.getElementById("admin-adventure-edit-status-select").value=ADVENTURE_STATUS_LABELS[a.status]?a.status:"en_creation";
+  document.getElementById("admin-adventure-edit-status-select").value=ADVENTURE_STATUS_LABELS[a.status]?a.status:"brouillon";
   document.getElementById("admin-adventure-edit-status-select").dataset.validated=String(!!a.is_validated);
   document.getElementById("admin-adventure-edit-status-select").dataset.published=String(!!a.is_published);
   document.getElementById("admin-adventure-edit-status-select").dataset.villageSlug=a.village_slug||"";
@@ -7098,7 +7127,7 @@ async function playerApi(path, options = {}) {
   const token = await getAdminBearerToken();
   const response = await fetch(`${API_BASE}${path}`, {
     ...options,
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json', ...(options.headers || {}) }
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json', 'X-Admin-Test-Mode': (window.adminAccessGranted===true && window.adminCurrentRole==='admin' && localStorage.getItem("modeTestAventure")==="true") ? 'true' : 'false', ...(options.headers || {}) }
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
@@ -7143,42 +7172,70 @@ async function openPlayerAdventure(id, testerMode = false) {
     ]);
     document.getElementById('player-adventure-title').textContent = data.adventure.title;
     document.getElementById('player-adventure-progress').textContent = `⭐ ${progress.stars_earned} / ${progress.total_stars} étoiles · ${progress.validated_steps} / ${progress.total_steps} étapes validées`;
-    if(testerMode && progress.completed){
-      try{
-        const timerResult=await profileApi("/api/testers/timer/finish",{method:"POST",body:JSON.stringify({adventure_id:id})});
-        const report=timerResult.report||timerResult.session?.report_snapshot;
-        const reportField=document.getElementById("tester-level-review-report");
-        if(report && reportField && !reportField.value.trim()) reportField.value=testerAutomaticReport(report);
-        const reportNote=document.createElement("p");reportNote.style.cssText="padding:11px;margin:10px 0;background:#f1ead6;border-left:3px solid #d7ad45;border-radius:7px;line-height:1.5";
-        reportNote.textContent=report?`⏱️ Test terminé en ${formatTesterDuration(report.duration_seconds)}. Le rapport automatique est prêt dans ton espace testeur.`:"Ton parcours est terminé. Tu peux préparer ton bilan dans ton espace testeur.";
-        document.getElementById("player-adventure-progress").after(reportNote);
-      }catch(timerError){
-        const timerNote=document.createElement("p");timerNote.style.cssText="color:#8a4b22;font-size:13px";
-        timerNote.textContent=timerError.message||"Le rapport automatique n’a pas pu être enregistré.";
-        document.getElementById("player-adventure-progress").after(timerNote);
-      }
-    }
-    stepsBox.innerHTML = '';
-    data.steps.forEach(step => {
-      const article = document.createElement('article'); article.className = 'feature'; article.style.margin = '12px 0';
+    stepsBox.replaceChildren();
+    const steps = Array.isArray(data.steps) ? data.steps : [];
+    steps.forEach(step => {
+      const article = document.createElement('article'); article.className = 'feature'; article.style.cssText = 'margin:12px 0;padding:16px;border:1px solid #dfc783;border-radius:14px;background:#fffaf0';
       const heading = document.createElement('h4'); heading.textContent = `Étape ${step.step_number} — ${step.place_name}`; article.appendChild(heading);
-      const state = document.createElement('p'); state.textContent = step.validated ? '✅ Arrivée validée' : '📍 Rends-toi sur place pour découvrir l’énigme.'; article.appendChild(state);
-      if (step.validated) {
-        const riddle = document.createElement('p'); riddle.textContent = step.riddle || 'Aucune énigme renseignée.'; article.appendChild(riddle);
-        if (step.hint) { const hint = document.createElement('p'); hint.textContent = `Indice : ${step.hint}`; article.appendChild(hint); }
-      } else {
-        const button = document.createElement('button'); button.type = 'button'; button.className = 'small-btn'; button.textContent = '📍 Valider mon arrivée';
-        button.addEventListener('click', () => validatePlayerGps(id, step.id)); article.appendChild(button);
+      if (!step.unlocked) {
+        const locked = document.createElement('p'); locked.textContent = '🔒 Ce lieu sera débloqué après la bonne réponse à l’énigme précédente.'; article.appendChild(locked);
+      } else if (step.show_target) {
+        const note = document.createElement('p'); note.textContent = step.step_number === 1 ? '📍 Point de départ : rends-toi à ce lieu et valide ton arrivée pour découvrir la première énigme.' : '🧭 Bravo ! Le prochain lieu est débloqué. Rends-toi sur place pour ouvrir la prochaine énigme.'; article.appendChild(note);
+        if (step.latitude != null && step.longitude != null) {
+          const map = document.createElement('iframe'); map.title = `Carte pour rejoindre ${step.place_name}`; map.loading = 'lazy'; map.width = '100%'; map.height = '230'; map.style.cssText = 'border:0;border-radius:12px;margin:8px 0';
+          const lat = Number(step.latitude), lon = Number(step.longitude);
+          map.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lon-0.004}%2C${lat-0.003}%2C${lon+0.004}%2C${lat+0.003}&layer=mapnik&marker=${lat}%2C${lon}`;
+          article.appendChild(map);
+          const mapLink = document.createElement('a'); mapLink.href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=18/${lat}/${lon}`; mapLink.target = '_blank'; mapLink.rel = 'noopener noreferrer'; mapLink.textContent = 'Ouvrir l’itinéraire sur la carte ↗'; mapLink.style.cssText = 'display:inline-block;margin:4px 0 10px;color:#12613e;font-weight:700'; article.appendChild(mapLink);
+        } else {
+          const missing = document.createElement('p'); missing.textContent = '⚠️ Le point GPS de ce lieu n’a pas encore été renseigné par l’administration.'; article.appendChild(missing);
+        }
+        const gps = document.createElement('button'); gps.type = 'button'; gps.className = 'small-btn'; gps.textContent = '📍 Valider ma position'; gps.addEventListener('click', () => validatePlayerGps(id, step.id)); article.appendChild(gps);
+        if(window.adminAccessGranted===true && window.adminCurrentRole==='admin' && localStorage.getItem("modeTestAventure")==="true") {
+          const testGps=document.createElement('button'); testGps.type='button'; testGps.className='small-btn'; testGps.style.cssText='margin-left:8px;background:#fff2cf;border-color:#c99a32;color:#65480b'; testGps.textContent='🧪 Simuler l’arrivée (admin)';
+          testGps.addEventListener('click',async()=>{testGps.disabled=true;testGps.textContent='Simulation…';try{await playerApi(`/api/admin/adventures/${id}/steps/${step.id}/simulate-gps`,{method:'POST',body:JSON.stringify({})});await openPlayerAdventure(id,window.currentAdventureIsTester);}catch(error){alert(error.message||'Impossible de simuler cette arrivée.');testGps.disabled=false;testGps.textContent='🧪 Simuler l’arrivée (admin)';}});
+          article.appendChild(testGps);
+        }
+      } else if (step.show_riddle) {
+        const arrived = document.createElement('p'); arrived.textContent = '✅ Arrivée confirmée ! Voici ton énigme :'; article.appendChild(arrived);
+        const riddle = document.createElement('p'); riddle.textContent = step.riddle || 'Aucune énigme renseignée pour cette étape.'; riddle.style.cssText = 'font-size:16px;font-weight:700;line-height:1.5'; article.appendChild(riddle);
+        if (step.hint) { const hint = document.createElement('p'); hint.textContent = `💡 Indice : ${step.hint}`; article.appendChild(hint); }
+        if (step.answered) {
+          const done = document.createElement('p'); done.textContent = '🌟 Bonne réponse ! Le prochain lieu est débloqué.'; done.style.cssText = 'color:#12613e;font-weight:700'; article.appendChild(done);
+        } else {
+          const label = document.createElement('label'); label.textContent = 'Ta réponse'; label.style.cssText = 'display:block;font-weight:700;margin:10px 0 5px'; article.appendChild(label);
+          const input = document.createElement('input'); input.type = 'text'; input.placeholder = 'Écris ta réponse ici…'; input.autocomplete = 'off'; input.style.cssText = 'width:100%;padding:12px;border:1px solid #d8c38a;border-radius:9px'; article.appendChild(input);
+          const answerBtn = document.createElement('button'); answerBtn.type = 'button'; answerBtn.className = 'small-btn'; answerBtn.textContent = 'Valider ma réponse'; answerBtn.style.marginTop = '8px';
+          const feedback = document.createElement('p'); feedback.setAttribute('role','status'); feedback.style.cssText = 'margin:8px 0 0;font-weight:700';
+          answerBtn.addEventListener('click', async () => {
+            answerBtn.disabled = true; feedback.textContent = 'Vérification de ta réponse…';
+            try {
+              const result = await playerApi(`/api/adventures/${id}/steps/${step.id}/answer`, { method:'POST', body:JSON.stringify({answer:input.value}) });
+              feedback.textContent = result.message || 'Bonne réponse !'; feedback.style.color = '#12613e';
+              await openPlayerAdventure(id, window.currentAdventureIsTester);
+            } catch (error) { feedback.textContent = error.message || 'Réponse incorrecte. Réessaie.'; feedback.style.color = '#a33'; answerBtn.disabled = false; }
+          });
+          article.append(input, answerBtn, feedback);
+        }
       }
       stepsBox.appendChild(article);
     });
+    if (!steps.length) { const empty = document.createElement('p'); empty.textContent = 'Les étapes de cette aventure sont en préparation.'; stepsBox.appendChild(empty); }
+    if(testerMode && progress.completed){
+      try{
+        const timerResult=await profileApi('/api/testers/timer/finish',{method:'POST',body:JSON.stringify({adventure_id:id})});
+        const report=timerResult.report||timerResult.session?.report_snapshot;
+        const reportField=document.getElementById('tester-level-review-report');
+        if(report && reportField && !reportField.value.trim()) reportField.value=testerAutomaticReport(report);
+      }catch(timerError){ console.warn('Tester timer finish:',timerError.message); }
+    }
     list.style.display = 'none'; detail.style.display = 'block'; status.textContent = '';
   } catch (error) { status.textContent = error.message || 'Impossible d’ouvrir cette aventure.'; }
 }
 
 async function validatePlayerGps(adventureId, stepId) {
   if (!navigator.geolocation) { alert('La géolocalisation n’est pas disponible sur cet appareil.'); return; }
-  const button = [...document.querySelectorAll('#player-adventure-steps button')].find(b => b.textContent.includes('Valider mon arrivée'));
+  const button = [...document.querySelectorAll('#player-adventure-steps button')].find(b => b.textContent.includes('Valider ma position'));
   if (button) { button.disabled = true; button.textContent = 'Localisation en cours…'; }
   navigator.geolocation.getCurrentPosition(async position => {
     try {
@@ -7186,10 +7243,10 @@ async function validatePlayerGps(adventureId, stepId) {
         method: 'POST', body: JSON.stringify({ latitude: position.coords.latitude, longitude: position.coords.longitude, accuracy: position.coords.accuracy })
       });
       await openPlayerAdventure(adventureId, window.currentAdventureIsTester);
-    } catch (error) { alert(error.message || 'La validation GPS a échoué.'); if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; } }
+    } catch (error) { alert(error.message || 'La validation GPS a échoué.'); if (button) { button.disabled = false; button.textContent = '📍 Valider ma position'; } }
   }, error => {
     alert(error.code === 1 ? 'Autorise la géolocalisation pour valider ton arrivée.' : 'Position GPS indisponible. Réessaie dehors.');
-    if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; }
+    if (button) { button.disabled = false; button.textContent = '📍 Valider ma position'; }
   }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
 }
 
@@ -8892,7 +8949,7 @@ window.loadAdminDashboardOverview = async function(){
 
   const pendingTesters=applications.filter(x=>x.status==="pending");
   const pendingVillages=villages.filter(x=>["pending_confirmation","en_attente","a_valider"].includes(String(x.status||"").toLowerCase()));
-  const pendingAdventures=adventures.filter(x=>["a_valider","en_attente","pending","pending_validation"].includes(String(x.status||"").toLowerCase()) || (x.is_validated===false && x.status!=="en_creation"));
+  const pendingAdventures=adventures.filter(x=>["a_valider","en_attente","pending","pending_validation"].includes(String(x.status||"").toLowerCase()) || (x.is_validated===false && x.status!=="brouillon"));
   const pendingSupport=supportRequests.filter(x=>["en_attente","pending","nouveau"].includes(String(x.status||"").toLowerCase()));
   const pendingTotal=pendingTesters.length+pendingVillages.length+pendingAdventures.length+pendingSupport.length;
   put("dash-total-pending",pendingTotal);
@@ -8905,12 +8962,12 @@ window.loadAdminDashboardOverview = async function(){
 
   // Aventures : répartition par statut réel retourné par l'API.
   const adventureGroups=[
-    {key:"en_ligne",label:"Publiées",color:"#20a65b",icon:"🟢"},
+    {key:"publie",label:"Publiées",color:"#20a65b",icon:"🟢"},
     {key:"en_travaux",label:"En travaux",color:"#4b8ee8",icon:"🔵"},
     {key:"a_valider",label:"À valider",color:"#f0b323",icon:"🟡"},
-    {key:"suspendue",label:"Suspendues",color:"#e95861",icon:"🔴"}
+    {key:"suspendu",label:"Suspendues",color:"#e95861",icon:"🔴"}
   ];
-  const adventureCounts=adventureGroups.map(g=>({...g,count:adventures.filter(a=>String(a.status||"").toLowerCase()===g.key || (g.key==="en_ligne" && a.is_published===true)).length}));
+  const adventureCounts=adventureGroups.map(g=>({...g,count:adventures.filter(a=>String(a.status||"").toLowerCase()===g.key || (g.key==="publie" && a.is_published===true)).length}));
   const knownAdventureCount=adventureCounts.reduce((n,g)=>n+g.count,0);
   const otherAdventureCount=Math.max(0,adventures.length-knownAdventureCount);
   if(otherAdventureCount)adventureCounts.push({label:"Autres statuts",count:otherAdventureCount,color:"#9b9b8d",icon:"⚪"});
@@ -8933,7 +8990,7 @@ window.loadAdminDashboardOverview = async function(){
     {keys:["available","en_ligne"],label:"Actifs",icon:"✅"},
     {keys:["pending_confirmation","en_attente","a_valider"],label:"En attente",icon:"🕒"},
     {keys:["preparing","en_travaux"],label:"En préparation",icon:"🔧"},
-    {keys:["inactive","suspendu","suspendue"],label:"Suspendus / inactifs",icon:"⏸️"}
+    {keys:["inactive","suspendu"],label:"Suspendus / inactifs",icon:"⏸️"}
   ];
   const villageList=document.getElementById("dash-village-status-list");
   if(villageList){
