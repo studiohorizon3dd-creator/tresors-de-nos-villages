@@ -2958,6 +2958,7 @@ body.halloween-accueil .home-hero{
           <div class="admin-category-links">
             <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenTeam()"><span>👥</span> Gestion de l'équipe</button>
+            <button class="admin-nav-item" id="team-by-village-nav-item" type="button" onclick="adminOpenTeamByVillage()"><span>🏘️</span> Équipe par village</button>
             <button class="admin-nav-item" id="team-space-nav-item" type="button" onclick="adminOpenTeamSpace()"><span>🛡️</span> Vie de l'équipe</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
@@ -4358,6 +4359,12 @@ body.halloween-accueil .home-hero{
         </div>
       </div>
 
+      <div id="admin-team-by-village-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>🏘️ Équipe par village</h3><p>Vue d'ensemble réservée aux administrateurs : retrouve les modérateurs responsables de chaque village.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTeamByVillage()">↻ Actualiser</button></div>
+        <p id="team-by-village-status" class="status" role="status" aria-live="polite">Chargement de l'équipe…</p>
+        <div id="team-by-village-list" class="admin-recent-list"><p>Les villages et leurs modérateurs apparaîtront ici.</p></div>
+      </div>
+
       <div id="admin-team-space-view" class="admin-subview" hidden>
         <div class="admin-section-heading"><div><h3>🛡️ Vie de l'équipe</h3><p>Espace privé réservé aux administrateurs et aux modérateurs autorisés.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTeamSpace()">↻ Actualiser</button></div>
         <section class="feature" style="padding:16px;margin:12px 0"><h4>🏘️ Équipe par village</h4><p style="font-size:13px;color:#687267">Retrouve les modérateurs affectés à chaque village.</p><div id="team-space-villages">Chargement…</div></section>
@@ -4809,13 +4816,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 const adminSetView = window.adminSetView = function(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view","admin-inbox-view","admin-team-view","admin-team-space-view","admin-rewards-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view","admin-inbox-view","admin-team-view","admin-team-space-view","admin-team-by-village-view","admin-rewards-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenCommunication":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenCommunication":view==="admin-rewards-view"?"adminOpenRewards":view==="admin-team-space-view"?"adminOpenTeamSpace":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenCommunication":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenCommunication":view==="admin-rewards-view"?"adminOpenRewards":view==="admin-team-space-view"?"adminOpenTeamSpace":view==="admin-team-by-village-view"?"adminOpenTeamByVillage":"adminComingSoon"));
   if(active) active.classList.add("active");
 };
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -6167,6 +6174,47 @@ document.getElementById("admin-team-form")?.addEventListener("submit",async even
   catch(error){status.textContent=error.message||"Impossible d'ajouter le modérateur.";}
 });
 
+window.adminOpenTeamByVillage = async function(){
+  if(window.adminCurrentRole!=="admin"){alert("Cette rubrique est réservée aux administrateurs.");return;}
+  adminSetView("admin-team-by-village-view","Équipe par village");
+  await window.adminLoadTeamByVillage();
+};
+window.adminLoadTeamByVillage = async function(){
+  const status=document.getElementById("team-by-village-status");
+  const root=document.getElementById("team-by-village-list");
+  if(!status||!root)return;
+  status.textContent="Chargement des villages et des modérateurs…";
+  root.replaceChildren();
+  try{
+    const [data,villageData]=await Promise.all([adminApi("/api/team-space/overview"),adminApi("/api/admin/villages")]);
+    const villageNames=new Map((villageData.villages||[]).map(v=>[v.slug,v.name]));
+    const groups=new Map();
+    (data.members||[]).filter(m=>m.role==="moderator"&&m.status==="active").forEach(m=>{
+      (Array.isArray(m.allowed_villages)?m.allowed_villages:[]).forEach(slug=>{
+        if(!groups.has(slug))groups.set(slug,[]);
+        groups.get(slug).push(m);
+      });
+    });
+    if(!groups.size){const empty=document.createElement("div");empty.className="feature";empty.style.padding="16px";empty.textContent="Aucun village n'est encore attribué à un modérateur actif. Va dans Gestion de l'équipe pour attribuer un village.";root.append(empty);status.textContent="Aucune attribution pour le moment.";return;}
+    [...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0],"fr")).forEach(([slug,members])=>{
+      const card=document.createElement("section");card.className="feature";card.style.cssText="padding:16px;margin:10px 0;text-align:left";
+      const heading=document.createElement("h3");heading.style.margin="0 0 10px";heading.textContent="🏘️ "+(villageNames.get(slug)||slug.replace(/[-_]/g," ").replace(/\b\p{L}/gu,c=>c.toLocaleUpperCase("fr")));card.append(heading);
+      members.forEach(member=>{
+        const row=document.createElement("div");row.style.cssText="padding:10px 0;border-top:1px solid #e5dfd0";
+        const name=document.createElement("strong");name.textContent="🛡️ "+(member.name||"Modérateur");
+        const email=document.createElement("div");email.style.cssText="font-size:12px;color:#687267";email.textContent=member.email;
+        const perms=document.createElement("div");perms.style.cssText="font-size:13px;margin-top:5px";
+        const labels={support:"Messages et support",team_communication:"Communication et missions de l'équipe",player_reports:"Signalement des joueurs"};
+        const active=(member.permissions||[]).filter(x=>labels[x]).map(x=>labels[x]);
+        perms.textContent="Missions : "+(active.length?active.join(" · "):"Aucune mission attribuée");
+        row.append(name,email,perms);card.append(row);
+      });
+      root.append(card);
+    });
+    status.textContent=groups.size+" village(s) avec une équipe attribuée.";
+  }catch(error){status.textContent=error.message||"Impossible de charger l'équipe par village.";}
+};
+
 window.adminOpenTeamSpace = async function(){
   const perms=window.adminCurrentPermissions||[];
   if(window.adminCurrentRole!=="admin"&&!perms.some(p=>["team_communication","player_reports"].includes(p))){alert("Cette rubrique ne t'a pas été attribuée par l'administration.");return;}
@@ -6279,9 +6327,11 @@ window.setAdminAccessGranted = function(value){
     const action = button.getAttribute("onclick") || "";
     const communicationOnly = action.includes("adminOpenCommunication");
     const teamSpaceItem = button.id === "team-space-nav-item";
+    const teamByVillageItem = button.id === "team-by-village-nav-item";
     const perms = window.adminCurrentPermissions || [];
     const canTeamSpace = isAdmin || (perms.includes("team_communication") || perms.includes("player_reports"));
     const visible = isModerator ? (communicationOnly || (teamSpaceItem && canTeamSpace)) : isAdmin;
+    if(teamByVillageItem && !isAdmin) { button.hidden=true; button.style.setProperty("display","none","important"); return; }
     button.hidden = !visible;
     button.style.setProperty("display", visible ? "" : "none", "important");
     if (isModerator && communicationOnly) {
