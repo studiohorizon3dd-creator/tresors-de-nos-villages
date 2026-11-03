@@ -1782,6 +1782,27 @@ body.halloween-accueil .home-hero{
 @media(max-width:700px){.mailbox-hero{padding:19px}.mailbox-hero-icon{font-size:40px}.mailbox-admin-grid{grid-template-columns:1fr}.mailbox-toolbar{align-items:flex-start}.mailbox-message-head{display:block}.mailbox-history-row{grid-template-columns:1fr}.mailbox-history-row small{grid-column:1}}
 </style>
 
+
+<style>
+#recompenses-public{padding:38px clamp(16px,3vw,42px);scroll-margin-top:20px;background:linear-gradient(180deg,#f7f0df,#fffaf0)}
+#recompenses-public .public-rewards-panel{max-width:1200px;margin:0 auto;padding:22px;background:#fffdf6;border:1px solid #dfc995;border-radius:20px;box-shadow:0 8px 24px #26351c12}
+#recompenses-public .public-rewards-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#recompenses-public .public-rewards-panel-heading h3,#recompenses-public .public-rewards-lists h3{margin:0 0 14px;color:#123d2b;font:700 21px Georgia,serif}
+#recompenses-public .public-rewards-panel-heading span{padding:7px 12px;border-radius:20px;background:#eaf2e7;color:#155638;font-size:12px;font-weight:700}
+#recompenses-public .public-rewards-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;margin:12px 0 24px}
+#recompenses-public .public-podium-card{min-height:126px;padding:17px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(145deg,#fff8df,#f1dfaa);border:1px solid #d8bd73;border-radius:15px;color:#173d2a}
+#recompenses-public .public-podium-card.first{min-height:158px;background:linear-gradient(145deg,#ffedab,#e9c45e);border:2px solid #c99518}
+#recompenses-public .public-podium-medal{font-size:29px}#recompenses-public .public-podium-card strong{margin:6px 0;font:700 17px Georgia,serif}#recompenses-public .public-podium-card small{color:#5d624d;font-size:12px}
+#recompenses-public .public-rewards-lists{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+#recompenses-public .public-rewards-lists>div{min-width:0;padding:16px;border:1px solid #eadbb7;border-radius:14px;background:#fffaf0}
+#recompenses-public .public-ranking-row,#recompenses-public .public-reward-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eee3c9;font-size:14px}
+#recompenses-public .public-ranking-row:last-child,#recompenses-public .public-reward-row:last-child{border-bottom:0}
+#recompenses-public .public-ranking-row strong{min-width:24px;color:#986d13}#recompenses-public .public-ranking-row span:last-child{margin-left:auto;font-size:12px;color:#657060}
+#recompenses-public .public-reward-row>span:first-child{font-size:23px}#recompenses-public .public-reward-row small{display:block;color:#697465;font-size:11px;margin-top:3px}
+#recompenses-public .public-rewards-note{text-align:center;color:#6b715f;font-size:12px;margin:18px 0 0}
+@media(max-width:700px){#recompenses-public .public-rewards-podium{grid-template-columns:1fr;align-items:stretch}#recompenses-public .public-podium-card.first{min-height:130px;order:-1}#recompenses-public .public-rewards-lists{grid-template-columns:1fr}#recompenses-public .public-rewards-panel{padding:14px}}
+</style>
+
 </head>
 <body>
 
@@ -1807,6 +1828,7 @@ body.halloween-accueil .home-hero{
         <button class="premium-nav-link" type="button" onclick="goTo('villages-public')">▤ <span>Les aventures</span></button>
         <button class="premium-nav-link" type="button" onclick="goTo('formules-public')">◇ <span>Les formules</span></button>
         <button class="premium-nav-link" type="button" onclick="goTo('partenaires-public')">♧ <span>Partenaires</span></button>
+        <button class="premium-nav-link" type="button" onclick="goTo('recompenses-public')">🏆 <span>Classement</span></button>
       </div>
       <div class="premium-account-links">
         <button class="premium-login" type="button" onclick="showAccount()">♙ &nbsp;Se connecter</button>
@@ -1847,6 +1869,19 @@ body.halloween-accueil .home-hero{
     </div>
 
     <main class="premium-main">
+      <section class="public-rewards-section" id="recompenses-public">
+        <div class="premium-section-heading"><span></span><div><h2>🏆 Les récompenses des explorateurs</h2><p>Découvrez les explorateurs qui font briller nos villages et les récompenses remportées.</p></div><span></span></div>
+        <div class="public-rewards-panel">
+          <div class="public-rewards-panel-heading"><h3>🥇 Le podium des explorateurs</h3><span>Classement public</span></div>
+          <div id="public-rewards-podium" class="public-rewards-podium"><p>Chargement du classement…</p></div>
+          <div class="public-rewards-lists">
+            <div><h3>📊 Classement général</h3><div id="public-rewards-ranking"><p>Chargement…</p></div></div>
+            <div><h3>🎁 Dernières récompenses</h3><div id="public-rewards-history"><p>Chargement…</p></div></div>
+          </div>
+          <p class="public-rewards-note">Seuls les explorateurs ayant choisi de participer au classement apparaissent publiquement. Aucune adresse e-mail n’est affichée.</p>
+        </div>
+      </section>
+
       <section class="home-formulas premium-formulas" id="formules-public">
         <div class="premium-section-heading">
           <span></span>
@@ -7815,5 +7850,37 @@ function testerQuickFeedback(type){
   if(message){message.focus();}
 }
 </script>
+
+<script>
+async function loadPublicExplorerRewards(){
+  const podium=document.getElementById('public-rewards-podium');
+  const ranking=document.getElementById('public-rewards-ranking');
+  const history=document.getElementById('public-rewards-history');
+  if(!podium||!ranking||!history)return;
+  try{
+    const response=await fetch(`${API_BASE}/api/public/rewards`,{headers:{Accept:'application/json'},cache:'no-store'});
+    const data=await response.json();
+    if(!response.ok)throw new Error(data.error||'Chargement impossible.');
+    const players=Array.isArray(data.leaderboard)?data.leaderboard:[];
+    podium.replaceChildren();
+    if(!players.length){const p=document.createElement('p');p.textContent='Le podium apparaîtra dès que des explorateurs participeront au classement.';podium.append(p);}
+    else players.slice(0,3).forEach((player,index)=>{
+      const card=document.createElement('article');card.className='public-podium-card'+(index===0?' first':'');
+      const medal=document.createElement('span');medal.className='public-podium-medal';medal.textContent=['🥇','🥈','🥉'][index];
+      const name=document.createElement('strong');name.textContent=player.pseudo||'Explorateur';
+      const count=document.createElement('small');count.textContent=`${Number(player.villages_count)||0} aventure(s) terminée(s)`;
+      card.append(medal,name,count);podium.append(card);
+    });
+    ranking.replaceChildren();
+    if(!players.length){const p=document.createElement('p');p.textContent='Aucun explorateur classé pour le moment.';ranking.append(p);}
+    else players.forEach((player,index)=>{const row=document.createElement('div');row.className='public-ranking-row';const rank=document.createElement('strong');rank.textContent=`${index+1}.`;const name=document.createElement('span');name.textContent=player.pseudo||'Explorateur';const count=document.createElement('span');count.textContent=`${Number(player.villages_count)||0} aventure(s)`;row.append(rank,name,count);ranking.append(row);});
+    const rewards=Array.isArray(data.rewards)?data.rewards:[];history.replaceChildren();
+    if(!rewards.length){const p=document.createElement('p');p.textContent='Les premières récompenses apparaîtront ici lorsqu’elles auront été attribuées.';history.append(p);}
+    else rewards.forEach(reward=>{const row=document.createElement('div');row.className='public-reward-row';const icon=document.createElement('span');icon.textContent=reward.icon||'🏅';const copy=document.createElement('div');const title=document.createElement('strong');title.textContent=reward.title||'Récompense';const note=document.createElement('small');const date=reward.created_at?new Date(reward.created_at).toLocaleDateString('fr-FR'):'';note.textContent=`${reward.pseudo||'Explorateur'}${date?' · '+date:''}`;copy.append(title,note);row.append(icon,copy);history.append(row);});
+  }catch(error){for(const box of [podium,ranking,history]){box.replaceChildren();const p=document.createElement('p');p.textContent='Le classement est momentanément indisponible.';box.append(p);}}
+}
+document.addEventListener('DOMContentLoaded',loadPublicExplorerRewards);
+</script>
+
 </body>
 </html>
