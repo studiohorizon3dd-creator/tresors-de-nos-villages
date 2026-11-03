@@ -1710,20 +1710,6 @@ body.halloween-accueil .home-hero{
   #dashboard.admin-mode .admin-category-links{padding:6px}
 }
 
-
-/* Classement général compact */
-.compact-public-ranking{max-width:980px;margin:24px auto;padding:14px 16px;background:#fffdf7;border:1px solid #dfc77f;border-radius:14px;box-shadow:0 4px 13px #263b250c}
-.compact-public-ranking h2{margin:0 0 11px;color:#123d2b;font:700 21px Georgia,serif}
-.compact-ranking-scroll{overflow-x:auto}
-.compact-ranking-table{width:100%;border-collapse:collapse;font:14px Arial,sans-serif}
-.compact-ranking-table th{padding:9px 10px;background:#07512f;color:#fff8e5;text-align:left;white-space:nowrap}
-.compact-ranking-table th:first-child{border-radius:7px 0 0 7px}.compact-ranking-table th:last-child{border-radius:0 7px 7px 0}
-.compact-ranking-table td{padding:9px 10px;border-bottom:1px solid #eee4cf;color:#24392d}
-.compact-ranking-table tbody tr:nth-child(-n+3) td:first-child{font-weight:800;color:#9b741b}
-.compact-ranking-note{margin:9px 0 0;text-align:center;color:#687267;font-size:11px}
-#landing .public-rewards-section{padding:4px 18px 18px;background:#f7efdd}
-@media(max-width:600px){.compact-public-ranking{padding:11px 9px}.compact-ranking-table{font-size:12px}.compact-ranking-table th,.compact-ranking-table td{padding:8px 6px}}
-
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1797,24 +1783,19 @@ body.halloween-accueil .home-hero{
 </style>
 
 
+
 <style>
-#recompenses-public{padding:38px clamp(16px,3vw,42px);scroll-margin-top:20px;background:linear-gradient(180deg,#f7f0df,#fffaf0)}
-#recompenses-public .public-rewards-panel{max-width:1200px;margin:0 auto;padding:22px;background:#fffdf6;border:1px solid #dfc995;border-radius:20px;box-shadow:0 8px 24px #26351c12}
-#recompenses-public .public-rewards-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-#recompenses-public .public-rewards-panel-heading h3,#recompenses-public .public-rewards-lists h3{margin:0 0 14px;color:#123d2b;font:700 21px Georgia,serif}
-#recompenses-public .public-rewards-panel-heading span{padding:7px 12px;border-radius:20px;background:#eaf2e7;color:#155638;font-size:12px;font-weight:700}
-#recompenses-public .public-rewards-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end;margin:12px 0 24px}
-#recompenses-public .public-podium-card{min-height:126px;padding:17px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(145deg,#fff8df,#f1dfaa);border:1px solid #d8bd73;border-radius:15px;color:#173d2a}
-#recompenses-public .public-podium-card.first{min-height:158px;background:linear-gradient(145deg,#ffedab,#e9c45e);border:2px solid #c99518}
-#recompenses-public .public-podium-medal{font-size:29px}#recompenses-public .public-podium-card strong{margin:6px 0;font:700 17px Georgia,serif}#recompenses-public .public-podium-card small{color:#5d624d;font-size:12px}
-#recompenses-public .public-rewards-lists{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-#recompenses-public .public-rewards-lists>div{min-width:0;padding:16px;border:1px solid #eadbb7;border-radius:14px;background:#fffaf0}
-#recompenses-public .public-ranking-row,#recompenses-public .public-reward-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eee3c9;font-size:14px}
-#recompenses-public .public-ranking-row:last-child,#recompenses-public .public-reward-row:last-child{border-bottom:0}
-#recompenses-public .public-ranking-row strong{min-width:24px;color:#986d13}#recompenses-public .public-ranking-row span:last-child{margin-left:auto;font-size:12px;color:#657060}
-#recompenses-public .public-reward-row>span:first-child{font-size:23px}#recompenses-public .public-reward-row small{display:block;color:#697465;font-size:11px;margin-top:3px}
-#recompenses-public .public-rewards-note{text-align:center;color:#6b715f;font-size:12px;margin:18px 0 0}
-@media(max-width:700px){#recompenses-public .public-rewards-podium{grid-template-columns:1fr;align-items:stretch}#recompenses-public .public-podium-card.first{min-height:130px;order:-1}#recompenses-public .public-rewards-lists{grid-template-columns:1fr}#recompenses-public .public-rewards-panel{padding:14px}}
+#recompenses-public{padding:24px clamp(16px,3vw,42px);background:linear-gradient(180deg,#f7f0df,#fffaf0)}
+.public-ranking-card{max-width:1050px;margin:0 auto;padding:16px;background:#fffdf7;border:1px solid #dfc995;border-radius:15px;box-shadow:0 5px 16px #26351c10}
+.public-ranking-card h3{margin:0 0 10px;color:#123d2b;font:700 21px Georgia,serif}
+.public-ranking-table{width:100%;border-collapse:collapse;font:13px Arial,sans-serif}
+.public-ranking-table th{padding:10px 9px;text-align:left;background:#07512f;color:#fff8e5}
+.public-ranking-table th:first-child{border-radius:8px 0 0 8px}.public-ranking-table th:last-child{border-radius:0 8px 8px 0}
+.public-ranking-table td{padding:9px;border-bottom:1px solid #eee3c9;color:#24392d}
+.public-ranking-table tbody tr:last-child td{border-bottom:0}.public-ranking-table td:first-child{font-weight:700;color:#987321;width:42px}.public-ranking-table .rank-name{font-weight:700}
+.public-ranking-note{text-align:center;color:#6b715f;font-size:11px;margin:10px 0 0}
+#dash-public-leaderboard{max-width:1100px;margin:0 auto;padding:28px 22px}
+@media(max-width:600px){.public-ranking-card{padding:11px;overflow-x:auto}.public-ranking-table{min-width:520px}.public-ranking-table th,.public-ranking-table td{padding:8px 6px}}
 </style>
 
 </head>
@@ -1883,7 +1864,13 @@ body.halloween-accueil .home-hero{
     </div>
 
     <main class="premium-main">
-      
+      <section class="public-rewards-section" id="recompenses-public">
+        <div class="public-ranking-card">
+          <h3>📊 Classement général</h3>
+          <div id="public-rewards-ranking"><p>Chargement du classement…</p></div>
+          <p class="public-ranking-note">Seuls les explorateurs ayant choisi de participer au classement apparaissent publiquement.</p>
+        </div>
+      </section>
 
       <section class="home-formulas premium-formulas" id="formules-public">
         <div class="premium-section-heading">
@@ -1991,16 +1978,6 @@ body.halloween-accueil .home-hero{
       <p class="section-intro">Mairies, associations et acteurs locaux : construisons ensemble des parcours pour faire découvrir les richesses de vos villages.</p>
       <div class="cta-wrap"><button class="primary-btn" type="button" onclick="document.getElementById('public-town-contact').scrollIntoView({behavior:'smooth',block:'start'})">Nous contacter&nbsp; →</button></div>
     </section>
-<section class="public-rewards-section" id="recompenses-public">
-  <div class="compact-public-ranking">
-    <h2>📊 Classement général</h2>
-    <div class="compact-ranking-scroll"><table class="compact-ranking-table">
-      <thead><tr><th>#</th><th>Explorateur</th><th>Aventures</th><th>Étoiles</th><th>Badges</th></tr></thead>
-      <tbody id="public-rewards-ranking"><tr><td colspan="5">Chargement du classement…</td></tr></tbody>
-    </table></div>
-    <p class="compact-ranking-note">Seuls les explorateurs ayant choisi de participer au classement apparaissent publiquement.</p>
-  </div>
-</section>
 <section class="public-town-contact-section" id="public-town-contact" aria-labelledby="public-town-contact-title">
   <div class="town-hero">
     <div class="town-hero-mark">🤝</div>
@@ -2153,7 +2130,7 @@ body.halloween-accueil .home-hero{
           <button class="nav-btn active" onclick="showDashSection('dash-home')">⌂ &nbsp; Accueil</button>
           <button class="nav-btn" onclick="showDashSection('dash-village-map')">🗺️ &nbsp; Carte des villages</button>
           <button class="nav-btn" onclick="showDashSection('dash-puzzle-map')">🧩 &nbsp; Carte aux pièces mystères</button>
-          <button class="nav-btn" onclick="showDashSection('dash-public-ranking');loadPublicExplorerRewards()">🏆 &nbsp; Classement général</button>
+          <button class="nav-btn" onclick="showDashSection('dash-public-leaderboard');loadPublicExplorerRewards()">🏆 &nbsp; Classement général</button>
         </div>
       </details>
       <details class="nav-category"><summary>MON ESPACE <span class="nav-arrow">⌄</span></summary>
@@ -2799,16 +2776,14 @@ body.halloween-accueil .home-hero{
   <div id="public-updates-list" aria-live="polite"></div>
 </section>
 
-<section class="dash-section hidden" id="dash-public-ranking">
-  <div class="compact-public-ranking">
-    <h2>📊 Classement général</h2>
-    <div class="compact-ranking-scroll"><table class="compact-ranking-table">
-      <thead><tr><th>#</th><th>Explorateur</th><th>Aventures</th><th>Étoiles</th><th>Badges</th></tr></thead>
-      <tbody id="dashboard-public-rewards-ranking"><tr><td colspan="5">Chargement du classement…</td></tr></tbody>
-    </table></div>
-    <p class="compact-ranking-note">Seuls les explorateurs ayant choisi de participer au classement apparaissent publiquement.</p>
+<section class="dash-section hidden" id="dash-public-leaderboard">
+  <div class="public-ranking-card">
+    <h3>📊 Classement général</h3>
+    <div id="explorer-ranking-table"><p>Chargement du classement…</p></div>
+    <p class="public-ranking-note">Seuls les explorateurs ayant choisi de participer au classement apparaissent publiquement.</p>
   </div>
 </section>
+
 <section class="dash-section hidden" id="dash-town-contact">
   <div class="town-hero">
     <div class="town-hero-mark">🤝</div>
@@ -6413,7 +6388,7 @@ function showDashSection(id){
   // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
-  "dash-home", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-public-ranking", "dash-my-puzzle-progress", "dash-badges",
+  "dash-home", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges",
   "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-updates", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
@@ -7877,25 +7852,24 @@ function testerQuickFeedback(type){
 
 <script>
 async function loadPublicExplorerRewards(){
-  const tables=[document.getElementById('public-rewards-ranking'),document.getElementById('dashboard-public-rewards-ranking')].filter(Boolean);
-  if(!tables.length)return;
+  const targets=['public-rewards-ranking','explorer-ranking-table'].map(id=>document.getElementById(id)).filter(Boolean);
+  if(!targets.length)return;
   try{
-    const response=await fetch(`${API_BASE}/api/leaderboard`,{headers:{Accept:'application/json'},cache:'no-store'});
-    const data=await response.json();
+    const response=await fetch(`${API_BASE}/api/public/rewards`,{headers:{Accept:'application/json'},cache:'no-store'});
+    const data=await response.json().catch(()=>({}));
     if(!response.ok)throw new Error(data.error||'Chargement impossible.');
     const players=Array.isArray(data.leaderboard)?data.leaderboard:[];
-    tables.forEach(table=>{
-      table.replaceChildren();
-      if(!players.length){const row=document.createElement('tr'),cell=document.createElement('td');cell.colSpan=5;cell.textContent='Aucun explorateur classé pour le moment.';row.append(cell);table.append(row);return;}
-      players.forEach((player,index)=>{
-        const row=document.createElement('tr');
-        [index+1,player.pseudo||'Explorateur',Number(player.villages_count)||0,'—','—'].forEach(value=>{const cell=document.createElement('td');cell.textContent=String(value);row.append(cell);});
-        table.append(row);
-      });
+    targets.forEach(target=>{
+      target.replaceChildren();
+      const table=document.createElement('table');table.className='public-ranking-table';
+      const thead=document.createElement('thead');const header=document.createElement('tr');
+      ['#','Explorateur','Aventures','Étoiles','Badges'].forEach(label=>{const th=document.createElement('th');th.textContent=label;header.append(th);});
+      thead.append(header);table.append(thead);const tbody=document.createElement('tbody');
+      if(!players.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=5;td.textContent='Aucun explorateur classé pour le moment.';tr.append(td);tbody.append(tr);}
+      else players.forEach((player,index)=>{const tr=document.createElement('tr');const values=[String(index+1),player.pseudo||'Explorateur',String(Number(player.villages_count)||0),'—','—'];values.forEach((value,i)=>{const td=document.createElement('td');td.textContent=value;if(i===1)td.className='rank-name';tr.append(td);});tbody.append(tr);});
+      table.append(tbody);target.append(table);
     });
-  }catch(error){
-    tables.forEach(table=>{table.replaceChildren();const row=document.createElement('tr'),cell=document.createElement('td');cell.colSpan=5;cell.textContent='Le classement est momentanément indisponible.';row.append(cell);table.append(row);});
-  }
+  }catch(error){targets.forEach(target=>{target.replaceChildren();const p=document.createElement('p');p.textContent='Le classement est momentanément indisponible.';target.append(p);});}
 }
 document.addEventListener('DOMContentLoaded',loadPublicExplorerRewards);
 </script>
