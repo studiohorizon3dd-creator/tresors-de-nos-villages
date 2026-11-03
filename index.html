@@ -8485,9 +8485,9 @@ window.loadAdminDashboardOverview = async function(){
   // Réutilise exactement le client sécurisé déjà utilisé par l'administration.
   // Il récupère le jeton Neon, ajoute les en-têtes et gère les erreurs comme les autres pages.
   const api=async(path)=>await adminApi(path);
-  const [analyticsR,playersR,teamR,villagesR,adventuresR,testersR]=await Promise.allSettled([
+  const [analyticsR,playersR,teamR,villagesR,adventuresR,testersR,supportR]=await Promise.allSettled([
     api("/api/admin/analytics"),api("/api/admin/players"),api("/api/admin/team"),
-    api("/api/admin/villages"),api("/api/admin/adventures"),api("/api/admin/testers")
+    api("/api/admin/villages"),api("/api/admin/adventures"),api("/api/admin/testers"),api("/api/admin/support")
   ]);
   const analytics=analyticsR.status==="fulfilled"?analyticsR.value:{};
   const players=playersR.status==="fulfilled"?(playersR.value.players||[]):[];
@@ -8495,8 +8495,9 @@ window.loadAdminDashboardOverview = async function(){
   const villages=villagesR.status==="fulfilled"?(villagesR.value.villages||[]):[];
   const adventures=adventuresR.status==="fulfilled"?(adventuresR.value.adventures||[]):[];
   const applications=testersR.status==="fulfilled"?(testersR.value.applications||[]):[];
+  const supportRequests=supportR.status==="fulfilled"?(supportR.value.requests||[]):[];
 
-  put("dash-total-players",playersR.status==="fulfilled"?(playersR.value.count??players.length):"Erreur");
+  put("dash-total-players",analyticsR.status==="fulfilled"?(analytics.totals?.registered_total??(playersR.value?.count??players.length)):(playersR.status==="fulfilled"?(playersR.value.count??players.length):"Erreur"));
   put("dash-total-team",teamR.status==="fulfilled"?team.filter(x=>x.status!=="suspended").length:"—");
   put("dash-total-villages",villagesR.status==="fulfilled"?villages.length:"—");
   put("dash-total-adventures",adventuresR.status==="fulfilled"?adventures.length:"—");
@@ -8504,7 +8505,8 @@ window.loadAdminDashboardOverview = async function(){
   const pendingTesters=applications.filter(x=>x.status==="pending");
   const pendingVillages=villages.filter(x=>["pending_confirmation","en_attente","a_valider"].includes(String(x.status||"").toLowerCase()));
   const pendingAdventures=adventures.filter(x=>["a_valider","en_attente","pending","pending_validation"].includes(String(x.status||"").toLowerCase()) || (x.is_validated===false && x.status!=="en_creation"));
-  const pendingTotal=pendingTesters.length+pendingVillages.length+pendingAdventures.length;
+  const pendingSupport=supportRequests.filter(x=>["en_attente","pending","nouveau"].includes(String(x.status||"").toLowerCase()));
+  const pendingTotal=pendingTesters.length+pendingVillages.length+pendingAdventures.length+pendingSupport.length;
   put("dash-total-pending",pendingTotal);
   put("dash-pending-badge",pendingTotal);
   put("dash-players-note",playersR.status==="fulfilled"?"Comptes inscrits dans Neon":(playersR.reason?.message||"Chargement impossible"));
@@ -8567,10 +8569,11 @@ window.loadAdminDashboardOverview = async function(){
     const items=[
       {icon:"🧪",label:"Demandes de testeurs",count:pendingTesters.length,action:"adminOpenTesters()"},
       {icon:"📍",label:"Villages à confirmer",count:pendingVillages.length,action:"adminOpenVillages()"},
-      {icon:"🪧",label:"Aventures à valider",count:pendingAdventures.length,action:"adminOpenAdventures()"}
+      {icon:"🪧",label:"Aventures à valider",count:pendingAdventures.length,action:"adminOpenAdventures()"},
+      {icon:"💬",label:"Demandes de support",count:pendingSupport.length,action:"adminOpenSupport()"}
     ].filter(x=>x.count>0);
     if(!items.length){pendingList.textContent=pendingTotal===0?"Aucune demande en attente.":"Les demandes n'ont pas pu être chargées.";}
-    else items.forEach(item=>{const button=document.createElement("button");button.type="button";button.className="adm-pending-item";const icon=document.createElement("span");icon.textContent=item.icon;const label=document.createElement("span");label.textContent=item.label;const count=document.createElement("b");count.textContent=item.count;button.append(icon,label,count);button.addEventListener("click",()=>{if(item.label.includes("testeurs"))window.adminOpenTesters?.();else if(item.label.includes("Villages"))window.adminOpenVillages?.();else window.adminOpenAdventures?.();});pendingList.appendChild(button);});
+    else items.forEach(item=>{const button=document.createElement("button");button.type="button";button.className="adm-pending-item";const icon=document.createElement("span");icon.textContent=item.icon;const label=document.createElement("span");label.textContent=item.label;const count=document.createElement("b");count.textContent=item.count;button.append(icon,label,count);button.addEventListener("click",()=>{if(item.label.includes("testeurs"))window.adminOpenTesters?.();else if(item.label.includes("Villages"))window.adminOpenVillages?.();else if(item.label.includes("support"))window.adminOpenSupport?.();else window.adminOpenAdventures?.();});pendingList.appendChild(button);});
   }
 
   // Dernières activités : inscriptions récentes et visites récentes renvoyées par les statistiques.
@@ -8579,6 +8582,7 @@ window.loadAdminDashboardOverview = async function(){
     recentList.replaceChildren();
     const events=[];
     (analytics.recent_registrations||[]).slice(0,10).forEach(x=>events.push({icon:"👤",label:`Nouvelle inscription : ${x.display_name||x.email||"Explorateur"}`,date:x.registered_at}));
+    supportRequests.slice(0,10).forEach(x=>events.push({icon:"💬",label:`Demande de support : ${x.subject||"Sans objet"}`,date:x.created_at}));
     (analytics.recent||[]).slice(0,10).forEach(x=>events.push({icon:x.is_member?"🧭":"👣",label:`Visite : ${x.visitor_label||"Visiteur"}${x.village?" · "+x.village:""}`,date:x.last_seen}));
     events.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
     if(!events.length)recentList.textContent="Aucune activité récente enregistrée.";
@@ -8592,7 +8596,7 @@ window.loadAdminDashboardOverview = async function(){
     });
   }
 
-  const failures=[analyticsR,playersR,teamR,villagesR,adventuresR,testersR].filter(x=>x.status==="rejected").length;
+  const failures=[analyticsR,playersR,teamR,villagesR,adventuresR,testersR,supportR].filter(x=>x.status==="rejected").length;
   const note=document.getElementById("dash-dashboard-load-note");
   if(note)note.textContent=failures?`${failures} rubrique(s) indisponible(s) — vérifie les accès API.`:"Données actualisées depuis le serveur.";
 };
