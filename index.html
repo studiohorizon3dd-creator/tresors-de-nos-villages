@@ -397,15 +397,6 @@ body.halloween-accueil .home-hero{
 .admin-info-panel{background:#fffdf7;border:1px solid #e5ddc8;border-radius:12px;padding:18px;line-height:1.55;font-size:12px;color:#647064}
 .admin-info-panel p{margin:9px 0}
 .admin-subview{margin-top:8px}
-/* Gestion des informations : garder le formulaire immédiatement visible */
-#dashboard.admin-mode #admin-news-view:not([hidden]){display:block;margin-top:0;min-height:0}
-#dashboard.admin-mode #admin-news-view .admin-section-heading{margin-top:8px}
-#admin-news-status{padding:10px 13px;border-radius:9px;background:#fff8e7;border-left:4px solid #c9a33c;min-height:0}
-#admin-news-status:empty{display:none}
-#admin-news-form{scroll-margin-top:18px}
-#admin-news-form button[type="submit"]{background:#07512f;color:#fff7df;border:1px solid #d7ad45}
-#admin-news-form button:disabled{opacity:.65;cursor:wait}
-
 .admin-recent-list{background:#fffdf7;border:1px solid #e5ddc8;border-radius:12px;padding:15px;overflow:auto}
 .admin-footnote{font-size:11px;color:#7a8177;line-height:1.5}
 .admin-placeholder{margin:30px auto;max-width:520px;text-align:center;padding:45px 25px;background:#fffdf7;border:1px dashed #cdbb8a;border-radius:16px}
@@ -2285,6 +2276,29 @@ body.halloween-accueil .home-hero{
   #dash-tester-space .tester-dashboard-hero { min-height: 86px; padding: 12px 14px; }
 }
 
+</style>
+
+<style id="fix-tester-space-layout-2026-11-03">
+/* Correctif ciblé : l'Espace Testeur reste dans Communauté.
+   On corrige uniquement son centrage/sa largeur, sans modifier la navigation JS. */
+#dash-tester-space.tester-dashboard {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 680px) {
+  #dash-tester-space.tester-dashboard {
+    width: 100% !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -6548,12 +6562,7 @@ function renderAdminSupportTable(requests, statusEl, list){
   table.append(tbody);wrap.append(table);list.append(wrap);
 }
 
-function adminOpenNews(){
-  adminSetView('admin-news-view','Gestion des informations');
-  adminLoadNews();
-  // Le panneau était parfois conservé à l'ancien défilement : replacer la rubrique sous l'en-tête.
-  requestAnimationFrame(()=>document.getElementById('admin-news-view')?.scrollIntoView({behavior:'smooth',block:'start'}));
-}
+function adminOpenNews(){adminSetView('admin-news-view','Gestion des informations');adminLoadNews();}
 window.adminOpenNews=adminOpenNews;
 function adminNewsReset(){document.getElementById('admin-news-form')?.reset();document.getElementById('admin-news-id').value='';document.getElementById('admin-news-category').value='Actualité';}
 window.adminNewsReset=adminNewsReset;
@@ -6579,43 +6588,7 @@ async function adminLoadNews(){
   }catch(e){status.textContent=e.message||'Impossible de charger les actualités.';}
 }
 window.adminLoadNews=adminLoadNews;
-document.getElementById('admin-news-form')?.addEventListener('submit',async event=>{
-  event.preventDefault();
-  const form=event.currentTarget;
-  const status=document.getElementById('admin-news-status');
-  const id=document.getElementById('admin-news-id').value;
-  const submit=form.querySelector('button[type="submit"]');
-  const payload={
-    title:document.getElementById('admin-news-title').value.trim(),
-    category:document.getElementById('admin-news-category').value,
-    body:document.getElementById('admin-news-body').value.trim(),
-    is_published:document.getElementById('admin-news-publish').checked
-  };
-  if(submit){submit.disabled=true;submit.textContent='Enregistrement…';}
-  status.textContent='Enregistrement de la publication…';
-  try{
-    const result=await adminApi(id?`/api/admin/news/${encodeURIComponent(id)}`:'/api/admin/news',{
-      method:id?'PATCH':'POST',body:JSON.stringify(payload)
-    });
-    adminNewsReset();
-    const count=Number(result?.notifications_sent||0);
-    status.textContent=payload.is_published
-      ? (result?.notification_error
-          ? 'Publication enregistrée, mais les notifications n’ont pas pu être envoyées : '+result.notification_error
-          : `Publication publiée. ${result?.notification_created ? (count > 0 ? 'Notification envoyée à '+count+' membre(s).' : 'Aucun compte membre trouvé pour recevoir la notification.') : 'Aucune nouvelle notification nécessaire.'}`)
-      : 'Brouillon enregistré. Il ne sera visible qu’après publication.';
-    await adminLoadNews();
-    if(payload.is_published && result?.notification_error){
-      status.textContent='Publication enregistrée, mais notifications non envoyées : '+result.notification_error;
-    } else if(payload.is_published && result?.notification_created){
-      status.textContent=count>0?`Publication publiée et notification envoyée à ${count} membre(s).`:'Publication publiée, mais aucun compte membre n’a été trouvé pour recevoir la notification.';
-    }
-  }catch(e){
-    status.textContent=e.message||'Impossible d’enregistrer cette actualité.';
-  }finally{
-    if(submit){submit.disabled=false;submit.textContent='Enregistrer la publication';}
-  }
-});
+document.getElementById('admin-news-form')?.addEventListener('submit',async event=>{event.preventDefault();const status=document.getElementById('admin-news-status'),id=document.getElementById('admin-news-id').value;const payload={title:document.getElementById('admin-news-title').value,category:document.getElementById('admin-news-category').value,body:document.getElementById('admin-news-body').value,is_published:document.getElementById('admin-news-publish').checked};try{await adminApi(id?`/api/admin/news/${encodeURIComponent(id)}`:'/api/admin/news',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});adminNewsReset();status.textContent='Publication enregistrée.';await adminLoadNews();}catch(e){status.textContent=e.message||'Impossible d’enregistrer cette actualité.';}});
 
 window.loadPublicNews=async function(){
  const statusTargets=['public-home-news-status','public-news-status','public-updates-status'].map(id=>document.getElementById(id)).filter(Boolean);
