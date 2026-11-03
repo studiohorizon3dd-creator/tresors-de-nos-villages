@@ -148,13 +148,6 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 .map-village-card{background:#fbf2dc;border:1px solid #d7c69b;border-radius:12px;padding:14px}
 .map-village-card strong{display:block;margin-bottom:6px}
 @media(max-width:600px){#village-map{height:340px}}
-.map-village-status{display:inline-flex;align-items:center;margin:2px 0 6px;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:700}
-.map-village-status.pending_confirmation{background:#fff0ca;color:#925a0a}
-.map-village-status.upcoming_preparation{background:#e8eceb;color:#53615d}
-.map-village-status.in_progress{background:#dceefa;color:#17618c}
-.map-village-status.available{background:#e0f1dc;color:#22663a}
-.map-village-status.suspended{background:#ffe1df;color:#a72d2b}
-.map-village-status.updating{background:#eee4ff;color:#6740a2}
 
 /* Contact mairies & partenaires — présentation illustrée */
 #dash-town-contact{max-width:1500px;margin:0 auto;padding:0 22px 36px;background:#f7efdD;color:#183326}
@@ -543,10 +536,10 @@ body.halloween-accueil .home-hero{
 .village-admin-banner p{margin:0;font-size:14px;color:#f1e8cf}
 .village-admin-eyebrow{font-size:10px;letter-spacing:2px;color:#e8c76f;font-weight:800}
 .village-admin-banner-art{font-size:52px;white-space:nowrap;filter:drop-shadow(0 4px 5px #001a10)}
-.village-stat-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin:13px 0}
+.village-stat-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:13px 0}
 .village-stat{display:flex;align-items:center;gap:10px;min-width:0;padding:12px 10px;background:#fffdf7;border:1px solid #e9dfc9;border-radius:12px;box-shadow:0 4px 10px #203b2910}
 .village-stat-icon{width:37px;height:37px;flex:0 0 37px;display:grid;place-items:center;border-radius:50%;background:#e5f0e5;color:#17633d;font-size:19px;font-weight:bold}
-.village-stat-icon.pending{background:#fff0d2;color:#c27a0b}.village-stat-icon.preparation{background:#e8eceb;color:#53615d}.village-stat-icon.works{background:#fff0d9;color:#a36c18}.village-stat-icon.available{background:#e0f1dc;color:#237340}.village-stat-icon.suspended{background:#ffe1df;color:#bd3029}.village-stat-icon.update{background:#e1eff8;color:#28749a}
+.village-stat-icon.pending{background:#fff0d2;color:#c27a0b}.village-stat-icon.works{background:#fff0d9;color:#a36c18}.village-stat-icon.available{background:#e0f1dc;color:#237340}.village-stat-icon.suspended{background:#ffe1df;color:#bd3029}.village-stat-icon.update{background:#e1eff8;color:#28749a}
 .village-stat small{display:block;font-size:11px;color:#697366;white-space:nowrap}.village-stat strong{display:block;font:700 23px Georgia,serif;color:#153d2b;margin-top:2px}
 .village-admin-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin:12px 0 14px}
 .village-admin-tabs button{border:1px solid #e8dfcc;background:#fffdf7;border-radius:11px;padding:12px 8px;color:#284735;font-weight:700;box-shadow:0 3px 8px #1b38240d}
@@ -570,7 +563,7 @@ body.halloween-accueil .home-hero{
 .village-name-cell{display:flex;align-items:center;gap:9px;font-weight:700;color:#243d2e}
 .village-thumb{width:44px;height:34px;flex:0 0 44px;border-radius:7px;object-fit:cover;background:#e5eadc;display:grid;place-items:center;font-size:19px}
 .village-status-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
-.village-status-pill.pending_confirmation{background:#fff0ca;color:#925a0a}.village-status-pill.upcoming_preparation{background:#e8eceb;color:#53615d}.village-status-pill.in_progress{background:#dceefa;color:#17618c}.village-status-pill.available{background:#e0f1dc;color:#22663a}.village-status-pill.suspended{background:#ffe1df;color:#a72d2b}.village-status-pill.updating{background:#eee4ff;color:#6740a2}
+.village-status-pill.pending_confirmation{background:#fff0ca;color:#925a0a}.village-status-pill.in_progress{background:#dceefa;color:#17618c}.village-status-pill.available{background:#e0f1dc;color:#22663a}.village-status-pill.suspended{background:#ffe1df;color:#a72d2b}.village-status-pill.updating{background:#eee4ff;color:#6740a2}
 .village-action-btn{border:1px solid #d6b75d;background:#fffaf0;color:#244b36;border-radius:8px;padding:7px 9px;margin:1px}
 .village-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px 13px;margin-top:14px}
 .village-form label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#31503b;min-width:0}
@@ -2059,247 +2052,6 @@ body.halloween-accueil .home-hero{
 @media(max-width:700px){#admin-home-view .adm-hero{min-height:130px;padding:18px}.adm-hero-mark{font-size:42px!important}#admin-home-view .adm-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}#admin-home-view .adm-kpi{min-height:80px;padding:9px;gap:8px}#admin-home-view .adm-kpi-icon{flex-basis:35px;width:35px;height:35px;font-size:18px}#admin-home-view .adm-kpi strong{font-size:23px}#admin-home-view .adm-main-grid{grid-template-columns:1fr;grid-template-areas:"chart" "donut" "villages" "recent" "quick" "pending"}#admin-home-view .adm-donut-row{gap:14px}#admin-home-view .adm-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-home-view .adm-dashboard-footer{align-items:flex-start;flex-wrap:wrap}#admin-home-view .adm-dashboard-footer button{margin-left:0}}
 </style>
 
-
-<style>
-/* ===== Espace Testeur : mise en page finale alignée sur la maquette ===== */
-#dash-tester-space.tester-dashboard{
-  display:block!important;width:100%!important;max-width:1700px!important;margin:0 auto!important;
-  padding:12px clamp(12px,2vw,28px) 28px!important;box-sizing:border-box!important;
-  background:#f7efdc!important;color:#173a29!important;
-}
-#dash-tester-space .tester-dashboard-hero{
-  width:100%!important;min-height:82px!important;height:auto!important;padding:12px 24px!important;
-  display:flex!important;align-items:center!important;justify-content:flex-start!important;
-  border:1px solid #d7ad45!important;border-radius:16px!important;
-  background-image:linear-gradient(90deg,rgba(4,45,31,.94),rgba(4,45,31,.55) 48%,rgba(4,45,31,.08)),url('tester_assets/banner_background.png')!important;
-  background-size:cover!important;background-position:center 48%!important;background-repeat:no-repeat!important;
-  box-shadow:0 5px 16px #1b33251c!important;overflow:hidden!important;
-}
-#dash-tester-space .tester-dashboard-brand{display:flex!important;align-items:center!important;gap:14px!important}
-#dash-tester-space .tester-dashboard-flask{width:48px!important;height:52px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:none!important}
-#dash-tester-space .tester-dashboard-flask img{width:46px!important;height:50px!important;object-fit:contain!important}
-#dash-tester-space .tester-dashboard-brand h2{font:bold clamp(27px,3vw,39px) Georgia,serif!important;color:#fff4d5!important;text-shadow:0 2px 4px #102d20!important;margin:0!important}
-#dash-tester-space .tester-dashboard-brand p{font:13px Georgia,serif!important;color:#fff9e9!important;text-shadow:0 1px 3px #102d20!important;margin:3px 0 0!important}
-#dash-tester-space .tester-dashboard-hero-art{display:none!important}
-#dash-tester-space .tester-dashboard-topstats{
-  display:grid!important;grid-template-columns:1.45fr repeat(5,minmax(0,1fr))!important;gap:0!important;
-  width:100%!important;margin:12px 0 14px!important;padding:9px!important;
-  background:linear-gradient(120deg,#fff9e8,#f1e2bd)!important;border:1px solid #dfbd65!important;
-  border-radius:16px!important;box-shadow:0 4px 13px #273b2410!important;
-}
-#dash-tester-space .tester-identity-card,#dash-tester-space .tester-topstat{min-width:0!important;min-height:76px!important;padding:7px 10px!important;border-right:1px solid #d8bd7b!important}
-#dash-tester-space .tester-identity-card{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important}
-#dash-tester-space .tester-avatar{width:68px!important;height:68px!important;flex:none!important;border:3px solid #d7ad45!important;border-radius:50%!important;overflow:hidden!important}
-#dash-tester-space .tester-avatar img{width:100%!important;height:100%!important;object-fit:cover!important}
-#dash-tester-space .tester-identity-card strong{display:block!important;font:bold 19px Georgia,serif!important;color:#123b2a!important}
-#dash-tester-space .tester-validated-pill{display:inline-block!important;margin-top:5px!important;padding:6px 13px!important;border-radius:18px!important;background:linear-gradient(#159b50,#08703a)!important;color:white!important;font:bold 11px Arial,sans-serif!important}
-#dash-tester-space .tester-topstat{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:1px!important;text-align:center!important}
-#dash-tester-space .tester-topstat>span{font-size:27px!important}
-#dash-tester-space .tester-topstat strong{font:bold 25px Georgia,serif!important;color:#0b3928!important}
-#dash-tester-space .tester-topstat small{font:11px Georgia,serif!important;color:#294536!important}
-#dash-tester-space .tester-topstat:last-of-type{border-right:0!important}
-#dash-tester-space .tester-top-xp{width:88%!important;height:9px!important;margin-top:4px!important;border:1px solid #a88b4b!important;border-radius:20px!important;background:#eee1bd!important;overflow:hidden!important}
-#dash-tester-space .tester-top-xp i{display:block!important;height:100%!important;background:linear-gradient(90deg,#128849,#d7b333)!important}
-#dash-tester-space .tester-dashboard-grid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:14px!important;align-items:stretch!important;width:100%!important}
-#dash-tester-space .tester-dash-card{position:relative!important;min-width:0!important;padding:17px 18px!important;border:1px solid #dfc477!important;border-radius:16px!important;background:linear-gradient(145deg,#fffdf7,#f8edcf)!important;box-shadow:0 5px 15px #273b2410!important;overflow:hidden!important}
-#dash-tester-space .tester-dash-card:before{content:""!important;position:absolute!important;inset:5px!important;border:1px solid rgba(207,169,79,.16)!important;border-radius:12px!important;pointer-events:none!important}
-#dash-tester-space .tester-dash-card h3{position:relative!important;display:flex!important;align-items:center!important;gap:9px!important;margin:0 0 10px!important;padding-bottom:8px!important;border-bottom:1px solid #eadbb7!important;color:#102f22!important;font:bold 20px Georgia,serif!important}
-#dash-tester-space .tester-dash-card>p{position:relative!important;font:13px/1.5 Georgia,serif!important;color:#4b5949!important;margin:6px 0 11px!important}
-#dash-tester-space .tester-announcement-card{grid-column:span 5!important;min-height:190px!important;background:linear-gradient(110deg,#fff8e3,#f0dca9)!important}
-#dash-tester-space .tester-progression-card{grid-column:span 7!important;min-height:190px!important}
-#dash-tester-space .tester-announcement-card h3{display:inline-flex!important;padding:7px 15px!important;border:0!important;border-radius:9px!important;background:linear-gradient(110deg,#06432d,#087b4a)!important;color:#fff5d8!important}
-#dash-tester-space .tester-announcement-body{display:flex!important;align-items:center!important;gap:14px!important}
-#dash-tester-space .tester-announcement-art{flex:0 0 38%!important;min-width:0!important;min-height:112px!important;border:1px solid #d3a83c!important;border-radius:12px!important;background:#e8d49a!important;overflow:hidden!important}
-#dash-tester-space .tester-announcement-art img{width:100%!important;height:112px!important;object-fit:cover!important;border-radius:10px!important}
-#dash-tester-space .tester-announcement-body h4{font:bold 20px Georgia,serif!important;color:#123a29!important;margin:4px 0!important}
-#dash-tester-space .tester-announcement-body p{font:13px/1.4 Georgia,serif!important;color:#344638!important}
-#dash-tester-space .tester-rank-track{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;margin:10px 0 8px!important;height:auto!important;overflow:visible!important}
-#dash-tester-space .tester-rank-item{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;min-height:95px!important;height:auto!important;padding:5px 3px!important;border:0!important;background:transparent!important;color:#3e4c40!important}
-#dash-tester-space .tester-rank-item img{display:block!important;width:76px!important;height:76px!important;object-fit:contain!important}
-#dash-tester-space .tester-rank-item strong{display:block!important;font:bold 11px Georgia,serif!important}
-#dash-tester-space .tester-rank-item.active{background:radial-gradient(ellipse,#087346 0%,#087346 55%,transparent 58%)!important;color:#fff7d7!important}
-#dash-tester-space .tester-xp-track{height:12px!important;margin:3px 12px 16px!important;border:1px solid #b99a4c!important;border-radius:20px!important;background:#e9dfc6!important;overflow:visible!important;position:relative!important}
-#dash-tester-space .tester-xp-track span{display:block!important;height:100%!important;border-radius:20px!important;background:linear-gradient(90deg,#15904b,#e7b82f)!important}
-#dash-tester-space .tester-xp-track b{position:absolute!important;right:0!important;top:13px!important;font:10px Georgia,serif!important;color:#5a4b25!important}
-#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-access-card{grid-column:span 3!important;min-height:260px!important}
-#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4!important;min-height:190px!important}
-#dash-tester-space .tester-mission-count{display:inline-block!important;margin-left:auto!important;padding:5px 10px!important;border-radius:15px!important;background:#f7df82!important;color:#4b3b13!important;font:bold 11px Georgia,serif!important}
-#dash-tester-space .tester-dash-form{display:grid!important;gap:9px!important}
-#dash-tester-space .tester-dash-form label{display:grid!important;gap:5px!important;font:bold 13px Georgia,serif!important;color:#294b35!important}
-#dash-tester-space .tester-dash-form select,#dash-tester-space .tester-dash-form textarea,#dash-tester-space .tester-journal{width:100%!important;min-width:0!important;padding:10px 11px!important;border:1px solid #d6bd7e!important;border-radius:10px!important;background:#fffdf6!important;color:#293e30!important;font:13px Georgia,serif!important}
-#dash-tester-space .tester-dash-form textarea{min-height:66px!important;height:auto!important;resize:vertical!important}
-#dash-tester-space .tester-validation-steps{display:flex!important;justify-content:space-around!important;gap:8px!important;padding:10px 6px!important;margin:5px 0 10px!important;border:1px solid #d9bd72!important;border-radius:13px!important;background:#f8efd7!important}
-#dash-tester-space .tester-validation-steps span{display:flex!important;flex:1!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:4px!important}
-#dash-tester-space .tester-validation-steps b{display:grid!important;place-items:center!important;width:32px!important;height:32px!important;border:2px solid #caa34a!important;border-radius:50%!important;background:#fff9e9!important;color:#31503a!important;font:bold 16px Georgia,serif!important}
-#dash-tester-space .tester-validation-steps span:first-child b{background:#087346!important;color:white!important;border-color:#d9b34e!important}
-#dash-tester-space .tester-validation-steps small{font:bold 11px Georgia,serif!important;color:#38503c!important}
-#dash-tester-space .tester-dash-action{display:flex!important;width:100%!important;justify-content:center!important;padding:11px 14px!important;margin-top:7px!important;border:1px solid #d5ad45!important;border-radius:24px!important;background:linear-gradient(110deg,#06432d,#087849)!important;color:#fff6d9!important;font:bold 13px Georgia,serif!important;box-shadow:0 3px 0 #b18b37!important}
-#dash-tester-space .tester-feedback-shortcuts{display:grid!important;gap:9px!important}
-#dash-tester-space .tester-feedback-shortcuts button{display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;padding:11px!important;border:1px solid #dfc47d!important;border-radius:12px!important;background:#fffaf0!important;color:#173728!important;text-align:left!important}
-#dash-tester-space .tester-feedback-shortcuts button>span:first-child{font-size:25px!important}
-#dash-tester-space .tester-feedback-shortcuts button>span:nth-child(2){display:grid!important;gap:2px!important;flex:1!important}
-#dash-tester-space .tester-feedback-shortcuts strong{font:bold 13px Georgia,serif!important}
-#dash-tester-space .tester-feedback-shortcuts small{font:11px Georgia,serif!important;color:#58634f!important}
-#dash-tester-space .tester-feedback-shortcuts button>b{color:#b17d16!important;font-size:22px!important}
-#dash-tester-space .tester-feedback-details{margin-top:10px!important}
-#dash-tester-space .tester-feedback-details summary{cursor:pointer!important;color:#145235!important;font:bold 12px Georgia,serif!important}
-#dash-tester-space .tester-badge-row{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important}
-#dash-tester-space .tester-mini-badge{min-width:0!important;padding:8px 4px!important;text-align:center!important;border:1px solid #d8b24e!important;border-radius:12px!important;background:linear-gradient(145deg,#fff9e7,#f2dfad)!important;font:11px/1.2 Georgia,serif!important}
-#dash-tester-space .tester-mini-badge img{display:block!important;width:58px!important;height:62px!important;object-fit:contain!important;margin:0 auto 4px!important}
-#dash-tester-space .tester-history-list{max-height:180px!important;overflow:auto!important}
-#dash-tester-space .tester-version-pill{display:inline-block!important;padding:7px 12px!important;border-radius:20px!important;background:#eee3c5!important;color:#76531a!important;font:bold 12px Georgia,serif!important}
-#dash-tester-space .tester-check-list{padding-left:19px!important;margin:7px 0!important;font:13px/1.55 Georgia,serif!important;color:#4b594d!important}
-#dash-tester-space .tester-extra-tools{margin:14px 0 0!important;padding:13px 16px!important;border:1px solid #d8b75e!important;border-radius:14px!important;background:#fff8e7!important}
-#dash-tester-space .tester-extra-tools>summary{cursor:pointer!important;color:#174b35!important;font:bold 14px Georgia,serif!important}
-#dash-tester-space .tester-extra-tools-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;margin-top:12px!important}
-#dash-tester-space .tester-extra-tools-grid>.tester-dash-card{grid-column:auto!important;min-height:0!important}
-#dash-tester-space .tester-extra-challenges{margin-top:10px!important}
-@media(max-width:1050px){
- #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
- #dash-tester-space .tester-identity-card{grid-column:1/-1!important;justify-content:center!important;border-right:0!important;border-bottom:1px solid #d8bd7b!important}
- #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
- #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 3!important}
- #dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-access-card{grid-column:span 3!important}
- #dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 2!important}
- #dash-tester-space .tester-extra-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-}
-@media(max-width:650px){
- #dash-tester-space.tester-dashboard{padding:8px!important}
- #dash-tester-space .tester-dashboard-hero{min-height:78px!important;padding:9px 12px!important}
- #dash-tester-space .tester-dashboard-brand{gap:8px!important}
- #dash-tester-space .tester-dashboard-brand h2{font-size:25px!important}
- #dash-tester-space .tester-dashboard-brand p{font-size:10px!important}
- #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:6px!important}
- #dash-tester-space .tester-identity-card{grid-column:1/-1!important;justify-content:flex-start!important}
- #dash-tester-space .tester-topstat{border-right:1px solid #d5b96e!important;border-bottom:1px solid #d5b96e!important;padding:8px 3px!important}
- #dash-tester-space .tester-topstat:last-of-type{grid-column:1/-1!important;border:0!important}
- #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr!important;gap:9px!important}
- #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important;min-height:0!important}
- #dash-tester-space .tester-rank-item img{width:54px!important;height:58px!important}
- #dash-tester-space .tester-extra-tools-grid{grid-template-columns:1fr!important}
-}
-
-</style>
-<style>
-
-
-/* CORRECTION 03/11 — séparation admin/testeur + espace testeur plus aéré */
-#dashboard.admin-mode > #dash-tester-space,
-#dashboard.admin-mode > .content > #dash-tester-space {
-  display: none !important;
-}
-#dash-tester-space.tester-dashboard {
-  display: block;
-  width: min(calc(100vw - 56px), 1680px) !important;
-  max-width: 1680px !important;
-  box-sizing: border-box !important;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0 auto !important;
-  padding: 22px clamp(18px, 2.2vw, 36px) 38px !important;
-  background: #f7efdd;
-  color: #173a29;
-}
-#dash-tester-space .tester-dashboard-hero {
-  min-height: 104px;
-  padding: 18px clamp(20px, 2.5vw, 38px);
-  border-radius: 18px;
-}
-#dash-tester-space .tester-dashboard-brand h2 {
-  font-size: clamp(30px, 3vw, 42px);
-}
-#dash-tester-space .tester-dashboard-topstats {
-  gap: 12px;
-  margin: 16px 0 18px;
-  padding: 14px;
-  border-radius: 18px;
-}
-#dash-tester-space .tester-identity-card,
-#dash-tester-space .tester-topstat {
-  min-height: 92px;
-  padding: 10px 12px;
-}
-#dash-tester-space .tester-avatar {
-  width: 68px;
-  height: 68px;
-}
-#dash-tester-space .tester-dashboard-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  align-items: stretch;
-}
-#dash-tester-space .tester-dash-card {
-  min-width: 0;
-  padding: 20px;
-  border-radius: 17px;
-}
-#dash-tester-space .tester-dash-card h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-  padding-bottom: 9px;
-  border-bottom: 1px solid #e7d7b2;
-}
-#dash-tester-space .tester-dash-card > p {
-  font-size: 14px;
-  line-height: 1.6;
-  margin: 8px 0 14px;
-}
-#dash-tester-space .tester-progression-card { grid-column: span 2; }
-#dash-tester-space .tester-missions-card,
-#dash-tester-space .tester-validation-card,
-#dash-tester-space .tester-feedback-card { min-height: 300px; }
-#dash-tester-space .tester-history-card,
-#dash-tester-space .tester-badges-card,
-#dash-tester-space .tester-version-card { min-height: 235px; }
-#dash-tester-space .tester-rank-track { gap: 12px; margin-top: 16px; }
-#dash-tester-space .tester-rank-item { min-height: 92px; padding: 12px 8px; }
-#dash-tester-space .tester-dash-form { gap: 12px; }
-#dash-tester-space .tester-dash-form select,
-#dash-tester-space .tester-dash-form textarea { padding: 12px 14px; font-size: 14px; }
-#dash-tester-space .tester-dash-form textarea { min-height: 92px; }
-@media (max-width: 1050px) {
-  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  #dash-tester-space .tester-dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  #dash-tester-space .tester-progression-card { grid-column: span 1; }
-}
-@media (max-width: 680px) {
-  #dash-tester-space.tester-dashboard {
-    width: calc(100vw - 24px) !important;
-    left: 50%;
-    padding: 12px 8px 24px !important;
-  }
-  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  #dash-tester-space .tester-dashboard-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  #dash-tester-space .tester-progression-card { grid-column: auto; }
-  #dash-tester-space .tester-dash-card { padding: 16px; min-height: 0; }
-  #dash-tester-space .tester-dashboard-hero { min-height: 86px; padding: 12px 14px; }
-}
-
-</style>
-
-<style id="fix-tester-space-layout-2026-11-03">
-/* Correctif ciblé : l'Espace Testeur reste dans Communauté.
-   On corrige uniquement son centrage/sa largeur, sans modifier la navigation JS. */
-#dash-tester-space.tester-dashboard {
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
-  transform: none !important;
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-}
-@media (max-width: 680px) {
-  #dash-tester-space.tester-dashboard {
-    width: 100% !important;
-    left: auto !important;
-    transform: none !important;
-    margin: 0 !important;
-  }
-}
-</style>
 </head>
 <body>
 
@@ -2840,17 +2592,27 @@ body.halloween-accueil .home-hero{
   <h3>🗺️ La carte des villages</h3>
   <p>Retrouve les villages de nos aventures. Appuie sur un repère pour voir son statut.</p>
   <div class="map-legend" aria-label="Légende de la carte">
-    <span><i class="map-dot" style="background:#238044"></i> Visité / Disponible</span>
-    <span><i class="map-dot" style="background:#e5a000"></i> En attente</span>
-    <span><i class="map-dot" style="background:#8b9290"></i> Prochaine préparation</span>
-    <span><i class="map-dot" style="background:#287da7"></i> En travaux</span>
-    <span><i class="map-dot" style="background:#c63b35"></i> Suspendu</span>
-    <span><i class="map-dot" style="background:#8053b8"></i> Mise à jour</span>
+    <span><i class="map-dot" style="background:#23834a"></i> Visité</span>
+    <span><i class="map-dot" style="background:#d39b25"></i> Disponible</span>
+    <span><i class="map-dot" style="background:#8b9290"></i> À découvrir</span>
   </div>
   <div id="village-map" role="application" aria-label="Carte interactive des villages Humbert et Sempy"></div>
   <h3 style="margin:26px 0 8px">🌿 Les villages sur la carte</h3>
   <p>Choisis un village pour découvrir sa fiche et son aventure.</p>
-  <div class="map-village-list" id="map-village-list"><p>Chargement des villages…</p></div>
+  <div class="map-village-list">
+    <article class="map-village-card">
+      <strong>🏡 Humbert · 62650</strong>
+      <span id="map-status-humbert">Statut : vérification…</span>
+      <p style="font-size:14px;margin:8px 0">Notre première aventure : pars à la découverte du village grâce aux indices et aux énigmes.</p>
+      <button class="small-btn" type="button" onclick="showDashSection('dash-adventures')">Découvrir l’aventure</button>
+    </article>
+    <article class="map-village-card">
+      <strong>⛪ Sempy · 62170</strong>
+      <span id="map-status-sempy">Statut : à découvrir</span>
+      <p style="font-size:14px;margin:8px 0">Un nouveau village à découvrir prochainement. Son parcours est en préparation.</p>
+      <button class="small-btn" type="button" onclick="showDashSection('dash-news')">Suivre les actualités</button>
+    </article>
+  </div>
   <div class="village-proposal-banner" style="margin-top:22px">
     <div><h3>Votre village a aussi une histoire à raconter ?</h3><p>Proposez votre commune pour la faire apparaître sur notre carte.</p></div>
     <button class="primary-btn" type="button" onclick="ouvrirPropositionVillage()">Proposer mon village</button>
@@ -2902,7 +2664,7 @@ body.halloween-accueil .home-hero{
   </div>
 </section>
 
-<section class="dash-section hidden tester-dashboard" id="dash-tester-space" hidden>
+<section class="dash-section hidden tester-dashboard" id="dash-tester-space">
   <header class="tester-dashboard-hero">
     <div class="tester-dashboard-brand"><span class="tester-dashboard-flask"><img src="tester_assets/flask.png" alt="" aria-hidden="true"></span><div><h2>Espace Testeur</h2><p>Teste les parcours, signale les bugs et aide à améliorer les aventures !</p></div></div>
     <div class="tester-dashboard-hero-art" aria-hidden="true">🧭 🏡 🌳</div>
@@ -2926,13 +2688,7 @@ body.halloween-accueil .home-hero{
 <article class="tester-dash-card tester-progression-card"><h3>🎯 Ma progression Testeur</h3><p id="tester-explorer-level-text">Niveau actuel : Débutant. Termine des parcours pour atteindre le rang suivant.</p><div class="tester-rank-track"><div class="tester-rank-item" data-explorer-rank="0"><img src="tester_assets/rank_level_1.png" alt="Écusson niveau 1"><strong>Niv. 1<br>Découverte</strong></div><div class="tester-rank-item" data-explorer-rank="1"><img src="tester_assets/rank_level_2.png" alt="Écusson niveau 2"><strong>Niv. 2<br>Explorateur</strong></div><div class="tester-rank-item" data-explorer-rank="2"><img src="tester_assets/rank_level_3.png" alt="Écusson niveau 3"><strong>Niv. 3<br>Contributeur</strong></div><div class="tester-rank-item" data-explorer-rank="3"><img src="tester_assets/rank_level_4.png" alt="Écusson niveau 4"><strong>Niv. 4<br>Expert</strong></div><div class="tester-rank-item" data-explorer-rank="4"><img src="tester_assets/rank_level_5.png" alt="Écusson niveau 5"><strong>Niv. 5<br>Ambassadeur</strong></div></div><div class="tester-xp-track"><span></span><b id="tester-xp-label">0 / 250 XP</b></div></article>
 
 <article class="tester-dash-card tester-missions-card">
-      <h3>🎯 Mes missions de test <span class="tester-mission-count" id="tester-mission-count">0 mission en cours</span></h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div>
-    </article>
-
-<article class="tester-dash-card tester-access-card">
-      <h3>🗺️ Mes parcours autorisés</h3>
-      <p>Retrouve les villages et les niveaux qui te sont confiés par l’administration.</p>
-      <div id="tester-space-access-list"><p>Chargement…</p></div>
+      <h3>🎯 Mes missions de test <span class="tester-mission-count" id="tester-mission-count">0 mission en cours</span></h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div><strong class="tester-subheading">Mes parcours autorisés</strong><div id="tester-space-access-list"><p>Chargement…</p></div>
     </article>
 
 <article class="tester-dash-card tester-validation-card">
@@ -2973,28 +2729,22 @@ body.halloween-accueil .home-hero{
       <h3>🧪 Version de test</h3><p class="tester-version-pill">Espace de test — version en évolution</p><strong class="tester-subheading">Les points à vérifier</strong><ul class="tester-check-list"><li>Les énigmes sont-elles compréhensibles ?</li><li>Les indices et les réponses fonctionnent-ils ?</li><li>La carte et la validation GPS fonctionnent-elles à l’arrivée ?</li><li>Le parcours est-il agréable et adapté à son niveau ?</li></ul>
     </article>
 
-
-
-
-  </div>
-  <details class="tester-extra-tools">
-    <summary>⚙️ Mes outils complémentaires (statistiques, communauté, carnet et récompenses)</summary>
-    <div class="tester-extra-tools-grid">
-
 <article class="tester-dash-card tester-stats-card">
       <h3>📊 Statistiques de mes tests</h3><div class="tester-mini-stats"><div><strong id="tester-stat-missions-copy">0</strong><small>Missions</small></div><div><strong id="tester-stat-completed-copy">0</strong><small>Parcours terminés</small></div><div><strong id="tester-stat-feedback-copy">0</strong><small>Retours envoyés</small></div></div><p id="tester-space-status" class="status" role="status" aria-live="polite">Chargement de tes autorisations…</p>
     </article>
+
 <article class="tester-dash-card tester-community-card">
       <h3>👥 Communauté Testeurs</h3><p>Partage tes idées, tes observations et tes astuces pour aider à améliorer les parcours.</p><div class="tester-community-people" aria-hidden="true">🧑‍🌾 🧭 🧑‍🚀</div>
     </article>
+
 <article class="tester-dash-card tester-journal-card">
       <h3>📔 Mon carnet personnel</h3><p>Note tes découvertes et tes souvenirs. Tes notes restent privées sur cet appareil.</p><textarea id="tester-personal-journal" class="tester-journal" maxlength="5000" placeholder="Aujourd’hui, j’ai découvert…"></textarea><button type="button" class="tester-dash-action" id="tester-journal-save">✍️ Enregistrer mon carnet</button><span id="tester-journal-status" class="tester-space-note" role="status"></span>
     </article>
+
 <article class="tester-dash-card tester-rewards-card">
       <h3>🎁 Récompenses Testeurs</h3><p>Des badges spéciaux remercient les testeurs qui participent aux essais et aident à améliorer les aventures.</p><div id="tester-reward-status" class="tester-badge-row"></div><button type="button" class="tester-dash-action" onclick="document.getElementById('tester-reward-status')?.scrollIntoView({behavior:'smooth',block:'center'})">🏷️ Voir les récompenses</button>
     </article>
-    </div>
-  </details>
+  </div>
   <details class="tester-extra-challenges">
     <summary>🧭 Mes défis complémentaires : missions quotidiennes & défi du mois</summary>
     <div class="tester-extra-challenges-grid"><article class="tester-dash-card">
@@ -4679,7 +4429,6 @@ body.halloween-accueil .home-hero{
           <div class="village-stat-grid" id="admin-village-stats">
             <article class="village-stat"><span class="village-stat-icon">📍</span><div><small>Villages total</small><strong id="village-stat-total">—</strong></div></article>
             <article class="village-stat"><span class="village-stat-icon pending">⌛</span><div><small>En attente</small><strong id="village-stat-pending">—</strong></div></article>
-            <article class="village-stat"><span class="village-stat-icon preparation">📅</span><div><small>Prochaine préparation</small><strong id="village-stat-preparation">—</strong></div></article>
             <article class="village-stat"><span class="village-stat-icon works">🛠️</span><div><small>En travaux</small><strong id="village-stat-works">—</strong></div></article>
             <article class="village-stat"><span class="village-stat-icon available">✓</span><div><small>Disponibles</small><strong id="village-stat-available">—</strong></div></article>
             <article class="village-stat"><span class="village-stat-icon suspended">Ⅱ</span><div><small>Suspendus</small><strong id="village-stat-suspended">—</strong></div></article>
@@ -4705,7 +4454,7 @@ body.halloween-accueil .home-hero{
                   <input id="admin-village-search" type="search" placeholder="⌕ Rechercher un village…" oninput="adminRenderVillages()">
                   <select id="admin-village-filter" onchange="adminRenderVillages()" aria-label="Filtrer par statut">
                     <option value="">Tous les statuts</option>
-                    <option value="pending_confirmation">En attente</option><option value="upcoming_preparation">Prochaine préparation</option><option value="in_progress">En travaux</option>
+                    <option value="pending_confirmation">En attente</option><option value="in_progress">En travaux</option>
                     <option value="available">Disponible</option><option value="suspended">Suspendu</option><option value="updating">Mise à jour</option>
                   </select>
                   <button type="button" class="village-view-toggle active" aria-label="Vue liste">☷</button>
@@ -4717,14 +4466,12 @@ body.halloween-accueil .home-hero{
               <section class="village-panel" id="village-panel-add">
                 <div class="village-panel-heading"><div><h4 id="admin-village-form-title">＋ Ajouter un nouveau village</h4><p>Complétez les informations de votre commune partenaire.</p></div></div>
                 <form id="admin-village-form" class="village-form">
-                  <p id="admin-village-form-status" class="status wide" role="status" aria-live="polite" style="margin:0 0 10px;min-height:1.4em"></p>
                   <input type="hidden" id="admin-village-id">
                   <label>Nom du village <em>*</em><input id="admin-village-name" required maxlength="150" placeholder="Ex. Humbert"></label>
                   <label>Identifiant (sans espace) <em>*</em><input id="admin-village-slug" required maxlength="100" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="ex. humbert"></label>
                   <label>Code postal<input id="admin-village-postal" maxlength="10" placeholder="Ex. 62650"></label>
                   <label>Statut <em>*</em><select id="admin-village-status" required>
                     <option value="pending_confirmation">⌛ En attente de confirmation</option>
-                    <option value="upcoming_preparation">📅 Prochaine préparation</option>
                     <option value="in_progress">🛠️ En travaux</option>
                     <option value="available">✓ Disponible</option>
                     <option value="suspended">Ⅱ Suspendu</option>
@@ -4733,14 +4480,7 @@ body.halloween-accueil .home-hero{
                   <label class="wide">Description<textarea id="admin-village-description" maxlength="3000" rows="3" placeholder="Informations sur la préparation du village…"></textarea></label>
                   <label>Latitude GPS<input id="admin-village-latitude" type="number" step="any" min="-90" max="90" placeholder="Ex. 50.506349"></label>
                   <label>Longitude GPS<input id="admin-village-longitude" type="number" step="any" min="-180" max="180" placeholder="Ex. 1.910030"></label>
-                  <div class="wide">
-                    <p style="margin:4px 0 8px;font-weight:700">📍 Placer le village sur la carte</p>
-                    <p style="margin:0 0 8px;font-size:13px;color:#68766b">Clique directement sur la carte pour choisir le point GPS. Les coordonnées seront remplies automatiquement.</p>
-                    <div id="admin-village-picker-map" style="height:260px;width:100%;border:1px solid #dfc99f;border-radius:12px;overflow:hidden;background:#e8eee5"></div>
-                  </div>
-                  <label class="wide">Photo du village (depuis ton ordinateur)<input id="admin-village-photo-file" type="file" accept="image/jpeg,image/png,image/webp"></label>
-                  <div class="wide" id="admin-village-photo-preview"></div>
-                  <label class="wide">Ou adresse d’une photo déjà en ligne (facultatif)<input id="admin-village-photo" type="url" maxlength="1000" placeholder="https://…"></label>
+                  <label class="wide">Photo du village (URL, facultatif)<input id="admin-village-photo" type="url" maxlength="1000" placeholder="https://…"></label>
                   <div class="village-form-actions wide"><button type="button" class="admin-secondary-btn" onclick="adminResetVillageForm()">Annuler</button><button type="submit" class="admin-primary-btn" id="admin-village-save">▣ Enregistrer le village</button></div>
                 </form>
               </section>
@@ -4754,7 +4494,7 @@ body.halloween-accueil .home-hero{
               <section class="village-panel">
                 <div class="village-panel-heading"><h4>◧ Carte des villages</h4></div>
                 <div id="admin-villages-mini-map" class="village-mini-map"><div class="village-map-placeholder">📍<br>Ajoutez les coordonnées GPS d’un village pour le voir apparaître ici.</div></div>
-                <div class="village-map-legend"><span>🟢 Disponible</span><span>🟠 En attente</span><span>⚪ Prochaine préparation</span><span>🔵 En travaux</span><span>🔴 Suspendu</span><span>🟣 Mise à jour</span></div>
+                <div class="village-map-legend"><span>🟢 Disponible</span><span>🟠 En attente</span><span>🔵 En travaux</span><span>🔴 Suspendu</span></div>
                 <button type="button" class="village-map-link" onclick="adminVillageTab('map')">◧ Voir la carte complète →</button>
               </section>
               <section class="village-panel village-info-panel">
@@ -4877,6 +4617,7 @@ body.halloween-accueil .home-hero{
         </div>
         <div class="admin-info-panel" id="admin-adventure-steps-panel" hidden style="margin-top:16px">
           <h4 id="admin-adventure-steps-title" style="margin-top:0">Étapes et énigmes du parcours</h4>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button type="button" id="admin-test-humbert-btn" class="admin-secondary-btn" onclick="activerModeTestAventure()" hidden>🧪 Tester Humbert (mode administrateur)</button><span id="admin-test-status" role="status" style="font-size:13px"></span></div>
           <p>Ajoute les lieux, les coordonnées GPS, les photos, les énigmes, les réponses et les indices.</p>
           <div id="admin-adventure-steps-list"></div><div id="admin-step-map-preview" style="margin-top:12px"></div>
           <p style="font-size:13px;color:#667">Aperçu réservé à l’administration : il ne valide aucune étape réelle et n’ajoute aucune étoile.</p>
@@ -5207,7 +4948,7 @@ showDashboard(
     status.textContent = error.message || "Impossible de se connecter.";
   }
 });
-window.API_BASE = "https://tresors-de-nos-villages-serveur.onrender.com";
+const API_BASE = "https://tresors-de-nos-villages-serveur.onrender.com";
 async function getAdminBearerToken() {
   // Neon Better Auth exposes the short-lived JWT at /token (not /get-jwt-token).
   // The browser session cookie is sent only to Neon Auth; it is never copied to Render.
@@ -5227,7 +4968,7 @@ window.getAdminBearerToken = getAdminBearerToken;
   
 async function adminApi(path, options = {}) {
   const token = await getAdminBearerToken();
-  const response = await fetch(`${window.API_BASE}${path}`, {
+  const response = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", ...(options.headers || {}) }
   });
@@ -5235,8 +4976,6 @@ async function adminApi(path, options = {}) {
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
   return data;
 }
-// Expose le client API à la fenêtre : le tableau de bord est dans un script classique.
-window.adminApi = adminApi;
 
 window.checkAdminAccess = async function(){
   try{
@@ -5256,7 +4995,7 @@ window.checkAdminAccess = async function(){
 
 async function profileApi(path, options = {}) {
   const token = await getAdminBearerToken();
-  const response = await fetch(`${window.API_BASE}${path}`, {
+  const response = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", ...(options.headers || {}) }
   });
@@ -5309,7 +5048,7 @@ window.loadLeaderboard = async function() {
   loading.textContent = "Chargement du classement…";
   list.appendChild(loading);
   try {
-    const response = await fetch(`${window.API_BASE}/api/leaderboard`, { headers: { "Accept": "application/json" }, cache: "no-store" });
+    const response = await fetch(`${API_BASE}/api/leaderboard`, { headers: { "Accept": "application/json" }, cache: "no-store" });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
     list.replaceChildren();
@@ -5572,7 +5311,6 @@ window.loadTesterApplication = async function(){
     const testerHomeStatus = document.getElementById("tester-home-status");
     const testerHomeButton = document.getElementById("tester-home-button");
     const isAcceptedTester = app?.status === "accepted";
-    window.testerApplicationAccepted = isAcceptedTester;
     if(testerNav) testerNav.hidden = !(isAcceptedTester || adminAccessGranted);
     if(testerHome) testerHome.hidden = isAcceptedTester;
     if(testerHomeStatus && app?.status === "pending") testerHomeStatus.textContent = "Ta candidature est en attente de validation.";
@@ -6049,7 +5787,6 @@ window.adminLoadTesterFeedback = async function(){
 
 const ADMIN_VILLAGE_STATUSES = {
   pending_confirmation: "En attente",
-  upcoming_preparation: "Prochaine préparation",
   in_progress: "En travaux",
   available: "Disponible",
   suspended: "Suspendu",
@@ -6057,33 +5794,6 @@ const ADMIN_VILLAGE_STATUSES = {
 };
 let ADMIN_VILLAGES_CACHE = [];
 let ADMIN_VILLAGE_MAPS = { mini: null, full: null };
-let adminVillagePickerMap = null;
-let adminVillagePickerMarker = null;
-function adminSetVillageCoordinates(lat, lon, zoom = 15) {
-  const latInput=document.getElementById("admin-village-latitude");
-  const lonInput=document.getElementById("admin-village-longitude");
-  if(latInput)latInput.value=Number(lat).toFixed(6);
-  if(lonInput)lonInput.value=Number(lon).toFixed(6);
-  if(adminVillagePickerMap && window.L){
-    const point=[Number(lat),Number(lon)];
-    if(adminVillagePickerMarker)adminVillagePickerMarker.setLatLng(point);
-    else adminVillagePickerMarker=L.marker(point).addTo(adminVillagePickerMap);
-    adminVillagePickerMap.setView(point,zoom);
-  }
-}
-function adminInitVillagePickerMap(){
-  const el=document.getElementById("admin-village-picker-map");
-  if(!el || !window.L)return;
-  if(!adminVillagePickerMap){
-    adminVillagePickerMap=L.map(el,{scrollWheelZoom:true}).setView([50.5051,1.9077],13);
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(adminVillagePickerMap);
-    adminVillagePickerMap.on("click",event=>adminSetVillageCoordinates(event.latlng.lat,event.latlng.lng,adminVillagePickerMap.getZoom()));
-  }
-  setTimeout(()=>adminVillagePickerMap.invalidateSize(),120);
-  const latInput=document.getElementById("admin-village-latitude"),lonInput=document.getElementById("admin-village-longitude");
-  const lat=Number(latInput?.value),lon=Number(lonInput?.value);
-  if(latInput?.value!==""&&lonInput?.value!==""&&Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180)adminSetVillageCoordinates(lat,lon,15);
-}
 
 function adminVillageCell(value) {
   const cell=document.createElement("td");
@@ -6095,9 +5805,6 @@ function adminResetVillageForm(){
   document.getElementById("admin-village-id").value="";
   document.getElementById("admin-village-form-title").textContent="＋ Ajouter un nouveau village";
   document.getElementById("admin-village-save").textContent="▣ Enregistrer le village";
-  const photoFile=document.getElementById("admin-village-photo-file");if(photoFile)photoFile.value="";
-  document.getElementById("admin-village-photo-preview")?.replaceChildren();
-  if(adminVillagePickerMarker&&adminVillagePickerMap){adminVillagePickerMap.removeLayer(adminVillagePickerMarker);adminVillagePickerMarker=null;}
 }
 function adminEditVillage(v){
   document.getElementById("admin-village-id").value=v.id;
@@ -6112,7 +5819,6 @@ function adminEditVillage(v){
   document.getElementById("admin-village-form-title").textContent="Modifier "+(v.name||"le village");
   document.getElementById("admin-village-save").textContent="Enregistrer les modifications";
   adminVillageTab("add");
-  setTimeout(()=>adminInitVillagePickerMap(),160);
   document.getElementById("admin-village-form").scrollIntoView({behavior:"smooth",block:"center"});
 }
 window.adminResetVillageForm=adminResetVillageForm;
@@ -6130,20 +5836,20 @@ window.adminVillageTab=function(tab){
   if(main)main.hidden=showMap;if(side)side.hidden=showMap;
   if(tab==="pending"){document.getElementById("admin-village-filter").value="pending_confirmation";adminRenderVillages();}
   if(tab==="list"){document.getElementById("admin-village-filter").value="";adminRenderVillages();}
-  if(tab==="add"){document.getElementById("village-panel-add").scrollIntoView({behavior:"smooth",block:"start"});setTimeout(()=>adminInitVillagePickerMap(),160);}
+  if(tab==="add")document.getElementById("village-panel-add").scrollIntoView({behavior:"smooth",block:"start"});
   if(tab==="map"){setTimeout(()=>adminRenderVillageMap("admin-villages-full-map","full"),120);}
   if(tab==="stats")adminRenderVillageStats();
 };
 function adminRenderVillageStats(){
   const el=document.getElementById("admin-village-stat-details");if(!el)return;el.replaceChildren();
-  const counts={total:ADMIN_VILLAGES_CACHE.length,pending:0,preparation:0,works:0,available:0,suspended:0,updating:0};
-  ADMIN_VILLAGES_CACHE.forEach(v=>{const key={pending_confirmation:"pending",upcoming_preparation:"preparation",in_progress:"works",available:"available",suspended:"suspended",updating:"updating"}[v.status];if(key)counts[key]++;});
-  [["Total des villages",counts.total],["En attente",counts.pending],["Prochaine préparation",counts.preparation],["En travaux",counts.works],["Disponibles",counts.available],["Suspendus",counts.suspended],["Mises à jour",counts.updating]].forEach(([label,n])=>{const d=document.createElement("div"),s=document.createElement("strong"),t=document.createElement("span");s.textContent=n;t.textContent=label;d.append(s,t);el.append(d);});
+  const counts={total:ADMIN_VILLAGES_CACHE.length,pending:0,works:0,available:0,suspended:0,updating:0};
+  ADMIN_VILLAGES_CACHE.forEach(v=>{const key={pending_confirmation:"pending",in_progress:"works",available:"available",suspended:"suspended",updating:"updating"}[v.status];if(key)counts[key]++;});
+  [["Total des villages",counts.total],["En attente",counts.pending],["En travaux",counts.works],["Disponibles",counts.available],["Suspendus",counts.suspended],["Mises à jour",counts.updating]].forEach(([label,n])=>{const d=document.createElement("div"),s=document.createElement("strong"),t=document.createElement("span");s.textContent=n;t.textContent=label;d.append(s,t);el.append(d);});
 }
 function adminUpdateVillageCounters(villages){
-  const count={total:villages.length,pending:0,preparation:0,works:0,available:0,suspended:0,update:0};
-  villages.forEach(v=>{const k={pending_confirmation:"pending",upcoming_preparation:"preparation",in_progress:"works",available:"available",suspended:"suspended",updating:"update"}[v.status];if(k)count[k]++;});
-  Object.entries({total:"total",pending:"pending",preparation:"preparation",works:"works",available:"available",suspended:"suspended",update:"update"}).forEach(([id,key])=>{const el=document.getElementById("village-stat-"+id);if(el)el.textContent=count[key];});
+  const count={total:villages.length,pending:0,works:0,available:0,suspended:0,update:0};
+  villages.forEach(v=>{const k={pending_confirmation:"pending",in_progress:"works",available:"available",suspended:"suspended",updating:"update"}[v.status];if(k)count[k]++;});
+  Object.entries({total:"total",pending:"pending",works:"works",available:"available",suspended:"suspended",update:"update"}).forEach(([id,key])=>{const el=document.getElementById("village-stat-"+id);if(el)el.textContent=count[key];});
   const pending=document.getElementById("village-pending-count");if(pending)pending.textContent=count.pending;
   const total=document.getElementById("village-list-count");if(total)total.textContent=villages.length;
 }
@@ -6163,11 +5869,10 @@ window.adminRenderVillages=function(){
     if(v.photo_url){const img=document.createElement("img");img.className="village-thumb";img.src=v.photo_url;img.alt="";img.loading="lazy";img.onerror=()=>{img.replaceWith(Object.assign(document.createElement("span"),{className:"village-thumb",textContent:"🏡"}));};nameWrap.append(img);}
     else {const icon=document.createElement("span");icon.className="village-thumb";icon.textContent="🏡";nameWrap.append(icon);}
     const name=document.createElement("strong");name.textContent=v.name;nameWrap.append(name);nameTd.append(nameWrap);tr.append(nameTd,adminVillageCell(v.postal_code));
-    const st=document.createElement("td"),pill=document.createElement("span");pill.className="village-status-pill "+v.status;pill.textContent=({pending_confirmation:"⌛ En attente",upcoming_preparation:"📅 Prochaine préparation",in_progress:"⚒ En travaux",available:"✓ Disponible",suspended:"Ⅱ Suspendu",updating:"↻ Mise à jour"})[v.status]||v.status;st.append(pill);tr.append(st,adminVillageCell(v.description));
+    const st=document.createElement("td"),pill=document.createElement("span");pill.className="village-status-pill "+v.status;pill.textContent=({pending_confirmation:"⌛ En attente",in_progress:"⚒ En travaux",available:"✓ Disponible",suspended:"Ⅱ Suspendu",updating:"↻ Mise à jour"})[v.status]||v.status;st.append(pill);tr.append(st,adminVillageCell(v.description));
     const date=adminVillageCell(v.updated_at?new Date(v.updated_at).toLocaleDateString("fr-FR"):"—");tr.append(date);
     const actions=adminVillageCell("");const edit=document.createElement("button");edit.type="button";edit.className="village-action-btn";edit.textContent="✎";edit.title="Modifier";edit.addEventListener("click",()=>adminEditVillage(v));actions.append(edit);
-    const doc=document.createElement("button");doc.type="button";doc.className="village-action-btn";doc.textContent="▤";doc.title="Voir les informations";doc.addEventListener("click",()=>{alert(v.name+"\n\n"+(v.description||"Aucune description.")+"\n\nStatut : "+(ADMIN_VILLAGE_STATUSES[v.status]||v.status)+"\nGPS : "+(v.latitude??"—")+", "+(v.longitude??"—"));});actions.append(doc);
-    const del=document.createElement("button");del.type="button";del.className="village-action-btn";del.textContent="🗑";del.title="Supprimer";del.addEventListener("click",async()=>{if(!confirm("Supprimer définitivement le village "+v.name+" ?"))return;del.disabled=true;try{await adminApi(`/api/admin/villages/${encodeURIComponent(v.id)}`,{method:"DELETE"});await window.adminLoadVillages();}catch(e){alert(e.message||"Impossible de supprimer le village.");del.disabled=false;}});actions.append(del);tr.append(actions);tbody.append(tr);
+    const doc=document.createElement("button");doc.type="button";doc.className="village-action-btn";doc.textContent="▤";doc.title="Voir les informations";doc.addEventListener("click",()=>{alert(v.name+"\n\n"+(v.description||"Aucune description.")+"\n\nStatut : "+(ADMIN_VILLAGE_STATUSES[v.status]||v.status));});actions.append(doc);tr.append(actions);tbody.append(tr);
   });
   table.append(tbody);list.append(table);
 };
@@ -6179,7 +5884,7 @@ function adminRenderVillageMap(containerId,kind){
   const map=L.map(el,{scrollWheelZoom:false}).setView([46.6,2.4],5);
   ADMIN_VILLAGE_MAPS[kind]=map;
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-  const colors={available:"#238044",pending_confirmation:"#e5a000",upcoming_preparation:"#8b9290",in_progress:"#287da7",suspended:"#c63b35",updating:"#8053b8"};
+  const colors={available:"#238044",pending_confirmation:"#e5a000",in_progress:"#287da7",suspended:"#c63b35",updating:"#8053b8"};
   mapped.forEach(v=>{const marker=L.circleMarker([Number(v.latitude),Number(v.longitude)],{radius:9,color:"#fff",weight:2,fillColor:colors[v.status]||"#496b4e",fillOpacity:1}).addTo(map);marker.bindPopup("<strong>"+String(v.name).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))+"</strong><br>"+(ADMIN_VILLAGE_STATUSES[v.status]||v.status));});
   if(mapped.length)map.fitBounds(L.latLngBounds(mapped.map(v=>[Number(v.latitude),Number(v.longitude)])).pad(.2));
   else {el.innerHTML='<div class="village-map-placeholder">📍<br>Aucune coordonnée GPS renseignée pour le moment.</div>';ADMIN_VILLAGE_MAPS[kind].remove();ADMIN_VILLAGE_MAPS[kind]=null;}
@@ -6234,36 +5939,13 @@ window.adminLoadVillages=async function(){
     adminRenderVillageMap("admin-villages-mini-map","mini");
   }catch(error){status.textContent=error.message||"Impossible de charger les villages.";list.textContent="Vérifie que Render est déployé et que tu es connectée avec le compte administrateur.";}
 };
-document.getElementById("admin-village-photo-file")?.addEventListener("change",event=>{
-  const box=document.getElementById("admin-village-photo-preview");box.replaceChildren();
-  const file=event.target.files?.[0];if(!file)return;
-  const img=document.createElement("img");img.alt="Aperçu de la photo du village";img.src=URL.createObjectURL(file);
-  img.style.cssText="max-width:230px;max-height:160px;object-fit:cover;border-radius:10px;border:1px solid #dfc99f";box.appendChild(img);
-});
 const adminVillageForm=document.getElementById("admin-village-form");
 if(adminVillageForm)adminVillageForm.addEventListener("submit",async event=>{
-  event.preventDefault();const status=document.getElementById("admin-village-form-status"),listStatus=document.getElementById("admin-villages-status"),save=document.getElementById("admin-village-save"),id=document.getElementById("admin-village-id").value;
+  event.preventDefault();const status=document.getElementById("admin-villages-status"),save=document.getElementById("admin-village-save"),id=document.getElementById("admin-village-id").value;
   const lat=document.getElementById("admin-village-latitude").value,lon=document.getElementById("admin-village-longitude").value;
+  const payload={name:document.getElementById("admin-village-name").value.trim(),slug:document.getElementById("admin-village-slug").value.trim().toLowerCase(),postal_code:document.getElementById("admin-village-postal").value.trim(),status:document.getElementById("admin-village-status").value,description:document.getElementById("admin-village-description").value.trim(),latitude:lat===""?null:Number(lat),longitude:lon===""?null:Number(lon),photo_url:document.getElementById("admin-village-photo").value.trim()};
   save.disabled=true;status.textContent="Enregistrement…";
-  try{
-    let photoUrl=document.getElementById("admin-village-photo").value.trim();
-    const photoFile=document.getElementById("admin-village-photo-file")?.files?.[0];
-    if(photoFile){
-      if(!["image/jpeg","image/png","image/webp"].includes(photoFile.type))throw new Error("Choisis une image JPG, PNG ou WEBP.");
-      if(photoFile.size>8*1024*1024)throw new Error("La photo ne doit pas dépasser 8 Mo.");
-      status.textContent="Envoi de la photo…";
-      const signed=await adminApi("/api/admin/cloudinary/signature",{method:"POST",body:JSON.stringify({})});
-      const formData=new FormData();formData.append("file",photoFile);formData.append("api_key",signed.api_key);formData.append("timestamp",String(signed.timestamp));formData.append("folder",signed.folder);formData.append("signature",signed.signature);
-      const upload=await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloud_name)}/image/upload`,{method:"POST",body:formData});
-      const uploaded=await upload.json().catch(()=>({}));if(!upload.ok||!uploaded.secure_url)throw new Error(uploaded.error?.message||"L’envoi de la photo a échoué.");photoUrl=uploaded.secure_url;
-    }
-    const payload={name:document.getElementById("admin-village-name").value.trim(),slug:document.getElementById("admin-village-slug").value.trim().toLowerCase(),postal_code:document.getElementById("admin-village-postal").value.trim(),status:document.getElementById("admin-village-status").value,description:document.getElementById("admin-village-description").value.trim(),latitude:lat===""?null:Number(lat),longitude:lon===""?null:Number(lon),photo_url:photoUrl};
-    status.textContent="Enregistrement…";
-    await adminApi(id?`/api/admin/villages/${encodeURIComponent(id)}`:"/api/admin/villages",{method:id?"PATCH":"POST",body:JSON.stringify(payload)});
-    status.textContent=id?"Village modifié avec succès.":"Village ajouté avec succès.";
-    if(listStatus)listStatus.textContent=status.textContent;
-    adminResetVillageForm();await window.adminLoadVillages();adminVillageTab("list");
-  }
+  try{await adminApi(id?`/api/admin/villages/${encodeURIComponent(id)}`:"/api/admin/villages",{method:id?"PATCH":"POST",body:JSON.stringify(payload)});status.textContent=id?"Village modifié avec succès.":"Village ajouté avec succès.";adminResetVillageForm();await window.adminLoadVillages();adminVillageTab("list");}
   catch(error){status.textContent=error.message||"Impossible d’enregistrer le village.";}
   finally{save.disabled=false;}
 });
@@ -6385,11 +6067,14 @@ document.getElementById("admin-adventure-create-form")?.addEventListener("submit
 });
 window.adminLoadAdventureSteps=async function(id,title){
   const panel=document.getElementById("admin-adventure-steps-panel"),list=document.getElementById("admin-adventure-steps-list"),heading=document.getElementById("admin-adventure-steps-title");
-  window.adminSelectedAdventureId=id;panel.hidden=false;heading.textContent=`Étapes — ${title}`;list.textContent="Chargement…";
+  window.adminSelectedAdventureId=id;window.adminEditingStepId=null;panel.hidden=false;heading.textContent=`Étapes — ${title}`;const testBtn=document.getElementById("admin-test-humbert-btn");if(testBtn)testBtn.hidden=!String(title||"").toLowerCase().includes("humbert");list.textContent="Chargement…";
   try{const data=await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps`),steps=Array.isArray(data.steps)?data.steps:[];list.replaceChildren();
     if(data.level?.riddle_count){const info=document.createElement("p");info.textContent=`Niveau ${data.level.level_key} : ${steps.length}/${data.level.riddle_count} étapes prévues · ${data.level.star_count} étoiles`;info.style.cssText="font-weight:600;color:#52634f";list.appendChild(info);document.getElementById("admin-step-number").max=String(data.level.riddle_count);document.getElementById("admin-step-form-note")?.remove();}
     if(!steps.length)list.textContent="Aucune étape pour le moment. Tu peux ajouter les lieux ci-dessous.";
-    steps.forEach(step=>{const row=document.createElement("div");row.style.cssText="padding:12px;border-bottom:1px solid #eee8d9;margin:0;display:grid;gap:8px";const title=document.createElement("strong");title.textContent=`Étape ${step.step_number} — ${step.place_name}`;row.appendChild(title);if(step.photo_url){const img=document.createElement("img");img.src=step.photo_url;img.alt=`Photo de ${step.place_name}`;img.loading="lazy";img.style.cssText="max-width:260px;max-height:180px;object-fit:cover;border-radius:10px";row.appendChild(img);}const gps=document.createElement("span");gps.textContent=step.latitude!=null&&step.longitude!=null?`GPS : ${step.latitude}, ${step.longitude} · Rayon de validation : ${Number(step.gps_radius_meters)||100} m`:"GPS à renseigner · Rayon prévu : "+(Number(step.gps_radius_meters)||100)+" m";row.appendChild(gps);if(step.latitude!=null&&step.longitude!=null){const sim=document.createElement("button");sim.type="button";sim.className="admin-secondary-btn";sim.textContent="Voir le point sur la carte (simulation admin)";sim.addEventListener("click",()=>{const box=document.getElementById("admin-step-map-preview");box.replaceChildren();const frame=document.createElement("iframe");frame.title=`Carte du point ${step.place_name}`;frame.loading="lazy";frame.width="100%";frame.height="280";frame.style.border="0";frame.style.borderRadius="12px";frame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${Number(step.longitude)-0.003}%2C${Number(step.latitude)-0.002}%2C${Number(step.longitude)+0.003}%2C${Number(step.latitude)+0.002}&layer=mapnik&marker=${step.latitude}%2C${step.longitude}`;box.appendChild(frame);const note=document.createElement("p");note.textContent="Aperçu uniquement : aucune validation GPS de joueur n’est enregistrée.";box.appendChild(note);});row.appendChild(sim);}list.appendChild(row);});
+    steps.forEach(step=>{const row=document.createElement("div");row.style.cssText="padding:12px;border-bottom:1px solid #eee8d9;margin:0;display:grid;gap:8px";const title=document.createElement("strong");title.textContent=`Étape ${step.step_number} — ${step.place_name}`;row.appendChild(title);if(step.photo_url){const img=document.createElement("img");img.src=step.photo_url;img.alt=`Photo de ${step.place_name}`;img.loading="lazy";img.style.cssText="max-width:260px;max-height:180px;object-fit:cover;border-radius:10px";row.appendChild(img);}const gps=document.createElement("span");gps.textContent=step.latitude!=null&&step.longitude!=null?`GPS : ${step.latitude}, ${step.longitude} · Rayon de validation : ${Number(step.gps_radius_meters)||100} m`:"GPS à renseigner · Rayon prévu : "+(Number(step.gps_radius_meters)||100)+" m";row.appendChild(gps);if(step.latitude!=null&&step.longitude!=null){const sim=document.createElement("button");sim.type="button";sim.className="admin-secondary-btn";sim.textContent="Voir le point sur la carte (simulation admin)";sim.addEventListener("click",()=>{const box=document.getElementById("admin-step-map-preview");box.replaceChildren();const frame=document.createElement("iframe");frame.title=`Carte du point ${step.place_name}`;frame.loading="lazy";frame.width="100%";frame.height="280";frame.style.border="0";frame.style.borderRadius="12px";frame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${Number(step.longitude)-0.003}%2C${Number(step.latitude)-0.002}%2C${Number(step.longitude)+0.003}%2C${Number(step.latitude)+0.002}&layer=mapnik&marker=${step.latitude}%2C${step.longitude}`;box.appendChild(frame);const note=document.createElement("p");note.textContent="Aperçu uniquement : aucune validation GPS de joueur n’est enregistrée.";box.appendChild(note);});row.appendChild(sim);}
+      const actions=document.createElement("div");actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
+      const edit=document.createElement("button");edit.type="button";edit.className="admin-secondary-btn";edit.textContent="✏️ Modifier cette étape";edit.addEventListener("click",()=>{window.adminEditingStepId=step.id;document.getElementById("admin-step-number").value=step.step_number;document.getElementById("admin-step-place").value=step.place_name||"";document.getElementById("admin-step-lat").value=step.latitude??"";document.getElementById("admin-step-lon").value=step.longitude??"";document.getElementById("admin-step-gps-radius").value=step.gps_radius_meters||100;document.getElementById("admin-step-riddle").value=step.riddle||"";document.getElementById("admin-step-answer").value=step.answer||"";document.getElementById("admin-step-hint").value=step.hint||"";document.getElementById("admin-step-photo").value=step.photo_url||"";document.getElementById("admin-step-photo-file").value="";const submit=document.querySelector('#admin-adventure-step-form button[type="submit"]');submit.textContent="💾 Enregistrer les modifications";document.getElementById("admin-step-place").focus();});actions.appendChild(edit);
+      const del=document.createElement("button");del.type="button";del.className="admin-secondary-btn";del.textContent="🗑️ Supprimer cette étape";del.addEventListener("click",async()=>{if(!confirm(`Supprimer uniquement l’étape ${step.step_number} — ${step.place_name} ? Cette action est définitive.`))return;try{await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps/${encodeURIComponent(step.id)}`,{method:"DELETE"});await window.adminLoadAdventureSteps(id,heading.textContent.replace("Étapes — ","")); }catch(err){alert(err.message||"Suppression impossible.");}});actions.appendChild(del);row.appendChild(actions);list.appendChild(row);});
     const next=Math.max(0,...steps.map(x=>Number(x.step_number)||0))+1;document.getElementById("admin-step-number").value=String(next);
   }catch(e){list.textContent=e.message||"Impossible de charger les étapes.";}
 };
@@ -6409,7 +6094,7 @@ document.getElementById("admin-adventure-step-form")?.addEventListener("submit",
       const uploaded=await upload.json().catch(()=>({}));if(!upload.ok||!uploaded.secure_url)throw new Error(uploaded.error?.message||"L’envoi de la photo a échoué.");photoUrl=uploaded.secure_url;
     }
     const payload={step_number:Number(document.getElementById("admin-step-number").value),place_name:document.getElementById("admin-step-place").value.trim(),latitude:document.getElementById("admin-step-lat").value||null,longitude:document.getElementById("admin-step-lon").value||null,gps_radius_meters:Number(document.getElementById("admin-step-gps-radius").value||100),riddle:document.getElementById("admin-step-riddle").value.trim(),answer:document.getElementById("admin-step-answer").value.trim(),hint:document.getElementById("admin-step-hint").value.trim(),photo_url:photoUrl};
-    await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps`,{method:"POST",body:JSON.stringify(payload)});document.getElementById("admin-step-place").value="";document.getElementById("admin-step-lat").value="";document.getElementById("admin-step-lon").value="";document.getElementById("admin-step-gps-radius").value="100";document.getElementById("admin-step-riddle").value="";document.getElementById("admin-step-answer").value="";document.getElementById("admin-step-hint").value="";document.getElementById("admin-step-photo").value="";if(photoInput)photoInput.value="";document.getElementById("admin-step-photo-preview")?.replaceChildren();const title=document.getElementById("admin-adventure-steps-title").textContent.replace("Étapes — ","");await window.adminLoadAdventureSteps(id,title);document.getElementById("admin-adventures-status").textContent="Étape enregistrée.";
+    await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps${window.adminEditingStepId?`/${encodeURIComponent(window.adminEditingStepId)}`:""}`,{method:window.adminEditingStepId?"PATCH":"POST",body:JSON.stringify(payload)});window.adminEditingStepId=null;document.querySelector('#admin-adventure-step-form button[type="submit"]').textContent="➕ Ajouter l’étape / énigme";document.getElementById("admin-step-place").value="";document.getElementById("admin-step-lat").value="";document.getElementById("admin-step-lon").value="";document.getElementById("admin-step-gps-radius").value="100";document.getElementById("admin-step-riddle").value="";document.getElementById("admin-step-answer").value="";document.getElementById("admin-step-hint").value="";document.getElementById("admin-step-photo").value="";if(photoInput)photoInput.value="";document.getElementById("admin-step-photo-preview")?.replaceChildren();const title=document.getElementById("admin-adventure-steps-title").textContent.replace("Étapes — ","");await window.adminLoadAdventureSteps(id,title);document.getElementById("admin-adventures-status").textContent="Étape enregistrée.";
   }catch(err){alert(err.message||"Impossible d'ajouter l'étape.");}finally{btn.disabled=false;}
 });
 
@@ -6492,7 +6177,7 @@ window.saveSiteStatus=async function(){
 };
 async function loadPublicSiteStatus(){
   try{
-    const response=await fetch(`${window.API_BASE}/api/site-status`,{cache:"no-store"});
+    const response=await fetch(`${API_BASE}/api/site-status`,{cache:"no-store"});
     if(!response.ok)throw new Error(`HTTP ${response.status}`);
     const data=await response.json();
     const meta=SITE_STATUS_META[data.status]||SITE_STATUS_META.online;
@@ -6601,7 +6286,7 @@ window.loadPublicNews=async function(){
  [homeList,homeMore,dashList,updatesList].filter(Boolean).forEach(el=>el.replaceChildren());
  if(toggle){toggle.hidden=true;toggle.setAttribute('aria-expanded','false');}
  try{
-   const response=await fetch(`${window.API_BASE}/api/news`);
+   const response=await fetch(`${API_BASE}/api/news`);
    const data=await response.json().catch(()=>({}));
    if(!response.ok)throw new Error(data.error||'Impossible de charger les publications.');
    const items=Array.isArray(data.news)?data.news:[];
@@ -6784,7 +6469,7 @@ window.adminLoadTeamByVillage = async function(){
   status.textContent="Chargement des villages et des modérateurs…";
   root.replaceChildren();
   try{
-    const [data,villageData]=await Promise.all([adminApi("/api/admin/team"),adminApi("/api/admin/villages")]);
+    const [data,villageData]=await Promise.all([adminApi("/api/team-space/overview"),adminApi("/api/admin/villages")]);
     const villageNames=new Map((villageData.villages||[]).map(v=>[v.slug,v.name]));
     const groups=new Map();
     (data.members||[]).filter(m=>m.role==="moderator"&&m.status==="active").forEach(m=>{
@@ -6824,7 +6509,7 @@ window.adminLoadTeamSpace = async function(){
   const canComm=isAdmin||perms.includes("team_communication"), canReports=isAdmin||perms.includes("player_reports");
   document.getElementById("team-space-notes-area").hidden=!canComm;document.getElementById("team-space-chat-area").hidden=!canComm;document.getElementById("team-space-reports-area").hidden=!canReports;
   try{
-    const overview=await adminApi("/api/admin/team");
+    const overview=await adminApi("/api/team-space/overview");
     const root=document.getElementById("team-space-villages");root.replaceChildren();
     const groups=new Map();(overview.members||[]).forEach(m=>(m.allowed_villages||[]).forEach(v=>{if(!groups.has(v))groups.set(v,[]);groups.get(v).push(m.name||m.email);}));
     if(!groups.size){const p=document.createElement("p");p.textContent="Aucun village n'est encore attribué à un modérateur.";root.append(p);}
@@ -6918,7 +6603,7 @@ window.setAdminAccessGranted = function(value){
       ? "Espace réservé aux missions validées par l’administration"
       : "Réservé aux administrateurs autorisés";
   }
-  if(testerNav) testerNav.hidden = !(isAdmin || window.testerApplicationAccepted === true);
+  if(testerNav) testerNav.hidden = !isAdmin;
   // Le CSS du tableau de bord force certains boutons en display:flex!important.
   // On applique donc aussi display:none!important pour que l'attribut hidden soit respecté.
   document.querySelectorAll(".admin-nav-item").forEach(button => {
@@ -7036,7 +6721,7 @@ function ouvrirPropositionVillage(){
 
 async function playerApi(path, options = {}) {
   const token = await getAdminBearerToken();
-  const response = await fetch(`${window.API_BASE}${path}`, {
+  const response = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json', ...(options.headers || {}) }
   });
@@ -7163,15 +6848,6 @@ function showDashSection(id){
   // En administration, le menu explorateur latéral est masqué et la navigation admin passe en haut.
   const dashboard = document.getElementById("dashboard");
   if(dashboard) dashboard.classList.toggle("admin-mode", id === "dash-admin-info");
-  // L'espace testeur est un enfant direct de #dashboard (pas de .content) :
-  // on le masque explicitement lorsque l'administration est ouverte.
-  if(id === "dash-admin-info"){
-    const testerSpace = document.getElementById("dash-tester-space");
-    if(testerSpace){
-      testerSpace.classList.add("hidden");
-      testerSpace.style.display = "none";
-    }
-  }
 
   // L'administration est déplacée au début de la zone de contenu au moment
   // de son ouverture. Elle ne reste donc plus après toutes les rubriques joueur.
@@ -7217,7 +6893,6 @@ function showDashSection(id){
     const section = document.getElementById(sectionId);
     if(section) {
       section.classList.add("hidden");
-      if(sectionId === "dash-tester-space") section.hidden = true;
       // Masquage explicite : empêche une ancienne rubrique de conserver
       // sa hauteur et de créer un grand espace vide au-dessus du contenu.
       section.style.display = "none";
@@ -7226,7 +6901,6 @@ function showDashSection(id){
   const selected = document.getElementById(id);
   if(!selected){console.warn("Rubrique introuvable :", id);return;}
   selected.classList.remove("hidden");
-  if(id === "dash-tester-space") selected.hidden = false;
   selected.style.removeProperty("display");
   if(id === "dash-news" || id === "dash-updates") window.loadPublicNews?.();
   if(id === "dash-notifications") window.loadMemberNotifications?.();
@@ -7238,10 +6912,6 @@ function showDashSection(id){
   if(id === "dash-badges") window.loadMyAwardedRewards?.();
   if(id === "dash-testers") window.loadTesterApplication?.();
   if(id === "dash-tester-space") window.loadTesterSpace?.();
-  else {
-    const privateTesterSpace = document.getElementById("dash-tester-space");
-    if(privateTesterSpace){ privateTesterSpace.hidden = true; privateTesterSpace.classList.add("hidden"); privateTesterSpace.style.display = "none"; }
-  }
   document.querySelectorAll("#dashboard .nav-btn").forEach(btn=>btn.classList.remove("active"));
   const clickedButton = Array.from(document.querySelectorAll("#dashboard .nav-btn"))
     .find(btn => (btn.getAttribute("onclick") || "").includes("'" + id + "'"));
@@ -7373,66 +7043,30 @@ function actualiserProgressionCartePersonnelle(){
   if(status) status.textContent = humbertDone ? "Statut : découvert ✓" : "Statut : pas encore visité";
 }
 
-async function actualiserCarteVillages(){
-  const humbertDone=localStorage.getItem("humbertTamponObtenu")==="true";
-  const mapSection=document.getElementById("dash-village-map");
-  if(!mapSection||mapSection.classList.contains("hidden"))return;
-  const mapEl=document.getElementById("village-map"),listEl=document.getElementById("map-village-list");
-  if(typeof L==="undefined"){if(mapEl)mapEl.textContent="La carte n’a pas pu être chargée. Vérifie ta connexion internet.";return;}
-  try{
-    const response=await fetch(`${window.API_BASE}/api/villages`,{cache:"no-store"});
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(data.error||"Impossible de charger les villages.");
-    // Sécurité d’affichage : l’espace testeur est une rubrique du compte,
-    // jamais un village à afficher dans Explorer ou sur la carte.
-    const isRealVillage = v => {
-      const norm = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-      const name = norm(v?.name), slug = norm(v?.slug);
-      const reserved = new Set(["espace-testeur", "espace-testeurs", "testeur", "testeurs"]);
-      return !reserved.has(name) && !reserved.has(slug);
-    };
-    const villages=(Array.isArray(data.villages)?data.villages:[]).filter(isRealVillage);
-    if(listEl){
-      listEl.replaceChildren();
-      if(!villages.length){const p=document.createElement("p");p.textContent="Aucun village n’est encore enregistré.";listEl.append(p);}
-      villages.forEach(v=>{
-        const card=document.createElement("article");card.className="map-village-card";
-        const title=document.createElement("strong");title.textContent=`🏡 ${v.name||"Village"}${v.postal_code?" · "+v.postal_code:""}`;
-        const visited=String(v.slug).toLowerCase()==="humbert"&&humbertDone;
-        const labels={pending_confirmation:"En attente de confirmation",upcoming_preparation:"Prochaine préparation",in_progress:"En travaux",available:"Disponible",suspended:"Suspendu",updating:"Mise à jour"};
-        const status=document.createElement("span");status.className="map-village-status "+(visited?"available":(v.status||""));status.textContent="Statut : "+(visited?"Visité ✓":(labels[v.status]||"À découvrir"));
-        const desc=document.createElement("p");desc.style.cssText="font-size:14px;margin:8px 0";desc.textContent=v.description||"Village à découvrir prochainement.";
-        card.append(title,status,desc);
-        const button=document.createElement("button");button.type="button";button.className="small-btn";
-        if(String(v.slug).toLowerCase()==="humbert"&&v.status==="available"){button.textContent="Découvrir l’aventure";button.addEventListener("click",()=>showDashSection("dash-adventures"));}
-        else{button.textContent="Suivre les actualités";button.addEventListener("click",()=>showDashSection("dash-news"));}
-        card.append(button);listEl.append(card);
-      });
-    }
-    if(!villageMapInstance){
-      villageMapInstance=L.map("village-map").setView([50.5,1.9],10);
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(villageMapInstance);
-    }
-    Object.values(villageMapMarkers).forEach(marker=>{try{villageMapInstance.removeLayer(marker);}catch{}});
-    villageMapMarkers={};const bounds=[];
-    const colors={available:"#238044",pending_confirmation:"#e5a000",upcoming_preparation:"#8b9290",in_progress:"#287da7",suspended:"#c63b35",updating:"#8053b8"};
-    villages.forEach(v=>{
-      const lat=Number(v.latitude),lon=Number(v.longitude);
-      if(v.latitude===null||v.longitude===null||!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180)return;
-      const visited=String(v.slug).toLowerCase()==="humbert"&&humbertDone;
-      const marker=L.circleMarker([lat,lon],{radius:10,color:"#fff",weight:2,fillColor:visited?"#23834a":(colors[v.status]||"#8b9290"),fillOpacity:1}).addTo(villageMapInstance);
-      const safeName=String(v.name||"Village").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-      const label=visited?"Visité ✓":({pending_confirmation:"En attente de confirmation",upcoming_preparation:"Prochaine préparation",in_progress:"En travaux",available:"Disponible",suspended:"Suspendu",updating:"Mise à jour"}[v.status]||"À découvrir");
-      marker.bindPopup(`<strong>${safeName}</strong><br>${label}`);bounds.push([lat,lon]);villageMapMarkers[v.id]=marker;
-    });
-    if(bounds.length===1)villageMapInstance.setView(bounds[0],13);
-    else if(bounds.length>1)villageMapInstance.fitBounds(bounds,{padding:[30,30],maxZoom:12});
-    else villageMapInstance.setView([50.5,1.9],9);
-    setTimeout(()=>villageMapInstance.invalidateSize(),120);
-  }catch(error){
-    console.error("Carte des villages:",error);
-    if(listEl){listEl.replaceChildren();const p=document.createElement("p");p.textContent=error.message||"La liste des villages est indisponible.";listEl.append(p);}
+function actualiserCarteVillages(){
+  const humbertDone = localStorage.getItem("humbertTamponObtenu") === "true";
+  const hStatus = document.getElementById("map-status-humbert");
+  if(hStatus) hStatus.textContent = humbertDone ? "Statut : visité ✓" : "Statut : disponible";
+  const mapSection = document.getElementById("dash-village-map");
+  if(!mapSection || mapSection.classList.contains("hidden")) return;
+  if(typeof L === "undefined"){
+    const el=document.getElementById("village-map");
+    if(el) el.textContent="La carte n’a pas pu être chargée. Vérifie ta connexion internet.";
+    return;
   }
+  if(!villageMapInstance){
+    villageMapInstance=L.map("village-map").setView([50.4982,1.8925],12);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{
+      maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(villageMapInstance);
+    villageMapMarkers.humbert=L.circleMarker([50.50379,1.9064],{radius:10,color:"#ffffff",weight:2,fillColor:"#23834a",fillOpacity:1}).addTo(villageMapInstance);
+    villageMapMarkers.sempy=L.circleMarker([50.49291,1.87896],{radius:10,color:"#ffffff",weight:2,fillColor:"#8b9290",fillOpacity:1}).addTo(villageMapInstance);
+  }
+  const hColor=humbertDone?"#23834a":"#d39b25";
+  villageMapMarkers.humbert.setStyle({fillColor:hColor});
+  villageMapMarkers.humbert.bindPopup("<strong>Humbert</strong><br>"+(humbertDone?"Village visité ✓":"Aventure disponible"));
+  villageMapMarkers.sempy.bindPopup("<strong>Sempy</strong><br>À découvrir — parcours à préparer");
+  setTimeout(()=>villageMapInstance.invalidateSize(),100);
 }
 
 function actualiserPasseport(){
@@ -8854,7 +8488,7 @@ window.loadAdminDashboardOverview = async function(){
   const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value??"—");};
   // Réutilise exactement le client sécurisé déjà utilisé par l'administration.
   // Il récupère le jeton Neon, ajoute les en-têtes et gère les erreurs comme les autres pages.
-  const api=async(path)=>await window.adminApi(path);
+  const api=async(path)=>await adminApi(path);
   const [analyticsR,playersR,teamR,villagesR,adventuresR,testersR,supportR]=await Promise.allSettled([
     api("/api/admin/analytics"),api("/api/admin/players"),api("/api/admin/team"),
     api("/api/admin/villages"),api("/api/admin/adventures"),api("/api/admin/testers"),api("/api/admin/support")
@@ -8972,5 +8606,5 @@ window.loadAdminDashboardOverview = async function(){
 };
 </script>
 
-<style id="tester-space-visibility-fix">#dash-tester-space[hidden],#dash-tester-space.hidden{display:none!important}</style>\n</body>
+</body>
 </html>
