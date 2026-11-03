@@ -8942,5 +8942,34 @@ window.loadAdminDashboardOverview = async function(){
 };
 </script>
 
-<style id="tester-space-visibility-fix">#dash-tester-space.hidden{display:none!important}</style>\n</body>
+<style id="tester-space-visibility-fix">#dash-tester-space.hidden{display:none!important}</style>\n
+<style id="fix-espace-testeur-alignement">
+/* Correctif final : l'espace testeur reprend la largeur normale de la zone de contenu.
+   Neutralise les anciens essais de centrage avec left:50% et translateX(-50%). */
+#dash-tester-space.tester-dashboard {
+  display: block !important;
+  position: static !important;
+  inset: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  padding: 12px clamp(12px, 2vw, 28px) 28px !important;
+}
+#dash-tester-space.tester-dashboard > * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+@media (max-width: 650px) {
+  #dash-tester-space.tester-dashboard {
+    padding: 9px 8px 22px !important;
+  }
+}
+</style>
+
+</body>
 </html>
