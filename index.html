@@ -2960,6 +2960,7 @@ body.halloween-accueil .home-hero{
             <button class="admin-nav-item" type="button" onclick="adminOpenTeam()"><span>👥</span> Gestion de l'équipe</button>
             <button class="admin-nav-item" id="team-by-village-nav-item" type="button" onclick="adminOpenTeamByVillage()"><span>🏘️</span> Équipe par village</button>
             <button class="admin-nav-item" id="team-space-nav-item" type="button" onclick="adminOpenTeamSpace()"><span>🛡️</span> Vie de l'équipe</button>
+            <button class="admin-nav-item" id="moderator-space-nav-item" type="button" onclick="adminOpenCommunication()"><span>🛡️</span> Mon espace modérateur</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
           </div>
@@ -6334,18 +6335,19 @@ window.setAdminAccessGranted = function(value){
     const action = button.getAttribute("onclick") || "";
     const communicationOnly = action.includes("adminOpenCommunication");
     const teamSpaceItem = button.id === "team-space-nav-item";
+    const moderatorSpaceItem = button.id === "moderator-space-nav-item";
     const teamByVillageItem = button.id === "team-by-village-nav-item";
     const perms = window.adminCurrentPermissions || [];
     const canTeamSpace = isAdmin || (perms.includes("team_communication") || perms.includes("player_reports"));
-    const visible = isModerator ? (communicationOnly || (teamSpaceItem && canTeamSpace)) : isAdmin;
+    // Le lien "Mon espace modérateur" est placé dans "Membres et équipe".
+    // Le lien "Centre de communication" reste réservé à l'administration.
+    const visible = isModerator
+      ? (moderatorSpaceItem || (teamSpaceItem && canTeamSpace))
+      : (isAdmin && !moderatorSpaceItem);
     if(teamByVillageItem && !isAdmin) { button.hidden=true; button.style.setProperty("display","none","important"); return; }
+    if(communicationOnly && isModerator) { button.hidden=true; button.style.setProperty("display","none","important"); return; }
     button.hidden = !visible;
     button.style.setProperty("display", visible ? "" : "none", "important");
-    if (isModerator && communicationOnly) {
-      const icon = button.querySelector("span");
-      if (icon) icon.textContent = "🛡️";
-      Array.from(button.childNodes).filter(node => node.nodeType === Node.TEXT_NODE).forEach(node => node.textContent = " Mon espace modérateur");
-    }
   });
   // Masque également les rubriques parentes qui ne contiennent aucun bouton autorisé.
   document.querySelectorAll(".admin-category").forEach(category => {
