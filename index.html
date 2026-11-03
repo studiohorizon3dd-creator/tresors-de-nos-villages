@@ -2270,6 +2270,118 @@ body.halloween-accueil .home-hero{
 }
 
 </style>
+
+<style id="tester-layout-final-fix">
+/* Correctif final : espace testeur centré, aéré et isolé des autres rubriques */
+#dash-tester-space.hidden,
+#dashboard.admin-mode #dash-tester-space {
+  display: none !important;
+}
+#dash-tester-space.tester-dashboard:not(.hidden) {
+  display: block !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: 1680px !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  padding: 24px clamp(16px, 2.2vw, 36px) 40px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+#dash-tester-space .tester-dashboard-hero {
+  width: 100% !important;
+  min-height: 112px !important;
+  padding: 18px clamp(18px, 2.5vw, 38px) !important;
+  border-radius: 18px !important;
+}
+#dash-tester-space .tester-dashboard-topstats {
+  width: 100% !important;
+  grid-template-columns: minmax(230px, 1.45fr) repeat(5, minmax(0, 1fr)) !important;
+  gap: 0 !important;
+  margin: 16px 0 20px !important;
+  padding: 12px !important;
+}
+#dash-tester-space .tester-identity-card,
+#dash-tester-space .tester-topstat {
+  min-width: 0 !important;
+  min-height: 92px !important;
+  padding: 10px 12px !important;
+}
+#dash-tester-space .tester-dashboard-grid {
+  display: grid !important;
+  width: 100% !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+}
+#dash-tester-space .tester-dash-card {
+  min-width: 0 !important;
+  padding: 20px !important;
+  border-radius: 17px !important;
+}
+#dash-tester-space .tester-announcement-card { grid-column: span 5 !important; min-height: 205px !important; }
+#dash-tester-space .tester-progression-card { grid-column: span 7 !important; min-height: 205px !important; }
+#dash-tester-space .tester-missions-card,
+#dash-tester-space .tester-access-card,
+#dash-tester-space .tester-validation-card,
+#dash-tester-space .tester-feedback-card {
+  grid-column: span 3 !important;
+  min-height: 300px !important;
+}
+#dash-tester-space .tester-history-card,
+#dash-tester-space .tester-badges-card,
+#dash-tester-space .tester-version-card {
+  grid-column: span 4 !important;
+  min-height: 230px !important;
+}
+#dash-tester-space .tester-dash-card h3 {
+  font-size: 20px !important;
+  line-height: 1.25 !important;
+  margin: 0 0 13px !important;
+  padding-bottom: 10px !important;
+}
+#dash-tester-space .tester-dash-card > p {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  margin: 8px 0 14px !important;
+}
+#dash-tester-space .tester-rank-track { gap: 12px !important; margin: 14px 0 !important; }
+#dash-tester-space .tester-rank-item { min-height: 100px !important; padding: 8px !important; }
+#dash-tester-space .tester-rank-item img { width: 78px !important; height: 78px !important; }
+#dash-tester-space .tester-dash-form { gap: 12px !important; }
+#dash-tester-space .tester-dash-form select,
+#dash-tester-space .tester-dash-form textarea { padding: 12px 14px !important; font-size: 14px !important; }
+#dash-tester-space .tester-dash-form textarea { min-height: 88px !important; }
+#dash-tester-space .tester-extra-tools { margin-top: 18px !important; }
+@media (max-width: 1100px) {
+  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  #dash-tester-space .tester-identity-card { grid-column: 1 / -1 !important; justify-content: center !important; }
+  #dash-tester-space .tester-announcement-card,
+  #dash-tester-space .tester-progression-card { grid-column: span 6 !important; }
+  #dash-tester-space .tester-missions-card,
+  #dash-tester-space .tester-access-card,
+  #dash-tester-space .tester-validation-card,
+  #dash-tester-space .tester-feedback-card { grid-column: span 6 !important; }
+  #dash-tester-space .tester-history-card,
+  #dash-tester-space .tester-badges-card,
+  #dash-tester-space .tester-version-card { grid-column: span 4 !important; }
+}
+@media (max-width: 680px) {
+  #dash-tester-space.tester-dashboard:not(.hidden) { padding: 12px 10px 26px !important; }
+  #dash-tester-space .tester-dashboard-hero { min-height: 90px !important; padding: 12px 14px !important; }
+  #dash-tester-space .tester-dashboard-brand h2 { font-size: 26px !important; }
+  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  #dash-tester-space .tester-identity-card { grid-column: 1 / -1 !important; justify-content: flex-start !important; }
+  #dash-tester-space .tester-dashboard-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 12px !important; }
+  #dash-tester-space .tester-dashboard-grid > .tester-dash-card { grid-column: 1 / -1 !important; min-height: 0 !important; }
+  #dash-tester-space .tester-dash-card { padding: 16px !important; }
+  #dash-tester-space .tester-rank-item img { width: 58px !important; height: 60px !important; }
+}
+</style>
+
 </head>
 <body>
 
