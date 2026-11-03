@@ -1710,6 +1710,21 @@ body.halloween-accueil .home-hero{
   #dashboard.admin-mode .admin-category-links{padding:6px}
 }
 
+
+/* Rubrique Prochainement */
+.upcoming-hero{display:flex;align-items:center;gap:18px;padding:24px clamp(18px,3vw,34px);margin:0 0 22px;border:1px solid #d7ad45;border-radius:18px;background:linear-gradient(115deg,#062c20,#18543a);color:#fff5d7;box-shadow:0 7px 20px #18332618}
+.upcoming-hero-icon{display:grid;place-items:center;flex:none;width:66px;height:66px;border-radius:50%;background:#f4e3b4;color:#725216;font-size:34px;border:2px solid #d7ad45}
+.upcoming-kicker{margin:0 0 5px;color:#f0d27a;font:700 11px Arial,sans-serif;letter-spacing:2px}
+.upcoming-hero h3{margin:0 0 7px;color:#fff0b5;font-size:clamp(25px,3vw,34px)}
+.upcoming-hero p:last-child{margin:0;color:#fff8e7;line-height:1.55}
+.upcoming-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.upcoming-card{padding:18px 20px;border:1px solid #e3d1a2;border-radius:15px;background:#fffaf0;box-shadow:0 4px 14px #1833260d}
+.upcoming-card h4{margin:8px 0;color:#123d2b;font-size:20px}
+.upcoming-card p{margin:0;color:#465348;line-height:1.6;white-space:pre-wrap}
+.upcoming-status{display:inline-flex;padding:5px 10px;border-radius:30px;background:#f4e8c4;color:#765b1d;font:700 11px Arial,sans-serif;letter-spacing:.5px;text-transform:uppercase}
+.upcoming-status.development{background:#e3ebf8;color:#31577f}
+.upcoming-status.available{background:#e1f0e3;color:#27633a}
+@media(max-width:600px){.upcoming-hero{align-items:flex-start;padding:19px 16px}.upcoming-hero-icon{width:52px;height:52px;font-size:27px}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -2133,6 +2148,7 @@ body.halloween-accueil .home-hero{
           <button class="nav-btn" onclick="showDashSection('dash-help')">❔ &nbsp; Aide</button>
           <button class="nav-btn" onclick="showDashSection('dash-news')">📰 &nbsp; Actualités</button>
           <button class="nav-btn" onclick="showDashSection('dash-updates')">🔄 &nbsp; Mises à jour</button>
+          <button class="nav-btn" onclick="showDashSection('dash-upcoming')">✨ &nbsp; Prochainement</button>
           <button class="nav-btn" onclick="showDashSection('dash-town-contact')">✉ &nbsp; Contact – Mairies</button>
           <button class="nav-btn" onclick="showDashSection('dash-support')">🎧 &nbsp; Centre d’aide & Support</button>
         </div>
@@ -2748,6 +2764,18 @@ body.halloween-accueil .home-hero{
   <p>Découvre l’évolution du site : nouvelles fonctionnalités, améliorations, corrections et opérations de maintenance.</p>
   <p id="public-updates-status" class="status" role="status" aria-live="polite">Chargement des mises à jour…</p>
   <div id="public-updates-list" aria-live="polite"></div>
+</section>
+<section class="dash-section hidden" id="dash-upcoming">
+  <div class="upcoming-hero">
+    <div class="upcoming-hero-icon">✨</div>
+    <div>
+      <p class="upcoming-kicker">LES PROCHAINES ÉTAPES DU PROJET</p>
+      <h3>Prochainement</h3>
+      <p>Découvre les nouveautés et les fonctionnalités que nous préparons pour enrichir tes aventures.</p>
+    </div>
+  </div>
+  <p id="public-upcoming-status" class="status" role="status" aria-live="polite">Chargement des nouveautés…</p>
+  <div id="public-upcoming-list" class="upcoming-list" aria-live="polite"></div>
 </section>
 
 <section class="dash-section hidden" id="dash-town-contact">
@@ -4230,7 +4258,8 @@ body.halloween-accueil .home-hero{
         <form id="admin-news-form" class="feature" style="display:grid;gap:12px">
           <input id="admin-news-id" type="hidden">
           <label>Titre<input id="admin-news-title" maxlength="180" required style="display:block;width:100%;padding:12px"></label>
-          <label>Type de publication<select id="admin-news-category" required style="display:block;width:100%;padding:12px"><option value="Actualité">📰 Actualité</option><option value="Mise à jour">🔄 Mise à jour</option></select></label>
+          <label>Type de publication<select id="admin-news-category" required style="display:block;width:100%;padding:12px"><option value="Actualité">📰 Actualité</option><option value="Mise à jour">🔄 Mise à jour</option><option value="Prochainement - En préparation">✨ Prochainement — En préparation</option><option value="Prochainement - À venir">✨ Prochainement — À venir</option><option value="Prochainement - En développement">🛠️ Prochainement — En développement</option><option value="Prochainement - Disponible">✅ Prochainement — Disponible</option></select></label>
+          <small style="display:block;margin-top:-5px;color:#667263">Pour annoncer une future fonctionnalité, choisis « Prochainement » et son statut. Elle apparaîtra dans la rubrique dédiée.</small>
           <label>Texte<textarea id="admin-news-body" maxlength="12000" required rows="9" style="display:block;width:100%;padding:13px;min-height:220px;font:15px/1.6 Arial,sans-serif"></textarea></label>
           <label><input id="admin-news-publish" type="checkbox"> Publier immédiatement</label>
           <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer la publication</button><button class="admin-secondary-btn" type="button" onclick="adminNewsReset()">Nouvelle publication</button></div>
@@ -5735,22 +5764,27 @@ window.adminLoadNews=adminLoadNews;
 document.getElementById('admin-news-form')?.addEventListener('submit',async event=>{event.preventDefault();const status=document.getElementById('admin-news-status'),id=document.getElementById('admin-news-id').value;const payload={title:document.getElementById('admin-news-title').value,category:document.getElementById('admin-news-category').value,body:document.getElementById('admin-news-body').value,is_published:document.getElementById('admin-news-publish').checked};try{await adminApi(id?`/api/admin/news/${encodeURIComponent(id)}`:'/api/admin/news',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});adminNewsReset();status.textContent='Publication enregistrée.';await adminLoadNews();}catch(e){status.textContent=e.message||'Impossible d’enregistrer cette actualité.';}});
 
 window.loadPublicNews=async function(){
- const statusTargets=['public-home-news-status','public-news-status','public-updates-status'].map(id=>document.getElementById(id)).filter(Boolean);
+ const statusTargets=['public-home-news-status','public-news-status','public-updates-status','public-upcoming-status'].map(id=>document.getElementById(id)).filter(Boolean);
  const homeList=document.getElementById('public-home-news-list');
  const homeMore=document.getElementById('public-home-news-more');
  const toggle=document.getElementById('public-home-news-toggle');
  const dashList=document.getElementById('public-news-list');
  const updatesList=document.getElementById('public-updates-list');
+ const upcomingList=document.getElementById('public-upcoming-list');
  statusTargets.forEach(el=>el.textContent='Chargement des publications…');
- [homeList,homeMore,dashList,updatesList].filter(Boolean).forEach(el=>el.replaceChildren());
+ [homeList,homeMore,dashList,updatesList,upcomingList].filter(Boolean).forEach(el=>el.replaceChildren());
  if(toggle){toggle.hidden=true;toggle.setAttribute('aria-expanded','false');}
  try{
    const response=await fetch(`${API_BASE}/api/news`);
    const data=await response.json().catch(()=>({}));
    if(!response.ok)throw new Error(data.error||'Impossible de charger les publications.');
    const items=Array.isArray(data.news)?data.news:[];
-   const updates=items.filter(item=>String(item.category||'').trim().toLocaleLowerCase('fr')==='mise à jour');
-   const news=items.filter(item=>String(item.category||'').trim().toLocaleLowerCase('fr')!=='mise à jour');
+   const categoryOf=item=>String(item.category||'').trim().toLocaleLowerCase('fr');
+   const isUpcoming=item=>categoryOf(item).startsWith('prochainement');
+   const updates=items.filter(item=>categoryOf(item)==='mise à jour');
+   const upcoming=items.filter(isUpcoming);
+   const news=items.filter(item=>categoryOf(item)!=='mise à jour'&&!isUpcoming(item));
+   const publicItems=items.filter(item=>!isUpcoming(item));
    const makeCard=(item,home,compact=false)=>{
      const card=document.createElement('article');card.className=home?'public-home-news-card':(compact?'public-update-card':'feature');
      if(compact)card.style.cssText='margin:10px 0;padding:14px 18px;border:1px solid #ead8b2;border-radius:14px;background:#fffaf1;box-shadow:0 2px 8px rgba(35,50,35,.05);text-align:left';
@@ -5789,12 +5823,27 @@ window.loadPublicNews=async function(){
    }
    news.forEach(item=>{if(dashList)dashList.append(makeCard(item,false));});
    updates.forEach(item=>{if(updatesList)updatesList.append(makeCard(item,false,true));});
+   upcoming.forEach(item=>{
+     if(!upcomingList)return;
+     const card=document.createElement('article');card.className='upcoming-card';
+     const category=String(item.category||'Prochainement');
+     const status=category.replace(/^prochainement\s*[-–:]?\s*/i,'').trim()||'À venir';
+     const badge=document.createElement('span');badge.className='upcoming-status';
+     if(status.toLocaleLowerCase('fr').includes('développement'))badge.classList.add('development');
+     if(status.toLocaleLowerCase('fr').includes('disponible'))badge.classList.add('available');
+     badge.textContent=status;
+     const title=document.createElement('h4');title.textContent=item.title||'Nouvelle fonctionnalité';
+     const body=document.createElement('p');body.textContent=String(item.body||'').replace(/^#{1,6}\s*/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1');
+     card.append(badge,title,body);upcomingList.append(card);
+   });
    const newsStatus=document.getElementById('public-news-status');
    const updatesStatus=document.getElementById('public-updates-status');
    if(newsStatus)newsStatus.textContent=news.length?`${news.length} actualité(s) publiée(s).`:'Aucune actualité pour le moment.';
    if(updatesStatus)updatesStatus.textContent=updates.length?`${updates.length} mise(s) à jour publiée(s).`:'Aucune mise à jour pour le moment.';
+   const upcomingStatus=document.getElementById('public-upcoming-status');
+   if(upcomingStatus)upcomingStatus.textContent=upcoming.length?`${upcoming.length} nouveauté(s) annoncée(s).`:'Aucune nouveauté annoncée pour le moment.';
    const homeStatus=document.getElementById('public-home-news-status');
-   if(homeStatus)homeStatus.textContent=items.length?`${items.length} publication(s) publiée(s).`:'Aucune actualité pour le moment.';
+   if(homeStatus)homeStatus.textContent=publicItems.length?`${publicItems.length} publication(s) publiée(s).`:'Aucune actualité pour le moment.';
  }catch(e){statusTargets.forEach(el=>el.textContent=e.message||'Impossible de charger les publications.');}
 };
 
@@ -6231,7 +6280,7 @@ function showDashSection(id){
   // Cela évite que l’administration et l’aventure restent visibles ensemble.
  const sections = [
   "dash-home", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges",
-  "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-updates", "dash-town-contact", "dash-support",
+  "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-updates", "dash-upcoming", "dash-town-contact", "dash-support",
   "dash-admin-info", "dash-game",
   "dash-admin-enigmes", "dash-admin-support"
 ];
@@ -6248,7 +6297,7 @@ function showDashSection(id){
   if(!selected){console.warn("Rubrique introuvable :", id);return;}
   selected.classList.remove("hidden");
   selected.style.removeProperty("display");
-  if(id === "dash-news" || id === "dash-updates") window.loadPublicNews?.();
+  if(id === "dash-news" || id === "dash-updates" || id === "dash-upcoming") window.loadPublicNews?.();
   if(id === "dash-notifications") window.loadMemberNotifications?.();
   if(id === "dash-mailbox") window.loadMemberMailbox?.();
   if(id === "dash-adventures") window.loadPlayerAdventures?.();
