@@ -7337,7 +7337,15 @@ async function actualiserCarteVillages(){
     const response=await fetch(`${window.API_BASE}/api/villages`,{cache:"no-store"});
     const data=await response.json().catch(()=>({}));
     if(!response.ok)throw new Error(data.error||"Impossible de charger les villages.");
-    const villages=Array.isArray(data.villages)?data.villages:[];
+    // Sécurité d’affichage : l’espace testeur est une rubrique du compte,
+    // jamais un village à afficher dans Explorer ou sur la carte.
+    const isRealVillage = v => {
+      const norm = value => String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const name = norm(v?.name), slug = norm(v?.slug);
+      const reserved = new Set(["espace-testeur", "espace-testeurs", "testeur", "testeurs"]);
+      return !reserved.has(name) && !reserved.has(slug);
+    };
+    const villages=(Array.isArray(data.villages)?data.villages:[]).filter(isRealVillage);
     if(listEl){
       listEl.replaceChildren();
       if(!villages.length){const p=document.createElement("p");p.textContent="Aucun village n’est encore enregistré.";listEl.append(p);}
@@ -8918,51 +8926,5 @@ window.loadAdminDashboardOverview = async function(){
 };
 </script>
 
-<style id="tester-space-visibility-fix">#dash-tester-space.hidden{display:none!important}</style>\n
-<style id="tester-space-layout-final-fix">
-/* Correction définitive : l'espace testeur reprend toute la largeur disponible.
-   On annule l'ancien centrage par left:50% qui le décalait vers la droite. */
-#dashboard:not(.admin-mode) > #dash-tester-space,
-#dashboard:not(.admin-mode) > .content > #dash-tester-space {
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
-  transform: none !important;
-  float: none !important;
-  display: block !important;
-  width: 100% !important;
-  max-width: 1600px !important;
-  margin: 0 auto !important;
-  box-sizing: border-box !important;
-}
-#dash-tester-space.tester-dashboard {
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
-  transform: none !important;
-  width: 100% !important;
-  max-width: 1600px !important;
-  margin: 0 auto !important;
-  padding: 14px clamp(12px, 2vw, 28px) 30px !important;
-  box-sizing: border-box !important;
-}
-#dash-tester-space .tester-dashboard-hero,
-#dash-tester-space .tester-dashboard-topstats,
-#dash-tester-space .tester-dashboard-grid {
-  width: 100% !important;
-  min-width: 0 !important;
-}
-@media (max-width: 900px) {
-  #dash-tester-space.tester-dashboard {
-    padding: 10px 12px 24px !important;
-  }
-}
-@media (max-width: 650px) {
-  #dash-tester-space.tester-dashboard {
-    padding: 8px 10px 20px !important;
-  }
-}
-</style>
-
-</body>
+<style id="tester-space-visibility-fix">#dash-tester-space.hidden{display:none!important}</style>\n</body>
 </html>
