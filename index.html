@@ -4683,6 +4683,7 @@ body.halloween-accueil .home-hero{
               <section class="village-panel" id="village-panel-add">
                 <div class="village-panel-heading"><div><h4 id="admin-village-form-title">＋ Ajouter un nouveau village</h4><p>Complétez les informations de votre commune partenaire.</p></div></div>
                 <form id="admin-village-form" class="village-form">
+                  <p id="admin-village-form-status" class="status wide" role="status" aria-live="polite" style="margin:0 0 10px;min-height:1.4em"></p>
                   <input type="hidden" id="admin-village-id">
                   <label>Nom du village <em>*</em><input id="admin-village-name" required maxlength="150" placeholder="Ex. Humbert"></label>
                   <label>Identifiant (sans espace) <em>*</em><input id="admin-village-slug" required maxlength="100" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="ex. humbert"></label>
@@ -6204,7 +6205,7 @@ document.getElementById("admin-village-photo-file")?.addEventListener("change",e
 });
 const adminVillageForm=document.getElementById("admin-village-form");
 if(adminVillageForm)adminVillageForm.addEventListener("submit",async event=>{
-  event.preventDefault();const status=document.getElementById("admin-villages-status"),save=document.getElementById("admin-village-save"),id=document.getElementById("admin-village-id").value;
+  event.preventDefault();const status=document.getElementById("admin-village-form-status"),listStatus=document.getElementById("admin-villages-status"),save=document.getElementById("admin-village-save"),id=document.getElementById("admin-village-id").value;
   const lat=document.getElementById("admin-village-latitude").value,lon=document.getElementById("admin-village-longitude").value;
   save.disabled=true;status.textContent="Enregistrement…";
   try{
@@ -6222,7 +6223,9 @@ if(adminVillageForm)adminVillageForm.addEventListener("submit",async event=>{
     const payload={name:document.getElementById("admin-village-name").value.trim(),slug:document.getElementById("admin-village-slug").value.trim().toLowerCase(),postal_code:document.getElementById("admin-village-postal").value.trim(),status:document.getElementById("admin-village-status").value,description:document.getElementById("admin-village-description").value.trim(),latitude:lat===""?null:Number(lat),longitude:lon===""?null:Number(lon),photo_url:photoUrl};
     status.textContent="Enregistrement…";
     await adminApi(id?`/api/admin/villages/${encodeURIComponent(id)}`:"/api/admin/villages",{method:id?"PATCH":"POST",body:JSON.stringify(payload)});
-    status.textContent=id?"Village modifié avec succès.":"Village ajouté avec succès.";adminResetVillageForm();await window.adminLoadVillages();adminVillageTab("list");
+    status.textContent=id?"Village modifié avec succès.":"Village ajouté avec succès.";
+    if(listStatus)listStatus.textContent=status.textContent;
+    adminResetVillageForm();await window.adminLoadVillages();adminVillageTab("list");
   }
   catch(error){status.textContent=error.message||"Impossible d’enregistrer le village.";}
   finally{save.disabled=false;}
