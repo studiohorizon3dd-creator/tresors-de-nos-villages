@@ -2958,6 +2958,7 @@ body.halloween-accueil .home-hero{
           <div class="admin-category-links">
             <button class="admin-nav-item" type="button" onclick="adminOpenPlayers()"><span>♙</span> Joueurs & administrateurs</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenTeam()"><span>👥</span> Gestion de l'équipe</button>
+            <button class="admin-nav-item" id="team-space-nav-item" type="button" onclick="adminOpenTeamSpace()"><span>🛡️</span> Vie de l'équipe</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenTesters()"><span>🧪</span> Demandes testeurs</button>
             <button class="admin-nav-item" type="button" onclick="adminOpenTesterManagement()"><span>🧭</span> Gestion des testeurs</button>
           </div>
@@ -3217,6 +3218,8 @@ body.halloween-accueil .home-hero{
               <label><input type="checkbox" value="testers" disabled title="Fonction en cours de sécurisation"> 🧪 Gestion des testeurs</label>
               <label><input type="checkbox" value="news" disabled title="Fonction en cours de sécurisation"> 📰 Actualités et publications</label>
               <label><input type="checkbox" value="adventures" disabled title="Fonction en cours de sécurisation"> 🧭 Suivi des aventures</label>
+              <label><input type="checkbox" value="team_communication"> 📝 Communication et missions de l'équipe</label>
+              <label><input type="checkbox" value="player_reports"> 🚩 Signalement des joueurs</label>
             </div>
           </fieldset>
           <button class="admin-secondary-btn" type="submit">Ajouter / activer le modérateur</button>
@@ -4355,6 +4358,15 @@ body.halloween-accueil .home-hero{
         </div>
       </div>
 
+      <div id="admin-team-space-view" class="admin-subview" hidden>
+        <div class="admin-section-heading"><div><h3>🛡️ Vie de l'équipe</h3><p>Espace privé réservé aux administrateurs et aux modérateurs autorisés.</p></div><button type="button" class="admin-secondary-btn" onclick="adminLoadTeamSpace()">↻ Actualiser</button></div>
+        <section class="feature" style="padding:16px;margin:12px 0"><h4>🏘️ Équipe par village</h4><p style="font-size:13px;color:#687267">Retrouve les modérateurs affectés à chaque village.</p><div id="team-space-villages">Chargement…</div></section>
+        <div id="team-space-notes-area" class="feature" style="padding:16px;margin:12px 0" hidden><h4>📝 Notes et missions partagées</h4><form id="team-space-note-form" style="display:grid;gap:9px"><input id="team-note-title" maxlength="160" required placeholder="Titre de la note ou mission" style="padding:10px"><select id="team-note-village" style="padding:10px"><option value="">Tous les villages</option></select><textarea id="team-note-body" maxlength="3000" required rows="3" placeholder="Consigne, information ou tâche à suivre…" style="padding:10px"></textarea><button class="admin-secondary-btn" type="submit">Ajouter la note</button></form><div id="team-space-notes" style="margin-top:12px"></div></section>
+        <section id="team-space-chat-area" class="feature" style="padding:16px;margin:12px 0" hidden><h4>💬 Discussion de l'équipe</h4><p style="font-size:12px;color:#687267">Messages visibles uniquement par les membres autorisés de l'équipe.</p><div id="team-space-chat" style="max-height:300px;overflow:auto;padding:8px;background:#f7f7ef;border-radius:9px"></div><form id="team-space-chat-form" style="display:flex;gap:8px;margin-top:10px"><input id="team-space-chat-input" maxlength="2000" required placeholder="Écrire à l'équipe…" style="flex:1;min-width:0;padding:10px"><button class="admin-secondary-btn" type="submit">Envoyer</button></form></section>
+        <section id="team-space-reports-area" class="feature" style="padding:16px;margin:12px 0" hidden><h4>🚩 Signalement d'un joueur</h4><form id="team-space-report-form" style="display:grid;gap:9px"><input id="team-report-player" maxlength="160" required placeholder="Nom ou identifiant du joueur" style="padding:10px"><select id="team-report-reason" required style="padding:10px"><option value="">Choisir un motif</option><option>Comportement inapproprié</option><option>Triche ou contournement</option><option>Insultes ou harcèlement</option><option>Problème pendant une aventure</option><option>Autre</option></select><select id="team-report-village" style="padding:10px"><option value="">Village concerné (facultatif)</option></select><textarea id="team-report-description" maxlength="3000" required rows="4" placeholder="Décris les faits observés, sans jugement ni donnée inutile…" style="padding:10px"></textarea><button class="admin-secondary-btn" type="submit">Envoyer le signalement à l'administration</button></form><div id="team-space-reports" style="margin-top:12px"></div></section>
+        <p id="team-space-status" class="status" role="status" aria-live="polite"></p>
+      </div>
+
       <div id="admin-support-view" class="admin-subview" hidden>
         <div class="communication-tabs" role="tablist" aria-label="Centre de communication">
           <button type="button" onclick="adminOpenSupport()" class="communication-tab active">🎧 Support</button>
@@ -4797,13 +4809,13 @@ window.saveLeaderboardPreference = async function(enabled) {
 };
 
 const adminSetView = window.adminSetView = function(view, title) {
-  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view","admin-inbox-view","admin-team-view","admin-rewards-view"].forEach(id=>{
+  ["admin-home-view","admin-analytics-view","admin-placeholder-view","admin-adventures-view","admin-support-view","admin-players-view","admin-testers-view","admin-tester-management-view","admin-villages-view","admin-puzzle-view","admin-levels-view","admin-news-view","admin-site-status-view","admin-mailbox-view","admin-inbox-view","admin-team-view","admin-team-space-view","admin-rewards-view"].forEach(id=>{
     const el=document.getElementById(id); if(el) el.hidden=true;
   });
   const target=document.getElementById(view); if(target) target.hidden=false;
   const heading=document.getElementById("admin-page-title"); if(heading) heading.textContent=title;
   document.querySelectorAll(".admin-nav-item").forEach(btn=>btn.classList.remove("active"));
-  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenCommunication":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenCommunication":view==="admin-rewards-view"?"adminOpenRewards":"adminComingSoon"));
+  const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenCommunication":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenCommunication":view==="admin-rewards-view"?"adminOpenRewards":view==="admin-team-space-view"?"adminOpenTeamSpace":"adminComingSoon"));
   if(active) active.classList.add("active");
 };
 function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
@@ -6060,7 +6072,12 @@ window.openAdminPanel = async function() {
       const list = document.getElementById("admin-support-list");
       if (!window.adminCurrentPermissions.includes("support")) {
         supportArea.hidden = true;
-        if (list) list.textContent = "Aucune mission ne t’a encore été attribuée. L’administration pourra activer tes autorisations depuis la gestion de l’équipe.";
+        if (list) list.textContent = "Le support ne fait pas partie de tes missions.";
+        if (window.adminCurrentPermissions.some(p=>["team_communication","player_reports"].includes(p))) {
+          adminOpenTeamSpace();
+          statusEl.textContent = "Accès à ton espace équipe confirmé.";
+          return;
+        }
         statusEl.textContent = "Aucune mission autorisée pour le moment.";
         return;
       }
@@ -6099,7 +6116,8 @@ const TEAM_PERMISSION_LABELS = {
   support: "💬 Messages et support", map: "🗺️ Carte des villages",
   puzzle: "🧩 Carte aux pièces mystères", leaderboard: "🏆 Classement général",
   reports: "🚩 Signalements des joueurs", testers: "🧪 Gestion des testeurs",
-  news: "📰 Actualités et publications", adventures: "🧭 Suivi des aventures"
+  news: "📰 Actualités et publications", adventures: "🧭 Suivi des aventures",
+  team_communication: "📝 Communication et missions de l'équipe", player_reports: "🚩 Signalement des joueurs"
 };
 function getTeamPermissionChoices(root=document) {
   return Array.from(root.querySelectorAll('#admin-team-permissions input[type="checkbox"]:checked')).map(input=>input.value);
@@ -6126,7 +6144,7 @@ window.adminLoadTeam = async function() {
       const meta=document.createElement("p"); meta.textContent=`Modérateur · ${member.status==="active"?"Actif":"Suspendu"} · Villages : ${(member.allowed_villages||[]).join(", ")||"Tous / non précisés"}`;
       const permissionTitle=document.createElement("strong"); permissionTitle.textContent="Autorisations de ce modérateur";
       const permissionGrid=document.createElement("div"); permissionGrid.style.cssText="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:10px 0";
-      Object.entries(TEAM_PERMISSION_LABELS).forEach(([key,label])=>{const lab=document.createElement("label");lab.style.cssText="font-size:13px;display:flex;gap:7px;align-items:center";const cb=document.createElement("input");cb.type="checkbox";cb.value=key;cb.checked=(member.permissions||[]).includes(key);cb.disabled=key!=="support";if(key!=="support")lab.title="Fonction en cours de sécurisation";lab.append(cb,document.createTextNode(label+(key!=="support"?" — bientôt disponible":"")));permissionGrid.append(lab);});
+      Object.entries(TEAM_PERMISSION_LABELS).forEach(([key,label])=>{const lab=document.createElement("label");lab.style.cssText="font-size:13px;display:flex;gap:7px;align-items:center";const cb=document.createElement("input");cb.type="checkbox";cb.value=key;cb.checked=(member.permissions||[]).includes(key);cb.disabled=!(["support","team_communication","player_reports"].includes(key));if(cb.disabled)lab.title="Fonction en cours de sécurisation";lab.append(cb,document.createTextNode(label+(cb.disabled?" — bientôt disponible":"")));permissionGrid.append(lab);});
       const villages=document.createElement("select"); villages.multiple=true; villages.size=3; villages.style.cssText="display:block;width:100%;padding:8px;margin:8px 0";
       (villageData.villages||[]).forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;o.selected=(member.allowed_villages||[]).includes(v.slug);villages.append(o);});
       const controls=document.createElement("div");controls.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px";
@@ -6148,6 +6166,35 @@ document.getElementById("admin-team-form")?.addEventListener("submit",async even
   try{const result=await adminApi("/api/admin/team",{method:"POST",body:JSON.stringify({email,role:"moderator",allowed_villages,permissions})});status.textContent=`Modérateur ajouté : ${result.member?.email||email}`;event.target.reset();await window.adminLoadTeam();}
   catch(error){status.textContent=error.message||"Impossible d'ajouter le modérateur.";}
 });
+
+window.adminOpenTeamSpace = async function(){
+  const perms=window.adminCurrentPermissions||[];
+  if(window.adminCurrentRole!=="admin"&&!perms.some(p=>["team_communication","player_reports"].includes(p))){alert("Cette rubrique ne t'a pas été attribuée par l'administration.");return;}
+  adminSetView("admin-team-space-view","Vie de l'équipe");await window.adminLoadTeamSpace();
+};
+window.adminLoadTeamSpace = async function(){
+  const status=document.getElementById("team-space-status");if(!status)return;status.textContent="Chargement de l'espace équipe…";
+  const isAdmin=window.adminCurrentRole==="admin", perms=window.adminCurrentPermissions||[];
+  const canComm=isAdmin||perms.includes("team_communication"), canReports=isAdmin||perms.includes("player_reports");
+  document.getElementById("team-space-notes-area").hidden=!canComm;document.getElementById("team-space-chat-area").hidden=!canComm;document.getElementById("team-space-reports-area").hidden=!canReports;
+  try{
+    const overview=await adminApi("/api/team-space/overview");
+    const root=document.getElementById("team-space-villages");root.replaceChildren();
+    const groups=new Map();(overview.members||[]).forEach(m=>(m.allowed_villages||[]).forEach(v=>{if(!groups.has(v))groups.set(v,[]);groups.get(v).push(m.name||m.email);}));
+    if(!groups.size){const p=document.createElement("p");p.textContent="Aucun village n'est encore attribué à un modérateur.";root.append(p);}
+    [...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0])).forEach(([v,names])=>{const card=document.createElement("div");card.style.cssText="padding:10px;border:1px solid #e1dccb;border-radius:9px;margin:7px 0;background:#fffdf7";const strong=document.createElement("strong");strong.textContent="🏘️ "+v.replace(/[-_]/g," ").replace(/\b\w/g,c=>c.toUpperCase());const p=document.createElement("p");p.style.margin="6px 0 0";p.textContent="Modérateur(s) : "+names.join(", ");card.append(strong,p);root.append(card);});
+    ["team-note-village","team-report-village"].forEach(id=>{const sel=document.getElementById(id);if(sel){const first=sel.options[0];sel.replaceChildren(first);[...groups.keys()].forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;sel.append(o);});}});
+    if(canComm){await Promise.all([loadTeamNotes(),loadTeamChat()]);}
+    if(canReports)await loadTeamReports();
+    status.textContent="Espace privé de l'équipe chargé.";
+  }catch(e){status.textContent=e.message||"Impossible de charger l'espace équipe.";}
+};
+async function loadTeamNotes(){const data=await adminApi("/api/team-space/notes"),root=document.getElementById("team-space-notes");root.replaceChildren();(data.notes||[]).forEach(n=>{const card=document.createElement("article");card.style.cssText="padding:10px;border-bottom:1px solid #ddd";const title=document.createElement("strong");title.textContent=n.title+(n.village_slug?" · "+n.village_slug:"");const body=document.createElement("p");body.style.whiteSpace="pre-wrap";body.textContent=n.body;const meta=document.createElement("small");meta.textContent="Par "+n.created_by+" · "+new Date(n.created_at).toLocaleString("fr-FR");const sel=document.createElement("select");sel.innerHTML='<option value="todo">À faire</option><option value="doing">En cours</option><option value="done">Terminé</option>';sel.value=n.status;sel.addEventListener("change",async()=>{try{await adminApi(`/api/team-space/notes/${n.id}`,{method:"PATCH",body:JSON.stringify({status:sel.value})});}catch(e){alert(e.message);}});card.append(title,body,meta,document.createTextNode(" · "),sel);root.append(card);});if(!data.notes?.length)root.textContent="Aucune note pour le moment.";}
+async function loadTeamChat(){const data=await adminApi("/api/team-space/chat"),root=document.getElementById("team-space-chat");root.replaceChildren();(data.messages||[]).forEach(m=>{const p=document.createElement("p");p.style.cssText="padding:7px;border-bottom:1px solid #e3e3dc;margin:0;white-space:pre-wrap";const b=document.createElement("strong");b.textContent=(m.author_name||m.author_email)+" · ";const small=document.createElement("small");small.textContent=new Date(m.created_at).toLocaleString("fr-FR");p.append(b,document.createTextNode(m.body+" "),small);root.append(p);});root.scrollTop=root.scrollHeight;if(!data.messages?.length)root.textContent="La discussion de l'équipe est vide.";}
+async function loadTeamReports(){const data=await adminApi("/api/team-space/reports"),root=document.getElementById("team-space-reports");root.replaceChildren();(data.reports||[]).forEach(r=>{const card=document.createElement("article");card.style.cssText="padding:10px;border-bottom:1px solid #ddd";const title=document.createElement("strong");title.textContent="#"+r.id+" · "+r.player_label+" · "+r.reason;const body=document.createElement("p");body.style.whiteSpace="pre-wrap";body.textContent=r.description;const meta=document.createElement("small");meta.textContent="Village : "+(r.village_slug||"non précisé")+" · Signalé par "+r.reported_by+" · "+new Date(r.created_at).toLocaleString("fr-FR");card.append(title,body,meta);if(window.adminCurrentRole==="admin"){const form=document.createElement("div");form.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px";const sel=document.createElement("select");sel.innerHTML='<option value="pending">En attente</option><option value="reviewing">En examen</option><option value="resolved">Traité</option>';sel.value=r.status;const input=document.createElement("input");input.placeholder="Décision / suivi administratif";input.maxLength=2000;input.value=r.admin_decision||"";input.style.cssText="flex:1;min-width:180px;padding:8px";const btn=document.createElement("button");btn.className="admin-secondary-btn";btn.type="button";btn.textContent="Enregistrer";btn.addEventListener("click",async()=>{try{await adminApi(`/api/team-space/reports/${r.id}`,{method:"PATCH",body:JSON.stringify({status:sel.value,admin_decision:input.value})});await loadTeamReports();}catch(e){alert(e.message);}});form.append(sel,input,btn);card.append(form);}else{const st=document.createElement("p");st.textContent="Statut : "+({pending:"En attente",reviewing:"En examen",resolved:"Traité"}[r.status]||r.status);card.append(st);}root.append(card);});if(!data.reports?.length)root.textContent="Aucun signalement pour le moment.";}
+document.getElementById("team-space-note-form")?.addEventListener("submit",async e=>{e.preventDefault();const status=document.getElementById("team-space-status");try{await adminApi("/api/team-space/notes",{method:"POST",body:JSON.stringify({title:document.getElementById("team-note-title").value,body:document.getElementById("team-note-body").value,village_slug:document.getElementById("team-note-village").value})});e.target.reset();await loadTeamNotes();status.textContent="Note ajoutée à l'espace partagé.";}catch(err){status.textContent=err.message||"Impossible d'ajouter la note.";}});
+document.getElementById("team-space-chat-form")?.addEventListener("submit",async e=>{e.preventDefault();const input=document.getElementById("team-space-chat-input");try{await adminApi("/api/team-space/chat",{method:"POST",body:JSON.stringify({body:input.value})});input.value="";await loadTeamChat();}catch(err){document.getElementById("team-space-status").textContent=err.message||"Envoi impossible.";}});
+document.getElementById("team-space-report-form")?.addEventListener("submit",async e=>{e.preventDefault();const status=document.getElementById("team-space-status");try{await adminApi("/api/team-space/reports",{method:"POST",body:JSON.stringify({player_label:document.getElementById("team-report-player").value,reason:document.getElementById("team-report-reason").value,description:document.getElementById("team-report-description").value,village_slug:document.getElementById("team-report-village").value})});e.target.reset();await loadTeamReports();status.textContent="Signalement transmis à l'administration.";}catch(err){status.textContent=err.message||"Signalement impossible.";}});
 
 window.signOutAndHome = async function() {
   try { if (auth.signOut) await auth.signOut(); } catch(e) {}
@@ -6231,13 +6278,15 @@ window.setAdminAccessGranted = function(value){
   document.querySelectorAll(".admin-nav-item").forEach(button => {
     const action = button.getAttribute("onclick") || "";
     const communicationOnly = action.includes("adminOpenCommunication");
-    const visible = isModerator ? communicationOnly : isAdmin;
+    const teamSpaceItem = button.id === "team-space-nav-item";
+    const perms = window.adminCurrentPermissions || [];
+    const canTeamSpace = isAdmin || (perms.includes("team_communication") || perms.includes("player_reports"));
+    const visible = isModerator ? (communicationOnly || (teamSpaceItem && canTeamSpace)) : isAdmin;
     button.hidden = !visible;
     button.style.setProperty("display", visible ? "" : "none", "important");
     if (isModerator && communicationOnly) {
       const icon = button.querySelector("span");
       if (icon) icon.textContent = "🛡️";
-      // Remplace le libellé sans effacer le bouton ni son gestionnaire de clic.
       Array.from(button.childNodes).filter(node => node.nodeType === Node.TEXT_NODE).forEach(node => node.textContent = " Mon espace modérateur");
     }
   });
