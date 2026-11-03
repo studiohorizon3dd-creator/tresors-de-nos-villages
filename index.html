@@ -3176,16 +3176,16 @@ body.halloween-accueil .home-hero{
           <label>Villages autorisés <small>(facultatif, plusieurs possibles)</small><select id="admin-team-villages" multiple size="4" style="display:block;width:100%;padding:9px"></select></label>
           <fieldset style="border:1px solid #dfd2b4;border-radius:10px;padding:12px;background:#fffdf7">
             <legend><strong>Fonctions autorisées</strong></legend>
-            <p style="font-size:12px;color:#687267;margin:4px 0 10px">Coche les missions que tu souhaites confier à ce modérateur.</p>
+            <p style="font-size:12px;color:#687267;margin:4px 0 10px">Coche uniquement les missions réellement disponibles. Les autres outils resteront verrouillés jusqu’à la protection de leurs accès côté serveur.</p>
             <div id="admin-team-permissions" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px">
               <label><input type="checkbox" value="support"> 💬 Messages et support</label>
-              <label><input type="checkbox" value="map"> 🗺️ Carte des villages</label>
-              <label><input type="checkbox" value="puzzle"> 🧩 Carte aux pièces mystères</label>
-              <label><input type="checkbox" value="leaderboard"> 🏆 Classement général</label>
-              <label><input type="checkbox" value="reports"> 🚩 Signalements des joueurs</label>
-              <label><input type="checkbox" value="testers"> 🧪 Gestion des testeurs</label>
-              <label><input type="checkbox" value="news"> 📰 Actualités et publications</label>
-              <label><input type="checkbox" value="adventures"> 🧭 Suivi des aventures</label>
+              <label><input type="checkbox" value="map" disabled title="Fonction en cours de sécurisation"> 🗺️ Carte des villages</label>
+              <label><input type="checkbox" value="puzzle" disabled title="Fonction en cours de sécurisation"> 🧩 Carte aux pièces mystères</label>
+              <label><input type="checkbox" value="leaderboard" disabled title="Fonction en cours de sécurisation"> 🏆 Classement général</label>
+              <label><input type="checkbox" value="reports" disabled title="Fonction en cours de sécurisation"> 🚩 Signalements des joueurs</label>
+              <label><input type="checkbox" value="testers" disabled title="Fonction en cours de sécurisation"> 🧪 Gestion des testeurs</label>
+              <label><input type="checkbox" value="news" disabled title="Fonction en cours de sécurisation"> 📰 Actualités et publications</label>
+              <label><input type="checkbox" value="adventures" disabled title="Fonction en cours de sécurisation"> 🧭 Suivi des aventures</label>
             </div>
           </fieldset>
           <button class="admin-secondary-btn" type="submit">Ajouter / activer le modérateur</button>
@@ -4654,9 +4654,12 @@ async function adminApi(path, options = {}) {
 window.checkAdminAccess = async function(){
   try{
     const staffInfo = await adminApi("/api/admin/me");
-    window.adminCurrentRole = staffInfo.role || "admin";
+    window.adminCurrentRole = staffInfo.role;
+    window.adminCurrentPermissions = Array.isArray(staffInfo.permissions) ? staffInfo.permissions : [];
     window.setAdminAccessGranted(true);
   }catch(_error){
+    window.adminCurrentRole = null;
+    window.adminCurrentPermissions = [];
     window.setAdminAccessGranted(false);
   }
 };
@@ -6006,20 +6009,32 @@ window.loadPublicNews();
 window.openAdminPanel = async function() {
   const statusEl = document.getElementById("admin-panel-status");
   const supportArea = document.getElementById("admin-support-area");
-  statusEl.textContent = "Vérification des droits administrateur…";
+  statusEl.textContent = "Vérification des autorisations…";
   supportArea.hidden = true;
   try {
     const staffInfo = await adminApi("/api/admin/me");
-    window.adminCurrentRole = staffInfo.role || "admin";
+    window.adminCurrentRole = staffInfo.role;
+    window.adminCurrentPermissions = Array.isArray(staffInfo.permissions) ? staffInfo.permissions : [];
     window.setAdminAccessGranted(true);
     document.getElementById("admin-access-error")?.remove();
     window.showDashSection("dash-admin-info");
-    if (window.adminCurrentRole === "moderator") {
-      adminSetView("admin-support-view", "Centre de communication");
-    } else {
+    const isModerator = window.adminCurrentRole === "moderator";
+    if (isModerator) {
+      adminSetView("admin-support-view", "Mon espace modérateur");
+      const list = document.getElementById("admin-support-list");
+      if (!window.adminCurrentPermissions.includes("support")) {
+        supportArea.hidden = true;
+        if (list) list.textContent = "Aucune mission ne t’a encore été attribuée. L’administration pourra activer tes autorisations depuis la gestion de l’équipe.";
+        statusEl.textContent = "Aucune mission autorisée pour le moment.";
+        return;
+      }
+    } else if (window.adminCurrentRole === "admin") {
       adminShowHome();
+      statusEl.textContent = "Accès administrateur confirmé.";
+    } else {
+      throw new Error("Rôle d’équipe non reconnu. Accès refusé.");
     }
-    statusEl.textContent = window.adminCurrentRole === "moderator" ? "Accès modérateur confirmé." : "Accès administrateur confirmé.";
+    if (isModerator) statusEl.textContent = "Accès à ton espace modérateur confirmé.";
     const result = await adminApi("/api/admin/support");
     const list = document.getElementById("admin-support-list");
     renderAdminSupportTable(result.requests || [], statusEl, list);
@@ -6075,7 +6090,7 @@ window.adminLoadTeam = async function() {
       const meta=document.createElement("p"); meta.textContent=`Modérateur · ${member.status==="active"?"Actif":"Suspendu"} · Villages : ${(member.allowed_villages||[]).join(", ")||"Tous / non précisés"}`;
       const permissionTitle=document.createElement("strong"); permissionTitle.textContent="Autorisations de ce modérateur";
       const permissionGrid=document.createElement("div"); permissionGrid.style.cssText="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:10px 0";
-      Object.entries(TEAM_PERMISSION_LABELS).forEach(([key,label])=>{const lab=document.createElement("label");lab.style.cssText="font-size:13px;display:flex;gap:7px;align-items:center";const cb=document.createElement("input");cb.type="checkbox";cb.value=key;cb.checked=(member.permissions||[]).includes(key);lab.append(cb,document.createTextNode(label));permissionGrid.append(lab);});
+      Object.entries(TEAM_PERMISSION_LABELS).forEach(([key,label])=>{const lab=document.createElement("label");lab.style.cssText="font-size:13px;display:flex;gap:7px;align-items:center";const cb=document.createElement("input");cb.type="checkbox";cb.value=key;cb.checked=(member.permissions||[]).includes(key);cb.disabled=key!=="support";if(key!=="support")lab.title="Fonction en cours de sécurisation";lab.append(cb,document.createTextNode(label+(key!=="support"?" — bientôt disponible":"")));permissionGrid.append(lab);});
       const villages=document.createElement("select"); villages.multiple=true; villages.size=3; villages.style.cssText="display:block;width:100%;padding:8px;margin:8px 0";
       (villageData.villages||[]).forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;o.selected=(member.allowed_villages||[]).includes(v.slug);villages.append(o);});
       const controls=document.createElement("div");controls.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px";
@@ -6163,17 +6178,24 @@ window.setAdminAccessGranted = function(value){
   const adminNav = document.getElementById("admin-nav-button");
   const testerNav = document.getElementById("tester-space-nav");
   const isModerator = window.adminCurrentRole === "moderator";
+  const isAdmin = window.adminCurrentRole === "admin";
   if(adminNav) {
     adminNav.hidden = !adminAccessGranted;
-    adminNav.setAttribute("aria-label", "Administration — accès équipe autorisé");
+    adminNav.textContent = isModerator ? "🛡️  Mon espace modérateur" : "⚙  Administration";
+    adminNav.title = isModerator
+      ? "Espace réservé aux missions validées par l’administration"
+      : "Réservé aux administrateurs autorisés";
   }
-  if(adminAccessGranted && testerNav) testerNav.hidden = false;
+  if(testerNav) testerNav.hidden = !isAdmin;
   document.querySelectorAll(".admin-nav-item").forEach(button => {
     const action = button.getAttribute("onclick") || "";
-    const supportAllowed = action.includes("adminOpenSupport");
-    const teamOnly = action.includes("adminOpenTeam");
-    button.hidden = isModerator ? (!supportAllowed && !teamOnly) : false;
-    if (isModerator && teamOnly) button.hidden = true;
+    const communicationOnly = action.includes("adminOpenCommunication");
+    button.hidden = isModerator ? !communicationOnly : !isAdmin;
+    if (isModerator && communicationOnly) {
+      const icon = button.querySelector("span");
+      if (icon) icon.textContent = "🛡️";
+      button.lastChild.textContent = " Mon espace modérateur";
+    }
   });
   document.querySelectorAll(".communication-tab").forEach(button => {
     const action = button.getAttribute("onclick") || "";
@@ -7537,6 +7559,10 @@ window.adminOpenMailboxAdmin = async function() {
   await window.loadAdminMailboxHistory();
 };
 window.adminOpenCommunication = function() {
+  if (window.adminCurrentRole === "moderator") {
+    window.adminOpenSupport?.();
+    return;
+  }
   window.adminOpenMailboxAdmin();
 };
 window.adminOpenNotificationsAdmin = async function() {
