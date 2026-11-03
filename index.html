@@ -3224,7 +3224,7 @@ body.halloween-accueil .home-hero{
               <label><input type="checkbox" value="puzzle" disabled title="Fonction en cours de sécurisation"> 🧩 Carte aux pièces mystères</label>
               <label><input type="checkbox" value="leaderboard" disabled title="Fonction en cours de sécurisation"> 🏆 Classement général</label>
               <label><input type="checkbox" value="reports" disabled title="Fonction en cours de sécurisation"> 🚩 Signalements des joueurs</label>
-              <label><input type="checkbox" value="testers" disabled title="Fonction en cours de sécurisation"> 🧪 Gestion des testeurs</label>
+              <label><input type="checkbox" value="testers"> 🧪 Gestion des testeurs</label>
               <label><input type="checkbox" value="news" disabled title="Fonction en cours de sécurisation"> 📰 Actualités et publications</label>
               <label><input type="checkbox" value="adventures" disabled title="Fonction en cours de sécurisation"> 🧭 Suivi des aventures</label>
               <label><input type="checkbox" value="team_communication"> 📝 Communication et missions de l'équipe</label>
@@ -5316,6 +5316,8 @@ window.adminLoadTesterLevelReviews=async function(){
 };
 
 window.adminOpenTesters = async function(){
+  const allowed = window.adminCurrentRole === "admin" || (window.adminCurrentRole === "moderator" && (window.adminCurrentPermissions||[]).includes("testers"));
+  if(!allowed){alert("La gestion des testeurs ne t'a pas été attribuée par l'administration.");return;}
   adminSetView("admin-testers-view","Demandes testeurs");
   await window.adminLoadTesters();
 };
@@ -5368,6 +5370,8 @@ const TESTER_FORMULAS = [
   ["difficile","Difficile"],["extreme","Extrême"],["nuit","Nuit"]
 ];
 window.adminOpenTesterManagement = async function(){
+  const allowed = window.adminCurrentRole === "admin" || (window.adminCurrentRole === "moderator" && (window.adminCurrentPermissions||[]).includes("testers"));
+  if(!allowed){alert("La gestion des testeurs ne t'a pas été attribuée par l'administration.");return;}
   adminSetView("admin-tester-management-view","Gestion des testeurs");
   await Promise.all([window.adminLoadTesterDirectory(), window.adminLoadTesterFeedback(), window.adminLoadTesterLevelReviews()]);
 };
@@ -6159,7 +6163,7 @@ window.adminLoadTeam = async function() {
       const meta=document.createElement("p"); meta.textContent=`Modérateur · ${member.status==="active"?"Actif":"Suspendu"} · Villages : ${(member.allowed_villages||[]).join(", ")||"Tous / non précisés"}`;
       const permissionTitle=document.createElement("strong"); permissionTitle.textContent="Autorisations de ce modérateur";
       const permissionGrid=document.createElement("div"); permissionGrid.style.cssText="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:10px 0";
-      Object.entries(TEAM_PERMISSION_LABELS).forEach(([key,label])=>{const lab=document.createElement("label");lab.style.cssText="font-size:13px;display:flex;gap:7px;align-items:center";const cb=document.createElement("input");cb.type="checkbox";cb.value=key;cb.checked=(member.permissions||[]).includes(key);cb.disabled=!(["support","team_communication","player_reports"].includes(key));if(cb.disabled)lab.title="Fonction en cours de sécurisation";lab.append(cb,document.createTextNode(label+(cb.disabled?" — bientôt disponible":"")));permissionGrid.append(lab);});
+      Object.entries(TEAM_PERMISSION_LABELS).forEach(([key,label])=>{const lab=document.createElement("label");lab.style.cssText="font-size:13px;display:flex;gap:7px;align-items:center";const cb=document.createElement("input");cb.type="checkbox";cb.value=key;cb.checked=(member.permissions||[]).includes(key);cb.disabled=!(["support","testers","team_communication","player_reports"].includes(key));if(cb.disabled)lab.title="Fonction en cours de sécurisation";lab.append(cb,document.createTextNode(label+(cb.disabled?" — bientôt disponible":"")));permissionGrid.append(lab);});
       const villages=document.createElement("select"); villages.multiple=true; villages.size=3; villages.style.cssText="display:block;width:100%;padding:8px;margin:8px 0";
       (villageData.villages||[]).forEach(v=>{const o=document.createElement("option");o.value=v.slug;o.textContent=v.name;o.selected=(member.allowed_villages||[]).includes(v.slug);villages.append(o);});
       const controls=document.createElement("div");controls.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px";
@@ -6337,12 +6341,12 @@ window.setAdminAccessGranted = function(value){
     const teamSpaceItem = button.id === "team-space-nav-item";
     const moderatorSpaceItem = button.id === "moderator-space-nav-item";
     const teamByVillageItem = button.id === "team-by-village-nav-item";
+    const testerAdminItem = action.includes("adminOpenTesters") || action.includes("adminOpenTesterManagement");
     const perms = window.adminCurrentPermissions || [];
     const canTeamSpace = isAdmin || (perms.includes("team_communication") || perms.includes("player_reports"));
-    // Le lien "Mon espace modérateur" est placé dans "Membres et équipe".
-    // Le lien "Centre de communication" reste réservé à l'administration.
+    const canManageTesters = isAdmin || perms.includes("testers");
     const visible = isModerator
-      ? (moderatorSpaceItem || (teamSpaceItem && canTeamSpace))
+      ? (moderatorSpaceItem || (teamSpaceItem && canTeamSpace) || (testerAdminItem && canManageTesters))
       : (isAdmin && !moderatorSpaceItem);
     if(teamByVillageItem && !isAdmin) { button.hidden=true; button.style.setProperty("display","none","important"); return; }
     if(communicationOnly && isModerator) { button.hidden=true; button.style.setProperty("display","none","important"); return; }
