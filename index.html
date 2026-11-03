@@ -3016,6 +3016,7 @@ body.halloween-accueil .home-hero{
           <label for="admin-inbox-filter">Afficher</label>
           <select id="admin-inbox-filter">
             <option value="all">Toutes les catégories</option>
+            <option value="registrations">Nouvelles inscriptions</option>
             <option value="support">Support des joueurs</option>
             <option value="testers">Demandes testeurs</option>
             <option value="feedback">Retours des testeurs</option>
@@ -3092,7 +3093,13 @@ body.halloween-accueil .home-hero{
       </div>
 
       <div id="admin-analytics-view" class="admin-subview" hidden>
-        <div class="admin-section-heading"><div><h3>Statistiques du site</h3><p>Fréquentation et visiteurs récents</p></div></div>
+        <div class="admin-section-heading"><div><h3>Statistiques du site</h3><p>Fréquentation, inscriptions et visiteurs récents</p></div></div>
+        <div class="players-metrics" style="margin:12px 0">
+          <article class="players-metric"><span>👥</span><div><small>Total des comptes inscrits</small><strong id="analytics-registered-total">—</strong></div></article>
+          <article class="players-metric"><span>🆕</span><div><small>Nouvelles inscriptions (7 jours)</small><strong id="analytics-registered-7d">—</strong></div></article>
+        </div>
+        <h4>🆕 Derniers inscrits</h4>
+        <div id="analytics-registrations" class="admin-recent-list"><p>Les nouvelles inscriptions apparaîtront ici.</p></div>
         <p id="analytics-status" class="status" role="status" aria-live="polite">Préparation du chargement des statistiques…</p>
         <div id="analytics-recent" class="admin-recent-list"><p>Les dernières visites apparaîtront ici.</p></div>
         <p class="admin-footnote">Les visiteurs anonymes sont comptés sans nom ni adresse e-mail. Un visiteur est considéré actif s'il a consulté le site au cours des 5 dernières minutes.</p>
@@ -7620,7 +7627,7 @@ window.renderAdminNotificationBell = function(items = [], failures = []) {
     list.innerHTML = '<p class="admin-notification-empty">Tout est à jour. Aucune demande en attente. ✓</p>';
   } else {
     list.innerHTML = pending.slice(0, 8).map(item => {
-      const category = ["support","testers","partners","feedback","reviews"].includes(item.category) ? item.category : "all";
+      const category = ["support","testers","partners","feedback","reviews","registrations"].includes(item.category) ? item.category : "all";
       return `<button type="button" class="admin-notification-row" onclick="window.openAdminNotification('${category}')">
         <strong>${mailboxEscape(item.label || "Nouvelle demande")} · ${mailboxEscape(item.title || "À traiter")}</strong>
         <small>${mailboxEscape(item.sender || "Membre")} · ${mailboxEscape(mailboxDate(item.date))}</small>
@@ -7644,6 +7651,10 @@ window.openAdminNotification = async function(category) {
   window.toggleAdminNotificationPanel(false);
   if (category === "support") {
     await window.adminOpenSupport?.();
+    return;
+  }
+  if (category === "registrations") {
+    await window.adminOpenPlayers?.();
     return;
   }
   await window.adminOpenInbox?.();
@@ -7697,9 +7708,16 @@ window.loadAdminInbox = async function(options = {}) {
     } catch (error) { failures.push(label + " : " + (error.message || "indisponible")); }
   };
   await Promise.all([
+    load("Inscriptions", "/api/admin/registrations", "registrations", "registrations", x=>({
+      category:"registrations", label:"Nouvelle inscription", id:x.user_id,
+      title:x.display_name || "Nouvel explorateur",
+      body:"Un nouveau compte vient de rejoindre Trésors de nos Villages.",
+      sender:x.email || "Adresse non renseignée", date:x.created_at,
+      status:"nouveau", detail:"Création d'un compte joueur"
+    })),
     load("Support", "/api/admin/support", "requests", "support", x=>({
       category:"support", label:"Support", id:x.id, title:x.subject || "Demande de support",
-      body:x.message || "", sender:x.user_email || x.email || ("Membre " + String(x.user_id || "")),
+      body:x.message || "", sender:[x.user_name, x.user_email || x.email].filter(Boolean).join(" · ") || "Membre",
       date:x.created_at, status:x.status || "en_attente", detail:"Demande d'aide d'un joueur"
     })),
     load("Testeurs", "/api/admin/testers", "applications", "testers", x=>({
@@ -7883,6 +7901,24 @@ window.loadSiteAnalytics = async function() {
     put("analytics-members", totals.active_members);
     put("analytics-anonymous", totals.active_anonymous);
     put("analytics-24h", totals.visits_24h);
+    put("analytics-registered-total", totals.registered_total);
+    put("analytics-registered-7d", totals.registered_7d);
+    const registrationsList=document.getElementById("analytics-registrations");
+    if(registrationsList){
+      registrationsList.replaceChildren();
+      const registrations=Array.isArray(data.recent_registrations)?data.recent_registrations:[];
+      if(!registrations.length){registrationsList.textContent="Aucune inscription enregistrée.";}
+      else {
+        const ul=document.createElement("ul");
+        registrations.forEach(person=>{
+          const li=document.createElement("li");
+          const date=person.registered_at?new Date(person.registered_at).toLocaleString("fr-FR"):"";
+          li.textContent=[person.display_name,person.email,date].filter(Boolean).join(" · ");
+          ul.appendChild(li);
+        });
+        registrationsList.appendChild(ul);
+      }
+    }
 
     // Graphique réel : sessions créées chaque jour, selon first_seen.
     const chart=document.getElementById("admin-week-chart");
