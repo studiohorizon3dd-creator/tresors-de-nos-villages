@@ -2382,6 +2382,36 @@ body.halloween-accueil .home-hero{
 }
 </style>
 
+<style>
+
+/* Administration — zones de rédaction confortables pour les étapes */
+#admin-adventure-step-form .admin-step-writing-field {
+  display:block;
+  width:100%;
+  min-width:0;
+  color:#425044;
+  font-weight:600;
+}
+#admin-adventure-step-form .admin-step-writing-field textarea,
+#admin-adventure-step-form .admin-step-writing-field input {
+  margin-top:7px;
+  border:1px solid #d4c49c;
+  border-radius:9px;
+  background:#fffefa;
+  color:#26352a;
+  font:14px/1.55 Arial,sans-serif;
+}
+#admin-adventure-step-form .admin-step-writing-field textarea:focus,
+#admin-adventure-step-form .admin-step-writing-field input:focus {
+  outline:2px solid #d9b65f;
+  outline-offset:1px;
+  border-color:#b98b2e;
+}
+@media (max-width:600px) {
+  #admin-adventure-step-form .admin-step-writing-field textarea { min-height:125px; }
+}
+
+</style>
 </head>
 <body>
 
@@ -4974,7 +5004,7 @@ body.halloween-accueil .home-hero{
             <label>Rayon GPS autorisé (mètres)<input id="admin-step-gps-radius" type="number" min="10" max="500" step="5" value="100" required style="display:block;width:100%;padding:9px"><small>Le joueur devra se trouver dans ce rayon pour débloquer l’étape.</small></label>
             <div style="grid-column:1/-1;background:#edf3e8;border:1px solid #d4e2ce;border-radius:9px;padding:10px;color:#31543b;font-size:13px">📍 Le GPS est obligatoire pour valider l’arrivée. Renseigne la latitude, la longitude et le rayon de validation du lieu.</div>
             <label style="grid-column:1/-1">Photo de l’étape<input id="admin-step-photo-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:block;width:100%;padding:9px"><small>JPG, PNG ou WEBP · 8 Mo maximum</small><input id="admin-step-photo" type="hidden"></label><div id="admin-step-photo-preview" style="grid-column:1/-1"></div>
-            <label style="grid-column:1/-1">Énigme<textarea id="admin-step-riddle" rows="2" style="display:block;width:100%;padding:9px"></textarea></label><label>Réponse<input id="admin-step-answer" maxlength="500" style="display:block;width:100%;padding:9px"></label><label>Premier indice (avant la réponse)<textarea id="admin-step-hint" maxlength="1000" rows="2" style="display:block;width:100%;padding:9px"></textarea></label><label>Indice du prochain lieu (après bonne réponse)<textarea id="admin-step-next-hint" maxlength="1000" rows="2" placeholder="Un nouvel indice pour guider vers la prochaine étape…" style="display:block;width:100%;padding:9px"></textarea></label><label>Étoiles attribuées<input id="admin-step-stars" type="number" min="0" max="10" step="1" value="1" style="display:block;width:100%;padding:9px"></label>
+            <label class="admin-step-writing-field" style="grid-column:1/-1">Énigme<textarea id="admin-step-riddle" rows="4" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Réponse<input id="admin-step-answer" maxlength="500" style="display:block;width:100%;box-sizing:border-box;padding:12px"></label><label class="admin-step-writing-field" style="grid-column:1/-1">Premier indice (avant la réponse)<textarea id="admin-step-hint" maxlength="1000" rows="4" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Indice du prochain lieu (après bonne réponse)<textarea id="admin-step-next-hint" maxlength="1000" rows="4" placeholder="Un nouvel indice pour guider vers la prochaine étape…" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label>Étoiles attribuées<input id="admin-step-stars" type="number" min="0" max="10" step="1" value="1" style="display:block;width:100%;box-sizing:border-box;padding:10px"></label>
             <div style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap"><button class="admin-secondary-btn" id="admin-step-submit" type="submit">➕ Ajouter l'étape / énigme</button><button class="admin-secondary-btn" id="admin-step-cancel-edit" type="button" hidden>Annuler la modification</button></div>
           </form>
         </div>
