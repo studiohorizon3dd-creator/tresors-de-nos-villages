@@ -1977,6 +1977,81 @@ body.halloween-accueil .home-hero{
 }
 </style>
 
+
+<style id="admin-dashboard-mockup-theme">
+/* Refonte inspirée de la maquette validée : palette crème, forêt et cartes pastel */
+#admin-home-view.admin-dashboard-real{max-width:1660px;margin:0 auto;padding:4px 0 30px;color:#173b2b}
+#admin-home-view .adm-hero{min-height:150px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:25px 30px;border:1px solid #d7b85e;border-radius:19px;color:#fff5d9;background:radial-gradient(ellipse at 82% 10%,rgba(211,177,82,.28),transparent 32%),linear-gradient(110deg,#052d21 0%,#0c4934 65%,#1c6343 100%);box-shadow:0 9px 24px rgba(28,54,36,.14)}
+#admin-home-view .adm-hero:before{content:"";position:absolute;inset:auto -3% -70px 35%;height:150px;border-radius:50%;background:linear-gradient(12deg,rgba(137,160,79,.32),rgba(201,181,106,.12));transform:rotate(-5deg)}
+#admin-home-view .adm-hero:after{content:"";position:absolute;right:10%;bottom:-90px;width:340px;height:180px;border-radius:50%;border:1px solid rgba(245,222,159,.25);box-shadow:0 0 0 18px rgba(245,222,159,.035),0 0 0 38px rgba(245,222,159,.025)}
+#admin-home-view .adm-hero-copy{position:relative;z-index:1;max-width:850px}
+#admin-home-view .adm-eyebrow{font:800 10px Arial,sans-serif;letter-spacing:1.8px;color:#f1cf75}
+#admin-home-view .adm-hero h3{font:700 clamp(25px,3vw,36px)/1.15 Georgia,serif;color:#fff0c6;margin:8px 0 7px}
+#admin-home-view .adm-hero h3 span{color:#e5bc4b}
+#admin-home-view .adm-hero p{margin:0;color:#fff8e8;font:14px/1.5 Arial,sans-serif}
+#admin-home-view .adm-hero-mark{position:relative;z-index:1;font-size:66px;opacity:.88;filter:drop-shadow(0 5px 8px #001c12)}
+#admin-home-view .adm-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:13px 0 15px}
+#admin-home-view .adm-kpi{min-width:0;min-height:91px;display:flex;align-items:center;gap:12px;padding:13px 14px;border:1px solid rgba(157,132,72,.27);border-radius:16px;box-shadow:0 5px 14px rgba(49,54,35,.08)}
+#admin-home-view .adm-kpi-green{background:linear-gradient(135deg,#e3f3dc,#f6faed)}
+#admin-home-view .adm-kpi-purple{background:linear-gradient(135deg,#eee2f5,#fbf5ff)}
+#admin-home-view .adm-kpi-gold{background:linear-gradient(135deg,#fff0c9,#fff9e9)}
+#admin-home-view .adm-kpi-blue{background:linear-gradient(135deg,#deebff,#f4f8ff)}
+#admin-home-view .adm-kpi-pink{background:linear-gradient(135deg,#ffe1e5,#fff5f4)}
+#admin-home-view .adm-kpi-icon{flex:0 0 48px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.75);font-size:24px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.65)}
+#admin-home-view .adm-kpi small{display:block;font:700 11px/1.3 Arial,sans-serif;color:#33483a}
+#admin-home-view .adm-kpi strong{display:block;font:700 28px/1.05 Georgia,serif;color:#123b2a;margin:3px 0}
+#admin-home-view .adm-kpi span:last-child{display:block;font:10px/1.25 Arial,sans-serif;color:#6c705f}
+#admin-home-view .adm-main-grid{display:grid;grid-template-columns:1.18fr 1.12fr .92fr;grid-template-areas:"chart donut villages" "recent quick pending";gap:12px;align-items:stretch}
+#admin-home-view .adm-panel{min-width:0;padding:14px 15px;border:1px solid #dfc98f;border-radius:16px;background:linear-gradient(145deg,#fffdf5,#f8efd9);box-shadow:0 6px 17px rgba(50,53,34,.075)}
+#admin-home-view .adm-activity-chart{grid-area:chart}
+#admin-home-view .adm-adventure-panel{grid-area:donut}
+#admin-home-view .adm-village-panel{grid-area:villages}
+#admin-home-view .adm-recent-panel{grid-area:recent}
+#admin-home-view .adm-quick-panel{grid-area:quick}
+#admin-home-view .adm-pending-panel{grid-area:pending}
+#admin-home-view .adm-panel-head{min-height:32px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:9px;margin-bottom:9px;border-bottom:1px solid #e8d9b7}
+#admin-home-view .adm-panel-head h3{margin:0;color:#173e2d;font:700 18px/1.2 Georgia,serif}
+#admin-home-view .adm-panel-head h3 small{font:700 11px Arial,sans-serif;color:#6b6d5e}
+#admin-home-view .adm-live-tag{font:700 9px Arial,sans-serif;color:#1a7c4c;background:#e4f2df;border-radius:20px;padding:5px 8px;white-space:nowrap}
+#admin-home-view .adm-week-chart{height:145px!important;min-height:145px;display:flex;align-items:flex-end;justify-content:space-around;gap:10px;padding:12px 8px 21px!important;border-bottom:1px solid #ddcfad;background:repeating-linear-gradient(to bottom,transparent 0,transparent 27px,rgba(123,117,91,.12) 28px);overflow:visible}
+#admin-home-view .adm-week-chart>i{position:relative;flex:1;max-width:38px;min-width:10px;border-radius:8px 8px 2px 2px;background:linear-gradient(180deg,#13945d,#a8d6a5);box-shadow:0 2px 5px rgba(26,94,59,.12)}
+#admin-home-view .adm-week-chart>i:before{content:attr(data-value);position:absolute;top:-18px;left:50%;transform:translateX(-50%);font:10px Arial,sans-serif;color:#294735}
+#admin-home-view .adm-week-chart>i .chart-day{position:absolute;top:calc(100% + 5px);left:50%;transform:translateX(-50%);font:9px Arial,sans-serif;color:#6e6b5c;white-space:nowrap}
+#admin-home-view .admin-chart-caption{margin:11px 0 0;text-align:center;color:#77715f;font:10px Arial,sans-serif}
+#admin-home-view .adm-donut-row{min-height:155px;display:flex;align-items:center;justify-content:center;gap:20px}
+#admin-home-view .adm-donut{width:136px;height:136px;flex:0 0 136px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:conic-gradient(#179b5d 0 56%,#4d8fe8 56% 78%,#efb62e 78% 89%,#e95a63 89% 100%);position:relative;isolation:isolate}
+#admin-home-view .adm-donut:before{content:"";position:absolute;inset:15px;background:#fff9eb;border-radius:50%;z-index:-1}
+#admin-home-view .adm-donut strong{font:700 25px Georgia,serif;color:#143e2d}
+#admin-home-view .adm-donut small{font:10px Arial,sans-serif;color:#6b6658}
+#admin-home-view .adm-legend{display:grid;gap:9px;min-width:0}
+#admin-home-view .adm-legend-row{display:flex;align-items:center;gap:8px;font:700 11px Arial,sans-serif;color:#39483c}
+#admin-home-view .adm-legend-dot{width:10px;height:10px;flex:0 0 10px;border-radius:50%}
+#admin-home-view .adm-status-list{display:grid;gap:3px}
+#admin-home-view .adm-status-row{display:grid;grid-template-columns:27px minmax(0,1fr) auto;align-items:center;gap:8px;padding:7px 2px;border-bottom:1px solid #eee3cb;font:700 11px Arial,sans-serif;color:#39483c}
+#admin-home-view .adm-status-row:last-child{border-bottom:0}
+#admin-home-view .adm-status-icon{width:23px;height:23px;display:grid;place-items:center;border-radius:50%;background:#edf2df;font-size:13px}
+#admin-home-view .adm-status-count{font:700 12px Georgia,serif;color:#163d2d}
+#admin-home-view .adm-recent-list,#admin-home-view .adm-pending-list{display:grid;gap:2px}
+#admin-home-view .adm-activity-item{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px 2px;border-bottom:1px solid #eee3cb}
+#admin-home-view .adm-activity-item:last-child{border-bottom:0}
+#admin-home-view .adm-activity-icon{font-size:16px;text-align:center}
+#admin-home-view .adm-activity-text{font:700 11px/1.35 Arial,sans-serif;color:#304537;overflow-wrap:anywhere}
+#admin-home-view .adm-activity-time{font:9px Arial,sans-serif;color:#817866;white-space:nowrap}
+#admin-home-view .adm-text-action{border:0;background:transparent;color:#24714a;font:700 10px Arial,sans-serif;cursor:pointer}
+#admin-home-view .adm-quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#admin-home-view .adm-quick-grid button{min-height:76px;padding:9px 6px;border:1px solid #e2cb8f;border-radius:13px;background:linear-gradient(145deg,#fff8e7,#f2e2bb);color:#173e2d;font:700 10px/1.3 Arial,sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 7px rgba(60,49,22,.06)}
+#admin-home-view .adm-quick-grid button:hover{transform:translateY(-2px);border-color:#bd9a45;background:#fff3d2}
+#admin-home-view .adm-quick-grid button span{font-size:22px}
+#admin-home-view .adm-count-badge{min-width:24px;height:24px;display:grid;place-items:center;padding:0 7px;border-radius:50%;background:#d92f42;color:white;font:700 12px Arial,sans-serif}
+#admin-home-view .adm-pending-item{display:flex;align-items:center;gap:8px;padding:9px 8px;margin:3px 0;border:1px solid #ead9b5;border-radius:10px;background:#fffaf0;color:#304537;font:700 11px Arial,sans-serif}
+#admin-home-view .adm-pending-item span:first-child{font-size:16px}
+#admin-home-view .adm-pending-item b{margin-left:auto;color:#a46a13}
+#admin-home-view .adm-dashboard-footer{display:flex;align-items:center;gap:8px;margin-top:13px;padding:10px 13px;border-radius:12px;background:linear-gradient(90deg,#e9efd9,#f6efd9);color:#65705b;font:10px Arial,sans-serif}
+#admin-home-view .adm-dashboard-footer button{margin-left:auto;border:1px solid #d9c58e;border-radius:8px;padding:6px 9px;background:#fff9e9;color:#28523a;font:700 10px Arial,sans-serif;cursor:pointer}
+@media(max-width:1150px){#admin-home-view .adm-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}#admin-home-view .adm-main-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chart donut" "villages pending" "recent quick"}}
+@media(max-width:700px){#admin-home-view .adm-hero{min-height:130px;padding:18px}.adm-hero-mark{font-size:42px!important}#admin-home-view .adm-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}#admin-home-view .adm-kpi{min-height:80px;padding:9px;gap:8px}#admin-home-view .adm-kpi-icon{flex-basis:35px;width:35px;height:35px;font-size:18px}#admin-home-view .adm-kpi strong{font-size:23px}#admin-home-view .adm-main-grid{grid-template-columns:1fr;grid-template-areas:"chart" "donut" "villages" "recent" "quick" "pending"}#admin-home-view .adm-donut-row{gap:14px}#admin-home-view .adm-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-home-view .adm-dashboard-footer{align-items:flex-start;flex-wrap:wrap}#admin-home-view .adm-dashboard-footer button{margin-left:0}}
+</style>
+
 </head>
 <body>
 
@@ -3222,40 +3297,70 @@ body.halloween-accueil .home-hero{
         <div class="mailbox-history-card"><div class="mailbox-history-heading"><h4>📜 Historique des envois</h4><button type="button" class="small-btn" onclick="loadAdminMailboxHistory()">↻ Actualiser</button></div><div id="admin-mailbox-history"><p>Chargement de l’historique…</p></div></div>
       </div>
 
-      <div id="admin-home-view">
-        <div class="admin-home-banner">
-          <div><span class="admin-kicker">BIENVENUE DANS VOTRE ESPACE ADMINISTRATION</span><h3>Gardez un œil sur votre aventure.</h3><p>Suivez les visiteurs, les villages, les aventures et votre équipe depuis un seul endroit.</p></div>
-        </div>
+      <div id="admin-home-view" class="admin-dashboard-real">
+  <section class="adm-hero">
+    <div class="adm-hero-copy">
+      <span class="adm-eyebrow">CENTRE DE PILOTAGE · TRÉSORS DE NOS VILLAGES</span>
+      <h3>Bienvenue dans votre espace administration <span>♛</span></h3>
+      <p>Gérez le site, les villages, les aventures et votre équipe en toute simplicité.</p>
+    </div>
+    <div class="adm-hero-mark" aria-hidden="true">🧭</div>
+  </section>
 
-        <div class="admin-home-toolbar"><div class="admin-section-heading"><div><h3>Vue d'ensemble</h3><p>Les chiffres de fréquentation sont actualisés depuis le serveur.</p></div></div><span class="admin-live-pill">Données en direct</span></div>
-        <div class="admin-metric-grid">
-          <article class="admin-metric"><span class="admin-metric-icon">👥</span><span class="admin-metric-label">Visiteurs actifs</span><strong id="analytics-active">—</strong><small>Sur les 5 dernières minutes</small></article>
-          <article class="admin-metric"><span class="admin-metric-icon">🧭</span><span class="admin-metric-label">Explorateurs connectés</span><strong id="analytics-members">—</strong><small>Visiteurs identifiés</small></article>
-          <article class="admin-metric"><span class="admin-metric-icon">◉</span><span class="admin-metric-label">Visiteurs anonymes</span><strong id="analytics-anonymous">—</strong><small>Sans compte connecté</small></article>
-          <article class="admin-metric"><span class="admin-metric-icon">▥</span><span class="admin-metric-label">Visites sur 24 h</span><strong id="analytics-24h">—</strong><small>Depuis les dernières 24 heures</small></article>
-        </div>
+  <section class="adm-kpis" aria-label="Indicateurs principaux">
+    <article class="adm-kpi adm-kpi-green"><span class="adm-kpi-icon">👥</span><div><small>Joueurs inscrits</small><strong id="dash-total-players">—</strong><span id="dash-players-note">Comptes enregistrés</span></div></article>
+    <article class="adm-kpi adm-kpi-purple"><span class="adm-kpi-icon">👥</span><div><small>Membres de l'équipe</small><strong id="dash-total-team">—</strong><span id="dash-team-note">Administrateurs et modérateurs</span></div></article>
+    <article class="adm-kpi adm-kpi-gold"><span class="adm-kpi-icon">📍</span><div><small>Villages</small><strong id="dash-total-villages">—</strong><span id="dash-villages-note">Tous les villages enregistrés</span></div></article>
+    <article class="adm-kpi adm-kpi-blue"><span class="adm-kpi-icon">🪧</span><div><small>Aventures</small><strong id="dash-total-adventures">—</strong><span id="dash-adventures-note">Parcours enregistrés</span></div></article>
+    <article class="adm-kpi adm-kpi-pink"><span class="adm-kpi-icon">💬</span><div><small>Demandes en attente</small><strong id="dash-total-pending">—</strong><span id="dash-pending-note">À examiner par l'équipe</span></div></article>
+  </section>
 
-        <div class="admin-visual-grid">
-          <article class="admin-visual-card"><h3 class="admin-visual-title"><span>▥</span> Visites des 7 derniers jours</h3><div id="admin-week-chart" class="admin-chart-placeholder" aria-label="Nombre de sessions enregistrées chaque jour"><span class="admin-chart-empty">Chargement des visites…</span></div><p id="admin-week-caption" class="admin-chart-caption">Sessions enregistrées sur les 7 derniers jours</p></article>
-          <article class="admin-visual-card"><h3 class="admin-visual-title"><span>♙</span> Répartition des visiteurs</h3><div class="admin-donut-wrap"><div id="admin-visitor-donut" class="admin-donut"><span id="admin-donut-total">—</span></div><div id="admin-donut-legend" class="admin-donut-legend"><div><b></b> Explorateurs connectés</div><div><b></b> Visiteurs anonymes</div></div></div><p id="admin-donut-caption" class="admin-chart-caption">Répartition des sessions enregistrées</p></article>
-          <article class="admin-visual-card"><h3 class="admin-visual-title"><span>◈</span> Visites par zone</h3><div class="admin-france-map"><svg viewBox="0 0 180 190" role="img" aria-label="Carte de France métropolitaine, région Hauts-de-France mise en évidence"><path class="france-outline" d="M70 7 L105 14 119 29 151 40 143 65 164 85 151 108 154 132 129 149 116 181 87 171 66 184 48 161 27 151 31 126 12 105 27 82 19 58 43 43 48 18Z"/><path class="france-region-highlight" d="M70 7 L105 14 119 29 151 40 143 65 113 61 92 44 60 38 48 18Z"/><path class="france-region-line" d="M48 18 L60 38 L92 44 L113 61 L143 65"/><circle class="france-map-pin" cx="111" cy="34" r="5"/><text x="118" y="31" class="france-map-label">HDF</text></svg><div class="admin-map-note"><strong>Hauts-de-France</strong><span id="admin-map-visits">— session(s) associée(s) à un village</span><div id="admin-village-visits" class="admin-village-visits">Les villages apparaîtront ici lorsque les visites seront associées à un village.</div></div></div></article>
-        </div>
+  <section class="adm-main-grid">
+    <article class="adm-panel adm-activity-chart">
+      <header class="adm-panel-head"><h3>♟ Activité du site <small>(7 derniers jours)</small></h3><span class="adm-live-tag">● Données réelles</span></header>
+      <div id="admin-week-chart" class="admin-chart-placeholder adm-week-chart" aria-label="Nombre de sessions enregistrées chaque jour"><span class="admin-chart-empty">Chargement des visites…</span></div>
+      <p id="admin-week-caption" class="admin-chart-caption">Sessions enregistrées sur les 7 derniers jours</p>
+    </article>
 
-        <div class="admin-section-heading"><div><h3>Accès rapides</h3><p>Les outils principaux de votre administration</p></div></div>
-        <div class="admin-shortcut-grid">
-          <button type="button" class="admin-shortcut" onclick="adminOpenSupport()"><span class="admin-shortcut-icon">✉</span><span><strong>Support des joueurs</strong><small>Lire et traiter les demandes d'aide</small></span><b>→</b></button>
-          <button type="button" class="admin-shortcut" onclick="adminOpenAdventures()"><span class="admin-shortcut-icon">🧩</span><span><strong>Aventures & énigmes</strong><small>Accéder à la gestion des parcours</small></span><b>→</b></button>
-          <button type="button" class="admin-shortcut" onclick="adminShowAnalytics()"><span class="admin-shortcut-icon">▥</span><span><strong>Statistiques détaillées</strong><small>Consulter les visites récentes</small></span><b>→</b></button>
-          <button type="button" class="admin-shortcut" onclick="adminOpenPlayers()"><span class="admin-shortcut-icon">♙</span><span><strong>Joueurs & administrateurs</strong><small>Consulter les profils des explorateurs</small></span><b>→</b></button>
-        </div>
-
-        <div class="admin-bottom-grid">
-          <article class="admin-info-panel"><h3>⚙ État du projet</h3><p><span class="admin-status-dot"></span> Serveur d'administration connecté</p><div class="admin-project-status"><span>Site en ligne</span><span>Carte puzzle en préparation</span><span class="pending">Révélations à programmer</span></div><p class="admin-project-note">Les outils sont ajoutés progressivement. Les rubriques non encore reliées à une API restent signalées comme étant en préparation.</p></article>
-          <article class="admin-info-panel admin-test-panel"><h3>⚗ Actions de test</h3><p>Tester le parcours sans modifier les données des joueurs.</p><button type="button" class="admin-secondary-btn" onclick="activerModeTestAventure()">▶ Tester l'aventure</button><p id="admin-test-status" class="status" role="status" aria-live="polite"></p></article>
-        </div>
+    <article class="adm-panel adm-adventure-panel">
+      <header class="adm-panel-head"><h3>🏆 Répartition des aventures</h3></header>
+      <div class="adm-donut-row">
+        <div id="dash-adventure-donut" class="adm-donut"><strong id="dash-adventure-total">—</strong><small>Aventures</small></div>
+        <div id="dash-adventure-legend" class="adm-legend"><span>Chargement des aventures…</span></div>
       </div>
+    </article>
 
-      <div id="admin-analytics-view" class="admin-subview" hidden>
+    <article class="adm-panel adm-village-panel">
+      <header class="adm-panel-head"><h3>🏡 Statuts des villages</h3></header>
+      <div id="dash-village-status-list" class="adm-status-list"><p>Chargement des villages…</p></div>
+    </article>
+
+    <article class="adm-panel adm-recent-panel">
+      <header class="adm-panel-head"><h3>🕒 Dernières activités</h3><button type="button" class="adm-text-action" onclick="adminShowAnalytics()">Voir l'historique →</button></header>
+      <div id="dash-recent-activity" class="adm-recent-list"><p>Chargement des activités…</p></div>
+    </article>
+
+    <article class="adm-panel adm-quick-panel">
+      <header class="adm-panel-head"><h3>⚡ Actions rapides</h3></header>
+      <div class="adm-quick-grid">
+        <button type="button" onclick="adminOpenVillages()"><span>📍</span>Ajouter un village</button>
+        <button type="button" onclick="adminOpenAdventures()"><span>🪧</span>Créer / éditer une aventure</button>
+        <button type="button" onclick="adminOpenPlayers()"><span>👥</span>Gérer les utilisateurs</button>
+        <button type="button" onclick="adminOpenTesterManagement()"><span>🧪</span>Gérer les testeurs</button>
+        <button type="button" onclick="adminOpenNotificationsAdmin()"><span>📣</span>Publier une actualité</button>
+        <button type="button" onclick="adminShowAnalytics()"><span>📊</span>Voir les statistiques</button>
+      </div>
+    </article>
+
+    <article class="adm-panel adm-pending-panel">
+      <header class="adm-panel-head"><h3>📬 Demandes en attente</h3><b id="dash-pending-badge" class="adm-count-badge">—</b></header>
+      <div id="dash-pending-list" class="adm-pending-list"><p>Chargement des demandes…</p></div>
+    </article>
+  </section>
+  <div class="adm-dashboard-footer"><span>🌿</span> Trésors de nos Villages · Espace administration <small id="dash-dashboard-load-note">Chargement des données…</small> <button type="button" onclick="window.loadAdminDashboardOverview?.()">↻ Actualiser les données</button></div>
+</div>
+
+<div id="admin-analytics-view" class="admin-subview" hidden>
         <div class="admin-section-heading"><div><h3>Statistiques du site</h3><p>Fréquentation, inscriptions et visiteurs récents</p></div></div>
         <div class="players-metrics" style="margin:12px 0">
           <article class="players-metric"><span>👥</span><div><small>Total des comptes inscrits</small><strong id="analytics-registered-total">—</strong></div></article>
@@ -4995,7 +5100,7 @@ const adminSetView = window.adminSetView = function(view, title) {
   const active=Array.from(document.querySelectorAll(".admin-nav-item")).find(btn=>(btn.getAttribute("onclick")||"").includes(view==="admin-home-view"?"adminShowHome":view==="admin-support-view"?"adminOpenCommunication":view==="admin-adventures-view"?"adminOpenAdventures":view==="admin-analytics-view"?"adminShowAnalytics":view==="admin-players-view"?"adminOpenPlayers":view==="admin-testers-view"?"adminOpenTesters":view==="admin-tester-management-view"?"adminOpenTesterManagement":view==="admin-villages-view"?"adminOpenVillages":view==="admin-puzzle-view"?"adminOpenPuzzle":view==="admin-levels-view"?"adminOpenLevels":view==="admin-news-view"?"adminOpenNews":view==="admin-site-status-view"?"adminOpenSiteStatus":view==="admin-mailbox-view"?"adminOpenCommunication":view==="admin-rewards-view"?"adminOpenRewards":view==="admin-team-space-view"?"adminOpenTeamSpace":view==="admin-team-by-village-view"?"adminOpenTeamByVillage":"adminComingSoon"));
   if(active) active.classList.add("active");
 };
-function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");}
+function adminShowHome(){adminSetView("admin-home-view","Tableau de bord");window.loadSiteAnalytics?.();window.loadAdminDashboardOverview?.();}
 function adminShowAnalytics(){adminSetView("admin-analytics-view","Statistiques");window.loadSiteAnalytics?.();}
 async function adminOpenSupport(){
   adminSetView("admin-support-view","Centre de communication");
@@ -8369,6 +8474,132 @@ async function loadPublicExplorerRewards(view="public"){
   }
 }
 document.addEventListener('DOMContentLoaded',()=>loadPublicExplorerRewards("public"));
+</script>
+
+
+<script id="admin-dashboard-live-data">
+window.loadAdminDashboardOverview = async function(){
+  const root=document.getElementById("admin-home-view");
+  if(!root || root.hidden) return;
+  const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value??"—");};
+  const api=async(path)=>{
+    const token=await window.getAdminBearerToken();
+    const response=await fetch("https://tresors-de-nos-villages-serveur.onrender.com"+path,{headers:{Authorization:"Bearer "+token,Accept:"application/json"},cache:"no-store"});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data.error||("Erreur "+response.status));
+    return data;
+  };
+  const [analyticsR,playersR,teamR,villagesR,adventuresR,testersR]=await Promise.allSettled([
+    api("/api/admin/analytics"),api("/api/admin/players"),api("/api/admin/team"),
+    api("/api/admin/villages"),api("/api/admin/adventures"),api("/api/admin/testers")
+  ]);
+  const analytics=analyticsR.status==="fulfilled"?analyticsR.value:{};
+  const players=playersR.status==="fulfilled"?(playersR.value.players||[]):[];
+  const team=teamR.status==="fulfilled"?(teamR.value.members||[]):[];
+  const villages=villagesR.status==="fulfilled"?(villagesR.value.villages||[]):[];
+  const adventures=adventuresR.status==="fulfilled"?(adventuresR.value.adventures||[]):[];
+  const applications=testersR.status==="fulfilled"?(testersR.value.applications||[]):[];
+
+  put("dash-total-players",playersR.status==="fulfilled"?players.length:"—");
+  put("dash-total-team",teamR.status==="fulfilled"?team.filter(x=>x.status!=="suspended").length:"—");
+  put("dash-total-villages",villagesR.status==="fulfilled"?villages.length:"—");
+  put("dash-total-adventures",adventuresR.status==="fulfilled"?adventures.length:"—");
+
+  const pendingTesters=applications.filter(x=>x.status==="pending");
+  const pendingVillages=villages.filter(x=>["pending_confirmation","en_attente","a_valider"].includes(String(x.status||"").toLowerCase()));
+  const pendingAdventures=adventures.filter(x=>["a_valider","en_attente","pending","pending_validation"].includes(String(x.status||"").toLowerCase()) || (x.is_validated===false && x.status!=="en_creation"));
+  const pendingTotal=pendingTesters.length+pendingVillages.length+pendingAdventures.length;
+  put("dash-total-pending",pendingTotal);
+  put("dash-pending-badge",pendingTotal);
+  put("dash-players-note",playersR.status==="fulfilled"?"Comptes enregistrés dans Neon":"Données indisponibles");
+  put("dash-team-note",teamR.status==="fulfilled"?"Équipe active":"Données indisponibles");
+  put("dash-villages-note",villagesR.status==="fulfilled"?"Villages enregistrés":"Données indisponibles");
+  put("dash-adventures-note",adventuresR.status==="fulfilled"?"Parcours enregistrés":"Données indisponibles");
+  put("dash-pending-note",pendingTotal?"À examiner par l'équipe":"Aucune demande en attente");
+
+  // Aventures : répartition par statut réel retourné par l'API.
+  const adventureGroups=[
+    {key:"en_ligne",label:"Publiées",color:"#20a65b",icon:"🟢"},
+    {key:"en_travaux",label:"En travaux",color:"#4b8ee8",icon:"🔵"},
+    {key:"a_valider",label:"À valider",color:"#f0b323",icon:"🟡"},
+    {key:"suspendue",label:"Suspendues",color:"#e95861",icon:"🔴"}
+  ];
+  const adventureCounts=adventureGroups.map(g=>({...g,count:adventures.filter(a=>String(a.status||"").toLowerCase()===g.key || (g.key==="en_ligne" && a.is_published===true)).length}));
+  const knownAdventureCount=adventureCounts.reduce((n,g)=>n+g.count,0);
+  const otherAdventureCount=Math.max(0,adventures.length-knownAdventureCount);
+  if(otherAdventureCount)adventureCounts.push({label:"Autres statuts",count:otherAdventureCount,color:"#9b9b8d",icon:"⚪"});
+  put("dash-adventure-total",adventuresR.status==="fulfilled"?adventures.length:"—");
+  const donut=document.getElementById("dash-adventure-donut");
+  if(donut && adventuresR.status==="fulfilled"){
+    let cursor=0;const parts=adventureCounts.filter(g=>g.count>0).map(g=>{const from=cursor;cursor+=g.count/adventures.length*100;return `${g.color} ${from}% ${cursor}%`;});
+    donut.style.background=adventures.length?`conic-gradient(${parts.join(",")})`:"#d9d9cb";
+  }
+  const legend=document.getElementById("dash-adventure-legend");
+  if(legend){
+    legend.replaceChildren();
+    if(adventuresR.status!=="fulfilled"){legend.textContent="Répartition indisponible pour le moment.";}
+    else if(!adventures.length){legend.textContent="Aucune aventure enregistrée.";}
+    else adventureCounts.forEach(g=>{const row=document.createElement("div");row.className="adm-legend-row";const dot=document.createElement("i");dot.className="adm-legend-dot";dot.style.background=g.color;const label=document.createElement("span");label.textContent=`${g.label} : ${g.count} (${Math.round(g.count/adventures.length*100)} %) `;row.append(dot,label);legend.appendChild(row);});
+  }
+
+  // Statuts des villages : libellés alignés sur les valeurs de la base.
+  const villageGroups=[
+    {keys:["available","en_ligne"],label:"Actifs",icon:"✅"},
+    {keys:["pending_confirmation","en_attente","a_valider"],label:"En attente",icon:"🕒"},
+    {keys:["preparing","en_travaux"],label:"En préparation",icon:"🔧"},
+    {keys:["inactive","suspendu","suspendue"],label:"Suspendus / inactifs",icon:"⏸️"}
+  ];
+  const villageList=document.getElementById("dash-village-status-list");
+  if(villageList){
+    villageList.replaceChildren();
+    if(villagesR.status!=="fulfilled")villageList.textContent="Statuts des villages indisponibles.";
+    else if(!villages.length)villageList.textContent="Aucun village enregistré.";
+    else villageGroups.forEach(g=>{
+      const count=villages.filter(v=>g.keys.includes(String(v.status||"").toLowerCase())).length;
+      const row=document.createElement("div");row.className="adm-status-row";
+      const icon=document.createElement("span");icon.className="adm-status-icon";icon.textContent=g.icon;
+      const label=document.createElement("span");label.textContent=g.label;
+      const number=document.createElement("b");number.className="adm-status-count";number.textContent=count;
+      row.append(icon,label,number);villageList.appendChild(row);
+    });
+  }
+
+  // Demandes en attente : demandes testeurs, propositions de villages et aventures à valider.
+  const pendingList=document.getElementById("dash-pending-list");
+  if(pendingList){
+    pendingList.replaceChildren();
+    const items=[
+      {icon:"🧪",label:"Demandes de testeurs",count:pendingTesters.length,action:"adminOpenTesters()"},
+      {icon:"📍",label:"Villages à confirmer",count:pendingVillages.length,action:"adminOpenVillages()"},
+      {icon:"🪧",label:"Aventures à valider",count:pendingAdventures.length,action:"adminOpenAdventures()"}
+    ].filter(x=>x.count>0);
+    if(!items.length){pendingList.textContent=pendingTotal===0?"Aucune demande en attente.":"Les demandes n'ont pas pu être chargées.";}
+    else items.forEach(item=>{const button=document.createElement("button");button.type="button";button.className="adm-pending-item";const icon=document.createElement("span");icon.textContent=item.icon;const label=document.createElement("span");label.textContent=item.label;const count=document.createElement("b");count.textContent=item.count;button.append(icon,label,count);button.addEventListener("click",()=>{if(item.label.includes("testeurs"))window.adminOpenTesters?.();else if(item.label.includes("Villages"))window.adminOpenVillages?.();else window.adminOpenAdventures?.();});pendingList.appendChild(button);});
+  }
+
+  // Dernières activités : inscriptions récentes et visites récentes renvoyées par les statistiques.
+  const recentList=document.getElementById("dash-recent-activity");
+  if(recentList){
+    recentList.replaceChildren();
+    const events=[];
+    (analytics.recent_registrations||[]).slice(0,10).forEach(x=>events.push({icon:"👤",label:`Nouvelle inscription : ${x.display_name||x.email||"Explorateur"}`,date:x.registered_at}));
+    (analytics.recent||[]).slice(0,10).forEach(x=>events.push({icon:x.is_member?"🧭":"👣",label:`Visite : ${x.visitor_label||"Visiteur"}${x.village?" · "+x.village:""}`,date:x.last_seen}));
+    events.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+    if(!events.length)recentList.textContent="Aucune activité récente enregistrée.";
+    else events.slice(0,6).forEach(event=>{
+      const row=document.createElement("div");row.className="adm-activity-item";
+      const icon=document.createElement("span");icon.className="adm-activity-icon";icon.textContent=event.icon;
+      const label=document.createElement("span");label.className="adm-activity-text";label.textContent=event.label;
+      const time=document.createElement("time");time.className="adm-activity-time";
+      if(event.date){const mins=Math.max(0,Math.round((Date.now()-new Date(event.date).getTime())/60000));time.textContent=mins<1?"À l'instant":mins<60?`il y a ${mins} min`:mins<1440?`il y a ${Math.floor(mins/60)} h`:`${new Date(event.date).toLocaleDateString("fr-FR")}`;}
+      row.append(icon,label,time);recentList.appendChild(row);
+    });
+  }
+
+  const failures=[analyticsR,playersR,teamR,villagesR,adventuresR,testersR].filter(x=>x.status==="rejected").length;
+  const note=document.getElementById("dash-dashboard-load-note");
+  if(note)note.textContent=failures?`${failures} rubrique(s) n'ont pas pu être actualisée(s).`:"Toutes les données disponibles ont été actualisées.";
+};
 </script>
 
 </body>
