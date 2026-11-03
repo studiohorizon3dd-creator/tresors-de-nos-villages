@@ -6187,19 +6187,33 @@ window.setAdminAccessGranted = function(value){
       : "Réservé aux administrateurs autorisés";
   }
   if(testerNav) testerNav.hidden = !isAdmin;
+  // Le CSS du tableau de bord force certains boutons en display:flex!important.
+  // On applique donc aussi display:none!important pour que l'attribut hidden soit respecté.
   document.querySelectorAll(".admin-nav-item").forEach(button => {
     const action = button.getAttribute("onclick") || "";
     const communicationOnly = action.includes("adminOpenCommunication");
-    button.hidden = isModerator ? !communicationOnly : !isAdmin;
+    const visible = isModerator ? communicationOnly : isAdmin;
+    button.hidden = !visible;
+    button.style.setProperty("display", visible ? "" : "none", "important");
     if (isModerator && communicationOnly) {
       const icon = button.querySelector("span");
       if (icon) icon.textContent = "🛡️";
-      button.lastChild.textContent = " Mon espace modérateur";
+      // Remplace le libellé sans effacer le bouton ni son gestionnaire de clic.
+      Array.from(button.childNodes).filter(node => node.nodeType === Node.TEXT_NODE).forEach(node => node.textContent = " Mon espace modérateur");
     }
+  });
+  // Masque également les rubriques parentes qui ne contiennent aucun bouton autorisé.
+  document.querySelectorAll(".admin-category").forEach(category => {
+    const hasVisibleItem = Array.from(category.querySelectorAll(".admin-nav-item")).some(button => !button.hidden);
+    category.hidden = isModerator && !hasVisibleItem;
+    category.style.setProperty("display", category.hidden ? "none" : "", "important");
   });
   document.querySelectorAll(".communication-tab").forEach(button => {
     const action = button.getAttribute("onclick") || "";
-    button.hidden = isModerator && !action.includes("adminOpenSupport");
+    const allowedForModerator = action.includes("adminOpenSupport") || action.includes("adminOpenMailboxAdmin");
+    const visible = !isModerator || allowedForModerator;
+    button.hidden = !visible;
+    button.style.setProperty("display", visible ? "" : "none", "important");
   });
   window.adminAccessGranted = adminAccessGranted;
 };
