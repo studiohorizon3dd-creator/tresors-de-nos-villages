@@ -5995,12 +5995,17 @@ window.openAdminPanel = async function() {
   statusEl.textContent = "Vérification des droits administrateur…";
   supportArea.hidden = true;
   try {
-    await adminApi("/api/admin/me");
+    const staffInfo = await adminApi("/api/admin/me");
+    window.adminCurrentRole = staffInfo.role || "admin";
     window.setAdminAccessGranted(true);
     document.getElementById("admin-access-error")?.remove();
     window.showDashSection("dash-admin-info");
-    adminShowHome();
-    statusEl.textContent = "Accès administrateur confirmé.";
+    if (window.adminCurrentRole === "moderator") {
+      adminSetView("admin-support-view", "Centre de communication");
+    } else {
+      adminShowHome();
+    }
+    statusEl.textContent = window.adminCurrentRole === "moderator" ? "Accès modérateur confirmé." : "Accès administrateur confirmé.";
     const result = await adminApi("/api/admin/support");
     const list = document.getElementById("admin-support-list");
     renderAdminSupportTable(result.requests || [], statusEl, list);
