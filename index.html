@@ -345,6 +345,24 @@ body.halloween-accueil .home-hero{
 .admin-top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .admin-secure-pill{font-size:11px;color:#286342;background:#e5efe4;padding:8px 11px;border-radius:20px}
 .admin-refresh,.admin-secondary-btn{border:1px solid #c9ae65;background:#fffaf0;color:#244b36;border-radius:9px;padding:10px 14px;font-weight:700}
+.admin-notification-wrap{position:relative}
+.admin-notification-bell[hidden],.admin-notification-panel[hidden]{display:none!important}
+.admin-notification-bell{position:relative;width:42px;height:42px;border:1px solid #d7ad45;border-radius:12px;background:#fffaf0;color:#173b29;font-size:20px;display:grid;place-items:center}
+.admin-notification-bell:hover{background:#f6edda}
+.admin-notification-count{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;padding:0 5px;border-radius:20px;background:#c83232;color:#fff;display:grid;place-items:center;font:700 11px Arial,sans-serif;border:2px solid #fffaf0}
+.admin-notification-panel{position:absolute;z-index:30;right:0;top:50px;width:min(370px,calc(100vw - 32px));max-height: min(70vh,520px);overflow:auto;padding:12px;background:#fffdf7;border:1px solid #d7c69b;border-radius:15px;box-shadow:0 12px 32px #14291d30;color:#183326}
+.admin-notification-panel-head{display:flex;align-items:center;justify-content:space-between;padding:3px 4px 10px;border-bottom:1px solid #eadfca}
+.admin-notification-panel-head strong{font:700 17px Georgia,serif}
+.admin-notification-panel-head button{border:0;background:transparent;color:#536253;font-size:24px;line-height:1}
+.admin-notification-row{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #eee5d2;background:transparent;padding:11px 7px;color:#183326}
+.admin-notification-row:hover{background:#f8f1e2}
+.admin-notification-row strong{display:block;font-size:14px;margin-bottom:4px}
+.admin-notification-row small{display:block;color:#687466;font-size:11px;line-height:1.4}
+.admin-notification-empty{padding:18px 8px;text-align:center;color:#687466;font-size:13px}
+.admin-notification-warning{padding:8px;margin:5px 0;background:#fff3d9;border-radius:8px;color:#76551c;font-size:11px}
+.admin-notification-all{width:100%;margin-top:9px;padding:10px;border:1px solid #d7ad45;border-radius:9px;background:#f8f1e2;color:#244b36;font-weight:700}
+@media(max-width:650px){.admin-topbar{align-items:flex-start}.admin-top-actions{justify-content:flex-end}.admin-secure-pill{display:none}.admin-notification-panel{right:-5px}}
+
 .admin-welcome{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:25px 28px;border-radius:15px;background:linear-gradient(115deg,#0a3929,#1b6042);color:#fff5d9;box-shadow:0 8px 20px #153a2a18}
 .admin-welcome h3{font: bold clamp(21px,2.6vw,29px) Georgia,serif;margin:8px 0}
 .admin-welcome p{margin:0;line-height:1.5;color:#e5e8d8;font-size:13px}
@@ -2971,7 +2989,20 @@ body.halloween-accueil .home-hero{
     <div class="admin-main">
       <header class="admin-topbar">
         <div><span class="admin-kicker">CENTRE DE PILOTAGE</span><h2 id="admin-page-title">Tableau de bord</h2></div>
-        <div class="admin-top-actions"><span class="admin-secure-pill">● Administration active</span><button type="button" class="admin-refresh" onclick="loadSiteAnalytics()">↻ Actualiser</button></div>
+        <div class="admin-top-actions">
+          <div class="admin-notification-wrap">
+            <button type="button" id="admin-notification-bell" class="admin-notification-bell" onclick="window.toggleAdminNotificationPanel()" aria-label="Afficher les notifications" aria-expanded="false" hidden>
+              <span aria-hidden="true">🔔</span><span id="admin-notification-count" class="admin-notification-count" hidden>0</span>
+            </button>
+            <div id="admin-notification-panel" class="admin-notification-panel" hidden>
+              <div class="admin-notification-panel-head"><strong>Notifications</strong><button type="button" onclick="window.toggleAdminNotificationPanel(false)" aria-label="Fermer">×</button></div>
+              <div id="admin-notification-list"><p class="admin-notification-empty">Aucune nouvelle demande.</p></div>
+              <button type="button" class="admin-notification-all" onclick="window.adminOpenInbox();window.toggleAdminNotificationPanel(false)">Voir toute la boîte de réception →</button>
+            </div>
+          </div>
+          <span class="admin-secure-pill">● Administration active</span>
+          <button type="button" class="admin-refresh" onclick="loadSiteAnalytics()">↻ Actualiser</button>
+        </div>
       </header>
 
       <div id="admin-inbox-view" class="admin-subview" hidden>
@@ -4657,9 +4688,12 @@ window.checkAdminAccess = async function(){
     window.adminCurrentRole = staffInfo.role;
     window.adminCurrentPermissions = Array.isArray(staffInfo.permissions) ? staffInfo.permissions : [];
     window.setAdminAccessGranted(true);
+    if (window.adminCurrentRole === "admin") window.startAdminNotificationPolling?.();
+    else window.stopAdminNotificationPolling?.();
   }catch(_error){
     window.adminCurrentRole = null;
     window.adminCurrentPermissions = [];
+    window.stopAdminNotificationPolling?.();
     window.setAdminAccessGranted(false);
   }
 };
@@ -6016,6 +6050,8 @@ window.openAdminPanel = async function() {
     window.adminCurrentRole = staffInfo.role;
     window.adminCurrentPermissions = Array.isArray(staffInfo.permissions) ? staffInfo.permissions : [];
     window.setAdminAccessGranted(true);
+    if (window.adminCurrentRole === "admin") window.startAdminNotificationPolling?.();
+    else window.stopAdminNotificationPolling?.();
     document.getElementById("admin-access-error")?.remove();
     window.showDashSection("dash-admin-info");
     const isModerator = window.adminCurrentRole === "moderator";
@@ -6168,6 +6204,7 @@ function showDashboard(name, email){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function returnHome(){
+  window.stopAdminNotificationPolling?.();
   document.getElementById("dashboard").style.display="none";
   document.getElementById("landing").style.display="block";
   window.scrollTo({top:0,behavior:"smooth"});
@@ -6177,8 +6214,10 @@ window.setAdminAccessGranted = function(value){
   adminAccessGranted = value === true;
   const adminNav = document.getElementById("admin-nav-button");
   const testerNav = document.getElementById("tester-space-nav");
+  const notificationBell = document.getElementById("admin-notification-bell");
   const isModerator = window.adminCurrentRole === "moderator";
   const isAdmin = window.adminCurrentRole === "admin";
+  if (notificationBell) notificationBell.hidden = !(adminAccessGranted && isAdmin);
   if(adminNav) {
     adminNav.hidden = !adminAccessGranted;
     adminNav.textContent = isModerator ? "🛡️  Mon espace modérateur" : "⚙  Administration";
@@ -7469,17 +7508,87 @@ window.deleteMailboxMessage = async function(id) {
   try { await mailboxApi(`/api/mailbox/${id}`, { method:"DELETE" }); if (!document.getElementById("dash-notifications")?.classList.contains("hidden")) await window.loadMemberNotifications(); else await window.loadMemberMailbox(); }
   catch (error) { alert(error.message || "Impossible de supprimer ce message."); }
 };
+window.renderAdminNotificationBell = function(items = [], failures = []) {
+  const button = document.getElementById("admin-notification-bell");
+  const badge = document.getElementById("admin-notification-count");
+  const list = document.getElementById("admin-notification-list");
+  if (!button || !badge || !list) return;
+  const pending = Array.isArray(items) ? items : [];
+  badge.textContent = pending.length > 99 ? "99+" : String(pending.length);
+  badge.hidden = pending.length === 0;
+  button.title = pending.length ? `${pending.length} demande(s) à traiter` : "Aucune demande en attente";
+  if (!pending.length) {
+    list.innerHTML = '<p class="admin-notification-empty">Tout est à jour. Aucune demande en attente. ✓</p>';
+  } else {
+    list.innerHTML = pending.slice(0, 8).map(item => {
+      const category = ["support","testers","partners","feedback","reviews"].includes(item.category) ? item.category : "all";
+      return `<button type="button" class="admin-notification-row" onclick="window.openAdminNotification('${category}')">
+        <strong>${mailboxEscape(item.label || "Nouvelle demande")} · ${mailboxEscape(item.title || "À traiter")}</strong>
+        <small>${mailboxEscape(item.sender || "Membre")} · ${mailboxEscape(mailboxDate(item.date))}</small>
+      </button>`;
+    }).join("");
+    if (pending.length > 8) list.insertAdjacentHTML("beforeend", `<p class="admin-notification-empty">${pending.length - 8} autre(s) demande(s) dans la boîte de réception.</p>`);
+  }
+  if (failures.length) {
+    list.insertAdjacentHTML("beforeend", '<p class="admin-notification-warning">Certaines rubriques n’ont pas pu être vérifiées. Ouvre la boîte de réception pour contrôler.</p>');
+  }
+};
+window.toggleAdminNotificationPanel = function(force) {
+  const panel = document.getElementById("admin-notification-panel");
+  const button = document.getElementById("admin-notification-bell");
+  if (!panel || !button) return;
+  const open = typeof force === "boolean" ? force : panel.hidden;
+  panel.hidden = !open;
+  button.setAttribute("aria-expanded", String(open));
+};
+window.openAdminNotification = async function(category) {
+  window.toggleAdminNotificationPanel(false);
+  if (category === "support") {
+    await window.adminOpenSupport?.();
+    return;
+  }
+  await window.adminOpenInbox?.();
+  const filter = document.getElementById("admin-inbox-filter");
+  if (filter && ["testers","partners","feedback","reviews"].includes(category)) {
+    filter.value = category;
+    await window.loadAdminInbox?.();
+  }
+};
+window.startAdminNotificationPolling = function() {
+  if (window.adminCurrentRole !== "admin") return;
+  if (window.adminNotificationTimer) clearInterval(window.adminNotificationTimer);
+  const refresh = () => {
+    if (window.adminCurrentRole === "admin" && document.visibilityState !== "hidden") {
+      window.loadAdminInbox?.({ silent: true }).catch(error => console.warn("Notifications administration :", error));
+    }
+  };
+  refresh();
+  window.adminNotificationTimer = setInterval(refresh, 30000);
+};
+window.stopAdminNotificationPolling = function() {
+  if (window.adminNotificationTimer) clearInterval(window.adminNotificationTimer);
+  window.adminNotificationTimer = null;
+  window.toggleAdminNotificationPanel?.(false);
+};
+document.addEventListener("click", event => {
+  const wrap = document.querySelector(".admin-notification-wrap");
+  if (wrap && !wrap.contains(event.target)) window.toggleAdminNotificationPanel?.(false);
+});
+
 window.adminOpenInbox = async function() {
   adminSetView("admin-inbox-view", "Boîte de réception");
   await window.loadAdminInbox();
 };
-window.loadAdminInbox = async function() {
+window.loadAdminInbox = async function(options = {}) {
+  const silent = options?.silent === true;
   const list = document.getElementById("admin-inbox-list");
   const summary = document.getElementById("admin-inbox-summary");
   const filter = document.getElementById("admin-inbox-filter")?.value || "all";
   if (!list) return;
-  list.innerHTML = '<p class="mailbox-empty">Chargement de tous les messages…</p>';
-  if (summary) summary.textContent = "Récupération des demandes…";
+  if (!silent) {
+    list.innerHTML = '<p class="mailbox-empty">Chargement de tous les messages…</p>';
+    if (summary) summary.textContent = "Récupération des demandes…";
+  }
   const buckets = [];
   const failures = [];
   const load = async (label, path, key, category, map) => {
@@ -7505,8 +7614,7 @@ window.loadAdminInbox = async function() {
       title:x.subject || "Demande partenaire — " + (x.municipality || ""),
       body:x.message || "", sender:[x.contact_name,x.contact_email,x.municipality].filter(Boolean).join(" · "),
       date:x.created_at, status:x.status || "en_attente", detail:"Demande d'une mairie ou d'un partenaire"
-    }))
-,
+    })),
     load("Retours des testeurs", "/api/admin/tester-feedback", "feedback", "feedback", x=>({
       category:"feedback", label:"Retours testeurs", id:x.id,
       title:x.category || "Retour de testeur",
@@ -7521,9 +7629,12 @@ window.loadAdminInbox = async function() {
     }))
   ]);
   buckets.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+  const pendingItems = buckets.filter(x=>!["repondu","ferme","accepte","refuse","traite","clos"].includes(String(x.status).toLowerCase()));
+  window.renderAdminNotificationBell?.(pendingItems, failures);
+  if (silent) return;
+
   const visible = filter === "all" ? buckets : buckets.filter(x=>x.category===filter);
-  const pending = buckets.filter(x=>!["repondu","ferme","accepte","refuse","traite","clos"].includes(String(x.status).toLowerCase())).length;
-  if (summary) summary.textContent = `${buckets.length} élément(s) reçu(s) · ${pending} demande(s) à suivre` + (failures.length ? " · Certaines rubriques n'ont pas pu être chargées." : "");
+  if (summary) summary.textContent = `${buckets.length} élément(s) reçu(s) · ${pendingItems.length} demande(s) à suivre` + (failures.length ? " · Certaines rubriques n'ont pas pu être chargées." : "");
   if (!visible.length) list.innerHTML = '<div class="admin-inbox-empty">Aucun message dans cette catégorie pour le moment.</div>';
   else list.innerHTML = visible.map(item => `<article class="admin-inbox-item">
     <div><div class="admin-inbox-meta"><span class="admin-inbox-tag">${mailboxEscape(item.label)}</span><span>${mailboxEscape(item.detail)}</span><span>${mailboxEscape(mailboxDate(item.date))}</span></div>
