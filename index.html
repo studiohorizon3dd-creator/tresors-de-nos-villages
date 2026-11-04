@@ -195,6 +195,12 @@ footer{text-align:center;padding:22px;color:#687263;font-size:13px}
 @media(max-width:700px){#dash-town-contact{padding:0 12px 25px}#dash-town-contact .town-hero{margin:0 -12px;padding:22px 16px;min-height:150px}#dash-town-contact .town-hero-mark{font-size:36px}#dash-town-contact .town-tabs{margin:0 -12px 15px}#dash-town-contact .town-contact-layout{grid-template-columns:1fr}#dash-town-contact .town-left-column{display:grid;grid-template-columns:1fr 1fr;gap:10px}#dash-town-contact .town-left-column .town-side-card{margin:0}#dash-town-contact .town-right-column{grid-column:auto;grid-template-columns:1fr}#town-contact-form{grid-template-columns:1fr}#town-contact-form label[for="town-message"],#town-contact-form #town-message,#town-contact-form .town-upload-row,#town-contact-form button,#town-contact-status{grid-column:1}#town-contact-form .primary-btn{width:100%;min-width:0}}
 @media(max-width:460px){#dash-town-contact .town-left-column{grid-template-columns:1fr}#dash-town-contact .town-form-heading h4{font-size:21px}}
 
+/* Photo de présentation dans le formulaire de gestion des villages */
+.village-photo-field{display:grid;gap:7px}
+.village-photo-field input[type="file"]{width:100%;padding:10px;border:1px dashed #cdbb8c;border-radius:9px;background:#fffdf7}
+.village-photo-field small{color:#687263;font-size:12px}
+.village-photo-preview img{display:block;max-width:260px;max-height:170px;object-fit:cover;border-radius:10px;border:1px solid #dfc77f;margin-top:7px}
+
 /* Galerie des villages */
 .village-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;margin:24px 0}
 .village-gallery-card{overflow:hidden;background:#fffaf0;border:1px solid #e5d3a4;border-radius:18px;box-shadow:0 8px 22px rgba(6,44,32,.08)}
@@ -523,7 +529,7 @@ body.halloween-accueil .home-hero{
 .admin-adventure-create-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.admin-adventure-create-grid label{display:grid;gap:6px;font:700 13px Arial,sans-serif;color:#294b37}.admin-adventure-create-grid input,.admin-adventure-create-grid select,.admin-adventure-create-grid textarea{width:100%;min-width:0;padding:11px 12px;border:1px solid #d9d1bd;border-radius:9px;background:#fff;color:#24392d;font:14px Arial,sans-serif}.admin-adventure-create-grid .wide{grid-column:1/-1}
 .admin-adventure-create-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}.admin-adventure-tips{background:linear-gradient(150deg,#fff8e5,#f6e9c8);border-color:#e2c778}.admin-adventure-tips h4{display:flex;gap:8px;align-items:center}.admin-adventure-tips ul{padding-left:20px;margin:0;color:#415342;font:13px/1.8 Arial,sans-serif}.admin-adventure-tips li{margin:5px 0}
 .admin-adventure-list-panel{margin-top:16px}.admin-adventure-list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.admin-adventure-search{max-width:300px;width:100%;padding:10px 12px;border:1px solid #d9d1bd;border-radius:9px;font:13px Arial,sans-serif}
-.admin-adventure-card{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:15px;align-items:center;padding:13px;margin-top:11px;border:1px solid #e9e1d0;border-radius:14px;background:#fffefa;box-shadow:0 3px 10px #263b250c}.admin-adventure-thumb{width:132px;height:92px;object-fit:cover;border-radius:10px;background:linear-gradient(135deg,#164a34,#8a9b69);display:grid;place-items:center;color:#fff0bb;font-size:36px}.admin-adventure-thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px}.admin-adventure-card h5{font:700 20px Georgia,serif;color:#143e2b;margin:0 0 4px}.admin-adventure-card p{font:12px/1.5 Arial,sans-serif;color:#667267;margin:4px 0 8px}.admin-adventure-pills{display:flex;flex-wrap:wrap;gap:6px}.admin-adventure-pill{display:inline-flex;align-items:center;padding:5px 9px;border-radius:30px;background:#edf1e8;color:#365b3e;font:700 10px Arial,sans-serif}.admin-adventure-pill.pending{background:#fff0c5;color:#765516}.admin-adventure-pill.bad{background:#fbe2dc;color:#9b382c}.admin-adventure-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.admin-adventure-actions button{min-width:82px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;border:1px solid #d7b65f;border-radius:10px;background:#fffdf7;color:#174b35;font:700 11px Arial,sans-serif}.admin-adventure-actions button:disabled{opacity:.45;cursor:not-allowed}.admin-adventure-actions button span{font-size:18px}.admin-adventure-empty{padding:24px;text-align:center;color:#687267;background:#f8f4e9;border-radius:12px;margin-top:12px}
+.admin-adventure-card{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:15px;align-items:center;padding:13px;margin-top:11px;border:1px solid #e9e1d0;border-radius:14px;background:#fffefa;box-shadow:0 3px 10px #263b250c}.admin-adventure-thumb{width:132px;height:92px;object-fit:cover;border-radius:10px;background:linear-gradient(135deg,#164a34,#8a9b69);display:grid;place-items:center;color:#fff0bb;font-size:36px}.admin-adventure-thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px}.admin-adventure-card h5{font:700 20px Georgia,serif;color:#143e2b;margin:0 0 4px}.admin-adventure-card p{font:12px/1.5 Arial,sans-serif;color:#667267;margin:4px 0 8px}.admin-adventure-pills{display:flex;flex-wrap:wrap;gap:6px}.admin-adventure-pill{display:inline-flex;align-items:center;padding:5px 9px;border-radius:30px;background:#edf1e8;color:#365b3e;font:700 10px Arial,sans-serif}.admin-adventure-pill.pending{background:#fff0c5;color:#765516}.admin-adventure-pill.bad{background:#fbe2dc;color:#9b382c}.admin-adventure-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.admin-adventure-more-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:205px;padding:7px;background:#fffaf0;border:1px solid #d7b65f;border-radius:11px;box-shadow:0 10px 24px #172d1f30}.admin-adventure-more-menu button{width:100%;min-height:42px;display:flex;flex-direction:row;justify-content:flex-start;gap:9px;padding:10px 12px;border:0;border-radius:7px;background:transparent;color:#963b30;font:700 13px Arial,sans-serif}.admin-adventure-more-menu button:hover{background:#f8e6df}.admin-adventure-more-menu button span{font-size:16px}.admin-adventure-actions button{min-width:82px;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px;border:1px solid #d7b65f;border-radius:10px;background:#fffdf7;color:#174b35;font:700 11px Arial,sans-serif}.admin-adventure-actions button:disabled{opacity:.45;cursor:not-allowed}.admin-adventure-actions button span{font-size:18px}.admin-adventure-empty{padding:24px;text-align:center;color:#687267;background:#f8f4e9;border-radius:12px;margin-top:12px}
 @media(max-width:1050px){.admin-adventure-layout{grid-template-columns:1fr}.admin-adventure-tips{order:2}.admin-adventure-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.admin-adventure-card{grid-template-columns:100px minmax(0,1fr)}.admin-adventure-thumb{width:100px;height:82px}.admin-adventure-actions{grid-column:1/-1;justify-content:flex-start}}
 @media(max-width:600px){.admin-adventure-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-adventure-create-grid{grid-template-columns:1fr}.admin-adventure-create-grid .wide{grid-column:1}.admin-wizard-step{font-size:10px}.admin-adventure-card{grid-template-columns:1fr}.admin-adventure-thumb{width:100%;height:120px}.admin-adventure-actions button{flex:1;min-width:70px}.admin-adventure-hero{padding:18px}.admin-adventure-hero .hero-symbol{font-size:34px}}
 
@@ -2052,6 +2058,382 @@ body.halloween-accueil .home-hero{
 @media(max-width:700px){#admin-home-view .adm-hero{min-height:130px;padding:18px}.adm-hero-mark{font-size:42px!important}#admin-home-view .adm-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}#admin-home-view .adm-kpi{min-height:80px;padding:9px;gap:8px}#admin-home-view .adm-kpi-icon{flex-basis:35px;width:35px;height:35px;font-size:18px}#admin-home-view .adm-kpi strong{font-size:23px}#admin-home-view .adm-main-grid{grid-template-columns:1fr;grid-template-areas:"chart" "donut" "villages" "recent" "quick" "pending"}#admin-home-view .adm-donut-row{gap:14px}#admin-home-view .adm-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-home-view .adm-dashboard-footer{align-items:flex-start;flex-wrap:wrap}#admin-home-view .adm-dashboard-footer button{margin-left:0}}
 </style>
 
+
+<style>
+/* ===== Espace Testeur : mise en page finale alignée sur la maquette ===== */
+#dash-tester-space.tester-dashboard{
+  display:block!important;width:100%!important;max-width:1700px!important;margin:0 auto!important;
+  padding:12px clamp(12px,2vw,28px) 28px!important;box-sizing:border-box!important;
+  background:#f7efdc!important;color:#173a29!important;
+}
+#dash-tester-space .tester-dashboard-hero{
+  width:100%!important;min-height:82px!important;height:auto!important;padding:12px 24px!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  border:1px solid #d7ad45!important;border-radius:16px!important;
+  background-image:linear-gradient(90deg,rgba(4,45,31,.94),rgba(4,45,31,.55) 48%,rgba(4,45,31,.08)),url('tester_assets/banner_background.png')!important;
+  background-size:cover!important;background-position:center 48%!important;background-repeat:no-repeat!important;
+  box-shadow:0 5px 16px #1b33251c!important;overflow:hidden!important;
+}
+#dash-tester-space .tester-dashboard-brand{display:flex!important;align-items:center!important;gap:14px!important}
+#dash-tester-space .tester-dashboard-flask{width:48px!important;height:52px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:none!important}
+#dash-tester-space .tester-dashboard-flask img{width:46px!important;height:50px!important;object-fit:contain!important}
+#dash-tester-space .tester-dashboard-brand h2{font:bold clamp(27px,3vw,39px) Georgia,serif!important;color:#fff4d5!important;text-shadow:0 2px 4px #102d20!important;margin:0!important}
+#dash-tester-space .tester-dashboard-brand p{font:13px Georgia,serif!important;color:#fff9e9!important;text-shadow:0 1px 3px #102d20!important;margin:3px 0 0!important}
+#dash-tester-space .tester-dashboard-hero-art{display:none!important}
+#dash-tester-space .tester-dashboard-topstats{
+  display:grid!important;grid-template-columns:1.45fr repeat(5,minmax(0,1fr))!important;gap:0!important;
+  width:100%!important;margin:12px 0 14px!important;padding:9px!important;
+  background:linear-gradient(120deg,#fff9e8,#f1e2bd)!important;border:1px solid #dfbd65!important;
+  border-radius:16px!important;box-shadow:0 4px 13px #273b2410!important;
+}
+#dash-tester-space .tester-identity-card,#dash-tester-space .tester-topstat{min-width:0!important;min-height:76px!important;padding:7px 10px!important;border-right:1px solid #d8bd7b!important}
+#dash-tester-space .tester-identity-card{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important}
+#dash-tester-space .tester-avatar{width:68px!important;height:68px!important;flex:none!important;border:3px solid #d7ad45!important;border-radius:50%!important;overflow:hidden!important}
+#dash-tester-space .tester-avatar img{width:100%!important;height:100%!important;object-fit:cover!important}
+#dash-tester-space .tester-identity-card strong{display:block!important;font:bold 19px Georgia,serif!important;color:#123b2a!important}
+#dash-tester-space .tester-validated-pill{display:inline-block!important;margin-top:5px!important;padding:6px 13px!important;border-radius:18px!important;background:linear-gradient(#159b50,#08703a)!important;color:white!important;font:bold 11px Arial,sans-serif!important}
+#dash-tester-space .tester-topstat{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:1px!important;text-align:center!important}
+#dash-tester-space .tester-topstat>span{font-size:27px!important}
+#dash-tester-space .tester-topstat strong{font:bold 25px Georgia,serif!important;color:#0b3928!important}
+#dash-tester-space .tester-topstat small{font:11px Georgia,serif!important;color:#294536!important}
+#dash-tester-space .tester-topstat:last-of-type{border-right:0!important}
+#dash-tester-space .tester-top-xp{width:88%!important;height:9px!important;margin-top:4px!important;border:1px solid #a88b4b!important;border-radius:20px!important;background:#eee1bd!important;overflow:hidden!important}
+#dash-tester-space .tester-top-xp i{display:block!important;height:100%!important;background:linear-gradient(90deg,#128849,#d7b333)!important}
+#dash-tester-space .tester-dashboard-grid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:14px!important;align-items:stretch!important;width:100%!important}
+#dash-tester-space .tester-dash-card{position:relative!important;min-width:0!important;padding:17px 18px!important;border:1px solid #dfc477!important;border-radius:16px!important;background:linear-gradient(145deg,#fffdf7,#f8edcf)!important;box-shadow:0 5px 15px #273b2410!important;overflow:hidden!important}
+#dash-tester-space .tester-dash-card:before{content:""!important;position:absolute!important;inset:5px!important;border:1px solid rgba(207,169,79,.16)!important;border-radius:12px!important;pointer-events:none!important}
+#dash-tester-space .tester-dash-card h3{position:relative!important;display:flex!important;align-items:center!important;gap:9px!important;margin:0 0 10px!important;padding-bottom:8px!important;border-bottom:1px solid #eadbb7!important;color:#102f22!important;font:bold 20px Georgia,serif!important}
+#dash-tester-space .tester-dash-card>p{position:relative!important;font:13px/1.5 Georgia,serif!important;color:#4b5949!important;margin:6px 0 11px!important}
+#dash-tester-space .tester-announcement-card{grid-column:span 5!important;min-height:190px!important;background:linear-gradient(110deg,#fff8e3,#f0dca9)!important}
+#dash-tester-space .tester-progression-card{grid-column:span 7!important;min-height:190px!important}
+#dash-tester-space .tester-announcement-card h3{display:inline-flex!important;padding:7px 15px!important;border:0!important;border-radius:9px!important;background:linear-gradient(110deg,#06432d,#087b4a)!important;color:#fff5d8!important}
+#dash-tester-space .tester-announcement-body{display:flex!important;align-items:center!important;gap:14px!important}
+#dash-tester-space .tester-announcement-art{flex:0 0 38%!important;min-width:0!important;min-height:112px!important;border:1px solid #d3a83c!important;border-radius:12px!important;background:#e8d49a!important;overflow:hidden!important}
+#dash-tester-space .tester-announcement-art img{width:100%!important;height:112px!important;object-fit:cover!important;border-radius:10px!important}
+#dash-tester-space .tester-announcement-body h4{font:bold 20px Georgia,serif!important;color:#123a29!important;margin:4px 0!important}
+#dash-tester-space .tester-announcement-body p{font:13px/1.4 Georgia,serif!important;color:#344638!important}
+#dash-tester-space .tester-rank-track{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;margin:10px 0 8px!important;height:auto!important;overflow:visible!important}
+#dash-tester-space .tester-rank-item{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;min-height:95px!important;height:auto!important;padding:5px 3px!important;border:0!important;background:transparent!important;color:#3e4c40!important}
+#dash-tester-space .tester-rank-item img{display:block!important;width:76px!important;height:76px!important;object-fit:contain!important}
+#dash-tester-space .tester-rank-item strong{display:block!important;font:bold 11px Georgia,serif!important}
+#dash-tester-space .tester-rank-item.active{background:radial-gradient(ellipse,#087346 0%,#087346 55%,transparent 58%)!important;color:#fff7d7!important}
+#dash-tester-space .tester-xp-track{height:12px!important;margin:3px 12px 16px!important;border:1px solid #b99a4c!important;border-radius:20px!important;background:#e9dfc6!important;overflow:visible!important;position:relative!important}
+#dash-tester-space .tester-xp-track span{display:block!important;height:100%!important;border-radius:20px!important;background:linear-gradient(90deg,#15904b,#e7b82f)!important}
+#dash-tester-space .tester-xp-track b{position:absolute!important;right:0!important;top:13px!important;font:10px Georgia,serif!important;color:#5a4b25!important}
+#dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-access-card{grid-column:span 3!important;min-height:260px!important}
+#dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 4!important;min-height:190px!important}
+#dash-tester-space .tester-mission-count{display:inline-block!important;margin-left:auto!important;padding:5px 10px!important;border-radius:15px!important;background:#f7df82!important;color:#4b3b13!important;font:bold 11px Georgia,serif!important}
+#dash-tester-space .tester-dash-form{display:grid!important;gap:9px!important}
+#dash-tester-space .tester-dash-form label{display:grid!important;gap:5px!important;font:bold 13px Georgia,serif!important;color:#294b35!important}
+#dash-tester-space .tester-dash-form select,#dash-tester-space .tester-dash-form textarea,#dash-tester-space .tester-journal{width:100%!important;min-width:0!important;padding:10px 11px!important;border:1px solid #d6bd7e!important;border-radius:10px!important;background:#fffdf6!important;color:#293e30!important;font:13px Georgia,serif!important}
+#dash-tester-space .tester-dash-form textarea{min-height:66px!important;height:auto!important;resize:vertical!important}
+#dash-tester-space .tester-validation-steps{display:flex!important;justify-content:space-around!important;gap:8px!important;padding:10px 6px!important;margin:5px 0 10px!important;border:1px solid #d9bd72!important;border-radius:13px!important;background:#f8efd7!important}
+#dash-tester-space .tester-validation-steps span{display:flex!important;flex:1!important;flex-direction:column!important;align-items:center!important;text-align:center!important;gap:4px!important}
+#dash-tester-space .tester-validation-steps b{display:grid!important;place-items:center!important;width:32px!important;height:32px!important;border:2px solid #caa34a!important;border-radius:50%!important;background:#fff9e9!important;color:#31503a!important;font:bold 16px Georgia,serif!important}
+#dash-tester-space .tester-validation-steps span:first-child b{background:#087346!important;color:white!important;border-color:#d9b34e!important}
+#dash-tester-space .tester-validation-steps small{font:bold 11px Georgia,serif!important;color:#38503c!important}
+#dash-tester-space .tester-dash-action{display:flex!important;width:100%!important;justify-content:center!important;padding:11px 14px!important;margin-top:7px!important;border:1px solid #d5ad45!important;border-radius:24px!important;background:linear-gradient(110deg,#06432d,#087849)!important;color:#fff6d9!important;font:bold 13px Georgia,serif!important;box-shadow:0 3px 0 #b18b37!important}
+#dash-tester-space .tester-feedback-shortcuts{display:grid!important;gap:9px!important}
+#dash-tester-space .tester-feedback-shortcuts button{display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;padding:11px!important;border:1px solid #dfc47d!important;border-radius:12px!important;background:#fffaf0!important;color:#173728!important;text-align:left!important}
+#dash-tester-space .tester-feedback-shortcuts button>span:first-child{font-size:25px!important}
+#dash-tester-space .tester-feedback-shortcuts button>span:nth-child(2){display:grid!important;gap:2px!important;flex:1!important}
+#dash-tester-space .tester-feedback-shortcuts strong{font:bold 13px Georgia,serif!important}
+#dash-tester-space .tester-feedback-shortcuts small{font:11px Georgia,serif!important;color:#58634f!important}
+#dash-tester-space .tester-feedback-shortcuts button>b{color:#b17d16!important;font-size:22px!important}
+#dash-tester-space .tester-feedback-details{margin-top:10px!important}
+#dash-tester-space .tester-feedback-details summary{cursor:pointer!important;color:#145235!important;font:bold 12px Georgia,serif!important}
+#dash-tester-space .tester-badge-row{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important}
+#dash-tester-space .tester-mini-badge{min-width:0!important;padding:8px 4px!important;text-align:center!important;border:1px solid #d8b24e!important;border-radius:12px!important;background:linear-gradient(145deg,#fff9e7,#f2dfad)!important;font:11px/1.2 Georgia,serif!important}
+#dash-tester-space .tester-mini-badge img{display:block!important;width:58px!important;height:62px!important;object-fit:contain!important;margin:0 auto 4px!important}
+#dash-tester-space .tester-history-list{max-height:180px!important;overflow:auto!important}
+#dash-tester-space .tester-version-pill{display:inline-block!important;padding:7px 12px!important;border-radius:20px!important;background:#eee3c5!important;color:#76531a!important;font:bold 12px Georgia,serif!important}
+#dash-tester-space .tester-check-list{padding-left:19px!important;margin:7px 0!important;font:13px/1.55 Georgia,serif!important;color:#4b594d!important}
+#dash-tester-space .tester-extra-tools{margin:14px 0 0!important;padding:13px 16px!important;border:1px solid #d8b75e!important;border-radius:14px!important;background:#fff8e7!important}
+#dash-tester-space .tester-extra-tools>summary{cursor:pointer!important;color:#174b35!important;font:bold 14px Georgia,serif!important}
+#dash-tester-space .tester-extra-tools-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;margin-top:12px!important}
+#dash-tester-space .tester-extra-tools-grid>.tester-dash-card{grid-column:auto!important;min-height:0!important}
+#dash-tester-space .tester-extra-challenges{margin-top:10px!important}
+@media(max-width:1050px){
+ #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #dash-tester-space .tester-identity-card{grid-column:1/-1!important;justify-content:center!important;border-right:0!important;border-bottom:1px solid #d8bd7b!important}
+ #dash-tester-space .tester-dashboard-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+ #dash-tester-space .tester-announcement-card,#dash-tester-space .tester-progression-card{grid-column:span 3!important}
+ #dash-tester-space .tester-missions-card,#dash-tester-space .tester-validation-card,#dash-tester-space .tester-feedback-card,#dash-tester-space .tester-access-card{grid-column:span 3!important}
+ #dash-tester-space .tester-history-card,#dash-tester-space .tester-badges-card,#dash-tester-space .tester-version-card{grid-column:span 2!important}
+ #dash-tester-space .tester-extra-tools-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:650px){
+ #dash-tester-space.tester-dashboard{padding:8px!important}
+ #dash-tester-space .tester-dashboard-hero{min-height:78px!important;padding:9px 12px!important}
+ #dash-tester-space .tester-dashboard-brand{gap:8px!important}
+ #dash-tester-space .tester-dashboard-brand h2{font-size:25px!important}
+ #dash-tester-space .tester-dashboard-brand p{font-size:10px!important}
+ #dash-tester-space .tester-dashboard-topstats{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:6px!important}
+ #dash-tester-space .tester-identity-card{grid-column:1/-1!important;justify-content:flex-start!important}
+ #dash-tester-space .tester-topstat{border-right:1px solid #d5b96e!important;border-bottom:1px solid #d5b96e!important;padding:8px 3px!important}
+ #dash-tester-space .tester-topstat:last-of-type{grid-column:1/-1!important;border:0!important}
+ #dash-tester-space .tester-dashboard-grid{grid-template-columns:1fr!important;gap:9px!important}
+ #dash-tester-space .tester-dashboard-grid>.tester-dash-card{grid-column:1/-1!important;min-height:0!important}
+ #dash-tester-space .tester-rank-item img{width:54px!important;height:58px!important}
+ #dash-tester-space .tester-extra-tools-grid{grid-template-columns:1fr!important}
+}
+
+</style>
+<style>
+
+
+/* CORRECTION 03/11 — séparation admin/testeur + espace testeur plus aéré */
+#dashboard.admin-mode > #dash-tester-space,
+#dashboard.admin-mode > .content > #dash-tester-space {
+  display: none !important;
+}
+#dash-tester-space.tester-dashboard {
+  display: block;
+  width: min(calc(100vw - 56px), 1680px) !important;
+  max-width: 1680px !important;
+  box-sizing: border-box !important;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 auto !important;
+  padding: 22px clamp(18px, 2.2vw, 36px) 38px !important;
+  background: #f7efdd;
+  color: #173a29;
+}
+#dash-tester-space .tester-dashboard-hero {
+  min-height: 104px;
+  padding: 18px clamp(20px, 2.5vw, 38px);
+  border-radius: 18px;
+}
+#dash-tester-space .tester-dashboard-brand h2 {
+  font-size: clamp(30px, 3vw, 42px);
+}
+#dash-tester-space .tester-dashboard-topstats {
+  gap: 12px;
+  margin: 16px 0 18px;
+  padding: 14px;
+  border-radius: 18px;
+}
+#dash-tester-space .tester-identity-card,
+#dash-tester-space .tester-topstat {
+  min-height: 92px;
+  padding: 10px 12px;
+}
+#dash-tester-space .tester-avatar {
+  width: 68px;
+  height: 68px;
+}
+#dash-tester-space .tester-dashboard-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+#dash-tester-space .tester-dash-card {
+  min-width: 0;
+  padding: 20px;
+  border-radius: 17px;
+}
+#dash-tester-space .tester-dash-card h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #e7d7b2;
+}
+#dash-tester-space .tester-dash-card > p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 8px 0 14px;
+}
+#dash-tester-space .tester-progression-card { grid-column: span 2; }
+#dash-tester-space .tester-missions-card,
+#dash-tester-space .tester-validation-card,
+#dash-tester-space .tester-feedback-card { min-height: 300px; }
+#dash-tester-space .tester-history-card,
+#dash-tester-space .tester-badges-card,
+#dash-tester-space .tester-version-card { min-height: 235px; }
+#dash-tester-space .tester-rank-track { gap: 12px; margin-top: 16px; }
+#dash-tester-space .tester-rank-item { min-height: 92px; padding: 12px 8px; }
+#dash-tester-space .tester-dash-form { gap: 12px; }
+#dash-tester-space .tester-dash-form select,
+#dash-tester-space .tester-dash-form textarea { padding: 12px 14px; font-size: 14px; }
+#dash-tester-space .tester-dash-form textarea { min-height: 92px; }
+@media (max-width: 1050px) {
+  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #dash-tester-space .tester-dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #dash-tester-space .tester-progression-card { grid-column: span 1; }
+}
+@media (max-width: 680px) {
+  #dash-tester-space.tester-dashboard {
+    width: calc(100vw - 24px) !important;
+    left: 50%;
+    padding: 12px 8px 24px !important;
+  }
+  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #dash-tester-space .tester-dashboard-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  #dash-tester-space .tester-progression-card { grid-column: auto; }
+  #dash-tester-space .tester-dash-card { padding: 16px; min-height: 0; }
+  #dash-tester-space .tester-dashboard-hero { min-height: 86px; padding: 12px 14px; }
+}
+
+</style>
+
+<style id="tester-layout-final-fix">
+/* Correctif final : espace testeur centré, aéré et isolé des autres rubriques */
+#dash-tester-space.hidden,
+#dashboard.admin-mode #dash-tester-space {
+  display: none !important;
+}
+#dash-tester-space.tester-dashboard:not(.hidden) {
+  display: block !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: 1680px !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  padding: 24px clamp(16px, 2.2vw, 36px) 40px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+#dash-tester-space .tester-dashboard-hero {
+  width: 100% !important;
+  min-height: 112px !important;
+  padding: 18px clamp(18px, 2.5vw, 38px) !important;
+  border-radius: 18px !important;
+}
+#dash-tester-space .tester-dashboard-topstats {
+  width: 100% !important;
+  grid-template-columns: minmax(230px, 1.45fr) repeat(5, minmax(0, 1fr)) !important;
+  gap: 0 !important;
+  margin: 16px 0 20px !important;
+  padding: 12px !important;
+}
+#dash-tester-space .tester-identity-card,
+#dash-tester-space .tester-topstat {
+  min-width: 0 !important;
+  min-height: 92px !important;
+  padding: 10px 12px !important;
+}
+#dash-tester-space .tester-dashboard-grid {
+  display: grid !important;
+  width: 100% !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+}
+#dash-tester-space .tester-dash-card {
+  min-width: 0 !important;
+  padding: 20px !important;
+  border-radius: 17px !important;
+}
+#dash-tester-space .tester-announcement-card { grid-column: span 5 !important; min-height: 205px !important; }
+#dash-tester-space .tester-progression-card { grid-column: span 7 !important; min-height: 205px !important; }
+#dash-tester-space .tester-missions-card,
+#dash-tester-space .tester-access-card,
+#dash-tester-space .tester-validation-card,
+#dash-tester-space .tester-feedback-card {
+  grid-column: span 3 !important;
+  min-height: 300px !important;
+}
+#dash-tester-space .tester-history-card,
+#dash-tester-space .tester-badges-card,
+#dash-tester-space .tester-version-card {
+  grid-column: span 4 !important;
+  min-height: 230px !important;
+}
+#dash-tester-space .tester-dash-card h3 {
+  font-size: 20px !important;
+  line-height: 1.25 !important;
+  margin: 0 0 13px !important;
+  padding-bottom: 10px !important;
+}
+#dash-tester-space .tester-dash-card > p {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  margin: 8px 0 14px !important;
+}
+#dash-tester-space .tester-rank-track { gap: 12px !important; margin: 14px 0 !important; }
+#dash-tester-space .tester-rank-item { min-height: 100px !important; padding: 8px !important; }
+#dash-tester-space .tester-rank-item img { width: 78px !important; height: 78px !important; }
+#dash-tester-space .tester-dash-form { gap: 12px !important; }
+#dash-tester-space .tester-dash-form select,
+#dash-tester-space .tester-dash-form textarea { padding: 12px 14px !important; font-size: 14px !important; }
+#dash-tester-space .tester-dash-form textarea { min-height: 88px !important; }
+#dash-tester-space .tester-extra-tools { margin-top: 18px !important; }
+@media (max-width: 1100px) {
+  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  #dash-tester-space .tester-identity-card { grid-column: 1 / -1 !important; justify-content: center !important; }
+  #dash-tester-space .tester-announcement-card,
+  #dash-tester-space .tester-progression-card { grid-column: span 6 !important; }
+  #dash-tester-space .tester-missions-card,
+  #dash-tester-space .tester-access-card,
+  #dash-tester-space .tester-validation-card,
+  #dash-tester-space .tester-feedback-card { grid-column: span 6 !important; }
+  #dash-tester-space .tester-history-card,
+  #dash-tester-space .tester-badges-card,
+  #dash-tester-space .tester-version-card { grid-column: span 4 !important; }
+}
+@media (max-width: 680px) {
+  #dash-tester-space.tester-dashboard:not(.hidden) { padding: 12px 10px 26px !important; }
+  #dash-tester-space .tester-dashboard-hero { min-height: 90px !important; padding: 12px 14px !important; }
+  #dash-tester-space .tester-dashboard-brand h2 { font-size: 26px !important; }
+  #dash-tester-space .tester-dashboard-topstats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  #dash-tester-space .tester-identity-card { grid-column: 1 / -1 !important; justify-content: flex-start !important; }
+  #dash-tester-space .tester-dashboard-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 12px !important; }
+  #dash-tester-space .tester-dashboard-grid > .tester-dash-card { grid-column: 1 / -1 !important; min-height: 0 !important; }
+  #dash-tester-space .tester-dash-card { padding: 16px !important; }
+  #dash-tester-space .tester-rank-item img { width: 58px !important; height: 60px !important; }
+}
+</style>
+
+<style>
+
+/* Administration — zones de rédaction confortables pour les étapes */
+#admin-adventure-step-form .admin-step-writing-field {
+  display:block;
+  width:100%;
+  min-width:0;
+  color:#425044;
+  font-weight:600;
+}
+#admin-adventure-step-form .admin-step-writing-field textarea,
+#admin-adventure-step-form .admin-step-writing-field input {
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  margin-top:8px;
+  border:1px solid #cbb98f;
+  border-radius:10px;
+  background:#fffefa;
+  color:#26352a;
+  font:15px/1.6 Arial,sans-serif;
+}
+#admin-adventure-step-form .admin-step-writing-field textarea {
+  min-height:145px;
+  padding:13px 14px;
+  resize:vertical;
+}
+#admin-adventure-step-form #admin-step-answer {
+  min-height:86px;
+}
+#admin-adventure-step-form .admin-step-writing-field {
+  line-height:1.5;
+  margin-top:3px;
+}
+#admin-adventure-step-form .admin-step-writing-field textarea:focus,
+#admin-adventure-step-form .admin-step-writing-field input:focus {
+  outline:2px solid #d9b65f;
+  outline-offset:1px;
+  border-color:#b98b2e;
+}
+@media (max-width:600px) {
+  #admin-adventure-step-form .admin-step-writing-field textarea { min-height:135px; }
+  #admin-adventure-step-form #admin-step-answer { min-height:78px; }
+}
+
+</style>
 </head>
 <body>
 
@@ -2688,7 +3070,13 @@ body.halloween-accueil .home-hero{
 <article class="tester-dash-card tester-progression-card"><h3>🎯 Ma progression Testeur</h3><p id="tester-explorer-level-text">Niveau actuel : Débutant. Termine des parcours pour atteindre le rang suivant.</p><div class="tester-rank-track"><div class="tester-rank-item" data-explorer-rank="0"><img src="tester_assets/rank_level_1.png" alt="Écusson niveau 1"><strong>Niv. 1<br>Découverte</strong></div><div class="tester-rank-item" data-explorer-rank="1"><img src="tester_assets/rank_level_2.png" alt="Écusson niveau 2"><strong>Niv. 2<br>Explorateur</strong></div><div class="tester-rank-item" data-explorer-rank="2"><img src="tester_assets/rank_level_3.png" alt="Écusson niveau 3"><strong>Niv. 3<br>Contributeur</strong></div><div class="tester-rank-item" data-explorer-rank="3"><img src="tester_assets/rank_level_4.png" alt="Écusson niveau 4"><strong>Niv. 4<br>Expert</strong></div><div class="tester-rank-item" data-explorer-rank="4"><img src="tester_assets/rank_level_5.png" alt="Écusson niveau 5"><strong>Niv. 5<br>Ambassadeur</strong></div></div><div class="tester-xp-track"><span></span><b id="tester-xp-label">0 / 250 XP</b></div></article>
 
 <article class="tester-dash-card tester-missions-card">
-      <h3>🎯 Mes missions de test <span class="tester-mission-count" id="tester-mission-count">0 mission en cours</span></h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div><strong class="tester-subheading">Mes parcours autorisés</strong><div id="tester-space-access-list"><p>Chargement…</p></div>
+      <h3>🎯 Mes missions de test <span class="tester-mission-count" id="tester-mission-count">0 mission en cours</span></h3><p>Les parcours qui te sont confiés apparaissent ici. Ta progression est enregistrée avec ton compte personnel.</p><div id="tester-space-missions"><p>Chargement de tes missions…</p></div>
+    </article>
+
+<article class="tester-dash-card tester-access-card">
+      <h3>🗺️ Mes parcours autorisés</h3>
+      <p>Retrouve les villages et les niveaux qui te sont confiés par l’administration.</p>
+      <div id="tester-space-access-list"><p>Chargement…</p></div>
     </article>
 
 <article class="tester-dash-card tester-validation-card">
@@ -2729,22 +3117,28 @@ body.halloween-accueil .home-hero{
       <h3>🧪 Version de test</h3><p class="tester-version-pill">Espace de test — version en évolution</p><strong class="tester-subheading">Les points à vérifier</strong><ul class="tester-check-list"><li>Les énigmes sont-elles compréhensibles ?</li><li>Les indices et les réponses fonctionnent-ils ?</li><li>La carte et la validation GPS fonctionnent-elles à l’arrivée ?</li><li>Le parcours est-il agréable et adapté à son niveau ?</li></ul>
     </article>
 
+
+
+
+  </div>
+  <details class="tester-extra-tools">
+    <summary>⚙️ Mes outils complémentaires (statistiques, communauté, carnet et récompenses)</summary>
+    <div class="tester-extra-tools-grid">
+
 <article class="tester-dash-card tester-stats-card">
       <h3>📊 Statistiques de mes tests</h3><div class="tester-mini-stats"><div><strong id="tester-stat-missions-copy">0</strong><small>Missions</small></div><div><strong id="tester-stat-completed-copy">0</strong><small>Parcours terminés</small></div><div><strong id="tester-stat-feedback-copy">0</strong><small>Retours envoyés</small></div></div><p id="tester-space-status" class="status" role="status" aria-live="polite">Chargement de tes autorisations…</p>
     </article>
-
 <article class="tester-dash-card tester-community-card">
       <h3>👥 Communauté Testeurs</h3><p>Partage tes idées, tes observations et tes astuces pour aider à améliorer les parcours.</p><div class="tester-community-people" aria-hidden="true">🧑‍🌾 🧭 🧑‍🚀</div>
     </article>
-
 <article class="tester-dash-card tester-journal-card">
       <h3>📔 Mon carnet personnel</h3><p>Note tes découvertes et tes souvenirs. Tes notes restent privées sur cet appareil.</p><textarea id="tester-personal-journal" class="tester-journal" maxlength="5000" placeholder="Aujourd’hui, j’ai découvert…"></textarea><button type="button" class="tester-dash-action" id="tester-journal-save">✍️ Enregistrer mon carnet</button><span id="tester-journal-status" class="tester-space-note" role="status"></span>
     </article>
-
 <article class="tester-dash-card tester-rewards-card">
       <h3>🎁 Récompenses Testeurs</h3><p>Des badges spéciaux remercient les testeurs qui participent aux essais et aident à améliorer les aventures.</p><div id="tester-reward-status" class="tester-badge-row"></div><button type="button" class="tester-dash-action" onclick="document.getElementById('tester-reward-status')?.scrollIntoView({behavior:'smooth',block:'center'})">🏷️ Voir les récompenses</button>
     </article>
-  </div>
+    </div>
+  </details>
   <details class="tester-extra-challenges">
     <summary>🧭 Mes défis complémentaires : missions quotidiennes & défi du mois</summary>
     <div class="tester-extra-challenges-grid"><article class="tester-dash-card">
@@ -4480,7 +4874,14 @@ body.halloween-accueil .home-hero{
                   <label class="wide">Description<textarea id="admin-village-description" maxlength="3000" rows="3" placeholder="Informations sur la préparation du village…"></textarea></label>
                   <label>Latitude GPS<input id="admin-village-latitude" type="number" step="any" min="-90" max="90" placeholder="Ex. 50.506349"></label>
                   <label>Longitude GPS<input id="admin-village-longitude" type="number" step="any" min="-180" max="180" placeholder="Ex. 1.910030"></label>
-                  <label class="wide">Photo du village (URL, facultatif)<input id="admin-village-photo" type="url" maxlength="1000" placeholder="https://…"></label>
+                  <div class="wide village-photo-field">
+                    <label for="admin-village-photo-file">Photo du village (depuis ton ordinateur)</label>
+                    <input id="admin-village-photo-file" type="file" accept="image/jpeg,image/png,image/webp">
+                    <small>Formats JPG, PNG ou WEBP · 8 Mo maximum. La photo sera envoyée automatiquement.</small>
+                    <div id="admin-village-photo-preview" class="village-photo-preview" aria-live="polite"></div>
+                    <label for="admin-village-photo">Ou adresse d’une photo déjà en ligne (facultatif)</label>
+                    <input id="admin-village-photo" type="url" maxlength="1000" placeholder="https://…">
+                  </div>
                   <div class="village-form-actions wide"><button type="button" class="admin-secondary-btn" onclick="adminResetVillageForm()">Annuler</button><button type="submit" class="admin-primary-btn" id="admin-village-save">▣ Enregistrer le village</button></div>
                 </form>
               </section>
@@ -4572,6 +4973,10 @@ body.halloween-accueil .home-hero{
 
       <div id="admin-adventures-view" class="admin-subview" hidden>
         <div class="admin-adventure-hero"><div class="hero-symbol">🗺️</div><div><div class="admin-kicker" style="color:#f0d27b">ATELIER DE CRÉATION</div><h3>Aventures & Énigmes</h3><p>Crée, organise et prépare tes parcours avant leur publication.</p></div></div>
+        <section id="admin-gps-test-panel" hidden style="display:none;align-items:center;gap:14px;flex-wrap:wrap;padding:13px 16px;margin:0 0 14px;border:1px solid #d9bd6b;border-radius:13px;background:linear-gradient(100deg,#fff8e5,#f4edda)">
+          <div style="font-size:27px">🧪</div><div style="flex:1;min-width:220px"><strong style="display:block;color:#0b5033">Mode test GPS — administration uniquement</strong><small id="admin-gps-test-status" style="color:#665d4b">Désactivé. Active-le pour simuler les arrivées depuis ton PC, sans te déplacer.</small></div>
+          <button type="button" class="admin-secondary-btn" id="admin-gps-test-toggle" onclick="window.toggleAdminGpsTestMode()">Activer le mode test</button>
+        </section>
         <div class="admin-adventure-tabs" role="tablist" aria-label="Filtres des aventures">
           <button type="button" class="admin-adventure-tab" data-adventure-filter="all" aria-selected="true">🗺️ Aventures</button>
           <button type="button" class="admin-adventure-tab" data-adventure-filter="riddles" aria-selected="false">🧩 Énigmes</button>
@@ -4608,7 +5013,7 @@ body.halloween-accueil .home-hero{
             <label>Titre de l’aventure<input id="admin-adventure-edit-title" required maxlength="150" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></label>
             <label>Village<input id="admin-adventure-edit-village" required maxlength="150" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></label>
             <label style="grid-column:1/-1">Description<textarea id="admin-adventure-edit-description" rows="3" maxlength="3000" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></textarea></label>
-            <label>Statut de l’aventure<select id="admin-adventure-edit-status-select" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"><option value="en_creation">En cours de création</option><option value="a_valider">À valider</option><option value="en_attente">En attente</option><option value="en_travaux">En travaux</option><option value="mise_a_jour">Mise à jour</option><option value="en_ligne">En ligne</option><option value="suspendue">Suspendue</option></select></label>
+            <label>Statut de l’aventure<select id="admin-adventure-edit-status-select" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"><option value="brouillon">En cours de création</option><option value="a_valider">À valider</option><option value="en_attente">En attente</option><option value="en_travaux">En travaux</option><option value="mise_a_jour">Mise à jour</option><option value="publie">En ligne</option><option value="suspendu">Suspendue</option></select></label>
             <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer</button><button class="admin-secondary-btn" id="admin-adventure-edit-cancel" type="button">Annuler</button></div>
           </form>
           <p style="font-size:12px;color:#66736a;margin-bottom:0">« Valider » confirme le contenu sans le publier. « Mettre en ligne » reste une action distincte.</p>
@@ -4617,20 +5022,19 @@ body.halloween-accueil .home-hero{
         </div>
         <div class="admin-info-panel" id="admin-adventure-steps-panel" hidden style="margin-top:16px">
           <h4 id="admin-adventure-steps-title" style="margin-top:0">Étapes et énigmes du parcours</h4>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button type="button" id="admin-test-humbert-btn" class="admin-secondary-btn" onclick="activerModeTestAventure()" hidden>🧪 Tester Humbert (mode administrateur)</button><span id="admin-test-status" role="status" style="font-size:13px"></span></div>
           <p>Ajoute les lieux, les coordonnées GPS, les photos, les énigmes, les réponses et les indices.</p>
           <div id="admin-adventure-steps-list"></div><div id="admin-step-map-preview" style="margin-top:12px"></div>
           <p style="font-size:13px;color:#667">Aperçu réservé à l’administration : il ne valide aucune étape réelle et n’ajoute aucune étoile.</p>
           <form id="admin-adventure-step-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px">
-            <label>Numéro d'étape<input id="admin-step-number" type="number" min="1" max="200" required value="1" style="display:block;width:100%;padding:9px"></label>
+            <input id="admin-step-id" type="hidden"><label>Numéro d'étape<input id="admin-step-number" type="number" min="1" max="200" required value="1" style="display:block;width:100%;padding:9px"></label>
             <label>Nom du lieu<input id="admin-step-place" required maxlength="200" placeholder="Ex. Place du village" style="display:block;width:100%;padding:9px"></label>
             <label>Latitude<input id="admin-step-lat" type="number" step="any" min="-90" max="90" placeholder="50.000000" required style="display:block;width:100%;padding:9px"></label>
             <label>Longitude<input id="admin-step-lon" type="number" step="any" min="-180" max="180" placeholder="1.000000" required style="display:block;width:100%;padding:9px"></label>
             <label>Rayon GPS autorisé (mètres)<input id="admin-step-gps-radius" type="number" min="10" max="500" step="5" value="100" required style="display:block;width:100%;padding:9px"><small>Le joueur devra se trouver dans ce rayon pour débloquer l’étape.</small></label>
             <div style="grid-column:1/-1;background:#edf3e8;border:1px solid #d4e2ce;border-radius:9px;padding:10px;color:#31543b;font-size:13px">📍 Le GPS est obligatoire pour valider l’arrivée. Renseigne la latitude, la longitude et le rayon de validation du lieu.</div>
             <label style="grid-column:1/-1">Photo de l’étape<input id="admin-step-photo-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:block;width:100%;padding:9px"><small>JPG, PNG ou WEBP · 8 Mo maximum</small><input id="admin-step-photo" type="hidden"></label><div id="admin-step-photo-preview" style="grid-column:1/-1"></div>
-            <label style="grid-column:1/-1">Énigme<textarea id="admin-step-riddle" rows="2" style="display:block;width:100%;padding:9px"></textarea></label><label>Réponse<input id="admin-step-answer" maxlength="500" style="display:block;width:100%;padding:9px"></label><label>Indice<input id="admin-step-hint" maxlength="1000" style="display:block;width:100%;padding:9px"></label>
-            <div style="grid-column:1/-1"><button class="admin-secondary-btn" type="submit">➕ Ajouter l'étape / énigme</button></div>
+            <label class="admin-step-writing-field" style="grid-column:1/-1">Énigme<textarea id="admin-step-riddle" rows="5" style="display:block;width:100%;min-height:145px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Réponse attendue<textarea id="admin-step-answer" maxlength="500" rows="3" placeholder="Saisis la réponse attendue par le joueur…" style="display:block;width:100%;min-height:86px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Indice pour trouver le lieu et aider à résoudre l’énigme<textarea id="admin-step-hint" maxlength="1000" rows="5" placeholder="Aide le joueur sans lui donner directement la réponse…" style="display:block;width:100%;min-height:145px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Indice pour rejoindre le prochain lieu (après bonne réponse)<textarea id="admin-step-next-hint" maxlength="1000" rows="5" placeholder="Après la bonne réponse, indique au joueur où poursuivre son aventure…" style="display:block;width:100%;min-height:145px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label>Étoiles attribuées<input id="admin-step-stars" type="number" min="0" max="10" step="1" value="1" style="display:block;width:100%;box-sizing:border-box;padding:10px"></label>
+            <div style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap"><button class="admin-secondary-btn" id="admin-step-submit" type="submit">➕ Ajouter l'étape / énigme</button><button class="admin-secondary-btn" id="admin-step-cancel-edit" type="button" hidden>Annuler la modification</button></div>
           </form>
         </div>
       </div>
@@ -4949,6 +5353,7 @@ showDashboard(
   }
 });
 const API_BASE = "https://tresors-de-nos-villages-serveur.onrender.com";
+window.API_BASE = API_BASE; // Rend l’adresse accessible aux scripts classiques.
 async function getAdminBearerToken() {
   // Neon Better Auth exposes the short-lived JWT at /token (not /get-jwt-token).
   // The browser session cookie is sent only to Neon Auth; it is never copied to Render.
@@ -4976,13 +5381,16 @@ async function adminApi(path, options = {}) {
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
   return data;
 }
+// Expose le client API à la fenêtre : le tableau de bord est dans un script classique.
 window.adminApi = adminApi;
+
 window.checkAdminAccess = async function(){
   try{
     const staffInfo = await adminApi("/api/admin/me");
     window.adminCurrentRole = staffInfo.role;
     window.adminCurrentPermissions = Array.isArray(staffInfo.permissions) ? staffInfo.permissions : [];
     window.setAdminAccessGranted(true);
+    window.refreshAdminGpsTestMode?.();
     if (window.adminCurrentRole === "admin") window.startAdminNotificationPolling?.();
     else window.stopAdminNotificationPolling?.();
   }catch(_error){
@@ -5117,8 +5525,31 @@ async function adminOpenSupport(){
     if (status) status.textContent = error.message || "Impossible de charger le support.";
   }
 }
+window.refreshAdminGpsTestMode=function(){
+  const allowed=window.adminAccessGranted===true && window.adminCurrentRole==="admin";
+  const enabled=allowed && localStorage.getItem("modeTestAventure")==="true";
+  const panel=document.getElementById("admin-gps-test-panel");
+  const status=document.getElementById("admin-gps-test-status");
+  const button=document.getElementById("admin-gps-test-toggle");
+  if(panel) { panel.hidden=!allowed; panel.style.display=allowed?"flex":"none"; }
+  if(status) status.textContent=enabled?"Activé : les administrateurs peuvent simuler chaque arrivée GPS depuis leur PC. Les testeurs et joueurs gardent le vrai GPS.":"Désactivé. Active-le pour simuler les arrivées depuis ton PC, sans te déplacer.";
+  if(button) button.textContent=enabled?"Désactiver le mode test":"Activer le mode test";
+};
+window.toggleAdminGpsTestMode=function(){
+  if(window.adminAccessGranted!==true || window.adminCurrentRole!=="admin") { alert("Cette option est réservée aux administrateurs."); return; }
+  if(localStorage.getItem("modeTestAventure")==="true") localStorage.removeItem("modeTestAventure");
+  else localStorage.setItem("modeTestAventure","true");
+  window.refreshAdminGpsTestMode();
+  if(typeof adminRenderAdventureList==="function") adminRenderAdventureList();
+};
+window.adminPreviewAdventure=async function(id){
+  if(window.adminAccessGranted!==true || window.adminCurrentRole!=="admin" || localStorage.getItem("modeTestAventure")!=="true") { alert("Active d’abord le mode test GPS réservé à l’administration."); return; }
+  showDashSection("dash-adventures");
+  await openPlayerAdventure(id,false);
+};
 async function adminOpenAdventures(){
   adminSetView("admin-adventures-view","Aventures & énigmes");
+  window.refreshAdminGpsTestMode?.();
   await window.adminLoadAdventures();
 }
 let adminPlayersCache=[];
@@ -5803,8 +6234,18 @@ function adminVillageCell(value) {
 function adminResetVillageForm(){
   const form=document.getElementById("admin-village-form");if(form)form.reset();
   document.getElementById("admin-village-id").value="";
+  const preview=document.getElementById("admin-village-photo-preview");if(preview)preview.replaceChildren();
+  const file=document.getElementById("admin-village-photo-file");if(file)file.value="";
   document.getElementById("admin-village-form-title").textContent="＋ Ajouter un nouveau village";
   document.getElementById("admin-village-save").textContent="▣ Enregistrer le village";
+}
+function adminShowVillagePhotoPreview(url){
+  const preview=document.getElementById("admin-village-photo-preview");if(!preview)return;
+  preview.replaceChildren();
+  if(!url)return;
+  const img=document.createElement("img");img.src=url;img.alt="Aperçu de la photo du village";
+  img.onerror=()=>{preview.textContent="L’aperçu de cette photo n’est pas disponible.";};
+  preview.appendChild(img);
 }
 function adminEditVillage(v){
   document.getElementById("admin-village-id").value=v.id;
@@ -5816,6 +6257,8 @@ function adminEditVillage(v){
   document.getElementById("admin-village-latitude").value=v.latitude??"";
   document.getElementById("admin-village-longitude").value=v.longitude??"";
   document.getElementById("admin-village-photo").value=v.photo_url||"";
+  const villagePhotoFile=document.getElementById("admin-village-photo-file");if(villagePhotoFile)villagePhotoFile.value="";
+  adminShowVillagePhotoPreview(v.photo_url||"");
   document.getElementById("admin-village-form-title").textContent="Modifier "+(v.name||"le village");
   document.getElementById("admin-village-save").textContent="Enregistrer les modifications";
   adminVillageTab("add");
@@ -5939,14 +6382,49 @@ window.adminLoadVillages=async function(){
     adminRenderVillageMap("admin-villages-mini-map","mini");
   }catch(error){status.textContent=error.message||"Impossible de charger les villages.";list.textContent="Vérifie que Render est déployé et que tu es connectée avec le compte administrateur.";}
 };
+const adminVillagePhotoFile=document.getElementById("admin-village-photo-file");
+if(adminVillagePhotoFile)adminVillagePhotoFile.addEventListener("change",event=>{
+  const file=event.target.files?.[0];
+  if(!file){adminShowVillagePhotoPreview(document.getElementById("admin-village-photo").value.trim());return;}
+  const preview=document.getElementById("admin-village-photo-preview");preview.replaceChildren();
+  const img=document.createElement("img");img.alt="Aperçu de la photo sélectionnée";img.src=URL.createObjectURL(file);preview.appendChild(img);
+});
+async function adminUploadVillagePhoto(file){
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Choisis une image JPG, PNG ou WEBP.");
+  if(file.size>8*1024*1024)throw new Error("La photo ne doit pas dépasser 8 Mo.");
+  const signed=await adminApi("/api/admin/cloudinary/signature",{method:"POST",body:JSON.stringify({resource:"village"})});
+  const formData=new FormData();formData.append("file",file);formData.append("api_key",signed.api_key);
+  formData.append("timestamp",String(signed.timestamp));formData.append("folder",signed.folder);formData.append("signature",signed.signature);
+  const upload=await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloud_name)}/image/upload`,{method:"POST",body:formData});
+  const uploaded=await upload.json().catch(()=>({}));
+  if(!upload.ok||!uploaded.secure_url)throw new Error(uploaded.error?.message||"L’envoi de la photo a échoué.");
+  return uploaded.secure_url;
+}
 const adminVillageForm=document.getElementById("admin-village-form");
 if(adminVillageForm)adminVillageForm.addEventListener("submit",async event=>{
-  event.preventDefault();const status=document.getElementById("admin-villages-status"),save=document.getElementById("admin-village-save"),id=document.getElementById("admin-village-id").value;
+  event.preventDefault();
+  const status=document.getElementById("admin-villages-status"),save=document.getElementById("admin-village-save"),id=document.getElementById("admin-village-id").value;
   const lat=document.getElementById("admin-village-latitude").value,lon=document.getElementById("admin-village-longitude").value;
-  const payload={name:document.getElementById("admin-village-name").value.trim(),slug:document.getElementById("admin-village-slug").value.trim().toLowerCase(),postal_code:document.getElementById("admin-village-postal").value.trim(),status:document.getElementById("admin-village-status").value,description:document.getElementById("admin-village-description").value.trim(),latitude:lat===""?null:Number(lat),longitude:lon===""?null:Number(lon),photo_url:document.getElementById("admin-village-photo").value.trim()};
   save.disabled=true;status.textContent="Enregistrement…";
-  try{await adminApi(id?`/api/admin/villages/${encodeURIComponent(id)}`:"/api/admin/villages",{method:id?"PATCH":"POST",body:JSON.stringify(payload)});status.textContent=id?"Village modifié avec succès.":"Village ajouté avec succès.";adminResetVillageForm();await window.adminLoadVillages();adminVillageTab("list");}
-  catch(error){status.textContent=error.message||"Impossible d’enregistrer le village.";}
+  try{
+    let photoUrl=document.getElementById("admin-village-photo").value.trim();
+    const photoFile=document.getElementById("admin-village-photo-file")?.files?.[0];
+    if(photoFile){status.textContent="Envoi de la photo…";photoUrl=await adminUploadVillagePhoto(photoFile);}
+    const payload={
+      name:document.getElementById("admin-village-name").value.trim(),
+      slug:document.getElementById("admin-village-slug").value.trim().toLowerCase(),
+      postal_code:document.getElementById("admin-village-postal").value.trim(),
+      status:document.getElementById("admin-village-status").value,
+      description:document.getElementById("admin-village-description").value.trim(),
+      latitude:lat===""?null:Number(lat),longitude:lon===""?null:Number(lon),photo_url:photoUrl
+    };
+    status.textContent="Sauvegarde des informations…";
+    await adminApi(id?`/api/admin/villages/${encodeURIComponent(id)}`:"/api/admin/villages",{
+      method:id?"PATCH":"POST",body:JSON.stringify(payload)
+    });
+    status.textContent=id?"Village modifié avec succès.":"Village ajouté avec succès.";
+    adminResetVillageForm();await window.adminLoadVillages();adminVillageTab("list");
+  }catch(error){status.textContent=error.message||"Impossible d’enregistrer le village.";}
   finally{save.disabled=false;}
 });
 
@@ -5977,7 +6455,7 @@ window.adminLoadVillageLevels = async function(){
 const levelsCustomForm=document.getElementById("levels-custom-form");if(levelsCustomForm)levelsCustomForm.addEventListener("submit",async e=>{e.preventDefault();const village=document.getElementById("admin-level-village").value,status=document.getElementById("admin-levels-status"),name=document.getElementById("levels-custom-name").value.trim(),key=adminLevelSlug(name);if(!village){status.textContent="Choisis d’abord un village.";return;}if(!key){status.textContent="Nom de niveau invalide.";return;}if(adminLevelCache.some(x=>x.level_key===key)){status.textContent="Ce niveau existe déjà pour ce village.";return;}const payload={village_slug:village,level_key:key,display_name:name,riddle_count:Number(document.getElementById("levels-custom-riddles").value),star_count:Number(document.getElementById("levels-custom-stars").value),access_type:document.getElementById("levels-custom-access").value,price_eur:Number(document.getElementById("levels-custom-price").value),status:document.getElementById("levels-custom-status").value,sort_order:adminLevelCache.length};try{await adminApi("/api/admin/village-levels",{method:"PUT",body:JSON.stringify(payload)});levelsCustomForm.reset();document.getElementById("levels-custom-riddles").value=10;document.getElementById("levels-custom-stars").value=10;document.getElementById("levels-custom-price").value="1.99";status.textContent="Niveau personnalisé ajouté.";await window.adminLoadVillageLevels();}catch(err){status.textContent=err.message||"Impossible d’ajouter le niveau.";}});
 
 window.adminSelectedAdventureId = null;
-const ADVENTURE_STATUS_LABELS={en_creation:"En cours de création",a_valider:"À valider",en_attente:"En attente",en_travaux:"En travaux",mise_a_jour:"Mise à jour",en_ligne:"En ligne",suspendue:"Suspendue"};
+const ADVENTURE_STATUS_LABELS={brouillon:"En cours de création",a_valider:"À valider",en_attente:"En attente",en_travaux:"En travaux",mise_a_jour:"Mise à jour",publie:"En ligne",suspendu:"Suspendue"};
 let adminAdventureCache=[];
 let adminAdventureCurrentFilter="all";
 function adminAdventureStatusPill(a){
@@ -5989,7 +6467,7 @@ function adminAdventureMatchesFilter(a,filter){
   if(filter==="drafts")return !a.is_published&&!a.is_validated;
   if(filter==="validation")return !a.is_validated&&!a.is_published && ["a_valider","en_attente"].includes(a.status);
   if(filter==="online")return !!a.is_published;
-  if(filter==="archives")return a.status==="suspendue";
+  if(filter==="archives")return a.status==="suspendu";
   return true;
 }
 function adminRenderAdventureList(){
@@ -6005,8 +6483,19 @@ function adminRenderAdventureList(){
     const info=document.createElement("div");const title=document.createElement("h5");title.textContent=a.title||"Aventure sans titre";const meta=document.createElement("p");meta.textContent=`${a.village||"Village non défini"} · ${a.level_key||"Niveau non défini"}`;const pills=document.createElement("div");pills.className="admin-adventure-pills";pills.innerHTML=adminAdventureStatusPill(a);info.append(title,meta,pills);
     const actions=document.createElement("div");actions.className="admin-adventure-actions";
     const make=(icon,label,fn,disabled=false)=>{const b=document.createElement("button");b.type="button";b.disabled=disabled;const i=document.createElement("span");i.textContent=icon;b.append(i,document.createTextNode(label));b.addEventListener("click",fn);return b;};
-    actions.append(make("✏️","Modifier",()=>window.adminEditAdventure(a)),make("🧩","Gérer les énigmes",()=>window.adminLoadAdventureSteps(a.id,a.title,a.village)),make("☑","Valider",()=>window.adminAdventureAction(a.id,"validate"),!!a.is_validated),make("🌐","Mettre en ligne",()=>window.adminAdventureAction(a.id,"publish"),!!a.is_published||!a.is_validated));
-    const more=make("•••","Plus",()=>window.adminEditAdventure(a));more.title="Autres réglages et statut";actions.append(more);card.append(thumb,info,actions);list.appendChild(card);
+    actions.append(make("✏️","Modifier",()=>window.adminEditAdventure(a)),make("🧩","Gérer les énigmes",()=>window.adminLoadAdventureSteps(a.id,a.title)),make("☑","Valider",()=>window.adminAdventureAction(a.id,"validate"),!!a.is_validated),make("🌐","Mettre en ligne",()=>window.adminAdventureAction(a.id,"publish"),!!a.is_published||!a.is_validated));
+    if(window.adminAccessGranted===true && window.adminCurrentRole==="admin" && localStorage.getItem("modeTestAventure")==="true") actions.append(make("🧪","Tester",()=>window.adminPreviewAdventure(a.id)));
+    const more=make("•••","Plus",()=>{
+      const existing=actions.querySelector(".admin-adventure-more-menu");
+      if(existing){existing.remove();return;}
+      document.querySelectorAll(".admin-adventure-more-menu").forEach(menu=>menu.remove());
+      const menu=document.createElement("div");menu.className="admin-adventure-more-menu";menu.setAttribute("role","menu");
+      const remove=document.createElement("button");remove.type="button";remove.setAttribute("role","menuitem");
+      const icon=document.createElement("span");icon.textContent="🗑️";
+      remove.append(icon,document.createTextNode("Supprimer cette aventure"));
+      remove.addEventListener("click",async()=>{menu.remove();await window.adminDeleteAdventure(a.id,a.title);});
+      menu.appendChild(remove);actions.appendChild(menu);
+    });more.title="Autres réglages";more.setAttribute("aria-haspopup","true");actions.append(more);card.append(thumb,info,actions);list.appendChild(card);
   });
 }
 window.adminLoadAdventures = async function(){
@@ -6027,7 +6516,7 @@ window.adminEditAdventure=function(a){
   document.getElementById("admin-adventure-edit-title").value=a.title||"";
   document.getElementById("admin-adventure-edit-village").value=a.village||"";
   document.getElementById("admin-adventure-edit-description").value=a.description||"";
-  document.getElementById("admin-adventure-edit-status-select").value=ADVENTURE_STATUS_LABELS[a.status]?a.status:"en_creation";
+  document.getElementById("admin-adventure-edit-status-select").value=ADVENTURE_STATUS_LABELS[a.status]?a.status:"brouillon";
   document.getElementById("admin-adventure-edit-status-select").dataset.validated=String(!!a.is_validated);
   document.getElementById("admin-adventure-edit-status-select").dataset.published=String(!!a.is_published);
   document.getElementById("admin-adventure-edit-status-select").dataset.villageSlug=a.village_slug||"";
@@ -6037,6 +6526,28 @@ window.adminEditAdventure=function(a){
   document.getElementById("admin-adventure-publish").disabled=!!a.is_published||!a.is_validated;
   document.getElementById("admin-adventure-edit-message").textContent="";
   panel.scrollIntoView({behavior:"smooth",block:"start"});
+};
+window.adminDeleteAdventure=async function(id,title){
+  const label=String(title||"cette aventure");
+  if(!confirm(`Supprimer définitivement « ${label} » ?\n\nCette action est irréversible. Les étapes et énigmes liées seront également concernées si la base les supprime en cascade.`))return;
+  const status=document.getElementById("admin-adventures-status");
+  try{
+    if(status)status.textContent="Suppression de l’aventure…";
+    await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}`,{method:"DELETE"});
+    const editId=document.getElementById("admin-adventure-edit-id")?.value;
+    if(String(editId)===String(id)){
+      const editPanel=document.getElementById("admin-adventure-edit-panel");if(editPanel)editPanel.hidden=true;
+    }
+    if(String(window.adminSelectedAdventureId)===String(id)){
+      const stepsPanel=document.getElementById("admin-adventure-steps-panel");if(stepsPanel)stepsPanel.hidden=true;
+      window.adminSelectedAdventureId=null;
+    }
+    if(status)status.textContent=`L’aventure « ${label} » a été supprimée.`;
+    await window.adminLoadAdventures();
+  }catch(error){
+    if(status)status.textContent=error.message||"Impossible de supprimer cette aventure.";
+    alert(error.message||"Impossible de supprimer cette aventure.");
+  }
 };
 window.adminAdventureAction=async function(id,action){
   const msg=document.getElementById("admin-adventure-edit-message");if(msg)msg.textContent="Traitement…";
@@ -6063,21 +6574,38 @@ document.getElementById("admin-adventure-create-form")?.addEventListener("submit
   e.preventDefault();const status=document.getElementById("admin-adventures-status"),btn=e.currentTarget.querySelector('button[type="submit"]');
   const villageSlug=document.getElementById("admin-adventure-village").value,village=document.getElementById("admin-adventure-village").selectedOptions[0]?.textContent||"",levelKey=document.getElementById("admin-adventure-level").value,title=document.getElementById("admin-adventure-title").value.trim(),description=document.getElementById("admin-adventure-description").value.trim();
   if(!villageSlug||!levelKey){status.textContent="Choisis d'abord un village et un niveau.";return;}
-  btn.disabled=true;try{const result=await adminApi("/api/admin/adventures",{method:"POST",body:JSON.stringify({village,village_slug:villageSlug,level_key:levelKey,title,description})});document.getElementById("admin-adventure-title").value="";document.getElementById("admin-adventure-description").value="";status.textContent=`Parcours « ${result.adventure.title} » créé en brouillon.`;await window.adminLoadAdventures();if(result.adventure?.id)await window.adminLoadAdventureSteps(result.adventure.id,result.adventure.title,result.adventure.village);}catch(err){status.textContent=err.message||"Impossible de créer le parcours.";}finally{btn.disabled=false;}
+  btn.disabled=true;try{const result=await adminApi("/api/admin/adventures",{method:"POST",body:JSON.stringify({village,village_slug:villageSlug,level_key:levelKey,title,description})});document.getElementById("admin-adventure-title").value="";document.getElementById("admin-adventure-description").value="";status.textContent=`Parcours « ${result.adventure.title} » créé en brouillon.`;await window.adminLoadAdventures();if(result.adventure?.id)await window.adminLoadAdventureSteps(result.adventure.id,result.adventure.title);}catch(err){status.textContent=err.message||"Impossible de créer le parcours.";}finally{btn.disabled=false;}
 });
-window.adminLoadAdventureSteps=async function(id,title,village=""){
+window.adminLoadAdventureSteps=async function(id,title){
   const panel=document.getElementById("admin-adventure-steps-panel"),list=document.getElementById("admin-adventure-steps-list"),heading=document.getElementById("admin-adventure-steps-title");
-  window.adminSelectedAdventureId=id;window.adminSelectedAdventureVillage=village||window.adminSelectedAdventureVillage||"";window.adminEditingStepId=null;panel.hidden=false;heading.textContent=`Étapes — ${title}`;const testBtn=document.getElementById("admin-test-humbert-btn");if(testBtn){testBtn.hidden=false;testBtn.textContent="🧪 Tester ce parcours (mode administrateur)";}list.textContent="Chargement…";
+  window.adminSelectedAdventureId=id;panel.hidden=false;heading.textContent=`Étapes — ${title}`;list.textContent="Chargement…";
   try{const data=await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps`),steps=Array.isArray(data.steps)?data.steps:[];list.replaceChildren();
     if(data.level?.riddle_count){const info=document.createElement("p");info.textContent=`Niveau ${data.level.level_key} : ${steps.length}/${data.level.riddle_count} étapes prévues · ${data.level.star_count} étoiles`;info.style.cssText="font-weight:600;color:#52634f";list.appendChild(info);document.getElementById("admin-step-number").max=String(data.level.riddle_count);document.getElementById("admin-step-form-note")?.remove();}
     if(!steps.length)list.textContent="Aucune étape pour le moment. Tu peux ajouter les lieux ci-dessous.";
-    steps.forEach(step=>{const row=document.createElement("div");row.style.cssText="padding:12px;border-bottom:1px solid #eee8d9;margin:0;display:grid;gap:8px";const title=document.createElement("strong");title.textContent=`Étape ${step.step_number} — ${step.place_name}`;row.appendChild(title);if(step.photo_url){const img=document.createElement("img");img.src=step.photo_url;img.alt=`Photo de ${step.place_name}`;img.loading="lazy";img.style.cssText="max-width:260px;max-height:180px;object-fit:cover;border-radius:10px";row.appendChild(img);}const gps=document.createElement("span");gps.textContent=step.latitude!=null&&step.longitude!=null?`GPS : ${step.latitude}, ${step.longitude} · Rayon de validation : ${Number(step.gps_radius_meters)||100} m`:"GPS à renseigner · Rayon prévu : "+(Number(step.gps_radius_meters)||100)+" m";row.appendChild(gps);if(step.latitude!=null&&step.longitude!=null){const sim=document.createElement("button");sim.type="button";sim.className="admin-secondary-btn";sim.textContent="Voir le point sur la carte (simulation admin)";sim.addEventListener("click",()=>{const box=document.getElementById("admin-step-map-preview");box.replaceChildren();const frame=document.createElement("iframe");frame.title=`Carte du point ${step.place_name}`;frame.loading="lazy";frame.width="100%";frame.height="280";frame.style.border="0";frame.style.borderRadius="12px";frame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${Number(step.longitude)-0.003}%2C${Number(step.latitude)-0.002}%2C${Number(step.longitude)+0.003}%2C${Number(step.latitude)+0.002}&layer=mapnik&marker=${step.latitude}%2C${step.longitude}`;box.appendChild(frame);const note=document.createElement("p");note.textContent="Aperçu uniquement : aucune validation GPS de joueur n’est enregistrée.";box.appendChild(note);});row.appendChild(sim);}
-      const actions=document.createElement("div");actions.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
-      const edit=document.createElement("button");edit.type="button";edit.className="admin-secondary-btn";edit.textContent="✏️ Modifier cette étape";edit.addEventListener("click",()=>{window.adminEditingStepId=step.id;document.getElementById("admin-step-number").value=step.step_number;document.getElementById("admin-step-place").value=step.place_name||"";document.getElementById("admin-step-lat").value=step.latitude??"";document.getElementById("admin-step-lon").value=step.longitude??"";document.getElementById("admin-step-gps-radius").value=step.gps_radius_meters||100;document.getElementById("admin-step-riddle").value=step.riddle||"";document.getElementById("admin-step-answer").value=step.answer||"";document.getElementById("admin-step-hint").value=step.hint||"";document.getElementById("admin-step-photo").value=step.photo_url||"";document.getElementById("admin-step-photo-file").value="";const submit=document.querySelector('#admin-adventure-step-form button[type="submit"]');submit.textContent="💾 Enregistrer les modifications";document.getElementById("admin-step-place").focus();});actions.appendChild(edit);
-      const del=document.createElement("button");del.type="button";del.className="admin-secondary-btn";del.textContent="🗑️ Supprimer cette étape";del.addEventListener("click",async()=>{if(!confirm(`Supprimer uniquement l’étape ${step.step_number} — ${step.place_name} ? Cette action est définitive.`))return;try{await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps/${encodeURIComponent(step.id)}`,{method:"DELETE"});await window.adminLoadAdventureSteps(id,heading.textContent.replace("Étapes — ",""),window.adminSelectedAdventureVillage||""); }catch(err){alert(err.message||"Suppression impossible.");}});actions.appendChild(del);row.appendChild(actions);list.appendChild(row);});
+    steps.forEach(step=>{const row=document.createElement("div");row.style.cssText="padding:12px;border-bottom:1px solid #eee8d9;margin:0;display:grid;gap:8px";const title=document.createElement("strong");title.textContent=`Étape ${step.step_number} — ${step.place_name}`;row.appendChild(title);if(step.photo_url){const img=document.createElement("img");img.src=step.photo_url;img.alt=`Photo de ${step.place_name}`;img.loading="lazy";img.style.cssText="max-width:260px;max-height:180px;object-fit:cover;border-radius:10px";row.appendChild(img);}const gps=document.createElement("span");gps.textContent=step.latitude!=null&&step.longitude!=null?`GPS : ${step.latitude}, ${step.longitude} · Rayon : ${Number(step.gps_radius_meters)||100} m · ⭐ ${Number(step.stars_awarded)||0}`:"GPS à renseigner · Rayon : "+(Number(step.gps_radius_meters)||100)+" m";row.appendChild(gps);const details=document.createElement("p");details.textContent=`Énigme : ${step.riddle||"Non renseignée"} · Indice suivant : ${step.next_hint||"Non renseigné"}`;row.appendChild(details);const edit=document.createElement("button");edit.type="button";edit.className="admin-secondary-btn";edit.textContent="✏️ Modifier cette étape";edit.addEventListener("click",()=>window.adminEditAdventureStep(step));row.appendChild(edit);if(step.latitude!=null&&step.longitude!=null){const sim=document.createElement("button");sim.type="button";sim.className="admin-secondary-btn";sim.textContent="Voir le point sur la carte (simulation admin)";sim.addEventListener("click",()=>{const box=document.getElementById("admin-step-map-preview");box.replaceChildren();const frame=document.createElement("iframe");frame.title=`Carte du point ${step.place_name}`;frame.loading="lazy";frame.width="100%";frame.height="280";frame.style.border="0";frame.style.borderRadius="12px";frame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${Number(step.longitude)-0.003}%2C${Number(step.latitude)-0.002}%2C${Number(step.longitude)+0.003}%2C${Number(step.latitude)+0.002}&layer=mapnik&marker=${step.latitude}%2C${step.longitude}`;box.appendChild(frame);const note=document.createElement("p");note.textContent="Aperçu uniquement : aucune validation GPS de joueur n’est enregistrée.";box.appendChild(note);});row.appendChild(sim);}list.appendChild(row);});
     const next=Math.max(0,...steps.map(x=>Number(x.step_number)||0))+1;document.getElementById("admin-step-number").value=String(next);
   }catch(e){list.textContent=e.message||"Impossible de charger les étapes.";}
 };
+window.adminEditAdventureStep=function(step){
+  document.getElementById("admin-step-id").value=step.id;
+  document.getElementById("admin-step-number").value=step.step_number||1;
+  document.getElementById("admin-step-place").value=step.place_name||"";
+  document.getElementById("admin-step-lat").value=step.latitude??"";
+  document.getElementById("admin-step-lon").value=step.longitude??"";
+  document.getElementById("admin-step-gps-radius").value=step.gps_radius_meters||100;
+  document.getElementById("admin-step-riddle").value=step.riddle||"";
+  document.getElementById("admin-step-answer").value=step.answer||"";
+  document.getElementById("admin-step-hint").value=step.hint||"";
+  document.getElementById("admin-step-next-hint").value=step.next_hint||"";
+  document.getElementById("admin-step-stars").value=step.stars_awarded??1;
+  document.getElementById("admin-step-photo").value=step.photo_url||"";
+  const preview=document.getElementById("admin-step-photo-preview");preview.replaceChildren();
+  if(step.photo_url){const img=document.createElement("img");img.src=step.photo_url;img.alt="Photo actuelle";img.style.cssText="max-width:240px;max-height:160px;object-fit:cover;border-radius:10px";preview.appendChild(img);}
+  document.getElementById("admin-step-submit").textContent="💾 Enregistrer les modifications";
+  document.getElementById("admin-step-cancel-edit").hidden=false;
+  document.getElementById("admin-adventure-step-form").scrollIntoView({behavior:"smooth",block:"center"});
+};
+document.getElementById("admin-step-cancel-edit")?.addEventListener("click",()=>{document.getElementById("admin-adventure-step-form").reset();document.getElementById("admin-step-id").value="";document.getElementById("admin-step-photo").value="";document.getElementById("admin-step-stars").value="1";document.getElementById("admin-step-gps-radius").value="100";document.getElementById("admin-step-submit").textContent="➕ Ajouter l'étape / énigme";document.getElementById("admin-step-cancel-edit").hidden=true;document.getElementById("admin-step-photo-preview").replaceChildren();});
 document.getElementById("admin-step-photo-file")?.addEventListener("change",e=>{const box=document.getElementById("admin-step-photo-preview");box.replaceChildren();const file=e.target.files?.[0];if(!file)return;const img=document.createElement("img");img.alt="Aperçu de la photo choisie";img.src=URL.createObjectURL(file);img.style.cssText="max-width:240px;max-height:160px;object-fit:cover;border-radius:10px";box.appendChild(img);});
 document.getElementById("admin-adventure-step-form")?.addEventListener("submit",async e=>{
   e.preventDefault();const id=window.adminSelectedAdventureId;if(!id){alert("Choisis d'abord un parcours.");return;}const form=e.currentTarget,btn=form.querySelector('button[type="submit"]');btn.disabled=true;
@@ -6093,8 +6621,9 @@ document.getElementById("admin-adventure-step-form")?.addEventListener("submit",
       const upload=await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloud_name)}/image/upload`,{method:"POST",body:formData});
       const uploaded=await upload.json().catch(()=>({}));if(!upload.ok||!uploaded.secure_url)throw new Error(uploaded.error?.message||"L’envoi de la photo a échoué.");photoUrl=uploaded.secure_url;
     }
-    const payload={step_number:Number(document.getElementById("admin-step-number").value),place_name:document.getElementById("admin-step-place").value.trim(),latitude:document.getElementById("admin-step-lat").value||null,longitude:document.getElementById("admin-step-lon").value||null,gps_radius_meters:Number(document.getElementById("admin-step-gps-radius").value||100),riddle:document.getElementById("admin-step-riddle").value.trim(),answer:document.getElementById("admin-step-answer").value.trim(),hint:document.getElementById("admin-step-hint").value.trim(),photo_url:photoUrl};
-    await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/steps${window.adminEditingStepId?`/${encodeURIComponent(window.adminEditingStepId)}`:""}`,{method:window.adminEditingStepId?"PATCH":"POST",body:JSON.stringify(payload)});window.adminEditingStepId=null;document.querySelector('#admin-adventure-step-form button[type="submit"]').textContent="➕ Ajouter l’étape / énigme";document.getElementById("admin-step-place").value="";document.getElementById("admin-step-lat").value="";document.getElementById("admin-step-lon").value="";document.getElementById("admin-step-gps-radius").value="100";document.getElementById("admin-step-riddle").value="";document.getElementById("admin-step-answer").value="";document.getElementById("admin-step-hint").value="";document.getElementById("admin-step-photo").value="";if(photoInput)photoInput.value="";document.getElementById("admin-step-photo-preview")?.replaceChildren();const title=document.getElementById("admin-adventure-steps-title").textContent.replace("Étapes — ","");await window.adminLoadAdventureSteps(id,title,window.adminSelectedAdventureVillage||"");document.getElementById("admin-adventures-status").textContent="Étape enregistrée.";
+    const payload={step_number:Number(document.getElementById("admin-step-number").value),place_name:document.getElementById("admin-step-place").value.trim(),latitude:document.getElementById("admin-step-lat").value||null,longitude:document.getElementById("admin-step-lon").value||null,gps_radius_meters:Number(document.getElementById("admin-step-gps-radius").value||100),riddle:document.getElementById("admin-step-riddle").value.trim(),answer:document.getElementById("admin-step-answer").value.trim(),hint:document.getElementById("admin-step-hint").value.trim(),next_hint:document.getElementById("admin-step-next-hint").value.trim(),stars_awarded:Number(document.getElementById("admin-step-stars").value||0),photo_url:photoUrl};
+    const editingStepId=document.getElementById("admin-step-id").value;
+    await adminApi(editingStepId?`/api/admin/adventures/${encodeURIComponent(id)}/steps/${encodeURIComponent(editingStepId)}`:`/api/admin/adventures/${encodeURIComponent(id)}/steps`,{method:editingStepId?"PATCH":"POST",body:JSON.stringify(payload)});document.getElementById("admin-step-place").value="";document.getElementById("admin-step-lat").value="";document.getElementById("admin-step-lon").value="";document.getElementById("admin-step-gps-radius").value="100";document.getElementById("admin-step-riddle").value="";document.getElementById("admin-step-answer").value="";document.getElementById("admin-step-hint").value="";document.getElementById("admin-step-next-hint").value="";document.getElementById("admin-step-stars").value="1";document.getElementById("admin-step-id").value="";document.getElementById("admin-step-submit").textContent="➕ Ajouter l'étape / énigme";document.getElementById("admin-step-cancel-edit").hidden=true;document.getElementById("admin-step-photo").value="";if(photoInput)photoInput.value="";document.getElementById("admin-step-photo-preview")?.replaceChildren();const title=document.getElementById("admin-adventure-steps-title").textContent.replace("Étapes — ","");await window.adminLoadAdventureSteps(id,title);document.getElementById("admin-adventures-status").textContent="Étape enregistrée.";
   }catch(err){alert(err.message||"Impossible d'ajouter l'étape.");}finally{btn.disabled=false;}
 });
 
@@ -6143,7 +6672,8 @@ window.adminOpenSiteStatus=async function(){
   if(feedback)feedback.textContent="Chargement du statut actuel…";
   try{
     const data=await adminApi("/api/admin/site-status");
-    const status=data.status||"online";
+    const storedStatus=data.status||"online";
+    const status=storedStatus==="online"?"in_progress":storedStatus;
     document.querySelectorAll('input[name="site-status-value"]').forEach(el=>el.checked=el.value===status);
     document.getElementById("site-status-message").value=data.message||"";
     document.getElementById("site-status-banner-enabled").checked=data.banner_enabled!==false;
@@ -6167,9 +6697,10 @@ window.saveSiteStatus=async function(){
   if(feedback)feedback.textContent="Enregistrement…";
   try{
     const result=await adminApi("/api/admin/site-status",{method:"PUT",body:JSON.stringify(data)});
-    const meta=SITE_STATUS_META[result.status]||SITE_STATUS_META.online;
+    const displayStatus=result.status==="online"?"in_progress":result.status;
+    const meta=SITE_STATUS_META[displayStatus]||SITE_STATUS_META.online;
     document.getElementById("site-status-current-label").textContent=meta.icon+" "+meta.title;
-    paintSiteStatusPreview(result);
+    paintSiteStatusPreview({...result,status:displayStatus});
     if(feedback)feedback.textContent="Modifications enregistrées. Le bandeau du site sera actualisé.";
     await loadPublicSiteStatus();
   }catch(error){if(feedback)feedback.textContent=error.message||"Impossible d’enregistrer les modifications.";}
@@ -6180,7 +6711,8 @@ async function loadPublicSiteStatus(){
     const response=await fetch(`${API_BASE}/api/site-status`,{cache:"no-store"});
     if(!response.ok)throw new Error(`HTTP ${response.status}`);
     const data=await response.json();
-    const meta=SITE_STATUS_META[data.status]||SITE_STATUS_META.online;
+    const displayStatus=data.status==="online"?"in_progress":data.status;
+    const meta=SITE_STATUS_META[displayStatus]||SITE_STATUS_META.online;
     const message=String(data.message||meta.message).replace(/\s+/g," ").trim();
     const updateBanner=(prefix,enabled)=>{
       const banner=document.getElementById(`${prefix}-site-status-banner`);
@@ -6721,9 +7253,9 @@ function ouvrirPropositionVillage(){
 
 async function playerApi(path, options = {}) {
   const token = await getAdminBearerToken();
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${window.API_BASE}${path}`, {
     ...options,
-    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json', ...(options.headers || {}) }
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', 'Content-Type': 'application/json', 'X-Admin-Test-Mode': (window.adminAccessGranted===true && window.adminCurrentRole==='admin' && localStorage.getItem("modeTestAventure")==="true") ? 'true' : 'false', ...(options.headers || {}) }
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
@@ -6768,42 +7300,72 @@ async function openPlayerAdventure(id, testerMode = false) {
     ]);
     document.getElementById('player-adventure-title').textContent = data.adventure.title;
     document.getElementById('player-adventure-progress').textContent = `⭐ ${progress.stars_earned} / ${progress.total_stars} étoiles · ${progress.validated_steps} / ${progress.total_steps} étapes validées`;
-    if(testerMode && progress.completed){
-      try{
-        const timerResult=await profileApi("/api/testers/timer/finish",{method:"POST",body:JSON.stringify({adventure_id:id})});
-        const report=timerResult.report||timerResult.session?.report_snapshot;
-        const reportField=document.getElementById("tester-level-review-report");
-        if(report && reportField && !reportField.value.trim()) reportField.value=testerAutomaticReport(report);
-        const reportNote=document.createElement("p");reportNote.style.cssText="padding:11px;margin:10px 0;background:#f1ead6;border-left:3px solid #d7ad45;border-radius:7px;line-height:1.5";
-        reportNote.textContent=report?`⏱️ Test terminé en ${formatTesterDuration(report.duration_seconds)}. Le rapport automatique est prêt dans ton espace testeur.`:"Ton parcours est terminé. Tu peux préparer ton bilan dans ton espace testeur.";
-        document.getElementById("player-adventure-progress").after(reportNote);
-      }catch(timerError){
-        const timerNote=document.createElement("p");timerNote.style.cssText="color:#8a4b22;font-size:13px";
-        timerNote.textContent=timerError.message||"Le rapport automatique n’a pas pu être enregistré.";
-        document.getElementById("player-adventure-progress").after(timerNote);
-      }
-    }
-    stepsBox.innerHTML = '';
-    data.steps.forEach(step => {
-      const article = document.createElement('article'); article.className = 'feature'; article.style.margin = '12px 0';
+    stepsBox.replaceChildren();
+    const steps = Array.isArray(data.steps) ? data.steps : [];
+    steps.forEach(step => {
+      const article = document.createElement('article'); article.className = 'feature'; article.style.cssText = 'margin:12px 0;padding:16px;border:1px solid #dfc783;border-radius:14px;background:#fffaf0';
       const heading = document.createElement('h4'); heading.textContent = `Étape ${step.step_number} — ${step.place_name}`; article.appendChild(heading);
-      const state = document.createElement('p'); state.textContent = step.validated ? '✅ Arrivée validée' : '📍 Rends-toi sur place pour découvrir l’énigme.'; article.appendChild(state);
-      if (step.validated) {
-        const riddle = document.createElement('p'); riddle.textContent = step.riddle || 'Aucune énigme renseignée.'; article.appendChild(riddle);
-        if (step.hint) { const hint = document.createElement('p'); hint.textContent = `Indice : ${step.hint}`; article.appendChild(hint); }
-      } else {
-        const button = document.createElement('button'); button.type = 'button'; button.className = 'small-btn'; button.textContent = '📍 Valider mon arrivée';
-        button.addEventListener('click', () => validatePlayerGps(id, step.id)); article.appendChild(button);
+      if(step.photo_url && (step.show_target || step.show_riddle)){const stepPhoto=document.createElement('img');stepPhoto.src=step.photo_url;stepPhoto.alt='Photo du lieu à observer';stepPhoto.loading='lazy';stepPhoto.style.cssText='width:100%;max-height:260px;object-fit:cover;border-radius:12px;margin:8px 0';article.appendChild(stepPhoto);}
+      if (!step.unlocked) {
+        const locked = document.createElement('p'); locked.textContent = '🔒 Ce lieu sera débloqué après la bonne réponse à l’énigme précédente.'; article.appendChild(locked);
+      } else if (step.show_target) {
+        const note = document.createElement('p'); note.textContent = step.step_number === 1 ? '📍 Point de départ : rends-toi à ce lieu et valide ton arrivée pour découvrir la première énigme.' : '🧭 Bravo ! Le prochain lieu est débloqué. Rends-toi sur place pour ouvrir la prochaine énigme.'; article.appendChild(note);
+        if (step.latitude != null && step.longitude != null) {
+          const map = document.createElement('iframe'); map.title = `Carte pour rejoindre ${step.place_name}`; map.loading = 'lazy'; map.width = '100%'; map.height = '230'; map.style.cssText = 'border:0;border-radius:12px;margin:8px 0';
+          const lat = Number(step.latitude), lon = Number(step.longitude);
+          map.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lon-0.004}%2C${lat-0.003}%2C${lon+0.004}%2C${lat+0.003}&layer=mapnik&marker=${lat}%2C${lon}`;
+          article.appendChild(map);
+          const mapLink = document.createElement('a'); mapLink.href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=18/${lat}/${lon}`; mapLink.target = '_blank'; mapLink.rel = 'noopener noreferrer'; mapLink.textContent = 'Ouvrir l’itinéraire sur la carte ↗'; mapLink.style.cssText = 'display:inline-block;margin:4px 0 10px;color:#12613e;font-weight:700'; article.appendChild(mapLink);
+        } else {
+          const missing = document.createElement('p'); missing.textContent = '⚠️ Le point GPS de ce lieu n’a pas encore été renseigné par l’administration.'; article.appendChild(missing);
+        }
+        const gps = document.createElement('button'); gps.type = 'button'; gps.className = 'small-btn'; gps.textContent = '📍 Valider ma position'; gps.addEventListener('click', () => validatePlayerGps(id, step.id)); article.appendChild(gps);
+        if(window.adminAccessGranted===true && window.adminCurrentRole==='admin' && localStorage.getItem("modeTestAventure")==="true") {
+          const testGps=document.createElement('button'); testGps.type='button'; testGps.className='small-btn'; testGps.style.cssText='margin-left:8px;background:#fff2cf;border-color:#c99a32;color:#65480b'; testGps.textContent='🧪 Simuler l’arrivée (admin)';
+          testGps.addEventListener('click',async()=>{testGps.disabled=true;testGps.textContent='Simulation…';try{await playerApi(`/api/admin/adventures/${id}/steps/${step.id}/simulate-gps`,{method:'POST',body:JSON.stringify({})});await openPlayerAdventure(id,window.currentAdventureIsTester);}catch(error){alert(error.message||'Impossible de simuler cette arrivée.');testGps.disabled=false;testGps.textContent='🧪 Simuler l’arrivée (admin)';}});
+          article.appendChild(testGps);
+        }
+      } else if (step.show_riddle) {
+        const arrived = document.createElement('p'); arrived.textContent = '✅ Arrivée confirmée ! Voici ton énigme :'; article.appendChild(arrived);
+        const riddle = document.createElement('p'); riddle.textContent = step.riddle || 'Aucune énigme renseignée pour cette étape.'; riddle.style.cssText = 'font-size:16px;font-weight:700;line-height:1.5'; article.appendChild(riddle);
+        if (step.hint) { const hint = document.createElement('p'); hint.textContent = `💡 Indice : ${step.hint}`; article.appendChild(hint); }
+        if (step.answered) {
+          const done = document.createElement('p'); done.textContent = '🌟 Bravo, bonne réponse ! Voici votre nouvel indice pour poursuivre l’aventure :'; done.style.cssText = 'color:#12613e;font-weight:700'; article.appendChild(done);
+          if(step.next_hint){const nextHint=document.createElement('p');nextHint.textContent='🔎 '+step.next_hint;nextHint.style.cssText='padding:12px;background:#fff4d8;border-left:4px solid #c99a32;border-radius:8px;font-weight:600';article.appendChild(nextHint);}
+        } else {
+          const label = document.createElement('label'); label.textContent = 'Ta réponse'; label.style.cssText = 'display:block;font-weight:700;margin:10px 0 5px'; article.appendChild(label);
+          const input = document.createElement('input'); input.type = 'text'; input.placeholder = 'Écris ta réponse ici…'; input.autocomplete = 'off'; input.style.cssText = 'width:100%;padding:12px;border:1px solid #d8c38a;border-radius:9px'; article.appendChild(input);
+          const answerBtn = document.createElement('button'); answerBtn.type = 'button'; answerBtn.className = 'small-btn'; answerBtn.textContent = 'Valider ma réponse'; answerBtn.style.marginTop = '8px';
+          const feedback = document.createElement('p'); feedback.setAttribute('role','status'); feedback.style.cssText = 'margin:8px 0 0;font-weight:700';
+          answerBtn.addEventListener('click', async () => {
+            answerBtn.disabled = true; feedback.textContent = 'Vérification de ta réponse…';
+            try {
+              const result = await playerApi(`/api/adventures/${id}/steps/${step.id}/answer`, { method:'POST', body:JSON.stringify({answer:input.value}) });
+              feedback.textContent = result.message || 'Bonne réponse !'; feedback.style.color = '#12613e';
+              await openPlayerAdventure(id, window.currentAdventureIsTester);
+            } catch (error) { feedback.textContent = error.message || 'Réponse incorrecte. Réessaie.'; feedback.style.color = '#a33'; answerBtn.disabled = false; }
+          });
+          article.append(input, answerBtn, feedback);
+        }
       }
       stepsBox.appendChild(article);
     });
+    if (!steps.length) { const empty = document.createElement('p'); empty.textContent = 'Les étapes de cette aventure sont en préparation.'; stepsBox.appendChild(empty); }
+    if(testerMode && progress.completed){
+      try{
+        const timerResult=await profileApi('/api/testers/timer/finish',{method:'POST',body:JSON.stringify({adventure_id:id})});
+        const report=timerResult.report||timerResult.session?.report_snapshot;
+        const reportField=document.getElementById('tester-level-review-report');
+        if(report && reportField && !reportField.value.trim()) reportField.value=testerAutomaticReport(report);
+      }catch(timerError){ console.warn('Tester timer finish:',timerError.message); }
+    }
     list.style.display = 'none'; detail.style.display = 'block'; status.textContent = '';
   } catch (error) { status.textContent = error.message || 'Impossible d’ouvrir cette aventure.'; }
 }
 
 async function validatePlayerGps(adventureId, stepId) {
   if (!navigator.geolocation) { alert('La géolocalisation n’est pas disponible sur cet appareil.'); return; }
-  const button = [...document.querySelectorAll('#player-adventure-steps button')].find(b => b.textContent.includes('Valider mon arrivée'));
+  const button = [...document.querySelectorAll('#player-adventure-steps button')].find(b => b.textContent.includes('Valider ma position'));
   if (button) { button.disabled = true; button.textContent = 'Localisation en cours…'; }
   navigator.geolocation.getCurrentPosition(async position => {
     try {
@@ -6811,10 +7373,10 @@ async function validatePlayerGps(adventureId, stepId) {
         method: 'POST', body: JSON.stringify({ latitude: position.coords.latitude, longitude: position.coords.longitude, accuracy: position.coords.accuracy })
       });
       await openPlayerAdventure(adventureId, window.currentAdventureIsTester);
-    } catch (error) { alert(error.message || 'La validation GPS a échoué.'); if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; } }
+    } catch (error) { alert(error.message || 'La validation GPS a échoué.'); if (button) { button.disabled = false; button.textContent = '📍 Valider ma position'; } }
   }, error => {
     alert(error.code === 1 ? 'Autorise la géolocalisation pour valider ton arrivée.' : 'Position GPS indisponible. Réessaie dehors.');
-    if (button) { button.disabled = false; button.textContent = '📍 Valider mon arrivée'; }
+    if (button) { button.disabled = false; button.textContent = '📍 Valider ma position'; }
   }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
 }
 
@@ -6848,6 +7410,15 @@ function showDashSection(id){
   // En administration, le menu explorateur latéral est masqué et la navigation admin passe en haut.
   const dashboard = document.getElementById("dashboard");
   if(dashboard) dashboard.classList.toggle("admin-mode", id === "dash-admin-info");
+  // L'espace testeur est un enfant direct de #dashboard (pas de .content) :
+  // on le masque explicitement lorsque l'administration est ouverte.
+  if(id === "dash-admin-info"){
+    const testerSpace = document.getElementById("dash-tester-space");
+    if(testerSpace){
+      testerSpace.classList.add("hidden");
+      testerSpace.style.display = "none";
+    }
+  }
 
   // L'administration est déplacée au début de la zone de contenu au moment
   // de son ouverture. Elle ne reste donc plus après toutes les rubriques joueur.
@@ -8508,7 +9079,7 @@ window.loadAdminDashboardOverview = async function(){
 
   const pendingTesters=applications.filter(x=>x.status==="pending");
   const pendingVillages=villages.filter(x=>["pending_confirmation","en_attente","a_valider"].includes(String(x.status||"").toLowerCase()));
-  const pendingAdventures=adventures.filter(x=>["a_valider","en_attente","pending","pending_validation"].includes(String(x.status||"").toLowerCase()) || (x.is_validated===false && x.status!=="en_creation"));
+  const pendingAdventures=adventures.filter(x=>["a_valider","en_attente","pending","pending_validation"].includes(String(x.status||"").toLowerCase()) || (x.is_validated===false && x.status!=="brouillon"));
   const pendingSupport=supportRequests.filter(x=>["en_attente","pending","nouveau"].includes(String(x.status||"").toLowerCase()));
   const pendingTotal=pendingTesters.length+pendingVillages.length+pendingAdventures.length+pendingSupport.length;
   put("dash-total-pending",pendingTotal);
@@ -8521,12 +9092,12 @@ window.loadAdminDashboardOverview = async function(){
 
   // Aventures : répartition par statut réel retourné par l'API.
   const adventureGroups=[
-    {key:"en_ligne",label:"Publiées",color:"#20a65b",icon:"🟢"},
+    {key:"publie",label:"Publiées",color:"#20a65b",icon:"🟢"},
     {key:"en_travaux",label:"En travaux",color:"#4b8ee8",icon:"🔵"},
     {key:"a_valider",label:"À valider",color:"#f0b323",icon:"🟡"},
-    {key:"suspendue",label:"Suspendues",color:"#e95861",icon:"🔴"}
+    {key:"suspendu",label:"Suspendues",color:"#e95861",icon:"🔴"}
   ];
-  const adventureCounts=adventureGroups.map(g=>({...g,count:adventures.filter(a=>String(a.status||"").toLowerCase()===g.key || (g.key==="en_ligne" && a.is_published===true)).length}));
+  const adventureCounts=adventureGroups.map(g=>({...g,count:adventures.filter(a=>String(a.status||"").toLowerCase()===g.key || (g.key==="publie" && a.is_published===true)).length}));
   const knownAdventureCount=adventureCounts.reduce((n,g)=>n+g.count,0);
   const otherAdventureCount=Math.max(0,adventures.length-knownAdventureCount);
   if(otherAdventureCount)adventureCounts.push({label:"Autres statuts",count:otherAdventureCount,color:"#9b9b8d",icon:"⚪"});
@@ -8549,7 +9120,7 @@ window.loadAdminDashboardOverview = async function(){
     {keys:["available","en_ligne"],label:"Actifs",icon:"✅"},
     {keys:["pending_confirmation","en_attente","a_valider"],label:"En attente",icon:"🕒"},
     {keys:["preparing","en_travaux"],label:"En préparation",icon:"🔧"},
-    {keys:["inactive","suspendu","suspendue"],label:"Suspendus / inactifs",icon:"⏸️"}
+    {keys:["inactive","suspendu"],label:"Suspendus / inactifs",icon:"⏸️"}
   ];
   const villageList=document.getElementById("dash-village-status-list");
   if(villageList){
