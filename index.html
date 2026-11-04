@@ -4976,7 +4976,7 @@ async function adminApi(path, options = {}) {
   if (!response.ok) throw new Error(data.error || `Erreur serveur (${response.status}).`);
   return data;
 }
-
+window.adminApi = adminApi;
 window.checkAdminAccess = async function(){
   try{
     const staffInfo = await adminApi("/api/admin/me");
@@ -8488,7 +8488,7 @@ window.loadAdminDashboardOverview = async function(){
   const put=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value??"—");};
   // Réutilise exactement le client sécurisé déjà utilisé par l'administration.
   // Il récupère le jeton Neon, ajoute les en-têtes et gère les erreurs comme les autres pages.
-  const api=async(path)=>await adminApi(path);
+  const api=async(path)=>await window.adminApi(path);
   const [analyticsR,playersR,teamR,villagesR,adventuresR,testersR,supportR]=await Promise.allSettled([
     api("/api/admin/analytics"),api("/api/admin/players"),api("/api/admin/team"),
     api("/api/admin/villages"),api("/api/admin/adventures"),api("/api/admin/testers"),api("/api/admin/support")
