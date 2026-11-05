@@ -13382,6 +13382,7 @@
                             COMMUNAUTÉ <span class="nav-arrow">⌄</span>
                         </summary>
                         <div class="nav-submenu">
+                            <button class="nav-btn" onclick="showDashSection('dash-community')">🌍 &nbsp; Espace communauté</button>
                             <button class="nav-btn" onclick="showDashSection('dash-testers')">🧪 &nbsp; Devenir testeur</button>
                             <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
                             <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
@@ -13922,6 +13923,34 @@
                     </article>
                 </div>
                 <p class="puzzle-note">Ta progression est personnelle et liée à ton compte sur cet appareil.</p>
+            </section>
+            <section class="dash-section hidden" id="dash-community">
+                <div class="mailbox-hero">
+                    <div>
+                        <p class="eyebrow">TRÉSORS DE NOS VILLAGES</p>
+                        <h2>🌍 Espace communauté</h2>
+                        <p>Un lieu privé pour échanger, parler de nos villages et partager nos découvertes.</p>
+                    </div>
+                    <span class="mailbox-hero-icon">🧭</span>
+                </div>
+                <div class="feature" style="padding:18px;margin:16px 0">
+                    <h3 style="margin-top:0">Bienvenue dans la communauté des explorateurs</h3>
+                    <p>La communauté est réservée aux membres connectés. Tu peux consulter les rubriques dès maintenant. Pour publier, répondre ou partager des photos, ton compte devra d’abord être validé par l’administration.</p>
+                    <div id="community-membership-status" class="tester-status" role="status" aria-live="polite">Vérification de ton accès…</div>
+                    <button type="button" class="primary-btn" id="community-request-access" onclick="requestCommunityAccess()" hidden>Demander l’autorisation de participer</button>
+                </div>
+                <div class="explorer-profile-heading" style="margin-top:24px">
+                    <div><p class="eyebrow">PREMIÈRE ÉTAPE</p><h2>💬 Les rubriques du forum</h2><p>Choisis le thème qui t’intéresse. Les discussions seront ouvertes dans la prochaine phase.</p></div>
+                </div>
+                <div id="community-category-list" class="explorer-profile-grid" aria-live="polite">
+                    <p class="mailbox-empty">Chargement des rubriques…</p>
+                </div>
+                <section id="community-admin-panel" class="feature" style="padding:18px;margin-top:24px" hidden>
+                    <h3>🛡️ Validation des membres de la communauté</h3>
+                    <p>Seuls les membres validés ici pourront publier, répondre et partager des photos lorsque ces fonctions seront activées.</p>
+                    <div id="community-admin-members" aria-live="polite">Chargement des demandes…</div>
+                </section>
+                <p id="community-status" class="status" role="status" aria-live="polite"></p>
             </section>
             <section class="dash-section hidden" id="dash-testers">
                 <h3>🧪 Devenir testeur</h3>
@@ -22424,11 +22453,8 @@
             const testerHomeStatus = document.getElementById("tester-home-status");
             const testerHomeButton = document.getElementById("tester-home-button");
             const isAcceptedTester = app?.status === "accepted";
-            window.isAcceptedTester = isAcceptedTester;
-            if (testerNav) {
-                testerNav.hidden = !isAcceptedTester;
-                testerNav.style.setProperty("display", isAcceptedTester ? "" : "none", "important");
-            }
+            if (testerNav)
+                testerNav.hidden = !(isAcceptedTester || adminAccessGranted);
             if (testerHome)
                 testerHome.hidden = isAcceptedTester;
             if (testerHomeStatus && app?.status === "pending")
@@ -26262,13 +26288,8 @@
             adminNav.textContent = isModerator ? "🛡️  Mon espace modérateur" : "⚙  Administration";
             adminNav.title = isModerator ? "Espace réservé aux missions validées par l’administration" : "Réservé aux administrateurs autorisés";
         }
-        // L'espace personnel testeur n'est jamais accordé par le seul statut admin.
-        // Il reste visible uniquement si la candidature du compte est acceptée.
-        if (testerNav) {
-            const testerVisible = window.isAcceptedTester === true;
-            testerNav.hidden = !testerVisible;
-            testerNav.style.setProperty("display", testerVisible ? "" : "none", "important");
-        }
+        if (testerNav)
+            testerNav.hidden = !isAdmin;
         // Le CSS du tableau de bord force certains boutons en display:flex!important.
         // On applique donc aussi display:none!important pour que l'attribut hidden soit respecté.
         document.querySelectorAll(".admin-nav-item").forEach(button => {
@@ -26669,16 +26690,102 @@
         document.querySelectorAll("#dash-rules .rules-content").forEach(panel => panel.classList.toggle("active", panel.id === id));
         document.querySelectorAll("#dash-rules .rules-tab").forEach(tab => tab.classList.toggle("active", tab === button));
     }
-    function showDashSection(id, options={}) {
-        if (id === "dash-tester-space" && window.isAcceptedTester !== true) {
-            const testerNav = document.getElementById("tester-space-nav");
-            if (testerNav) {
-                testerNav.hidden = true;
-                testerNav.style.setProperty("display", "none", "important");
+    window.loadCommunityHome = async function() {
+        const status=document.getElementById('community-membership-status');
+        const list=document.getElementById('community-category-list');
+        const requestButton=document.getElementById('community-request-access');
+        if (!status || !list) return;
+        status.textContent='Chargement de ton espace communautaire…';
+        if (requestButton) requestButton.hidden=true;
+        try {
+            const data=await profileApi('/api/community/bootstrap');
+            const membership=data.membership;
+            if (data.can_publish) {
+                status.textContent='✅ Ton compte est validé par l’administration. Tu pourras publier et participer aux discussions dès leur ouverture.';
+            } else if (membership?.status==='pending') {
+                status.textContent='⏳ Ta demande de participation est en attente de validation par l’administration. Tu peux déjà consulter les rubriques.';
+            } else if (membership?.status==='rejected' || membership?.status==='suspended') {
+                status.textContent='Ton autorisation de participation n’est pas active. Tu peux consulter les rubriques, mais pas publier.';
+                if (requestButton) { requestButton.hidden=false; requestButton.textContent='Demander un nouvel examen'; }
+            } else {
+                status.textContent='Tu peux consulter les rubriques. Demande une validation pour pouvoir publier et répondre.';
+                if (requestButton) requestButton.hidden=false;
             }
-            alert("Cet espace est réservé aux testeurs dont la candidature a été acceptée.");
-            return;
+            list.replaceChildren();
+            (data.categories||[]).forEach(category=>{
+                const card=document.createElement('article');
+                card.className='explorer-card';
+                card.style.cssText='padding:18px;min-height:130px';
+                const heading=document.createElement('h3');
+                heading.textContent=`${category.icon||'💬'} ${category.title}`;
+                const desc=document.createElement('p');
+                desc.textContent=category.description||'';
+                const label=document.createElement('small');
+                label.textContent='Rubrique du forum · Discussions bientôt disponibles';
+                card.append(heading,desc,label);
+                list.append(card);
+            });
+            if (!(data.categories||[]).length) list.textContent='Les rubriques seront bientôt disponibles.';
+            // Le panneau de validation n'est rendu que si le serveur confirme les droits administrateur.
+            const adminPanel=document.getElementById('community-admin-panel');
+            const adminList=document.getElementById('community-admin-members');
+            if (adminPanel && adminList) {
+                try {
+                    const adminData=await adminApi('/api/admin/community/members');
+                    adminPanel.hidden=false;
+                    adminList.replaceChildren();
+                    const pending=(adminData.members||[]).filter(member=>member.status==='pending');
+                    if (!pending.length) { adminList.textContent='Aucune demande de validation en attente.'; }
+                    pending.forEach(member=>{
+                        const row=document.createElement('div');
+                        row.style.cssText='display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid #e7dcc5';
+                        const identity=document.createElement('div');
+                        const name=document.createElement('strong');
+                        name.textContent=member.display_name||'Membre';
+                        const email=document.createElement('small');
+                        email.textContent=member.email;
+                        email.style.display='block';
+                        identity.append(name,email);
+                        const actions=document.createElement('div');
+                        actions.style.cssText='display:flex;gap:8px';
+                        const approve=document.createElement('button');
+                        approve.type='button'; approve.className='primary-btn'; approve.textContent='Valider';
+                        approve.addEventListener('click',async()=>{
+                            approve.disabled=true;
+                            try { await adminApi('/api/admin/community/members/'+encodeURIComponent(member.user_id),{method:'PATCH',body:JSON.stringify({status:'approved'})}); window.loadCommunityHome(); }
+                            catch(err) { approve.disabled=false; alert(err.message||'Validation impossible.'); }
+                        });
+                        const reject=document.createElement('button');
+                        reject.type='button'; reject.className='small-btn'; reject.textContent='Refuser';
+                        reject.addEventListener('click',async()=>{
+                            reject.disabled=true;
+                            try { await adminApi('/api/admin/community/members/'+encodeURIComponent(member.user_id),{method:'PATCH',body:JSON.stringify({status:'rejected'})}); window.loadCommunityHome(); }
+                            catch(err) { reject.disabled=false; alert(err.message||'Action impossible.'); }
+                        });
+                        actions.append(approve,reject); row.append(identity,actions); adminList.append(row);
+                    });
+                } catch(_notAdmin) { adminPanel.hidden=true; }
+            }
+        } catch(error) {
+            status.textContent=error.message||'Impossible de charger la communauté.';
+            list.replaceChildren();
         }
+    };
+
+    window.requestCommunityAccess = async function() {
+        const status=document.getElementById('community-membership-status');
+        const button=document.getElementById('community-request-access');
+        if (button) button.disabled=true;
+        try {
+            await profileApi('/api/community/request-access',{method:'POST',body:JSON.stringify({})});
+            if (status) status.textContent='✅ Ta demande a bien été envoyée. L’administration doit maintenant la valider.';
+            if (button) button.hidden=true;
+        } catch(error) {
+            if (status) status.textContent=error.message||'Impossible d’envoyer ta demande.';
+        } finally { if (button) button.disabled=false; }
+    };
+
+    function showDashSection(id, options={}) {
         // Ne jamais afficher l'espace admin avant confirmation du serveur.
         if (id === "dash-admin-info" && !adminAccessGranted) {
             const adminSection = document.getElementById("dash-admin-info");
@@ -26762,7 +26869,7 @@
         }
         // Masquer toutes les rubriques avant d’afficher celle qui a été choisie.
         // Cela évite que l’administration et l’aventure restent visibles ensemble.
-        const sections = ["dash-home", "dash-public-leaderboard", "dash-profile", "dash-mailbox", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges", "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-updates", "dash-town-contact", "dash-support", "dash-admin-info", "dash-game", "dash-admin-enigmes", "dash-admin-support"];
+        const sections = ["dash-home", "dash-public-leaderboard", "dash-profile", "dash-mailbox", "dash-community", "dash-testers", "dash-tester-space", "dash-adventures", "dash-village-map", "dash-puzzle-map", "dash-my-puzzle-progress", "dash-badges", "dash-stars", "dash-formulas", "dash-help", "dash-rules", "dash-news", "dash-updates", "dash-town-contact", "dash-support", "dash-admin-info", "dash-game", "dash-admin-enigmes", "dash-admin-support"];
         sections.forEach(function(sectionId) {
             const section = document.getElementById(sectionId);
             if (section) {
@@ -26795,6 +26902,8 @@
             window.loadExplorerProfile?.();
         if (id === "dash-badges")
             window.loadMyAwardedRewards?.();
+        if (id === "dash-community")
+            window.loadCommunityHome?.();
         if (id === "dash-testers")
             window.loadTesterApplication?.();
         if (id === "dash-tester-space")
