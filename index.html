@@ -13384,7 +13384,7 @@
                         <div class="nav-submenu">
                             <button class="nav-btn" onclick="showDashSection('dash-community')">🌍 &nbsp; Espace communauté</button>
                             <button class="nav-btn" onclick="showDashSection('dash-testers')">🧪 &nbsp; Devenir testeur</button>
-                            <button class="nav-btn" id="tester-space-nav" onclick="showDashSection('dash-tester-space')" hidden>🔐 &nbsp; Espace testeurs</button>
+                            <button class="nav-btn" id="tester-space-nav" onclick="openTesterSpaceIfAuthorized()" hidden>🔐 &nbsp; Espace testeurs</button>
                             <button class="nav-btn" onclick="ouvrirPropositionVillage()">✉️ &nbsp; Proposer mon village</button>
                         </div>
                     </details>
@@ -15186,6 +15186,7 @@
                                     <option value="support">Support des joueurs</option>
                                     <option value="testers">Demandes testeurs</option>
                                     <option value="feedback">Retours des testeurs</option>
+                                    <option value="community">Communauté (membres, publications et photos)</option>
                                     <option value="reviews">Validations de niveaux</option>
                                     <option value="partners">Mairies et partenaires</option>
                                 </select>
@@ -22512,8 +22513,11 @@
             const testerHomeStatus = document.getElementById("tester-home-status");
             const testerHomeButton = document.getElementById("tester-home-button");
             const isAcceptedTester = app?.status === "accepted";
+            // L'espace testeurs est strictement réservé aux comptes dont la candidature est acceptée.
+            // Les administrateurs gèrent les testeurs depuis leur panneau dédié, sans ouvrir cet espace personnel.
+            window.currentUserIsAcceptedTester = isAcceptedTester;
             if (testerNav)
-                testerNav.hidden = !(isAcceptedTester || adminAccessGranted);
+                testerNav.hidden = !isAcceptedTester;
             if (testerHome)
                 testerHome.hidden = isAcceptedTester;
             if (testerHomeStatus && app?.status === "pending")
@@ -22765,6 +22769,23 @@
                 );
         }
     }
+
+    // Vérification serveur obligatoire avant d'afficher l'espace personnel des testeurs.
+    // Le contrôle API reste la référence : masquer le bouton seul ne constitue pas une protection.
+    window.openTesterSpaceIfAuthorized = async function() {
+        const nav = document.getElementById("tester-space-nav");
+        try {
+            await profileApi("/api/testers/access");
+            window.currentUserIsAcceptedTester = true;
+            if (nav) nav.hidden = false;
+            showDashSection("dash-tester-space");
+        } catch (error) {
+            window.currentUserIsAcceptedTester = false;
+            if (nav) nav.hidden = true;
+            alert("Cet espace est réservé aux testeurs dont la candidature a été acceptée.");
+            showDashSection("dash-home");
+        }
+    };
 
     window.loadTesterSpace = async function() {
         const status = document.getElementById("tester-space-status");
@@ -28264,7 +28285,7 @@
             list.innerHTML = '<p class="admin-notification-empty">Tout est à jour. Aucune demande en attente. ✓</p>';
         } else {
             list.innerHTML = pending.slice(0, 8).map(item => {
-                const category = ["support", "testers", "partners", "feedback", "reviews", "registrations"].includes(item.category) ? item.category : "all";
+                const category = ["support", "testers", "partners", "feedback", "reviews", "registrations", "community"].includes(item.category) ? item.category : "all";
                 return `<button type="button" class="admin-notification-row" onclick="window.openAdminNotification('${category}')">
         <strong>${mailboxEscape(item.label || "Nouvelle demande")} · ${mailboxEscape(item.title || "À traiter")}</strong>
         <small>${mailboxEscape(item.sender || "Membre")} · ${mailboxEscape(mailboxDate(item.date))}</small>
@@ -28297,6 +28318,10 @@
         }
         if (category === "registrations") {
             await window.adminOpenPlayers?.();
+            return;
+        }
+        if (category === "community") {
+            await window.adminOpenCommunity?.("pending");
             return;
         }
         await window.adminOpenInbox?.();
@@ -28426,6 +28451,26 @@
             date: x.created_at,
             status: x.status || "en_attente",
             detail: "Demande de validation d'un parcours"
+        })), load("Communauté — publications et photos", "/api/admin/community/content?status=pending", "posts", "community", x => ({
+            category: "community",
+            label: "Communauté · publication à valider",
+            id: x.id,
+            title: (x.author_name || "Explorateur") + (x.photo_url ? " · Photo" : " · Publication"),
+            body: x.body || "Une photo ou publication attend ta validation.",
+            sender: x.author_name || "Membre",
+            date: x.created_at,
+            status: x.status || "pending",
+            detail: "Publication communautaire à modérer"
+        })), load("Communauté — demandes d'accès", "/api/admin/community/members", "members", "community", x => ({
+            category: "community",
+            label: "Communauté · demande d'accès",
+            id: x.user_id,
+            title: x.display_name || "Demande d'accès à la communauté",
+            body: "Un membre souhaite rejoindre la communauté des explorateurs.",
+            sender: x.email || "Membre",
+            date: x.requested_at,
+            status: x.status || "pending",
+            detail: "Demande d'accès à examiner"
         }))]);
         buckets.sort( (a, b) => new Date(b.date || 0) - new Date(a.date || 0));
         const pendingItems = buckets.filter(x => !["repondu", "ferme", "accepte", "refuse", "traite", "clos"].includes(String(x.status).toLowerCase()));
@@ -28443,7 +28488,7 @@
     <div><div class="admin-inbox-meta"><span class="admin-inbox-tag">${mailboxEscape(item.label)}</span><span>${mailboxEscape(item.detail)}</span><span>${mailboxEscape(mailboxDate(item.date))}</span></div>
     <h4>${mailboxEscape(item.title)}</h4><small>Expéditeur : ${mailboxEscape(item.sender)}</small>
     <p>${mailboxEscape(item.body)}</p><small>Statut : ${mailboxEscape(item.status)}</small></div>
-    <div><button type="button" class="admin-secondary-btn" onclick="${item.category === "support" ? "adminOpenSupport()" : item.category === "testers" ? "adminOpenTesters()" : "adminOpenCommunication()"}">Ouvrir la rubrique</button></div>
+    <div><button type="button" class="admin-secondary-btn" onclick="${item.category === "support" ? "adminOpenSupport()" : item.category === "testers" ? "adminOpenTesters()" : item.category === "community" ? "adminOpenCommunity('pending')" : "adminOpenCommunication()"}">Ouvrir la rubrique</button></div>
     </article>`).join("");
         if (failures.length)
             list.insertAdjacentHTML("beforeend", `<div class="admin-inbox-empty">${failures.map(mailboxEscape).join("<br>")}</div>`);
