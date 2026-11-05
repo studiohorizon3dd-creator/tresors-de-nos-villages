@@ -13455,6 +13455,17 @@
                                 Prêt(e) pour une nouvelle aventure &nbsp;?<br>Retrouve ta progression, tes aventures et tes récompenses ici&nbsp;!
                             </p>
                         </div>
+                        <section class="explorer-countdown" id="explorer-countdown" hidden aria-live="polite">
+                            <p class="explorer-countdown-kicker">✨ PROCHAINE NOUVEAUTÉ</p>
+                            <h3 id="explorer-countdown-title">Une nouveauté arrive !</h3>
+                            <div class="explorer-countdown-units" id="explorer-countdown-units">
+                                <div><strong id="countdown-days">00</strong><span>JOURS</span></div>
+                                <div><strong id="countdown-hours">00</strong><span>HEURES</span></div>
+                                <div><strong id="countdown-minutes">00</strong><span>MINUTES</span></div>
+                                <div><strong id="countdown-seconds">00</strong><span>SECONDES</span></div>
+                            </div>
+                            <p class="explorer-countdown-finished" id="explorer-countdown-finished" hidden></p>
+                        </section>
                         <div class="explorer-welcome-user">
                             <span class="explorer-user-medal">♙</span>
                             <strong>
@@ -17826,6 +17837,34 @@
                                     text-shadow: 0 2px 4px #0008
                                 }
 
+                                #dashboard #dash-home .explorer-countdown {
+                                    flex: 1 1 390px;
+                                    max-width: 520px;
+                                    min-width: 280px;
+                                    padding: 13px 18px 14px;
+                                    border: 2px solid #e2bd62;
+                                    border-radius: 18px;
+                                    background: linear-gradient(145deg,rgba(255,249,232,.97),rgba(244,224,174,.96));
+                                    color: #17382b;
+                                    text-align: center;
+                                    box-shadow: 0 5px 18px #0004;
+                                }
+                                #dashboard #dash-home .explorer-countdown[hidden] { display: none !important; }
+                                #dashboard #dash-home .explorer-countdown-kicker { margin: 0 0 4px; color: #8b641c; font: bold 10px Georgia,serif; letter-spacing: 1.6px; }
+                                #dashboard #dash-home .explorer-countdown h3 { margin: 0 0 9px; color: #123b2b; font: bold clamp(16px,1.5vw,21px) Georgia,serif; }
+                                #dashboard #dash-home .explorer-countdown-units { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 7px; }
+                                #dashboard #dash-home .explorer-countdown-units div { display:flex; flex-direction:column; align-items:center; padding:7px 3px 5px; border-radius:10px; background:#0b432f; color:#fff5d9; }
+                                #dashboard #dash-home .explorer-countdown-units strong { font: bold clamp(20px,2vw,29px)/1 Georgia,serif; font-variant-numeric:tabular-nums; }
+                                #dashboard #dash-home .explorer-countdown-units span { margin-top:5px; font: bold 8px Arial,sans-serif; letter-spacing:.8px; }
+                                #dashboard #dash-home .explorer-countdown-finished { margin:9px 0 0; color:#0a603c; font:bold 14px Georgia,serif; }
+                                #dashboard #dash-home .explorer-countdown.is-finished .explorer-countdown-units { display:none; }
+                                @media (max-width: 760px) {
+                                    #dashboard #dash-home .explorer-welcome-hero { flex-wrap:wrap; }
+                                    #dashboard #dash-home .explorer-welcome-copy { flex:1 1 100%; }
+                                    #dashboard #dash-home .explorer-countdown { order:3; flex-basis:100%; max-width:none; }
+                                    #dashboard #dash-home .explorer-welcome-user { margin-left:auto; }
+                                }
+
                                 #dashboard #dash-home .explorer-welcome-user {
                                     position: relative;
                                     flex: 0 0 190px;
@@ -21164,6 +21203,14 @@
                                             <label class="site-status-check">
                                                 <input type="checkbox" id="site-status-notify-members">Afficher aussi le bandeau dans l’espace joueur
                                             </label>
+                                        </div>
+                                        <div class="site-status-panel" style="padding:12px;margin-top:12px;grid-column:1/-1">
+                                            <strong style="font-family:Georgia,serif">⏳ Compte à rebours des nouveautés</strong>
+                                            <label class="site-status-check"><input type="checkbox" id="site-countdown-enabled">Afficher le compte à rebours dans l’espace explorateur</label>
+                                            <label>Annonce / nouveauté <input type="text" id="site-countdown-title" maxlength="120" placeholder="Ex. : Un nouveau village arrive !"></label>
+                                            <label>Date et heure du jour J <input type="datetime-local" id="site-countdown-target"></label>
+                                            <label>Message à afficher une fois le compte terminé <input type="text" id="site-countdown-finished" maxlength="180" value="Ça y est ! La nouveauté est disponible !"></label>
+                                            <small>Le compte à rebours se termine automatiquement à la date choisie. Le message de disponibilité reste affiché jusqu’à ce que tu désactives ou modifies l’annonce.</small>
                                         </div>
                                     </div>
                                     <p class="site-status-help">La notification aux membres est une information affichée dans le site ; elle n’envoie pas d’e-mail ni de notification push. « Mise à jour » laisse les pages accessibles. Les autres statuts affichent également une information, sans bloquer automatiquement l’accès.</p>
@@ -25128,6 +25175,13 @@
             message: "Une intervention technique est en cours."
         }
     };
+    function toLocalDateTimeInput(value) {
+        if (!value) return "";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        const pad = n => String(n).padStart(2, "0");
+        return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
     function getSiteStatusForm() {
         const status = document.querySelector('input[name="site-status-value"]:checked')?.value || "online";
         return {
@@ -25137,7 +25191,11 @@
             notify_members: document.getElementById("site-status-notify-members")?.checked === true,
             schedule_enabled: document.getElementById("site-status-schedule")?.checked === true,
             starts_at: document.getElementById("site-status-start")?.value || null,
-            ends_at: document.getElementById("site-status-end")?.value || null
+            ends_at: document.getElementById("site-status-end")?.value || null,
+            countdown_enabled: document.getElementById("site-countdown-enabled")?.checked === true,
+            countdown_title: document.getElementById("site-countdown-title")?.value.trim() || "",
+            countdown_target_at: document.getElementById("site-countdown-target")?.value || null,
+            countdown_finished_message: document.getElementById("site-countdown-finished")?.value.trim() || "Ça y est ! La nouveauté est disponible !"
         };
     }
     function paintSiteStatusPreview(data=getSiteStatusForm()) {
@@ -25173,6 +25231,10 @@
             document.getElementById("site-status-schedule").checked = data.schedule_enabled === true;
             document.getElementById("site-status-start").value = data.starts_at ? new Date(data.starts_at).toISOString().slice(0, 16) : "";
             document.getElementById("site-status-end").value = data.ends_at ? new Date(data.ends_at).toISOString().slice(0, 16) : "";
+            document.getElementById("site-countdown-enabled").checked = data.countdown_enabled === true;
+            document.getElementById("site-countdown-title").value = data.countdown_title || "";
+            document.getElementById("site-countdown-target").value = toLocalDateTimeInput(data.countdown_target_at);
+            document.getElementById("site-countdown-finished").value = data.countdown_finished_message || "Ça y est ! La nouveauté est disponible !";
             const meta = SITE_STATUS_META[status] || SITE_STATUS_META.online;
             document.getElementById("site-status-current-label").textContent = meta.icon + " " + meta.title;
             paintSiteStatusPreview(data);
@@ -25197,6 +25259,10 @@
                 feedback.textContent = "La date de fin doit être après la date de début.";
             return;
         }
+        if (data.countdown_enabled && (!data.countdown_title || !data.countdown_target_at)) {
+            if (feedback) feedback.textContent = "Indique le nom de la nouveauté et la date/heure du jour J.";
+            return;
+        }
         const button = document.querySelector('#admin-site-status-view .site-status-admin-actions .save');
         if (button)
             button.disabled = true;
@@ -25205,7 +25271,10 @@
         try {
             const result = await adminApi("/api/admin/site-status", {
                 method: "PUT",
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    ...data,
+                    countdown_target_at: data.countdown_target_at ? new Date(data.countdown_target_at).toISOString() : null
+                })
             });
             const displayStatus = result.status === "online" ? "in_progress" : result.status;
             const meta = SITE_STATUS_META[displayStatus] || SITE_STATUS_META.online;
@@ -25226,6 +25295,45 @@
         }
     }
     ;
+    let explorerCountdownTimer = null;
+    function renderExplorerCountdown(data) {
+        const card = document.getElementById("explorer-countdown");
+        if (!card) return;
+        if (!data || data.countdown_enabled !== true || !data.countdown_target_at) {
+            card.hidden = true;
+            if (explorerCountdownTimer) clearInterval(explorerCountdownTimer);
+            explorerCountdownTimer = null;
+            return;
+        }
+        card.hidden = false;
+        card.classList.remove("is-finished");
+        const title = document.getElementById("explorer-countdown-title");
+        const finished = document.getElementById("explorer-countdown-finished");
+        if (title) title.textContent = data.countdown_title || "Une nouveauté arrive !";
+        if (explorerCountdownTimer) clearInterval(explorerCountdownTimer);
+        const target = new Date(data.countdown_target_at).getTime();
+        const tick = () => {
+            const remaining = target - Date.now();
+            if (remaining <= 0) {
+                ["days", "hours", "minutes", "seconds"].forEach(key => { const el = document.getElementById(`countdown-${key}`); if (el) el.textContent = "00"; });
+                card.classList.add("is-finished");
+                if (finished) { finished.hidden = false; finished.textContent = data.countdown_finished_message || "Ça y est ! La nouveauté est disponible !"; }
+                if (explorerCountdownTimer) clearInterval(explorerCountdownTimer);
+                explorerCountdownTimer = null;
+                return;
+            }
+            if (finished) finished.hidden = true;
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining % 86400000) / 3600000);
+            const minutes = Math.floor((remaining % 3600000) / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            const values = { days, hours, minutes, seconds };
+            Object.entries(values).forEach(([key, value]) => { const el = document.getElementById(`countdown-${key}`); if (el) el.textContent = String(value).padStart(2, "0"); });
+        };
+        tick();
+        if (target > Date.now()) explorerCountdownTimer = setInterval(tick, 1000);
+    }
+
     async function loadPublicSiteStatus() {
         try {
             const response = await fetch(`${API_BASE}/api/site-status`, {
@@ -25234,6 +25342,7 @@
             if (!response.ok)
                 throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
+            renderExplorerCountdown(data);
             const displayStatus = data.status === "online" ? "in_progress" : data.status;
             const meta = SITE_STATUS_META[displayStatus] || SITE_STATUS_META.online;
             const message = String(data.message || meta.message).replace(/\s+/g, " ").trim();
