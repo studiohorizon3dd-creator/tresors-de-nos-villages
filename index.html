@@ -13940,11 +13940,30 @@
                     <button type="button" class="primary-btn" id="community-request-access" onclick="requestCommunityAccess()" hidden>Demander l’autorisation de participer</button>
                 </div>
                 <div class="explorer-profile-heading" style="margin-top:24px">
-                    <div><p class="eyebrow">PREMIÈRE ÉTAPE</p><h2>💬 Les rubriques du forum</h2><p>Choisis le thème qui t’intéresse. Les discussions seront ouvertes dans la prochaine phase.</p></div>
+                    <div><p class="eyebrow">PREMIÈRE ÉTAPE</p><h2>💬 Les rubriques du forum</h2><p>Choisis une rubrique pour lire les discussions. Seuls les membres validés par l’administration peuvent créer un sujet ou répondre.</p></div>
                 </div>
                 <div id="community-category-list" class="explorer-profile-grid" aria-live="polite">
                     <p class="mailbox-empty">Chargement des rubriques…</p>
                 </div>
+                <section id="community-forum-panel" class="feature" style="padding:18px;margin-top:22px" hidden>
+                    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+                        <div><p class="eyebrow">FORUM DES EXPLORATEURS</p><h2 id="community-forum-title">💬 Discussions</h2></div>
+                        <button type="button" class="small-btn" onclick="loadCommunityTopics()">↻ Actualiser</button>
+                    </div>
+                    <div id="community-topic-create" hidden style="margin:14px 0;padding:14px;border:1px solid #e7dcc5;border-radius:12px">
+                        <h3>Créer une discussion</h3>
+                        <form id="community-topic-form">
+                            <label for="community-topic-title">Titre de la discussion</label>
+                            <input id="community-topic-title" maxlength="140" required placeholder="Ex. : Que visiter dans mon village ?" style="width:100%;margin:6px 0 12px;padding:12px;border:1px solid #cfc4ad;border-radius:8px">
+                            <label for="community-topic-body">Ton message</label>
+                            <textarea id="community-topic-body" maxlength="5000" required minlength="10" rows="4" placeholder="Présente ton sujet à la communauté…" style="width:100%;margin:6px 0 12px;padding:12px;border:1px solid #cfc4ad;border-radius:8px"></textarea>
+                            <button class="primary-btn" type="submit">Publier la discussion</button>
+                        </form>
+                    </div>
+                    <div id="community-topic-list" aria-live="polite">Choisis une rubrique pour afficher les discussions.</div>
+                    <div id="community-topic-detail" hidden></div>
+                    <p id="community-forum-status" class="status" role="status" aria-live="polite"></p>
+                </section>
                 <section id="community-admin-panel" class="feature" style="padding:18px;margin-top:24px" hidden>
                     <h3>🛡️ Validation des membres de la communauté</h3>
                     <p>Seuls les membres validés ici pourront publier, répondre et partager des photos lorsque ces fonctions seront activées.</p>
@@ -26720,9 +26739,11 @@
                 heading.textContent=`${category.icon||'💬'} ${category.title}`;
                 const desc=document.createElement('p');
                 desc.textContent=category.description||'';
-                const label=document.createElement('small');
-                label.textContent='Rubrique du forum · Discussions bientôt disponibles';
-                card.append(heading,desc,label);
+                const open=document.createElement('button');
+                open.type='button'; open.className='small-btn'; open.textContent='Ouvrir les discussions';
+                card.dataset.communityCategory=category.slug; card.dataset.categoryTitle=category.title;
+                open.addEventListener('click',()=>window.loadCommunityTopics(category.slug));
+                card.append(heading,desc,open);
                 list.append(card);
             });
             if (!(data.categories||[]).length) list.textContent='Les rubriques seront bientôt disponibles.';
@@ -26771,6 +26792,54 @@
             list.replaceChildren();
         }
     };
+
+    let activeCommunityCategory = '';
+    let activeCommunityTopic = null;
+    window.loadCommunityTopics = async function(category=activeCommunityCategory) {
+        const list=document.getElementById('community-topic-list'), detail=document.getElementById('community-topic-detail'), create=document.getElementById('community-topic-create'), title=document.getElementById('community-forum-title'), panel=document.getElementById('community-forum-panel'), status=document.getElementById('community-forum-status');
+        if(!list||!category)return;
+        activeCommunityCategory=category; activeCommunityTopic=null;
+        if(panel)panel.hidden=false;if(detail)detail.hidden=true;if(create)create.hidden=true;
+        const card=Array.from(document.querySelectorAll('#community-category-list [data-community-category]')).find(x=>x.dataset.communityCategory===category);
+        if(title)title.textContent='💬 '+(card?.dataset.categoryTitle||'Discussions');
+        if(list)list.textContent='Chargement des discussions…';if(status)status.textContent='';
+        try {
+            const data=await profileApi('/api/community/topics?category='+encodeURIComponent(category));
+            list.replaceChildren();
+            if(!data.topics?.length){list.textContent='Aucune discussion pour le moment. Sois le premier à lancer un sujet !';}
+            (data.topics||[]).forEach(topic=>{
+                const item=document.createElement('article');item.className='explorer-card';item.style.cssText='padding:14px;margin:10px 0;cursor:pointer';
+                const h=document.createElement('h3');h.textContent=topic.title;
+                const meta=document.createElement('small');meta.textContent=(topic.author_name||'Explorateur')+' · '+new Date(topic.created_at).toLocaleDateString('fr-FR')+' · '+topic.reply_count+' réponse(s)';
+                const preview=document.createElement('p');preview.textContent=topic.body.length>180?topic.body.slice(0,180)+'…':topic.body;
+                const open=document.createElement('button');open.type='button';open.className='small-btn';open.textContent='Lire la discussion';open.addEventListener('click',()=>openCommunityTopic(topic.id));
+                item.append(h,meta,preview,open);list.append(item);
+            });
+            const membershipText=document.getElementById('community-membership-status')?.textContent||'';
+            const canPost=membershipText.includes('validé par l’administration');
+            if(create)create.hidden=!canPost;
+        } catch(error){list.textContent=error.message||'Impossible de charger les discussions.';}
+    };
+    window.openCommunityTopic = async function(id) {
+        const list=document.getElementById('community-topic-list'),detail=document.getElementById('community-topic-detail'),create=document.getElementById('community-topic-create'),status=document.getElementById('community-forum-status');
+        if(!detail)return;detail.hidden=false;detail.replaceChildren();if(list)list.hidden=true;if(create)create.hidden=true;if(status)status.textContent='Chargement…';
+        try {
+            const data=await profileApi('/api/community/topics/'+encodeURIComponent(id));activeCommunityTopic=id;
+            const back=document.createElement('button');back.type='button';back.className='small-btn';back.textContent='← Retour aux discussions';back.addEventListener('click',()=>{if(list)list.hidden=false;detail.hidden=true;loadCommunityTopics();});
+            const h=document.createElement('h2');h.textContent=data.topic.title;
+            const meta=document.createElement('small');meta.textContent=(data.topic.author_name||'Explorateur')+' · '+new Date(data.topic.created_at).toLocaleString('fr-FR');
+            const body=document.createElement('p');body.style.whiteSpace='pre-wrap';body.textContent=data.topic.body;
+            detail.append(back,h,meta,body);
+            const divider=document.createElement('hr');detail.append(divider);
+            const rh=document.createElement('h3');rh.textContent='Réponses ('+(data.replies||[]).length+')';detail.append(rh);
+            (data.replies||[]).forEach(reply=>{const article=document.createElement('article');article.className='explorer-card';article.style.cssText='padding:12px;margin:10px 0';const who=document.createElement('strong');who.textContent=reply.author_name||'Explorateur';const when=document.createElement('small');when.textContent=' · '+new Date(reply.created_at).toLocaleString('fr-FR');const text=document.createElement('p');text.style.whiteSpace='pre-wrap';text.textContent=reply.body;article.append(who,when,text);detail.append(article);});
+            const membershipText=document.getElementById('community-membership-status')?.textContent||'';
+            if(membershipText.includes('validé par l’administration')&&!data.topic.is_locked){const form=document.createElement('form');form.style.marginTop='16px';const label=document.createElement('label');label.textContent='Ta réponse';const area=document.createElement('textarea');area.rows=3;area.maxLength=3000;area.required=true;area.placeholder='Écris ta réponse…';area.style.cssText='display:block;width:100%;margin:8px 0;padding:12px;border:1px solid #cfc4ad;border-radius:8px';const send=document.createElement('button');send.type='submit';send.className='primary-btn';send.textContent='Envoyer la réponse';form.append(label,area,send);form.addEventListener('submit',async e=>{e.preventDefault();send.disabled=true;try{await profileApi('/api/community/topics/'+id+'/replies',{method:'POST',body:JSON.stringify({body:area.value})});await openCommunityTopic(id);}catch(err){if(status)status.textContent=err.message||'Envoi impossible.';send.disabled=false;}});detail.append(form);}
+            if(status)status.textContent='';
+        }catch(error){if(status)status.textContent=error.message||'Impossible d’ouvrir cette discussion.';}
+    };
+    const communityTopicForm=document.getElementById('community-topic-form');
+    if(communityTopicForm&&!communityTopicForm.dataset.bound){communityTopicForm.dataset.bound='1';communityTopicForm.addEventListener('submit',async e=>{e.preventDefault();const title=document.getElementById('community-topic-title'),body=document.getElementById('community-topic-body'),status=document.getElementById('community-forum-status'),submit=communityTopicForm.querySelector('button[type="submit"]');submit.disabled=true;try{await profileApi('/api/community/topics',{method:'POST',body:JSON.stringify({category_slug:activeCommunityCategory,title:title.value,body:body.value})});communityTopicForm.reset();if(status)status.textContent='Discussion publiée !';await loadCommunityTopics(activeCommunityCategory);}catch(error){if(status)status.textContent=error.message||'Publication impossible.';}finally{submit.disabled=false;}});}
 
     window.requestCommunityAccess = async function() {
         const status=document.getElementById('community-membership-status');
