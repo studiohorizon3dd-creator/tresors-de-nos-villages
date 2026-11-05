@@ -5544,8 +5544,15 @@ window.toggleAdminGpsTestMode=function(){
 };
 window.adminPreviewAdventure=async function(id){
   if(window.adminAccessGranted!==true || window.adminCurrentRole!=="admin" || localStorage.getItem("modeTestAventure")!=="true") { alert("Active d’abord le mode test GPS réservé à l’administration."); return; }
-  showDashSection("dash-adventures");
-  await openPlayerAdventure(id,false);
+  // Empêche le chargement de la liste des aventures joueur pendant l'ouverture
+  // directe d'un parcours depuis l'administration.
+  window.adminPreviewOpeningAdventure = true;
+  try {
+    showDashSection("dash-adventures");
+    await openPlayerAdventure(id,false);
+  } finally {
+    window.adminPreviewOpeningAdventure = false;
+  }
 };
 async function adminOpenAdventures(){
   adminSetView("admin-adventures-view","Aventures & énigmes");
@@ -7476,7 +7483,7 @@ function showDashSection(id){
   if(id === "dash-news" || id === "dash-updates") window.loadPublicNews?.();
   if(id === "dash-notifications") window.loadMemberNotifications?.();
   if(id === "dash-mailbox") window.loadMemberMailbox?.();
-  if(id === "dash-adventures") window.loadPlayerAdventures?.();
+  if(id === "dash-adventures" && window.adminPreviewOpeningAdventure !== true) window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
   if(id === "dash-my-puzzle-progress") actualiserProgressionCartePersonnelle();
   if(id === "dash-profile") window.loadExplorerProfile?.();
