@@ -13117,6 +13117,7 @@
                     </button>
                     <div id="public-home-news-content" class="public-home-news-content">
                         <p id="public-home-news-status" class="public-home-news-status" role="status" aria-live="polite">Chargement des actualités…</p>
+                        <div id="public-home-countdowns" aria-live="polite"></div>
                         <div id="public-home-news-list" class="public-home-news-grid" aria-live="polite"></div>
                         <div id="public-home-news-more" class="public-home-news-more" hidden></div>
                         <button id="public-home-news-toggle" class="public-home-news-toggle" type="button" aria-expanded="false" hidden>
@@ -14872,6 +14873,7 @@
                 <h3>📰 Actualités</h3>
                 <p>Retrouve les annonces, les nouvelles du projet et les informations importantes de Trésors de nos Villages.</p>
                 <p id="public-news-status" class="status" role="status" aria-live="polite">Chargement des actualités…</p>
+                <div id="public-news-countdowns" aria-live="polite"></div>
                 <div id="public-news-list" aria-live="polite"></div>
             </section>
             <section class="dash-section hidden" id="dash-updates">
@@ -21553,6 +21555,34 @@
         <label>
             <input id="admin-news-publish" type="checkbox">Publier immédiatement
         </label>
+        <fieldset style="border:1px solid #d8dfd8;border-radius:12px;padding:14px;display:grid;gap:10px">
+            <legend style="padding:0 8px;font-weight:700">⏳ Compte à rebours (facultatif)</legend>
+            <label style="display:flex;gap:8px;align-items:center">
+                <input id="admin-news-countdown-enabled" type="checkbox"> Activer un compte à rebours pour cette actualité
+            </label>
+            <div id="admin-news-countdown-fields" style="display:none;gap:10px">
+                <label>Type
+                    <select id="admin-news-countdown-type" style="display:block;width:100%;padding:10px">
+                        <option value="village">Ouverture d’un village</option>
+                        <option value="niveau">Disponibilité d’un niveau</option>
+                        <option value="autre">Autre annonce</option>
+                    </select>
+                </label>
+                <label>Nom affiché
+                    <input id="admin-news-countdown-label" maxlength="180" placeholder="Ex. Ouverture de l’aventure à Humbert" style="display:block;width:100%;padding:10px">
+                </label>
+                <label>Date et heure
+                    <input id="admin-news-countdown-date" type="datetime-local" style="display:block;width:100%;padding:10px">
+                </label>
+                <label style="display:flex;gap:8px;align-items:center">
+                    <input id="admin-news-countdown-active" type="checkbox" checked> Afficher ce compte à rebours aux visiteurs
+                </label>
+                <label style="display:flex;gap:8px;align-items:center">
+                    <input id="admin-news-countdown-confirmed" type="checkbox"> Confirmer « Disponible maintenant » à la fin du compte à rebours
+                </label>
+            </div>
+            <small>Le compte à rebours sera visible sur l’accueil et dans les actualités. Tu peux le désactiver ou le supprimer en modifiant cette publication.</small>
+        </fieldset>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
             <button class="admin-secondary-btn" type="submit">Enregistrer la publication</button>
             <button class="admin-secondary-btn" type="button" onclick="adminNewsReset()">Nouvelle publication</button>
@@ -25500,7 +25530,11 @@
         document.getElementById('admin-news-form')?.reset();
         document.getElementById('admin-news-id').value = '';
         document.getElementById('admin-news-category').value = 'Actualité';
+        document.getElementById('admin-news-countdown-fields').style.display = 'none';
     }
+    document.getElementById('admin-news-countdown-enabled')?.addEventListener('change', event => {
+        document.getElementById('admin-news-countdown-fields').style.display = event.target.checked ? 'grid' : 'none';
+    });
     window.adminNewsReset = adminNewsReset;
     async function adminLoadNews() {
         const status = document.getElementById('admin-news-status')
@@ -25525,12 +25559,39 @@
                 edit.type = 'button';
                 edit.className = 'admin-secondary-btn';
                 edit.textContent = 'Modifier';
-                edit.addEventListener('click', () => {
+                edit.addEventListener('click', async () => {
                     document.getElementById('admin-news-id').value = item.id;
                     document.getElementById('admin-news-title').value = item.title;
                     document.getElementById('admin-news-category').value = ['En préparation', 'À venir', 'En développement', 'Disponible', 'Actualités', 'Prochainement', 'Actualité', 'Mise à jour', 'Attention', 'Urgent'].find(value => value.toLocaleLowerCase('fr') === String(item.category || '').trim().toLocaleLowerCase('fr')) || 'Actualité';
                     document.getElementById('admin-news-body').value = item.body;
                     document.getElementById('admin-news-publish').checked = !!item.is_published;
+                    const countdownEnabled = document.getElementById('admin-news-countdown-enabled');
+                    const countdownFields = document.getElementById('admin-news-countdown-fields');
+                    countdownEnabled.checked = false;
+                    countdownFields.style.display = 'none';
+                    document.getElementById('admin-news-countdown-confirmed').checked = false;
+                    document.getElementById('admin-news-countdown-active').checked = true;
+                    document.getElementById('admin-news-countdown-label').value = '';
+                    document.getElementById('admin-news-countdown-date').value = '';
+                    try {
+                        const countdownData = await adminApi(`/api/admin/news/${encodeURIComponent(item.id)}/countdown`);
+                        const countdown = countdownData.countdown;
+                        if (countdown) {
+                            countdownEnabled.checked = true;
+                            countdownFields.style.display = 'grid';
+                            document.getElementById('admin-news-countdown-active').checked = !!countdown.is_active;
+                            document.getElementById('admin-news-countdown-type').value = countdown.countdown_type || 'autre';
+                            document.getElementById('admin-news-countdown-label').value = countdown.label || '';
+                            const releaseDate = new Date(countdown.release_at);
+                            if (!Number.isNaN(releaseDate.getTime())) {
+                                const localDate = new Date(releaseDate.getTime() - releaseDate.getTimezoneOffset() * 60000);
+                                document.getElementById('admin-news-countdown-date').value = localDate.toISOString().slice(0, 16);
+                            }
+                            document.getElementById('admin-news-countdown-confirmed').checked = !!countdown.release_confirmed;
+                        }
+                    } catch (countdownError) {
+                        status.textContent = countdownError.message || 'Impossible de charger le compte à rebours.';
+                    }
                     document.getElementById('admin-news-form').scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
@@ -25598,13 +25659,39 @@
             is_published: document.getElementById('admin-news-publish').checked
         };
         try {
-            await adminApi(id ? `/api/admin/news/${encodeURIComponent(id)}` : '/api/admin/news', {
+            const countdownEnabledBeforeSave = document.getElementById('admin-news-countdown-enabled').checked;
+            if (countdownEnabledBeforeSave &&
+                (document.getElementById('admin-news-countdown-label').value.trim().length < 2 ||
+                 !document.getElementById('admin-news-countdown-date').value)) {
+                throw new Error('Pour activer le compte à rebours, indique un nom et une date/heure.');
+            }
+            const saved = await adminApi(id ? `/api/admin/news/${encodeURIComponent(id)}` : '/api/admin/news', {
                 method: id ? 'PATCH' : 'POST',
                 body: JSON.stringify(payload)
             });
+            const savedId = id || saved.article?.id;
+            if (!savedId) throw new Error('Publication enregistrée, mais son identifiant est introuvable pour le compte à rebours.');
+            const countdownEnabled = document.getElementById('admin-news-countdown-enabled').checked;
+            if (countdownEnabled) {
+                const label = document.getElementById('admin-news-countdown-label').value.trim();
+                const releaseAt = document.getElementById('admin-news-countdown-date').value;
+                await adminApi(`/api/admin/news/${encodeURIComponent(savedId)}/countdown`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        countdown_type: document.getElementById('admin-news-countdown-type').value,
+                        label,
+                        release_at: new Date(releaseAt).toISOString(),
+                        is_active: document.getElementById('admin-news-countdown-active').checked,
+                        release_confirmed: document.getElementById('admin-news-countdown-confirmed').checked
+                    })
+                });
+            } else {
+                await adminApi(`/api/admin/news/${encodeURIComponent(savedId)}/countdown`, { method: 'DELETE' });
+            }
             adminNewsReset();
             status.textContent = 'Publication enregistrée.';
             await adminLoadNews();
+            window.loadPublicCountdowns?.();
         } catch (e) {
             status.textContent = e.message || 'Impossible d’enregistrer cette actualité.';
         }
@@ -25726,8 +25813,67 @@
     }
     ;
 
+    // Affichage indépendant des comptes à rebours : une erreur ici ne bloque pas les actualités.
+    let publicCountdownTimer = null;
+    window.loadPublicCountdowns = async function() {
+        const containers = [
+            document.getElementById('public-home-countdowns'),
+            document.getElementById('public-news-countdowns')
+        ].filter(Boolean);
+        if (!containers.length) return;
+        containers.forEach(container => container.replaceChildren());
+        try {
+            const response = await fetch(`${API_BASE}/api/countdowns`);
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data.error || 'Chargement des comptes à rebours impossible.');
+            const countdowns = Array.isArray(data.countdowns) ? data.countdowns : [];
+            if (publicCountdownTimer) clearInterval(publicCountdownTimer);
+            const render = () => {
+                containers.forEach(container => container.replaceChildren());
+                const now = Date.now();
+                countdowns.forEach(item => {
+                    const release = new Date(item.release_at).getTime();
+                    if (!Number.isFinite(release)) return;
+                    const card = document.createElement('article');
+                    card.style.cssText = 'margin:14px 0;padding:18px;border:1px solid #d9e3d5;border-radius:16px;background:linear-gradient(135deg,#f7fbf4,#fff);box-shadow:0 4px 14px rgba(30,60,35,.07);text-align:center';
+                    const heading = document.createElement('h3');
+                    heading.textContent = item.label || item.news_title || 'Prochaine disponibilité';
+                    heading.style.cssText = 'margin:0 0 8px;font-size:clamp(18px,3vw,24px)';
+                    const kind = document.createElement('p');
+                    kind.textContent = item.countdown_type === 'village' ? '🏡 Ouverture d’un village' : item.countdown_type === 'niveau' ? '⭐ Disponibilité d’un niveau' : '📢 À venir';
+                    kind.style.cssText = 'margin:0 0 8px;font-size:13px;font-weight:700;letter-spacing:.04em';
+                    const clock = document.createElement('p');
+                    clock.style.cssText = 'margin:0;font-size:clamp(20px,4vw,30px);font-weight:800;font-variant-numeric:tabular-nums;color:#38543d';
+                    const detail = document.createElement('p');
+                    detail.style.cssText = 'margin:8px 0 0;font-size:13px;color:#526052';
+                    const remaining = release - now;
+                    if (remaining <= 0) {
+                        clock.textContent = item.release_confirmed ? 'Disponible maintenant !' : 'Date de lancement atteinte';
+                        detail.textContent = item.release_confirmed ? 'La disponibilité a été confirmée par l’administration.' : 'La date est atteinte ; la disponibilité reste à confirmer.';
+                    } else {
+                        const totalSeconds = Math.floor(remaining / 1000);
+                        const days = Math.floor(totalSeconds / 86400);
+                        const hours = Math.floor((totalSeconds % 86400) / 3600);
+                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                        const seconds = totalSeconds % 60;
+                        clock.textContent = `${days} j ${String(hours).padStart(2,'0')} h ${String(minutes).padStart(2,'0')} min ${String(seconds).padStart(2,'0')} s`;
+                        detail.textContent = `Prévu le ${new Date(release).toLocaleString('fr-FR', { dateStyle:'long', timeStyle:'short' })}`;
+                    }
+                    card.append(kind, heading, clock, detail);
+                    containers.forEach(container => container.append(card.cloneNode(true)));
+                });
+            };
+            render();
+            if (countdowns.length) publicCountdownTimer = setInterval(render, 1000);
+        } catch (error) {
+            // Ne pas afficher d'erreur bloquante et ne pas perturber le chargement des actualités.
+            console.warn('Countdown display unavailable:', error.message);
+        }
+    };
+
     // Charge les actualités publiées sur l'accueil public, sans connexion.
     window.loadPublicNews();
+    window.loadPublicCountdowns();
 
     window.openAdminPanel = async function() {
         const statusEl = document.getElementById("admin-panel-status");
