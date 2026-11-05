@@ -5,6 +5,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#062c20">
+        <meta name="description" content="Explorez les villages, résolvez des énigmes et collectionnez vos étoiles avec Trésors de nos Villages.">
+        <link rel="manifest" href="./manifest.webmanifest">
+        <link rel="apple-touch-icon" href="./icons/icon-192.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
         <title>Trésors de nos Villages</title>
         <style>
             :root {
@@ -29450,4 +29455,15 @@
     }
     ;
 </script>
-</ body></ html>
+
+<script>
+/* Installation PWA — ne touche pas aux données ni aux appels API du site. */
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+            .catch(error => console.warn("PWA : service worker non enregistré", error));
+    });
+}
+</script>
+
+</body></ html>
