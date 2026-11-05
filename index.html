@@ -15828,8 +15828,12 @@
                                                 <label>
                                                     Formule à offrir
                                                     <select id="admin-reward-formula">
+                                                        <option value="enfant_4_6">Enfant 4 à 6 ans</option>
+                                                        <option value="enfant_7_9">Enfant 7 à 9 ans</option>
+                                                        <option value="enfant_10_12">Enfant 10 à 12 ans</option>
+                                                        <option value="enfant_13_15">Enfant 13 à 15 ans</option>
                                                         <option value="facile">Facile</option>
-                                                        <option value="enfant">Enfant</option>
+                                                        <option value="enfant">Enfant (ancienne catégorie)</option>
                                                         <option value="famille">Famille</option>
                                                         <option value="moyen">Moyen</option>
                                                         <option value="difficile">Difficile</option>
@@ -22466,6 +22470,10 @@
     // ===== Espace personnel du testeur =====
     const testerFeedbackForm = document.getElementById("tester-feedback-form");
     const testerFormulaLabels = {
+        enfant_4_6: "Enfant 4 à 6 ans",
+        enfant_7_9: "Enfant 7 à 9 ans",
+        enfant_10_12: "Enfant 10 à 12 ans",
+        enfant_13_15: "Enfant 13 à 15 ans",
         enfant: "Enfant",
         facile: "Facile",
         famille: "Famille",
@@ -23178,7 +23186,7 @@
     }
     ;
 
-    const TESTER_FORMULAS = [["enfant", "Enfant"], ["facile", "Facile"], ["famille", "Famille"], ["moyen", "Moyen"], ["difficile", "Difficile"], ["extreme", "Extrême"], ["nuit", "Nuit"]];
+    const TESTER_FORMULAS = [["enfant_4_6", "Enfant 4 à 6 ans"], ["enfant_7_9", "Enfant 7 à 9 ans"], ["enfant_10_12", "Enfant 10 à 12 ans"], ["enfant_13_15", "Enfant 13 à 15 ans"], ["enfant", "Enfant"], ["facile", "Facile"], ["famille", "Famille"], ["moyen", "Moyen"], ["difficile", "Difficile"], ["extreme", "Extrême"], ["nuit", "Nuit"]];
     window.adminOpenTesterManagement = async function() {
         const allowed = window.adminCurrentRole === "admin" || (window.adminCurrentRole === "moderator" && (window.adminCurrentPermissions || []).includes("testers"));
         if (!allowed) {
@@ -24170,7 +24178,7 @@
         }
         );
 
-    const ADMIN_LEVEL_DEFINITIONS = [["enfant", "Enfant"], ["facile", "Facile"], ["famille", "Famille"], ["moyen", "Moyen"], ["difficile", "Difficile"], ["extreme", "Extrême"], ["nuit", "Nuit"]];
+    const ADMIN_LEVEL_DEFINITIONS = [["enfant_4_6", "Enfant 4 à 6 ans"], ["enfant_7_9", "Enfant 7 à 9 ans"], ["enfant_10_12", "Enfant 10 à 12 ans"], ["enfant_13_15", "Enfant 13 à 15 ans"], ["enfant", "Enfant"], ["facile", "Facile"], ["famille", "Famille"], ["moyen", "Moyen"], ["difficile", "Difficile"], ["extreme", "Extrême"], ["nuit", "Nuit"]];
     let adminLevelCache = [];
     window.adminOpenLevels = async function() {
         adminSetView("admin-levels-view", "Niveaux par village");
