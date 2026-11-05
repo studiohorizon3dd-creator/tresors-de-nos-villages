@@ -16657,13 +16657,18 @@
                                     <div class="levels-table-wrap" id="admin-levels-list">
                                         <p>Les niveaux apparaîtront ici.</p>
                                     </div>
-                                    <button type="button" class="levels-add" onclick="document.getElementById('levels-custom-form').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('levels-custom-name').focus();">＋ Ajouter un niveau personnalisé</button>
+                                    <button type="button" class="levels-add" onclick="document.getElementById('levels-custom-form').scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('levels-custom-category').focus();">＋ Ajouter un niveau personnalisé</button>
                                 </section>
                                 <aside class="levels-panel">
                                     <h3>🚩 Créer un niveau</h3>
                                     <form id="levels-custom-form" class="levels-form">
                                         <label>
-                                            Nom du niveau *<input id="levels-custom-name" required maxlength="60" placeholder="Ex. Aventure nocturne">
+                                            Catégorie *
+                                            <select id="levels-custom-category" required><option value="enfant">Enfant</option><option value="famille">Famille</option><option value="facile">Facile</option><option value="moyen">Moyen</option><option value="difficile">Difficile</option><option value="extreme">Extrême</option><option value="nuit">Nuit</option></select>
+                                        </label>
+                                        <label>
+                                            Âge *
+                                            <select id="levels-custom-age" required><option value="4-6">4 à 6 ans</option><option value="7-9">7 à 9 ans</option><option value="10-12">10 à 12 ans</option><option value="13-15">13 à 15 ans</option></select>
                                         </label>
                                         <div class="pair">
                                             <label>
@@ -24349,52 +24354,50 @@
     }
     ;
     const levelsCustomForm = document.getElementById("levels-custom-form");
+    const customCategory = document.getElementById("levels-custom-category");
+    const customAge = document.getElementById("levels-custom-age");
+    function updateCustomAgeOptions() {
+        const isChild = customCategory?.value === "enfant";
+        if (!customAge) return;
+        customAge.disabled = !isChild;
+        customAge.innerHTML = isChild
+          ? '<option value="4-6">4 à 6 ans</option><option value="7-9">7 à 9 ans</option><option value="10-12">10 à 12 ans</option><option value="13-15">13 à 15 ans</option>'
+          : '<option value="tous">Tous âges</option>';
+    }
+    customCategory?.addEventListener("change", updateCustomAgeOptions);
+    updateCustomAgeOptions();
     if (levelsCustomForm)
         levelsCustomForm.addEventListener("submit", async e => {
             e.preventDefault();
-            const village = document.getElementById("admin-level-village").value
-              , status = document.getElementById("admin-levels-status")
-              , name = document.getElementById("levels-custom-name").value.trim()
-              , key = adminLevelSlug(name);
-            if (!village) {
-                status.textContent = "Choisis d’abord un village.";
-                return;
-            }
-            if (!key) {
-                status.textContent = "Nom de niveau invalide.";
-                return;
-            }
+            const village = document.getElementById("admin-level-village").value;
+            const status = document.getElementById("admin-levels-status");
+            const category = customCategory.value;
+            const age = customAge.value;
+            const categoryLabels = {enfant:"Enfant",famille:"Famille",facile:"Facile",moyen:"Moyen",difficile:"Difficile",extreme:"Extrême",nuit:"Nuit"};
+            const ageLabels = {"4-6":"4 à 6 ans","7-9":"7 à 9 ans","10-12":"10 à 12 ans","13-15":"13 à 15 ans"};
+            const isChild = category === "enfant";
+            const key = isChild ? `enfant_${age.replace("-", "_")}` : category;
+            const name = isChild ? `${categoryLabels[category]} ${ageLabels[age]}` : categoryLabels[category];
+            if (!village) { status.textContent = "Choisis d’abord un village."; return; }
             if (adminLevelCache.some(x => x.level_key === key)) {
-                status.textContent = "Ce niveau existe déjà pour ce village.";
+                status.textContent = "Cette catégorie existe déjà pour ce village. Modifie ses nombres directement dans le tableau.";
                 return;
             }
-            const payload = {
-                village_slug: village,
-                level_key: key,
-                display_name: name,
-                riddle_count: Number(document.getElementById("levels-custom-riddles").value),
-                star_count: Number(document.getElementById("levels-custom-stars").value),
-                access_type: document.getElementById("levels-custom-access").value,
-                price_eur: Number(document.getElementById("levels-custom-price").value),
-                status: document.getElementById("levels-custom-status").value,
-                sort_order: adminLevelCache.length
-            };
-            try {
-                await adminApi("/api/admin/village-levels", {
-                    method: "PUT",
-                    body: JSON.stringify(payload)
-                });
-                levelsCustomForm.reset();
-                document.getElementById("levels-custom-riddles").value = 10;
-                document.getElementById("levels-custom-stars").value = 10;
-                document.getElementById("levels-custom-price").value = "1.99";
-                status.textContent = "Niveau personnalisé ajouté.";
-                await window.adminLoadVillageLevels();
-            } catch (err) {
-                status.textContent = err.message || "Impossible d’ajouter le niveau.";
+            const riddles = Number(document.getElementById("levels-custom-riddles").value);
+            const stars = Number(document.getElementById("levels-custom-stars").value);
+            if (!Number.isInteger(riddles) || riddles < 1 || riddles > 200 || !Number.isInteger(stars) || stars < 0 || stars > 1000) {
+                status.textContent = "Entre 1 et 200 énigmes et entre 0 et 1000 étoiles."; return;
             }
-        }
-        );
+            const payload = {village_slug:village,level_key:key,display_name:name,riddle_count:riddles,star_count:stars,access_type:document.getElementById("levels-custom-access").value,price_eur:Number(document.getElementById("levels-custom-price").value),status:document.getElementById("levels-custom-status").value,sort_order:adminLevelCache.length};
+            try {
+                await adminApi("/api/admin/village-levels", {method:"PUT",body:JSON.stringify(payload)});
+                document.getElementById("levels-custom-riddles").value=10;
+                document.getElementById("levels-custom-stars").value=10;
+                document.getElementById("levels-custom-price").value="1.99";
+                status.textContent=`${name} ajouté : ${riddles} énigmes et ${stars} étoiles.`;
+                await window.adminLoadVillageLevels();
+            } catch(err) { status.textContent=err.message||"Impossible d’ajouter le niveau."; }
+        });
 
     window.adminSelectedAdventureId = null;
     const ADVENTURE_STATUS_LABELS = {
