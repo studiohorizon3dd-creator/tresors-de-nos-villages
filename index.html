@@ -13117,6 +13117,7 @@
                     </button>
                     <div id="public-home-news-content" class="public-home-news-content">
                         <p id="public-home-news-status" class="public-home-news-status" role="status" aria-live="polite">Chargement des actualités…</p>
+                        <div id="public-home-countdowns" aria-live="polite"></div>
                         <div id="public-home-news-list" class="public-home-news-grid" aria-live="polite"></div>
                         <div id="public-home-news-more" class="public-home-news-more" hidden></div>
                         <button id="public-home-news-toggle" class="public-home-news-toggle" type="button" aria-expanded="false" hidden>
@@ -14872,6 +14873,7 @@
                 <h3>📰 Actualités</h3>
                 <p>Retrouve les annonces, les nouvelles du projet et les informations importantes de Trésors de nos Villages.</p>
                 <p id="public-news-status" class="status" role="status" aria-live="polite">Chargement des actualités…</p>
+                <div id="public-news-countdowns" aria-live="polite"></div>
                 <div id="public-news-list" aria-live="polite"></div>
             </section>
             <section class="dash-section hidden" id="dash-updates">
@@ -15034,6 +15036,7 @@
                                         <span>📰</span>
                                         Gestion des informations
                                     </button>
+                                    <button class="admin-nav-item" type="button" onclick="adminOpenCountdowns()"><span>⏳</span>Compte à rebours</button>
                                     <button class="admin-nav-item" type="button" onclick="adminOpenSiteStatus()">
                                         <span>⚙</span>
                                         Statut du site
@@ -21497,6 +21500,23 @@
     <p class="admin-footnote">Tu peux verrouiller une discussion pour empêcher les réponses ou la masquer si elle ne respecte pas les règles.</p>
     <div id="admin-community-topics" class="admin-recent-list"><p>Chargement…</p></div>
 </div>
+<div id="admin-countdowns-view" class="admin-subview" hidden>
+  <div class="admin-section-heading"><div><h3>⏳ Gestion des comptes à rebours</h3><p>Crée et gère indépendamment les dates de lancement des villages, niveaux et annonces.</p></div></div>
+  <p id="admin-countdowns-status" class="status" role="status" aria-live="polite"></p>
+  <form id="admin-countdown-form" class="feature" style="display:grid;gap:12px">
+    <input id="admin-countdown-id" type="hidden">
+    <label>Titre du compte à rebours<input id="admin-countdown-title" maxlength="180" required placeholder="Ex. Ouverture de l’aventure Humbert" style="display:block;width:100%;padding:12px"></label>
+    <label>Type<select id="admin-countdown-kind" style="display:block;width:100%;padding:12px"><option value="village">Ouverture d’un village</option><option value="niveau">Disponibilité d’un niveau</option><option value="autre">Autre annonce</option></select></label>
+    <label>Village, niveau ou précision (facultatif)<input id="admin-countdown-target" maxlength="180" placeholder="Ex. Humbert – niveau facile" style="display:block;width:100%;padding:12px"></label>
+    <label>Date et heure de fin<input id="admin-countdown-date" type="datetime-local" required style="display:block;width:100%;padding:12px"></label>
+    <label><input id="admin-countdown-active" type="checkbox" checked> Activer ce compte à rebours</label>
+    <label><input id="admin-countdown-home" type="checkbox" checked> Afficher sur la page d’accueil</label>
+    <label><input id="admin-countdown-news" type="checkbox" checked> Afficher dans la rubrique Actualités</label>
+    <label>Message lorsque le compte à rebours arrive à zéro<input id="admin-countdown-message" maxlength="240" value="Disponible maintenant !" style="display:block;width:100%;padding:12px"></label>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="admin-secondary-btn" type="submit">Enregistrer le compte à rebours</button><button class="admin-secondary-btn" type="button" id="admin-countdown-reset">Nouveau compte à rebours</button></div>
+  </form>
+  <h4 style="margin-top:24px">Comptes à rebours enregistrés</h4><div id="admin-countdowns-list"></div>
+</div>
 <div id="admin-news-view" class="admin-subview" hidden>
     <div class="admin-section-heading">
         <div>
@@ -21979,7 +21999,7 @@
     ;
 
     const adminSetView = window.adminSetView = function(view, title) {
-        ["admin-home-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
+        ["admin-home-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-news-view", "admin-countdowns-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
             const el = document.getElementById(id);
             if (el)
                 el.hidden = true;
@@ -21992,7 +22012,7 @@
         if (heading)
             heading.textContent = title;
         document.querySelectorAll(".admin-nav-item").forEach(btn => btn.classList.remove("active"));
-        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
+        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-countdowns-view" ? "adminOpenCountdowns" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
         if (active)
             active.classList.add("active");
     }
@@ -25393,6 +25413,15 @@
         list.append(wrap);
     }
 
+
+    function adminCountdownReset(){const f=document.getElementById('admin-countdown-form');f?.reset();document.getElementById('admin-countdown-id').value='';document.getElementById('admin-countdown-active').checked=true;document.getElementById('admin-countdown-home').checked=true;document.getElementById('admin-countdown-news').checked=true;document.getElementById('admin-countdown-message').value='Disponible maintenant !';}
+    document.getElementById('admin-countdown-reset')?.addEventListener('click',adminCountdownReset);
+    async function adminLoadCountdowns(){const status=document.getElementById('admin-countdowns-status'),list=document.getElementById('admin-countdowns-list');if(!status||!list)return;status.textContent='Chargement…';list.replaceChildren();try{const data=await adminApi('/api/admin/countdowns');for(const item of (data.countdowns||[])){const card=document.createElement('article');card.className='feature';card.style.cssText='margin:12px 0;padding:14px';const title=document.createElement('h4');title.textContent=item.title;const meta=document.createElement('p');meta.textContent=(item.kind==='village'?'Village':item.kind==='niveau'?'Niveau':'Autre')+' · '+new Date(item.ends_at).toLocaleString('fr-FR')+' · '+(item.is_active?'Actif':'Suspendu');const target=document.createElement('p');target.textContent=item.target_label||'';const edit=document.createElement('button');edit.type='button';edit.className='admin-secondary-btn';edit.textContent='Modifier';edit.addEventListener('click',()=>{document.getElementById('admin-countdown-id').value=item.id;document.getElementById('admin-countdown-title').value=item.title;document.getElementById('admin-countdown-kind').value=item.kind;document.getElementById('admin-countdown-target').value=item.target_label||'';const d=new Date(item.ends_at);document.getElementById('admin-countdown-date').value=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('admin-countdown-active').checked=!!item.is_active;document.getElementById('admin-countdown-home').checked=!!item.show_home;document.getElementById('admin-countdown-news').checked=!!item.show_news;document.getElementById('admin-countdown-message').value=item.completion_message||'Disponible maintenant !';document.getElementById('admin-countdown-form').scrollIntoView({behavior:'smooth',block:'start'});});const del=document.createElement('button');del.type='button';del.className='admin-secondary-btn';del.style.marginLeft='8px';del.textContent='Supprimer';del.addEventListener('click',async()=>{if(!confirm('Supprimer ce compte à rebours ?'))return;try{await adminApi('/api/admin/countdowns/'+encodeURIComponent(item.id),{method:'DELETE'});await adminLoadCountdowns();window.loadPublicCountdowns?.();}catch(e){status.textContent=e.message;}});card.append(title,meta);if(target.textContent)card.append(target);card.append(edit,del);list.append(card);}status.textContent=(data.countdowns||[]).length+' compte(s) à rebours chargé(s).';}catch(e){status.textContent=e.message||'Impossible de charger les comptes à rebours.';}}
+    function adminOpenCountdowns(){adminSetView('admin-countdowns-view','Compte à rebours');adminLoadCountdowns();}
+    window.adminOpenCountdowns=adminOpenCountdowns;
+    document.getElementById('admin-countdown-form')?.addEventListener('submit',async event=>{event.preventDefault();const status=document.getElementById('admin-countdowns-status'),id=document.getElementById('admin-countdown-id').value;const payload={title:document.getElementById('admin-countdown-title').value,kind:document.getElementById('admin-countdown-kind').value,target_label:document.getElementById('admin-countdown-target').value,ends_at:new Date(document.getElementById('admin-countdown-date').value).toISOString(),is_active:document.getElementById('admin-countdown-active').checked,show_home:document.getElementById('admin-countdown-home').checked,show_news:document.getElementById('admin-countdown-news').checked,completion_message:document.getElementById('admin-countdown-message').value};try{await adminApi(id?'/api/admin/countdowns/'+encodeURIComponent(id):'/api/admin/countdowns',{method:id?'PATCH':'POST',body:JSON.stringify(payload)});adminCountdownReset();status.textContent='Compte à rebours enregistré.';await adminLoadCountdowns();window.loadPublicCountdowns?.();}catch(e){status.textContent=e.message||'Enregistrement impossible.';}});
+    window.loadPublicCountdowns=async function(){try{const response=await fetch(`${API_BASE}/api/countdowns`);const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'');const items=Array.isArray(data.countdowns)?data.countdowns:[];const make=(where)=>{const host=document.getElementById(where);if(!host)return;host.replaceChildren();for(const item of items.filter(x=>where==='public-home-countdowns'?x.show_home:x.show_news)){const card=document.createElement('article');card.className='feature';card.style.cssText='margin:12px 0;padding:16px;border:1px solid #d9dfd5;border-radius:14px;background:#fff';const title=document.createElement('h3');title.textContent=item.title;const label=document.createElement('p');label.textContent=item.target_label||({village:'Ouverture d’un village',niveau:'Disponibilité d’un niveau'}[item.kind]||'Annonce');const timer=document.createElement('strong');timer.style.cssText='display:block;font-size:clamp(20px,4vw,30px);font-variant-numeric:tabular-nums;margin:8px 0';const end=new Date(item.ends_at).getTime();const tick=()=>{const left=end-Date.now();if(left<=0){timer.textContent=item.completion_message||'Disponible maintenant !';clearInterval(interval);return;}const days=Math.floor(left/86400000),hours=Math.floor(left%86400000/3600000),mins=Math.floor(left%3600000/60000),secs=Math.floor(left%60000/1000);timer.textContent=(days?days+' j ':'')+String(hours).padStart(2,'0')+' h '+String(mins).padStart(2,'0')+' min '+String(secs).padStart(2,'0')+' s';};tick();const interval=setInterval(tick,1000);const kind=document.createElement('small');kind.textContent='Fin prévue : '+new Date(item.ends_at).toLocaleString('fr-FR');card.append(title,label,timer,kind);host.append(card);}};make('public-home-countdowns');make('public-news-countdowns');}catch(error){console.warn('Public countdowns unavailable:',error.message);}};
+
     function adminOpenNews() {
         adminSetView('admin-news-view', 'Gestion des informations');
         adminLoadNews();
@@ -25672,6 +25701,7 @@
 
     // Charge les actualités publiées sur l'accueil public, sans connexion.
     window.loadPublicNews();
+    window.loadPublicCountdowns?.();
 
     window.openAdminPanel = async function() {
         const statusEl = document.getElementById("admin-panel-status");
