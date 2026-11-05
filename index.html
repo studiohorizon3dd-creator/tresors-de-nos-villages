@@ -22424,8 +22424,11 @@
             const testerHomeStatus = document.getElementById("tester-home-status");
             const testerHomeButton = document.getElementById("tester-home-button");
             const isAcceptedTester = app?.status === "accepted";
-            if (testerNav)
-                testerNav.hidden = !(isAcceptedTester || adminAccessGranted);
+            window.isAcceptedTester = isAcceptedTester;
+            if (testerNav) {
+                testerNav.hidden = !isAcceptedTester;
+                testerNav.style.setProperty("display", isAcceptedTester ? "" : "none", "important");
+            }
             if (testerHome)
                 testerHome.hidden = isAcceptedTester;
             if (testerHomeStatus && app?.status === "pending")
@@ -26259,8 +26262,13 @@
             adminNav.textContent = isModerator ? "🛡️  Mon espace modérateur" : "⚙  Administration";
             adminNav.title = isModerator ? "Espace réservé aux missions validées par l’administration" : "Réservé aux administrateurs autorisés";
         }
-        if (testerNav)
-            testerNav.hidden = !isAdmin;
+        // L'espace personnel testeur n'est jamais accordé par le seul statut admin.
+        // Il reste visible uniquement si la candidature du compte est acceptée.
+        if (testerNav) {
+            const testerVisible = window.isAcceptedTester === true;
+            testerNav.hidden = !testerVisible;
+            testerNav.style.setProperty("display", testerVisible ? "" : "none", "important");
+        }
         // Le CSS du tableau de bord force certains boutons en display:flex!important.
         // On applique donc aussi display:none!important pour que l'attribut hidden soit respecté.
         document.querySelectorAll(".admin-nav-item").forEach(button => {
@@ -26662,6 +26670,15 @@
         document.querySelectorAll("#dash-rules .rules-tab").forEach(tab => tab.classList.toggle("active", tab === button));
     }
     function showDashSection(id, options={}) {
+        if (id === "dash-tester-space" && window.isAcceptedTester !== true) {
+            const testerNav = document.getElementById("tester-space-nav");
+            if (testerNav) {
+                testerNav.hidden = true;
+                testerNav.style.setProperty("display", "none", "important");
+            }
+            alert("Cet espace est réservé aux testeurs dont la candidature a été acceptée.");
+            return;
+        }
         // Ne jamais afficher l'espace admin avant confirmation du serveur.
         if (id === "dash-admin-info" && !adminAccessGranted) {
             const adminSection = document.getElementById("dash-admin-info");
