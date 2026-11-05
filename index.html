@@ -22062,6 +22062,7 @@
         showDashSection("dash-adventures", {
             skipAdventureLoad: true
         });
+        window.currentAdventureIsAdminPreview = true;
         await openPlayerAdventure(id, false);
     }
     ;
@@ -26579,6 +26580,7 @@
     ;
 
     window.currentAdventureIsTester = false;
+    window.currentAdventureIsAdminPreview = false;
     async function openPlayerAdventure(id, testerMode=false) {
         window.currentAdventureIsTester = !!testerMode;
         const status = document.getElementById('player-adventures-status');
@@ -26589,7 +26591,12 @@
             status.textContent = 'Ouverture de l’aventure…';
             const [data,progress] = await Promise.all([playerApi(`/api/adventures/${id}/steps`), playerApi(`/api/adventures/${id}/progress`)]);
             document.getElementById('player-adventure-title').textContent = data.adventure.title;
-            document.getElementById('player-adventure-progress').textContent = `⭐ ${progress.stars_earned} / ${progress.total_stars} étoiles · ${progress.validated_steps} / ${progress.total_steps} étapes validées`;
+            const adminPreview = window.currentAdventureIsAdminPreview === true &&
+                window.adminAccessGranted === true && window.adminCurrentRole === 'admin' &&
+                localStorage.getItem("modeTestAventure") === "true";
+            document.getElementById('player-adventure-progress').textContent = adminPreview
+                ? '🧪 MODE TEST ADMINISTRATEUR — aucune progression joueur ne sera enregistrée'
+                : `⭐ ${progress.stars_earned} / ${progress.total_stars} étoiles · ${progress.validated_steps} / ${progress.total_steps} étapes validées`;
             stepsBox.replaceChildren();
             const steps = Array.isArray(data.steps) ? data.steps : [];
             steps.forEach(step => {
@@ -26607,7 +26614,7 @@
                     stepPhoto.style.cssText = 'width:100%;max-height:260px;object-fit:cover;border-radius:12px;margin:8px 0';
                     article.appendChild(stepPhoto);
                 }
-                if (!step.unlocked) {
+                if (!step.unlocked && !adminPreview) {
                     const locked = document.createElement('p');
                     locked.textContent = '🔒 Ce lieu sera débloqué après la bonne réponse à l’énigme précédente.';
                     article.appendChild(locked);
@@ -26641,9 +26648,48 @@
                     const gps = document.createElement('button');
                     gps.type = 'button';
                     gps.className = 'small-btn';
-                    gps.textContent = '📍 Valider ma position';
-                    gps.addEventListener('click', () => validatePlayerGps(id, step.id));
+                    gps.textContent = adminPreview ? '🧪 Simuler mon arrivée GPS' : '📍 Valider ma position';
+                    gps.addEventListener('click', () => {
+                        if (adminPreview) {
+                            gps.textContent = '✅ Arrivée GPS simulée — aperçu uniquement';
+                            gps.disabled = false;
+                        } else {
+                            validatePlayerGps(id, step.id);
+                        }
+                    });
                     article.appendChild(gps);
+                    if (adminPreview) {
+                        const riddle = document.createElement('p');
+                        riddle.textContent = step.riddle || '⚠️ Aucune énigme renseignée pour cette étape.';
+                        riddle.style.cssText = 'font-size:16px;font-weight:700;line-height:1.5;margin-top:14px';
+                        article.appendChild(riddle);
+                        if (step.hint) {
+                            const hint = document.createElement('p');
+                            hint.textContent = '💡 Indice : ' + step.hint;
+                            article.appendChild(hint);
+                        }
+                        const answerLabel = document.createElement('label');
+                        answerLabel.textContent = 'Tester une réponse (simulation uniquement)';
+                        answerLabel.style.cssText = 'display:block;font-weight:700;margin:10px 0 5px';
+                        const answerInput = document.createElement('input');
+                        answerInput.type = 'text';
+                        answerInput.placeholder = 'Saisis une réponse pour vérifier…';
+                        answerInput.style.cssText = 'width:100%;padding:12px;border:1px solid #d8c38a;border-radius:9px';
+                        const checkAnswer = document.createElement('button');
+                        checkAnswer.type = 'button';
+                        checkAnswer.className = 'small-btn';
+                        checkAnswer.textContent = '🧪 Vérifier la réponse';
+                        const answerFeedback = document.createElement('p');
+                        answerFeedback.setAttribute('role','status');
+                        checkAnswer.addEventListener('click', () => {
+                            const norm = value => String(value || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLocaleLowerCase('fr').replace(/[^a-z0-9]/g,'');
+                            const accepted = String(step.preview_answer || '').split(/[|;]/).map(norm).filter(Boolean);
+                            const ok = accepted.includes(norm(answerInput.value));
+                            answerFeedback.textContent = ok ? '✅ Bonne réponse ! Vérification simulée, aucune progression enregistrée.' : '❌ Réponse différente de celle enregistrée. Tu peux réessayer.';
+                            answerFeedback.style.color = ok ? '#12613e' : '#a33';
+                        });
+                        article.append(answerLabel,answerInput,checkAnswer,answerFeedback);
+                    }
                     if (window.adminAccessGranted === true && window.adminCurrentRole === 'admin' && localStorage.getItem("modeTestAventure") === "true") {
                         const testGps = document.createElement('button');
                         testGps.type = 'button';
@@ -26653,17 +26699,8 @@
                         testGps.addEventListener('click', async () => {
                             testGps.disabled = true;
                             testGps.textContent = 'Simulation…';
-                            try {
-                                await playerApi(`/api/admin/adventures/${id}/steps/${step.id}/simulate-gps`, {
-                                    method: 'POST',
-                                    body: JSON.stringify({})
-                                });
-                                await openPlayerAdventure(id, window.currentAdventureIsTester);
-                            } catch (error) {
-                                alert(error.message || 'Impossible de simuler cette arrivée.');
-                                testGps.disabled = false;
-                                testGps.textContent = '🧪 Simuler l’arrivée (admin)';
-                            }
+                            testGps.textContent = '✅ Arrivée simulée (aperçu uniquement)';
+                            testGps.disabled = false;
                         }
                         );
                         article.appendChild(testGps);
