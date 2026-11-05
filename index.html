@@ -13964,6 +13964,18 @@
                     <div id="community-topic-detail" hidden></div>
                     <p id="community-forum-status" class="status" role="status" aria-live="polite"></p>
                 </section>
+                <section id="community-social-panel" class="feature" style="padding:20px;margin-top:22px">
+                    <h2>🌿 Le fil des explorateurs</h2>
+                    <p>Partage tes découvertes et tes photos. Chaque publication est vérifiée par l’administration avant d’être visible par les autres membres.</p>
+                    <form id="community-post-form" style="display:grid;gap:10px;margin:16px 0">
+                        <textarea id="community-post-body" rows="3" maxlength="2000" placeholder="Raconte ta découverte…"></textarea>
+                        <label>Ajouter une photo (facultatif)<input id="community-post-photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+                        <small>Formats acceptés : JPG, PNG ou WebP, 8 Mo maximum. La photo sera publiée uniquement après validation.</small>
+                        <button type="submit" class="primary-btn">Envoyer pour validation</button>
+                        <p id="community-post-status" class="status" role="status" aria-live="polite"></p>
+                    </form>
+                    <div id="community-post-feed"><p>Chargement du fil…</p></div>
+                </section>
                 <section id="community-admin-panel" class="feature" style="padding:18px;margin-top:24px" hidden>
                     <h3>🛡️ Validation des membres de la communauté</h3>
                     <p>Seuls les membres validés ici pourront publier, répondre et partager des photos lorsque ces fonctions seront activées.</p>
@@ -15104,6 +15116,10 @@
                                     <button class="admin-nav-item" type="button" onclick="adminOpenNotificationsAdmin()">
                                         <span>🔔</span>
                                         Envoyer une notification
+                                    </button>
+                                    <button class="admin-nav-item" type="button" onclick="window.adminOpenCommunity()">
+                                        <span>🌐</span>
+                                        Modération communauté
                                     </button>
                                 </div>
                             </details>
@@ -21459,6 +21475,28 @@
         <div id="admin-support-list"></div>
     </div>
 </div>
+<div id="admin-community-view" class="admin-subview" hidden>
+    <div class="admin-section-heading"><div><h3>🌐 Modération de la communauté</h3><p>Valide les demandes des membres, les publications et les photos avant leur mise en ligne.</p></div></div>
+    <p id="admin-community-status" class="status" role="status" aria-live="polite">Chargement de la communauté…</p>
+    <div class="players-metrics" style="margin:12px 0">
+      <article class="players-metric"><span>⏳</span><div><small>À valider</small><strong id="admin-community-pending-count">—</strong></div></article>
+      <article class="players-metric"><span>✅</span><div><small>Approuvées</small><strong id="admin-community-approved-count">—</strong></div></article>
+      <article class="players-metric"><span>🗑️</span><div><small>Refusées</small><strong id="admin-community-rejected-count">—</strong></div></article>
+    </div>
+    <div class="communication-tabs" role="tablist" aria-label="Filtres de modération">
+      <button type="button" class="communication-tab active" data-community-filter="pending">⏳ En attente</button>
+      <button type="button" class="communication-tab" data-community-filter="approved">✅ Approuvées</button>
+      <button type="button" class="communication-tab" data-community-filter="rejected">⛔ Refusées</button>
+      <button type="button" class="communication-tab" data-community-filter="all">Toutes</button>
+    </div>
+    <h4>👥 Demandes d’accès à la communauté</h4>
+    <div id="admin-community-members" class="admin-recent-list"><p>Chargement…</p></div>
+    <h4 style="margin-top:24px">📸 Publications et photos</h4>
+    <div id="admin-community-posts" class="admin-recent-list"><p>Chargement…</p></div>
+    <h4 style="margin-top:24px">💬 Discussions du forum</h4>
+    <p class="admin-footnote">Tu peux verrouiller une discussion pour empêcher les réponses ou la masquer si elle ne respecte pas les règles.</p>
+    <div id="admin-community-topics" class="admin-recent-list"><p>Chargement…</p></div>
+</div>
 <div id="admin-news-view" class="admin-subview" hidden>
     <div class="admin-section-heading">
         <div>
@@ -21831,6 +21869,8 @@
             throw new Error(data.error || `Erreur serveur (${response.status}).`);
         return data;
     }
+    // Partagé avec les scripts classiques du tableau de bord.
+    window.profileApi = profileApi;
 
     // Compte une visite authentifiée par session de navigation (nouvelle visite après 30 min d'inactivité).
     window.trackPlayerVisit = async function() {
@@ -21939,7 +21979,7 @@
     ;
 
     const adminSetView = window.adminSetView = function(view, title) {
-        ["admin-home-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view"].forEach(id => {
+        ["admin-home-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
             const el = document.getElementById(id);
             if (el)
                 el.hidden = true;
@@ -21952,7 +21992,7 @@
         if (heading)
             heading.textContent = title;
         document.querySelectorAll(".admin-nav-item").forEach(btn => btn.classList.remove("active"));
-        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : "adminComingSoon"));
+        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
         if (active)
             active.classList.add("active");
     }
@@ -25387,6 +25427,48 @@
         adminLoadNews();
     }
     window.adminOpenNews = adminOpenNews;
+
+    let adminCommunityFilter = 'pending';
+    window.adminOpenCommunity = async function(filter='pending') {
+      adminCommunityFilter=filter;
+      window.adminSetView?.('admin-community-view','Modération communauté');
+      document.querySelectorAll('[data-community-filter]').forEach(b=>b.classList.toggle('active',b.dataset.communityFilter===filter));
+      const status=document.getElementById('admin-community-status');
+      const postsBox=document.getElementById('admin-community-posts');
+      const topicsBox=document.getElementById('admin-community-topics');
+      if(status)status.textContent='Chargement des éléments à modérer…';
+      try {
+        const data=await window.adminApi('/api/admin/community/content?status='+encodeURIComponent(filter));
+        const counts=data.counts||{};
+        document.getElementById('admin-community-pending-count').textContent=counts.pending_posts??0;
+        document.getElementById('admin-community-approved-count').textContent=counts.approved_posts??0;
+        document.getElementById('admin-community-rejected-count').textContent=counts.rejected_posts??0;
+        const membersBox=document.getElementById('admin-community-members');membersBox.replaceChildren();
+        const membersData=await window.adminApi('/api/admin/community/members');
+        const pendingMembers=(membersData.members||[]).filter(m=>m.status==='pending');
+        if(!pendingMembers.length)membersBox.textContent='Aucune demande d’accès en attente.';
+        pendingMembers.forEach(member=>{const row=document.createElement('article');row.className='feature';row.style.cssText='display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;padding:12px;margin:8px 0';const identity=document.createElement('div');const name=document.createElement('strong');name.textContent=member.display_name||'Explorateur';const email=document.createElement('small');email.textContent=member.email;email.style.display='block';identity.append(name,email);const actions=document.createElement('div');actions.style.cssText='display:flex;gap:8px';for(const [label,next,cls] of [['Valider','approved','primary-btn'],['Refuser','rejected','small-btn']]){const btn=document.createElement('button');btn.type='button';btn.className=cls;btn.textContent=label;btn.addEventListener('click',async()=>{btn.disabled=true;try{await window.adminApi('/api/admin/community/members/'+encodeURIComponent(member.user_id),{method:'PATCH',body:JSON.stringify({status:next})});await window.adminOpenCommunity(adminCommunityFilter);}catch(e){btn.disabled=false;if(status)status.textContent=e.message||'Action impossible.';}});actions.append(btn);}row.append(identity,actions);membersBox.append(row);});
+        postsBox.replaceChildren();
+        if(!(data.posts||[]).length)postsBox.textContent='Aucune publication dans cette catégorie.';
+        (data.posts||[]).forEach(post=>{
+          const card=document.createElement('article');card.className='feature';card.style.cssText='padding:16px;margin:12px 0';
+          const heading=document.createElement('strong');heading.textContent=(post.author_name||'Explorateur')+' · '+new Date(post.created_at).toLocaleString('fr-FR');card.append(heading);
+          const state=document.createElement('p');state.textContent='Statut : '+post.status;card.append(state);
+          if(post.body){const body=document.createElement('p');body.style.whiteSpace='pre-wrap';body.textContent=post.body;card.append(body);}
+          if(post.photo_url){const img=document.createElement('img');img.src=post.photo_url;img.alt='Photo proposée par un membre';img.loading='lazy';img.style.cssText='display:block;max-width:100%;max-height:420px;object-fit:contain;border-radius:10px;margin:10px 0';img.referrerPolicy='no-referrer';card.append(img);}
+          if(post.category_slug){const cat=document.createElement('small');cat.textContent='Rubrique : '+post.category_slug;card.append(cat);}
+          const actions=document.createElement('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-top:12px';
+          for(const [label,next,color] of [['Approuver','approved','primary-btn'],['Refuser','rejected','small-btn']]){const btn=document.createElement('button');btn.type='button';btn.className=color;btn.textContent=label;btn.addEventListener('click',async()=>{btn.disabled=true;try{await window.adminApi('/api/admin/community/posts/'+post.id,{method:'PATCH',body:JSON.stringify({status:next})});await window.adminOpenCommunity(adminCommunityFilter);}catch(e){btn.disabled=false;if(status)status.textContent=e.message||'Action impossible.';}});actions.append(btn);}
+          card.append(actions);postsBox.append(card);
+        });
+        topicsBox.replaceChildren();
+        if(!(data.topics||[]).length)topicsBox.textContent='Aucune discussion.';
+        (data.topics||[]).forEach(topic=>{const row=document.createElement('article');row.className='feature';row.style.cssText='padding:12px;margin:10px 0';const title=document.createElement('strong');title.textContent=topic.title;const meta=document.createElement('p');meta.textContent=(topic.author_name||'Explorateur')+' · '+(topic.is_hidden?'Masquée':'Visible')+' · '+(topic.is_locked?'Verrouillée':'Ouverte');row.append(title,meta);const actions=document.createElement('div');actions.style.cssText='display:flex;gap:8px;flex-wrap:wrap';const lock=document.createElement('button');lock.className='small-btn';lock.textContent=topic.is_locked?'Déverrouiller':'Verrouiller';lock.addEventListener('click',async()=>{await window.adminApi('/api/admin/community/topics/'+topic.id,{method:'PATCH',body:JSON.stringify({is_locked:!topic.is_locked})});window.adminOpenCommunity(adminCommunityFilter);});const hide=document.createElement('button');hide.className='small-btn';hide.textContent=topic.is_hidden?'Réafficher':'Masquer';hide.addEventListener('click',async()=>{await window.adminApi('/api/admin/community/topics/'+topic.id,{method:'PATCH',body:JSON.stringify({is_hidden:!topic.is_hidden})});window.adminOpenCommunity(adminCommunityFilter);});actions.append(lock,hide);row.append(actions);topicsBox.append(row);});
+        if(status)status.textContent='Modération chargée. Les photos et publications restent invisibles aux membres tant qu’elles ne sont pas approuvées.';
+      } catch(error) {if(status)status.textContent=error.message||'Impossible de charger la modération.';}
+    };
+    document.querySelectorAll('[data-community-filter]').forEach(b=>b.addEventListener('click',()=>window.adminOpenCommunity(b.dataset.communityFilter)));
+
     function adminNewsReset() {
         document.getElementById('admin-news-form')?.reset();
         document.getElementById('admin-news-id').value = '';
@@ -26210,6 +26292,7 @@
     ;
 </script>
 <script>
+    const profileApi = (...args) => window.profileApi(...args);
     function goTo(id) {
         document.getElementById(id)?.scrollIntoView({
             behavior: "smooth",
@@ -26719,8 +26802,10 @@
         try {
             const data=await profileApi('/api/community/bootstrap');
             const membership=data.membership;
+            const socialForm=document.getElementById('community-post-form');
+            if (socialForm) socialForm.hidden = !data.can_publish;
             if (data.can_publish) {
-                status.textContent='✅ Ton compte est validé par l’administration. Tu pourras publier et participer aux discussions dès leur ouverture.';
+                status.textContent='✅ Ton compte est validé par l’administration. Tu peux publier et participer aux discussions.';
             } else if (membership?.status==='pending') {
                 status.textContent='⏳ Ta demande de participation est en attente de validation par l’administration. Tu peux déjà consulter les rubriques.';
             } else if (membership?.status==='rejected' || membership?.status==='suspended') {
@@ -26840,6 +26925,24 @@
     };
     const communityTopicForm=document.getElementById('community-topic-form');
     if(communityTopicForm&&!communityTopicForm.dataset.bound){communityTopicForm.dataset.bound='1';communityTopicForm.addEventListener('submit',async e=>{e.preventDefault();const title=document.getElementById('community-topic-title'),body=document.getElementById('community-topic-body'),status=document.getElementById('community-forum-status'),submit=communityTopicForm.querySelector('button[type="submit"]');submit.disabled=true;try{await profileApi('/api/community/topics',{method:'POST',body:JSON.stringify({category_slug:activeCommunityCategory,title:title.value,body:body.value})});communityTopicForm.reset();if(status)status.textContent='Discussion publiée !';await loadCommunityTopics(activeCommunityCategory);}catch(error){if(status)status.textContent=error.message||'Publication impossible.';}finally{submit.disabled=false;}});}
+
+    window.loadCommunityFeed = async function() {
+      const box=document.getElementById('community-post-feed'); if(!box)return;
+      try {const data=await profileApi('/api/community/posts');box.replaceChildren();if(!(data.posts||[]).length){box.textContent='Aucune publication validée pour le moment.';return;}
+        (data.posts||[]).forEach(post=>{const card=document.createElement('article');card.className='explorer-card';card.style.cssText='padding:16px;margin:12px 0';const who=document.createElement('strong');who.textContent=post.author_name||'Explorateur';const when=document.createElement('small');when.textContent=' · '+new Date(post.created_at).toLocaleString('fr-FR');const body=document.createElement('p');body.style.whiteSpace='pre-wrap';body.textContent=post.body||'';card.append(who,when);if(post.body)card.append(body);if(post.photo_url){const img=document.createElement('img');img.src=post.photo_url;img.alt='Photo partagée par un explorateur';img.loading='lazy';img.style.cssText='max-width:100%;max-height:420px;object-fit:contain;border-radius:10px;margin-top:10px';card.append(img);}box.append(card);});
+      }catch(e){box.textContent=e.message||'Impossible de charger le fil.';}
+    };
+    const communityPostForm=document.getElementById('community-post-form');
+    if(communityPostForm&&!communityPostForm.dataset.bound){communityPostForm.dataset.bound='1';communityPostForm.addEventListener('submit',async e=>{e.preventDefault();const status=document.getElementById('community-post-status'),body=document.getElementById('community-post-body'),file=document.getElementById('community-post-photo')?.files?.[0],submit=communityPostForm.querySelector('button[type="submit"]');submit.disabled=true;if(status)status.textContent='Envoi en cours…';try{let photoUrl='';if(file){if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>8*1024*1024)throw new Error('Choisis une image JPG, PNG ou WebP de 8 Mo maximum.');const sig=await profileApi('/api/community/photos/signature',{method:'POST',body:JSON.stringify({})});const form=new FormData();form.append('file',file);form.append('api_key',sig.api_key);form.append('timestamp',String(sig.timestamp));form.append('folder',sig.folder);form.append('signature',sig.signature);const upload=await fetch(`https://api.cloudinary.com/v1_1/${sig.cloud_name}/image/upload`,{method:'POST',body:form});const uploaded=await upload.json();if(!upload.ok||!uploaded.secure_url)throw new Error(uploaded.error?.message||'Le transfert de la photo a échoué.');photoUrl=uploaded.secure_url;}const result=await profileApi('/api/community/posts',{method:'POST',body:JSON.stringify({body:body.value,photo_url:photoUrl})});communityPostForm.reset();if(status)status.textContent=result.message||'Publication envoyée pour validation.';}catch(err){if(status)status.textContent=err.message||'Envoi impossible.';}finally{submit.disabled=false;}});}
+
+    window.loadCommunityFeed = async function() {
+      const box=document.getElementById('community-post-feed'); if(!box)return;
+      try {const data=await profileApi('/api/community/posts');box.replaceChildren();if(!(data.posts||[]).length){box.textContent='Aucune publication validée pour le moment.';return;}
+        (data.posts||[]).forEach(post=>{const card=document.createElement('article');card.className='explorer-card';card.style.cssText='padding:16px;margin:12px 0';const who=document.createElement('strong');who.textContent=post.author_name||'Explorateur';const when=document.createElement('small');when.textContent=' · '+new Date(post.created_at).toLocaleString('fr-FR');const body=document.createElement('p');body.style.whiteSpace='pre-wrap';body.textContent=post.body||'';card.append(who,when);if(post.body)card.append(body);if(post.photo_url){const img=document.createElement('img');img.src=post.photo_url;img.alt='Photo partagée par un explorateur';img.loading='lazy';img.style.cssText='max-width:100%;max-height:420px;object-fit:contain;border-radius:10px;margin-top:10px';card.append(img);}box.append(card);});
+      }catch(e){box.textContent=e.message||'Impossible de charger le fil.';}
+    };
+    const communityPostForm=document.getElementById('community-post-form');
+    if(communityPostForm&&!communityPostForm.dataset.bound){communityPostForm.dataset.bound='1';communityPostForm.addEventListener('submit',async e=>{e.preventDefault();const status=document.getElementById('community-post-status'),body=document.getElementById('community-post-body'),file=document.getElementById('community-post-photo')?.files?.[0],submit=communityPostForm.querySelector('button[type="submit"]');submit.disabled=true;if(status)status.textContent='Envoi en cours…';try{let photoUrl='';if(file){if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>8*1024*1024)throw new Error('Choisis une image JPG, PNG ou WebP de 8 Mo maximum.');const sig=await profileApi('/api/community/photos/signature',{method:'POST',body:JSON.stringify({})});const form=new FormData();form.append('file',file);form.append('api_key',sig.api_key);form.append('timestamp',String(sig.timestamp));form.append('folder',sig.folder);form.append('signature',sig.signature);const upload=await fetch(`https://api.cloudinary.com/v1_1/${sig.cloud_name}/image/upload`,{method:'POST',body:form});const uploaded=await upload.json();if(!upload.ok||!uploaded.secure_url)throw new Error(uploaded.error?.message||'Le transfert de la photo a échoué.');photoUrl=uploaded.secure_url;}const result=await profileApi('/api/community/posts',{method:'POST',body:JSON.stringify({body:body.value,photo_url:photoUrl})});communityPostForm.reset();if(status)status.textContent=result.message||'Publication envoyée pour validation.';}catch(err){if(status)status.textContent=err.message||'Envoi impossible.';}finally{submit.disabled=false;}});}
 
     window.requestCommunityAccess = async function() {
         const status=document.getElementById('community-membership-status');
@@ -26971,8 +27074,10 @@
             window.loadExplorerProfile?.();
         if (id === "dash-badges")
             window.loadMyAwardedRewards?.();
-        if (id === "dash-community")
+        if (id === "dash-community") {
             window.loadCommunityHome?.();
+            window.loadCommunityFeed?.();
+        }
         if (id === "dash-testers")
             window.loadTesterApplication?.();
         if (id === "dash-tester-space")
