@@ -2400,27 +2400,12 @@ body.halloween-accueil .home-hero{
 }
 #admin-adventure-step-form .admin-step-writing-field textarea,
 #admin-adventure-step-form .admin-step-writing-field input {
-  display:block;
-  width:100%;
-  box-sizing:border-box;
-  margin-top:8px;
-  border:1px solid #cbb98f;
-  border-radius:10px;
+  margin-top:7px;
+  border:1px solid #d4c49c;
+  border-radius:9px;
   background:#fffefa;
   color:#26352a;
-  font:15px/1.6 Arial,sans-serif;
-}
-#admin-adventure-step-form .admin-step-writing-field textarea {
-  min-height:145px;
-  padding:13px 14px;
-  resize:vertical;
-}
-#admin-adventure-step-form #admin-step-answer {
-  min-height:86px;
-}
-#admin-adventure-step-form .admin-step-writing-field {
-  line-height:1.5;
-  margin-top:3px;
+  font:14px/1.55 Arial,sans-serif;
 }
 #admin-adventure-step-form .admin-step-writing-field textarea:focus,
 #admin-adventure-step-form .admin-step-writing-field input:focus {
@@ -2429,8 +2414,7 @@ body.halloween-accueil .home-hero{
   border-color:#b98b2e;
 }
 @media (max-width:600px) {
-  #admin-adventure-step-form .admin-step-writing-field textarea { min-height:135px; }
-  #admin-adventure-step-form #admin-step-answer { min-height:78px; }
+  #admin-adventure-step-form .admin-step-writing-field textarea { min-height:125px; }
 }
 
 </style>
@@ -5033,7 +5017,7 @@ body.halloween-accueil .home-hero{
             <label>Rayon GPS autorisé (mètres)<input id="admin-step-gps-radius" type="number" min="10" max="500" step="5" value="100" required style="display:block;width:100%;padding:9px"><small>Le joueur devra se trouver dans ce rayon pour débloquer l’étape.</small></label>
             <div style="grid-column:1/-1;background:#edf3e8;border:1px solid #d4e2ce;border-radius:9px;padding:10px;color:#31543b;font-size:13px">📍 Le GPS est obligatoire pour valider l’arrivée. Renseigne la latitude, la longitude et le rayon de validation du lieu.</div>
             <label style="grid-column:1/-1">Photo de l’étape<input id="admin-step-photo-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:block;width:100%;padding:9px"><small>JPG, PNG ou WEBP · 8 Mo maximum</small><input id="admin-step-photo" type="hidden"></label><div id="admin-step-photo-preview" style="grid-column:1/-1"></div>
-            <label class="admin-step-writing-field" style="grid-column:1/-1">Énigme<textarea id="admin-step-riddle" rows="5" style="display:block;width:100%;min-height:145px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Réponse attendue<textarea id="admin-step-answer" maxlength="500" rows="3" placeholder="Saisis la réponse attendue par le joueur…" style="display:block;width:100%;min-height:86px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Indice pour trouver le lieu et aider à résoudre l’énigme<textarea id="admin-step-hint" maxlength="1000" rows="5" placeholder="Aide le joueur sans lui donner directement la réponse…" style="display:block;width:100%;min-height:145px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Indice pour rejoindre le prochain lieu (après bonne réponse)<textarea id="admin-step-next-hint" maxlength="1000" rows="5" placeholder="Après la bonne réponse, indique au joueur où poursuivre son aventure…" style="display:block;width:100%;min-height:145px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label>Étoiles attribuées<input id="admin-step-stars" type="number" min="0" max="10" step="1" value="1" style="display:block;width:100%;box-sizing:border-box;padding:10px"></label>
+            <label class="admin-step-writing-field" style="grid-column:1/-1">Énigme<textarea id="admin-step-riddle" rows="4" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Réponse<input id="admin-step-answer" maxlength="500" style="display:block;width:100%;box-sizing:border-box;padding:12px"></label><label class="admin-step-writing-field" style="grid-column:1/-1">Premier indice (avant la réponse)<textarea id="admin-step-hint" maxlength="1000" rows="4" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label class="admin-step-writing-field" style="grid-column:1/-1">Indice du prochain lieu (après bonne réponse)<textarea id="admin-step-next-hint" maxlength="1000" rows="4" placeholder="Un nouvel indice pour guider vers la prochaine étape…" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea></label><label>Étoiles attribuées<input id="admin-step-stars" type="number" min="0" max="10" step="1" value="1" style="display:block;width:100%;box-sizing:border-box;padding:10px"></label>
             <div style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap"><button class="admin-secondary-btn" id="admin-step-submit" type="submit">➕ Ajouter l'étape / énigme</button><button class="admin-secondary-btn" id="admin-step-cancel-edit" type="button" hidden>Annuler la modification</button></div>
           </form>
         </div>
@@ -5543,16 +5527,14 @@ window.toggleAdminGpsTestMode=function(){
   if(typeof adminRenderAdventureList==="function") adminRenderAdventureList();
 };
 window.adminPreviewAdventure=async function(id){
-  if(window.adminAccessGranted!==true || window.adminCurrentRole!=="admin" || localStorage.getItem("modeTestAventure")!=="true") { alert("Active d’abord le mode test GPS réservé à l’administration."); return; }
-  // Empêche le chargement de la liste des aventures joueur pendant l'ouverture
-  // directe d'un parcours depuis l'administration.
-  window.adminPreviewOpeningAdventure = true;
-  try {
-    showDashSection("dash-adventures");
-    await openPlayerAdventure(id,false);
-  } finally {
-    window.adminPreviewOpeningAdventure = false;
+  if(window.adminAccessGranted!==true || window.adminCurrentRole!=="admin" || localStorage.getItem("modeTestAventure")!=="true") {
+    alert("Active d’abord le mode test GPS réservé à l’administration.");
+    return;
   }
+  // Évite que le chargement normal des aventures (joueurs) ne masque
+  // l'aperçu administrateur lancé juste après.
+  showDashSection("dash-adventures", {skipAdventureLoad:true});
+  await openPlayerAdventure(id,false);
 };
 async function adminOpenAdventures(){
   adminSetView("admin-adventures-view","Aventures & énigmes");
@@ -6571,11 +6553,48 @@ document.getElementById("admin-adventure-edit-cancel")?.addEventListener("click"
 document.getElementById("admin-adventure-validate")?.addEventListener("click",()=>window.adminAdventureAction(document.getElementById("admin-adventure-edit-id").value,"validate"));
 document.getElementById("admin-adventure-publish")?.addEventListener("click",()=>window.adminAdventureAction(document.getElementById("admin-adventure-edit-id").value,"publish"));
 window.adminLoadAdventureLevels=async function(){
-  const village=document.getElementById("admin-adventure-village").value, levelSelect=document.getElementById("admin-adventure-level");
-  levelSelect.replaceChildren(); const first=document.createElement("option");first.value="";first.textContent="Choisir un niveau…";levelSelect.appendChild(first);
+  const villageSelect=document.getElementById("admin-adventure-village");
+  const levelSelect=document.getElementById("admin-adventure-level");
+  const village=villageSelect?.value||"";
+  if(!levelSelect)return;
+  levelSelect.replaceChildren();
+  const first=document.createElement("option");
+  first.value="";
+  first.textContent="Choisir un niveau…";
+  levelSelect.appendChild(first);
   if(!village)return;
-  try{const data=await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);(data.levels||[]).filter(x=>x.status!=="desactive").forEach(x=>{const o=document.createElement("option");o.value=x.level_key;o.textContent=`${x.display_name} — ${x.riddle_count} énigmes / ${x.star_count} étoiles`;levelSelect.appendChild(o);});}
-  catch(e){const o=document.createElement("option");o.value="";o.textContent="Impossible de charger les niveaux";levelSelect.appendChild(o);}
+  try{
+    const data=await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);
+    let levels=Array.isArray(data.levels)?data.levels.filter(x=>x.status!=="desactive"):[];
+    if(levels.length===0){
+      levels=ADMIN_LEVEL_DEFINITIONS.map(([key,label],i)=>({
+        level_key:key,
+        display_name:label,
+        riddle_count:key==="moyen"?15:key==="difficile"?20:key==="extreme"?25:10,
+        star_count:key==="moyen"?15:key==="difficile"?20:key==="extreme"?25:10,
+        status:key==="facile"?"actif":"preparation",
+        sort_order:i
+      }));
+    }
+    levels.forEach(x=>{
+      const option=document.createElement("option");
+      option.value=x.level_key;
+      option.textContent=`${x.display_name} — ${x.riddle_count} énigmes / ${x.star_count} étoiles`;
+      levelSelect.appendChild(option);
+    });
+    if(levels.length===0){
+      const option=document.createElement("option");
+      option.value="";
+      option.textContent="Aucun niveau disponible";
+      levelSelect.appendChild(option);
+    }
+  }catch(error){
+    console.error("Chargement des niveaux du parcours impossible :",error);
+    const option=document.createElement("option");
+    option.value="";
+    option.textContent="Erreur de chargement — réessaie";
+    levelSelect.appendChild(option);
+  }
 };
 document.getElementById("admin-adventure-create-form")?.addEventListener("submit",async e=>{
   e.preventDefault();const status=document.getElementById("admin-adventures-status"),btn=e.currentTarget.querySelector('button[type="submit"]');
@@ -7391,7 +7410,7 @@ function showRuleTab(id, button) {
   document.querySelectorAll("#dash-rules .rules-content").forEach(panel => panel.classList.toggle("active", panel.id === id));
   document.querySelectorAll("#dash-rules .rules-tab").forEach(tab => tab.classList.toggle("active", tab === button));
 }
-function showDashSection(id){
+function showDashSection(id, options = {}){
   // Ne jamais afficher l'espace admin avant confirmation du serveur.
   if(id === "dash-admin-info" && !adminAccessGranted){
     const adminSection = document.getElementById("dash-admin-info");
@@ -7483,7 +7502,7 @@ function showDashSection(id){
   if(id === "dash-news" || id === "dash-updates") window.loadPublicNews?.();
   if(id === "dash-notifications") window.loadMemberNotifications?.();
   if(id === "dash-mailbox") window.loadMemberMailbox?.();
-  if(id === "dash-adventures" && window.adminPreviewOpeningAdventure !== true) window.loadPlayerAdventures?.();
+  if(id === "dash-adventures" && !options.skipAdventureLoad) window.loadPlayerAdventures?.();
   if(id === "dash-village-map") actualiserCarteVillages();
   if(id === "dash-my-puzzle-progress") actualiserProgressionCartePersonnelle();
   if(id === "dash-profile") window.loadExplorerProfile?.();
