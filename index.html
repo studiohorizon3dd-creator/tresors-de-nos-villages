@@ -21170,10 +21170,35 @@
                                             </select>
                                         </label>
                                         <label>
+                                            🗂️ Catégorie *
+                                            <select id="admin-adventure-category" required>
+                                                <option value="">Choisir une catégorie…</option>
+                                                <option value="enfant">Enfant</option>
+                                                <option value="facile">Facile</option>
+                                                <option value="famille">Famille</option>
+                                                <option value="moyen">Moyen</option>
+                                                <option value="difficile">Difficile</option>
+                                                <option value="extreme">Extrême</option>
+                                                <option value="nuit">Nuit</option>
+                                            </select>
+                                        </label>
+                                        <label id="admin-adventure-age-wrap" hidden>
+                                            👧 Tranche d’âge
+                                            <select id="admin-adventure-age">
+                                                <option value="4-6">4 à 6 ans</option>
+                                                <option value="7-9">7 à 9 ans</option>
+                                                <option value="10-12">10 à 12 ans</option>
+                                                <option value="13-15">13 à 15 ans</option>
+                                            </select>
+                                        </label>
+                                        <label>
                                             🏅 Niveau *
                                             <select id="admin-adventure-level" required>
                                                 <option value="">Choisir un niveau…</option>
                                             </select>
+                                        </label>
+                                        <label class="wide" id="admin-adventure-level-summary" style="color:#687267;font:13px Arial,sans-serif">
+                                            Le nombre d’énigmes et d’étoiles sera repris du niveau configuré pour ce village.
                                         </label>
                                         <label class="wide">
                                             ✏️ Nom du parcours *<input id="admin-adventure-title" required maxlength="150" placeholder="Ex. Le mystère du vieux village">
@@ -24675,42 +24700,45 @@
     window.adminLoadAdventureLevels = async function() {
         const villageSelect = document.getElementById("admin-adventure-village");
         const levelSelect = document.getElementById("admin-adventure-level");
+        const categorySelect = document.getElementById("admin-adventure-category");
+        const ageSelect = document.getElementById("admin-adventure-age");
+        const ageWrap = document.getElementById("admin-adventure-age-wrap");
+        const summary = document.getElementById("admin-adventure-level-summary");
         const village = villageSelect?.value || "";
-        if (!levelSelect)
-            return;
+        if (!levelSelect) return;
+        const selectedCategory = categorySelect?.value || "";
+        const selectedAge = ageSelect?.value || "4-6";
+        if (ageWrap) ageWrap.hidden = selectedCategory !== "enfant";
         levelSelect.replaceChildren();
         const first = document.createElement("option");
         first.value = "";
         first.textContent = "Choisir un niveau…";
         levelSelect.appendChild(first);
-        if (!village)
-            return;
+        if (!village) return;
         try {
             const data = await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village)}`);
             let levels = Array.isArray(data.levels) ? data.levels.filter(x => x.status !== "desactive") : [];
-            if (levels.length === 0) {
-                levels = ADMIN_LEVEL_DEFINITIONS.map( ([key,label], i) => ({
-                    level_key: key,
-                    display_name: label,
-                    riddle_count: key === "moyen" ? 15 : key === "difficile" ? 20 : key === "extreme" ? 25 : 10,
-                    star_count: key === "moyen" ? 15 : key === "difficile" ? 20 : key === "extreme" ? 25 : 10,
-                    status: key === "facile" ? "actif" : "preparation",
-                    sort_order: i
-                }));
+            const childKey = `enfant_${selectedAge.replace("-", "_")}`;
+            if (selectedCategory) {
+                levels = levels.filter(x => selectedCategory === "enfant"
+                    ? x.level_key === childKey || x.level_key === "enfant"
+                    : x.level_key === selectedCategory);
             }
             levels.forEach(x => {
                 const option = document.createElement("option");
                 option.value = x.level_key;
+                option.dataset.riddles = String(x.riddle_count ?? 0);
+                option.dataset.stars = String(x.star_count ?? 0);
                 option.textContent = `${x.display_name} — ${x.riddle_count} énigmes / ${x.star_count} étoiles`;
                 levelSelect.appendChild(option);
-            }
-            );
+            });
             if (levels.length === 0) {
                 const option = document.createElement("option");
                 option.value = "";
-                option.textContent = "Aucun niveau disponible";
+                option.textContent = selectedCategory ? "Aucun niveau configuré pour ce choix" : "Aucun niveau disponible";
                 levelSelect.appendChild(option);
             }
+            if (summary) summary.textContent = "Sélectionne un niveau pour afficher son nombre d’énigmes et d’étoiles.";
         } catch (error) {
             console.error("Chargement des niveaux du parcours impossible :", error);
             const option = document.createElement("option");
@@ -24718,8 +24746,14 @@
             option.textContent = "Erreur de chargement — réessaie";
             levelSelect.appendChild(option);
         }
-    }
-    ;
+    };
+    document.getElementById("admin-adventure-category")?.addEventListener("change", () => window.adminLoadAdventureLevels());
+    document.getElementById("admin-adventure-age")?.addEventListener("change", () => window.adminLoadAdventureLevels());
+    document.getElementById("admin-adventure-level")?.addEventListener("change", () => {
+        const selected = document.getElementById("admin-adventure-level").selectedOptions[0];
+        const summary = document.getElementById("admin-adventure-level-summary");
+        if (summary && selected?.value) summary.textContent = `${selected.dataset.riddles || 0} énigmes · ${selected.dataset.stars || 0} étoiles`;
+    });
     document.getElementById("admin-adventure-create-form")?.addEventListener("submit", async e => {
         e.preventDefault();
         const status = document.getElementById("admin-adventures-status")
@@ -26911,48 +26945,64 @@
             status.textContent = humbertDone ? "Statut : découvert ✓" : "Statut : pas encore visité";
     }
 
-    function actualiserCarteVillages() {
+    let villageMarkersLayer = null;
+    let villageMapLoadPromise = null;
+    async function actualiserCarteVillages() {
         const humbertDone = localStorage.getItem("humbertTamponObtenu") === "true";
         const hStatus = document.getElementById("map-status-humbert");
-        if (hStatus)
-            hStatus.textContent = humbertDone ? "Statut : visité ✓" : "Statut : disponible";
+        if (hStatus) hStatus.textContent = humbertDone ? "Statut : visité ✓" : "Statut : disponible";
         const mapSection = document.getElementById("dash-village-map");
-        if (!mapSection || mapSection.classList.contains("hidden"))
-            return;
+        if (!mapSection || mapSection.classList.contains("hidden")) return;
+        const mapElement = document.getElementById("village-map");
         if (typeof L === "undefined") {
-            const el = document.getElementById("village-map");
-            if (el)
-                el.textContent = "La carte n’a pas pu être chargée. Vérifie ta connexion internet.";
+            if (mapElement) mapElement.textContent = "La carte n’a pas pu être chargée. Vérifie ta connexion internet.";
             return;
         }
         if (!villageMapInstance) {
-            villageMapInstance = L.map("village-map").setView([50.4982, 1.8925], 12);
+            villageMapInstance = L.map("village-map").setView([50.4982, 1.8925], 11);
             L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 maxZoom: 19,
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(villageMapInstance);
-            villageMapMarkers.humbert = L.circleMarker([50.50379, 1.9064], {
-                radius: 10,
-                color: "#ffffff",
-                weight: 2,
-                fillColor: "#23834a",
-                fillOpacity: 1
-            }).addTo(villageMapInstance);
-            villageMapMarkers.sempy = L.circleMarker([50.49291, 1.87896], {
-                radius: 10,
-                color: "#ffffff",
-                weight: 2,
-                fillColor: "#8b9290",
-                fillOpacity: 1
-            }).addTo(villageMapInstance);
+            villageMarkersLayer = L.layerGroup().addTo(villageMapInstance);
         }
-        const hColor = humbertDone ? "#23834a" : "#d39b25";
-        villageMapMarkers.humbert.setStyle({
-            fillColor: hColor
-        });
-        villageMapMarkers.humbert.bindPopup("<strong>Humbert</strong><br>" + (humbertDone ? "Village visité ✓" : "Aventure disponible"));
-        villageMapMarkers.sempy.bindPopup("<strong>Sempy</strong><br>À découvrir — parcours à préparer");
-        setTimeout( () => villageMapInstance.invalidateSize(), 100);
+        if (villageMapLoadPromise) return villageMapLoadPromise;
+        villageMapLoadPromise = (async () => {
+            try {
+                const response = await fetch(`${window.API_BASE}/api/villages`, { headers: { Accept: "application/json" } });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.error || `Erreur ${response.status}`);
+                const villages = Array.isArray(data.villages) ? data.villages : [];
+                villageMarkersLayer.clearLayers();
+                const bounds = [];
+                villages.forEach(village => {
+                    const lat = Number(village.latitude);
+                    const lon = Number(village.longitude);
+                    if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) return;
+                    const visited = village.slug === "humbert" && humbertDone;
+                    const marker = L.circleMarker([lat, lon], {
+                        radius: 9, color: "#fff", weight: 2,
+                        fillColor: visited ? "#23834a" : (village.status === "available" ? "#d39b25" : "#8b9290"),
+                        fillOpacity: 1
+                    }).addTo(villageMarkersLayer);
+                    const name = String(village.name || "Village").replace(/[<>&"]/g, "");
+                    const postal = village.postal_code ? ` · ${String(village.postal_code).replace(/[<>&"]/g, "")}` : "";
+                    marker.bindPopup(`<strong>${name}${postal}</strong><br>${visited ? "Village visité ✓" : "Village à découvrir"}`);
+                    bounds.push([lat, lon]);
+                });
+                if (bounds.length) villageMapInstance.fitBounds(bounds, { padding: [25, 25], maxZoom: 13 });
+                else if (mapElement) {
+                    mapElement.insertAdjacentHTML("beforeend", '<p class="map-empty-note">Aucun village ne possède encore de coordonnées GPS enregistrées.</p>');
+                }
+                setTimeout(() => villageMapInstance.invalidateSize(), 100);
+            } catch (error) {
+                console.error("Chargement des points GPS des villages impossible :", error);
+                if (mapElement) mapElement.insertAdjacentHTML("beforeend", '<p class="map-empty-note">Impossible de charger les points GPS. Vérifie les coordonnées enregistrées pour les villages.</p>');
+            } finally {
+                villageMapLoadPromise = null;
+            }
+        })();
+        return villageMapLoadPromise;
     }
 
     function actualiserPasseport() {
