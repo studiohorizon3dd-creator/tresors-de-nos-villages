@@ -12915,6 +12915,33 @@
 @media(max-width:650px){.france-map-tools{grid-template-columns:1fr}#france-department-map{height:420px}.france-map-shell{padding:10px}}
 </style>
 
+
+<style id="admin-roadmap-styles">
+#admin-roadmap-view{max-width:1500px;margin:0 auto;padding:8px 0 35px;color:#183326}
+#admin-roadmap-view .roadmap-hero{padding:25px 28px;border-radius:18px;background:linear-gradient(110deg,#062c20,#14583b);color:#fff4cf;border:1px solid #d7ad45}
+#admin-roadmap-view .roadmap-hero h3{font:700 clamp(26px,3vw,38px) Georgia,serif;margin:5px 0 8px;color:#fff0b5}
+#admin-roadmap-view .roadmap-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}
+#admin-roadmap-view .roadmap-kpi,#admin-roadmap-view .roadmap-panel{background:#fffdf7;border:1px solid #e4d5b5;border-radius:13px;padding:15px;box-shadow:0 4px 12px #173b2810}
+#admin-roadmap-view .roadmap-kpi strong{display:block;font:700 28px Georgia,serif;color:#123d2b;margin-top:5px}
+#admin-roadmap-view .roadmap-panel{margin:14px 0}
+#admin-roadmap-view .roadmap-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#admin-roadmap-view label{display:grid;gap:5px;font-weight:700;font-size:13px}
+#admin-roadmap-view input,#admin-roadmap-view select,#admin-roadmap-view textarea{width:100%;padding:10px;border:1px solid #d6c8a8;border-radius:8px;background:#fff;color:#183326;font:14px Arial,sans-serif}
+#admin-roadmap-view textarea{min-height:75px;resize:vertical}
+#admin-roadmap-view .roadmap-wide{grid-column:1/-1}
+#admin-roadmap-view .roadmap-actions{display:flex;gap:8px;flex-wrap:wrap}
+#admin-roadmap-view button{border:1px solid #c9a34c;border-radius:9px;padding:10px 14px;background:#0c5637;color:#fff4cf;font-weight:700;cursor:pointer}
+#admin-roadmap-view button.secondary{background:#fffaf0;color:#174b35}
+#admin-roadmap-view .roadmap-table-wrap{overflow-x:auto}
+#admin-roadmap-view table{width:100%;border-collapse:collapse;min-width:720px}
+#admin-roadmap-view th,#admin-roadmap-view td{text-align:left;padding:10px;border-bottom:1px solid #eee4d0;font-size:13px}
+#admin-roadmap-view th{color:#6d5a2b;background:#faf4e5}
+#admin-roadmap-view .roadmap-tag{display:inline-block;padding:4px 8px;border-radius:20px;background:#f4edda;font-size:11px;font-weight:700}
+#admin-roadmap-view .roadmap-note{font-size:12px;color:#6b705f;line-height:1.5}
+@media(max-width:850px){#admin-roadmap-view .roadmap-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-roadmap-view .roadmap-form{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){#admin-roadmap-view .roadmap-form{grid-template-columns:1fr}#admin-roadmap-view .roadmap-grid{grid-template-columns:1fr 1fr}}
+</style>
+
 </head>
     <body>
         <script>
@@ -15071,6 +15098,10 @@
                                         <span>⚙</span>
                                         Statut du site
                                     </button>
+                                    <button class="admin-nav-item" type="button" id="admin-roadmap-nav" onclick="window.adminOpenRoadmap()">
+                                        <span>🧭</span>
+                                        Feuille de route nationale
+                                    </button>
                                 </div>
                             </details>
                             <details class="admin-category">
@@ -15439,6 +15470,59 @@
                                 Trésors de nos Villages · Espace administration <small id="dash-dashboard-load-note">Chargement des données…</small>
                                 <button type="button" onclick="window.loadAdminDashboardOverview?.()">↻ Actualiser les données</button>
                             </div>
+                        </div>
+                        <div id="admin-roadmap-view" class="admin-subview" hidden>
+                            <section>
+                                <div class="roadmap-hero">
+                                    <div style="font-size:11px;letter-spacing:2px;color:#e7c96f;font-weight:bold">PLANIFICATION NATIONALE</div>
+                                    <h3>🧭 Feuille de route nationale</h3>
+                                    <p style="margin:0;line-height:1.5">Prépare les prochaines découvertes, organise les recherches et suis l'avancement des villages.</p>
+                                </div>
+                                <div class="roadmap-grid">
+                                    <div class="roadmap-kpi"><span>Villages repérés</span><strong id="roadmap-total">0</strong><small>dans le catalogue</small></div>
+                                    <div class="roadmap-kpi"><span>À étudier</span><strong id="roadmap-study">0</strong><small>histoire et patrimoine</small></div>
+                                    <div class="roadmap-kpi"><span>En préparation</span><strong id="roadmap-prep">0</strong><small>parcours à construire</small></div>
+                                    <div class="roadmap-kpi"><span>Disponibles</span><strong id="roadmap-live">0</strong><small>parcours publiés</small></div>
+                                </div>
+                                <div class="roadmap-panel">
+                                    <h4 style="margin:0 0 8px">Ajouter un village au planning</h4>
+                                    <p class="roadmap-note">Cette liste sert à planifier les futurs villages. Elle ne publie pas de village sur la carte publique et ne crée pas de parcours.</p>
+                                    <form id="roadmap-form" class="roadmap-form" onsubmit="window.adminSaveRoadmapVillage(event)">
+                                        <input type="hidden" id="roadmap-edit-id">
+                                        <label>Nom du village<input id="roadmap-name" required maxlength="100" placeholder="Ex. Maresches"></label>
+                                        <label>Département<input id="roadmap-dept" required maxlength="40" placeholder="Ex. 59 – Nord"></label>
+                                        <label>Code postal<input id="roadmap-postal" maxlength="10" placeholder="Ex. 59990"></label>
+                                        <label>Statut
+                                            <select id="roadmap-status">
+                                                <option value="À étudier">À étudier</option>
+                                                <option value="Recherche historique">Recherche historique</option>
+                                                <option value="À contacter">À contacter</option>
+                                                <option value="En préparation">En préparation</option>
+                                                <option value="À tester">À tester</option>
+                                                <option value="Disponible">Disponible</option>
+                                            </select>
+                                        </label>
+                                        <label>Date prévue<input id="roadmap-date" type="date"></label>
+                                        <label class="roadmap-wide">Notes / patrimoine à rechercher<textarea id="roadmap-notes" maxlength="2000" placeholder="Lavoir, ancienne école, moulin, histoire locale…"></textarea></label>
+                                        <div class="roadmap-wide roadmap-actions">
+                                            <button type="submit">💾 Enregistrer dans la feuille de route</button>
+                                            <button type="button" class="secondary" onclick="window.adminResetRoadmapForm()">Annuler / Nouveau</button>
+                                        </div>
+                                    </form>
+                                    <p id="roadmap-status-message" class="roadmap-note" role="status" aria-live="polite"></p>
+                                </div>
+                                <div class="roadmap-panel">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+                                        <h4 style="margin:0">Catalogue des villages à développer</h4>
+                                        <input id="roadmap-search" style="max-width:280px" placeholder="Rechercher un village…" oninput="window.adminRenderRoadmap()">
+                                    </div>
+                                    <div class="roadmap-table-wrap">
+                                        <table><thead><tr><th>Village</th><th>Département</th><th>Code postal</th><th>Statut</th><th>Date prévue</th><th>Actions</th></tr></thead>
+                                        <tbody id="roadmap-list"><tr><td colspan="6">Chargement…</td></tr></tbody></table>
+                                    </div>
+                                    <p class="roadmap-note">Les données de cette première version sont conservées dans le stockage local de ce navigateur, sur cet ordinateur. Elles ne sont pas encore partagées entre plusieurs administrateurs.</p>
+                                </div>
+                            </section>
                         </div>
                         <div id="admin-analytics-view" class="admin-subview" hidden>
                             <div class="admin-section-heading">
@@ -22061,7 +22145,7 @@
     ;
 
     const adminSetView = window.adminSetView = function(view, title) {
-        ["admin-home-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
+        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
             const el = document.getElementById(id);
             if (el)
                 el.hidden = true;
@@ -22074,11 +22158,111 @@
         if (heading)
             heading.textContent = title;
         document.querySelectorAll(".admin-nav-item").forEach(btn => btn.classList.remove("active"));
-        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
+        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
         if (active)
             active.classList.add("active");
     }
     ;
+
+    const ROADMAP_STORAGE_KEY = "tresorsVillageRoadmapV1";
+    const ROADMAP_STARTER_VILLAGES = [
+        {id:"starter-maresches",name:"Maresches",department:"59 – Nord",postal:"59990",status:"À étudier",date:"",notes:"Village rural ; rechercher et vérifier le patrimoine local."},
+        {id:"starter-frettemeule",name:"Frettemeule",department:"80 – Somme",postal:"80220",status:"À étudier",date:"",notes:"Étudier l'église, le patrimoine rural et les lieux accessibles."},
+        {id:"starter-armix",name:"Armix",department:"01 – Ain",postal:"01510",status:"À étudier",date:"",notes:"Rechercher les fontaines, lavoirs et l'histoire locale."},
+        {id:"starter-coux",name:"Coux",department:"07 – Ardèche",postal:"07000",status:"À étudier",date:"",notes:"Repérer le patrimoine ancien et les lieux de balade."},
+        {id:"starter-orbais",name:"Orbais-l'Abbaye",department:"51 – Marne",postal:"51270",status:"À étudier",date:"",notes:"Étudier l'abbaye, l'église et le patrimoine ancien."},
+        {id:"starter-paars",name:"Paars",department:"02 – Aisne",postal:"02220",status:"À étudier",date:"",notes:"Pistes historiques à vérifier avant création d'un parcours."},
+        {id:"starter-brasseuse",name:"Brasseuse",department:"60 – Oise",postal:"60810",status:"À étudier",date:"",notes:"Étudier le lavoir et le patrimoine du village."},
+        {id:"starter-conteville",name:"Conteville",department:"76 – Seine-Maritime",postal:"76390",status:"À étudier",date:"",notes:"Vérifier les lieux patrimoniaux et les coordonnées."}
+    ];
+    function roadmapEscapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    }
+    function roadmapRead() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(ROADMAP_STORAGE_KEY) || "null");
+            if (Array.isArray(saved)) return saved;
+        } catch (error) { console.warn("Feuille de route locale illisible", error); }
+        localStorage.setItem(ROADMAP_STORAGE_KEY, JSON.stringify(ROADMAP_STARTER_VILLAGES));
+        return [...ROADMAP_STARTER_VILLAGES];
+    }
+    window.adminOpenRoadmap = function() {
+        if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") {
+            alert("La feuille de route est réservée aux administrateurs.");
+            return;
+        }
+        adminSetView("admin-roadmap-view", "Feuille de route nationale");
+        window.adminRenderRoadmap();
+    };
+    window.adminRenderRoadmap = function() {
+        if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
+        const rows = roadmapRead();
+        const count = status => rows.filter(v => v.status === status).length;
+        document.getElementById("roadmap-total").textContent = rows.length;
+        document.getElementById("roadmap-study").textContent = rows.filter(v => ["À étudier","Recherche historique","À contacter"].includes(v.status)).length;
+        document.getElementById("roadmap-prep").textContent = rows.filter(v => ["En préparation","À tester"].includes(v.status)).length;
+        document.getElementById("roadmap-live").textContent = count("Disponible");
+        const query = (document.getElementById("roadmap-search")?.value || "").trim().toLocaleLowerCase("fr");
+        const filtered = rows.filter(v => [v.name,v.department,v.postal,v.status].join(" ").toLocaleLowerCase("fr").includes(query));
+        const tbody = document.getElementById("roadmap-list");
+        tbody.innerHTML = filtered.length ? filtered.map(v => `<tr>
+            <td><strong>${roadmapEscapeHtml(v.name || "")}</strong></td>
+            <td>${roadmapEscapeHtml(v.department || "")}</td>
+            <td>${roadmapEscapeHtml(v.postal || "—")}</td>
+            <td><span class="roadmap-tag">${roadmapEscapeHtml(v.status || "À étudier")}</span></td>
+            <td>${roadmapEscapeHtml(v.date || "—")}</td>
+            <td><button type="button" class="secondary" onclick="window.adminEditRoadmapVillage('${String(v.id).replace(/'/g,"")}')">Modifier</button> <button type="button" class="secondary" onclick="window.adminDeleteRoadmapVillage('${String(v.id).replace(/'/g,"")}')">Supprimer</button></td>
+        </tr>`).join("") : '<tr><td colspan="6">Aucun village correspondant.</td></tr>';
+    };
+    window.adminSaveRoadmapVillage = function(event) {
+        event.preventDefault();
+        if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
+        const rows = roadmapRead();
+        const id = document.getElementById("roadmap-edit-id").value || ("roadmap-" + Date.now());
+        const village = {
+            id,
+            name: document.getElementById("roadmap-name").value.trim(),
+            department: document.getElementById("roadmap-dept").value.trim(),
+            postal: document.getElementById("roadmap-postal").value.trim(),
+            status: document.getElementById("roadmap-status").value,
+            date: document.getElementById("roadmap-date").value,
+            notes: document.getElementById("roadmap-notes").value.trim()
+        };
+        if (!village.name || !village.department) return;
+        const index = rows.findIndex(v => v.id === id);
+        if (index >= 0) rows[index] = village; else rows.push(village);
+        localStorage.setItem(ROADMAP_STORAGE_KEY, JSON.stringify(rows));
+        document.getElementById("roadmap-status-message").textContent = "Village enregistré dans la feuille de route sur cet ordinateur.";
+        window.adminResetRoadmapForm();
+        window.adminRenderRoadmap();
+    };
+    window.adminEditRoadmapVillage = function(id) {
+        if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
+        const v = roadmapRead().find(item => item.id === id);
+        if (!v) return;
+        document.getElementById("roadmap-edit-id").value = v.id;
+        document.getElementById("roadmap-name").value = v.name || "";
+        document.getElementById("roadmap-dept").value = v.department || "";
+        document.getElementById("roadmap-postal").value = v.postal || "";
+        document.getElementById("roadmap-status").value = v.status || "À étudier";
+        document.getElementById("roadmap-date").value = v.date || "";
+        document.getElementById("roadmap-notes").value = v.notes || "";
+        document.getElementById("roadmap-status-message").textContent = "Modification de " + v.name + ".";
+        document.getElementById("roadmap-form").scrollIntoView({behavior:"smooth",block:"center"});
+    };
+    window.adminDeleteRoadmapVillage = function(id) {
+        if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
+        const rows = roadmapRead();
+        const v = rows.find(item => item.id === id);
+        if (!v || !confirm("Supprimer " + v.name + " de la feuille de route ?")) return;
+        localStorage.setItem(ROADMAP_STORAGE_KEY, JSON.stringify(rows.filter(item => item.id !== id)));
+        window.adminRenderRoadmap();
+    };
+    window.adminResetRoadmapForm = function() {
+        document.getElementById("roadmap-form")?.reset();
+        document.getElementById("roadmap-edit-id").value = "";
+    };
+
     function adminShowHome() {
         adminSetView("admin-home-view", "Tableau de bord");
         window.loadSiteAnalytics?.();
@@ -26579,10 +26763,16 @@
             const moderatorSpaceItem = button.id === "moderator-space-nav-item";
             const teamByVillageItem = button.id === "team-by-village-nav-item";
             const testerAdminItem = action.includes("adminOpenTesters") || action.includes("adminOpenTesterManagement");
+            const roadmapAdminItem = action.includes("adminOpenRoadmap");
             const perms = window.adminCurrentPermissions || [];
             const canTeamSpace = isAdmin || (perms.includes("team_communication") || perms.includes("player_reports"));
             const canManageTesters = isAdmin || perms.includes("testers");
             const visible = isModerator ? (moderatorSpaceItem || (teamSpaceItem && canTeamSpace) || (testerAdminItem && canManageTesters)) : (isAdmin && !moderatorSpaceItem);
+            if (roadmapAdminItem && !isAdmin) {
+                button.hidden = true;
+                button.style.setProperty("display", "none", "important");
+                return;
+            }
             if (teamByVillageItem && !isAdmin) {
                 button.hidden = true;
                 button.style.setProperty("display", "none", "important");
