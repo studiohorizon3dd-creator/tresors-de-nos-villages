@@ -28268,7 +28268,7 @@
                     const items=belgium?[ ["WBR","Brabant wallon"],["WHT","Hainaut"],["WLG","Liège"],["WLX","Luxembourg"],["WNA","Namur"],["VAN","Anvers"],["VBR","Brabant flamand"],["VLI","Limbourg"],["VOV","Flandre-Orientale"],["VWV","Flandre-Occidentale"],["BRU","Région de Bruxelles-Capitale"] ]:FRANCE_DEPARTMENTS;
                     items.forEach(([code,name])=>{const o=document.createElement("option");o.value=code;o.textContent=`${code} · ${name}`;select.append(o);});
                 }
-                if(franceDepartmentMap){if(franceDepartmentLayer){franceDepartmentLayer.remove();franceDepartmentLayer=null;}if(belgium){franceDepartmentMap.setView([50.55,4.55],8,{animate:false});if(status)status.textContent="Carte de la Belgique affichée. Les provinces sont disponibles dans le filtre ; les villages belges seront ajoutés dans une prochaine étape.";}else{franceDepartmentMap.setView([46.6,2.4],5,{animate:false});if(status)status.textContent="Carte de France : sélectionne un département ou recherche un village.";actualiserCarteFrance();}}
+                if(franceDepartmentMap){if(franceDepartmentLayer){franceDepartmentLayer.remove();franceDepartmentLayer=null;}if(belgium){franceDepartmentMap.invalidateSize({pan:false});franceDepartmentMap.fitBounds([[49.48,2.52],[51.56,6.42]],{paddingTopLeft:[55,45],paddingBottomRight:[55,45],maxZoom:8,animate:true});if(status)status.textContent="Belgique : la carte est recentrée sur les frontières du pays. Choisis une province dans la liste.";}else{franceDepartmentMap.setView([46.6,2.4],5,{animate:false});if(status)status.textContent="Carte de France : sélectionne un département ou recherche un village.";actualiserCarteFrance();}}
                 const count=document.getElementById("france-map-count");if(count)count.textContent=belgium?"Belgique · provinces à explorer":`${franceVillageCache.length} village(s) référencé(s)`;
                 const selectedTitle=document.getElementById("france-selected-title");if(selectedTitle)selectedTitle.textContent=belgium?"Toute la Belgique":"Toute la France";
                 const list=document.getElementById("france-village-list");if(belgium&&list)list.innerHTML='<div class="france-map-empty">La carte de Belgique est prête. Les communes et villages seront ajoutés progressivement, sans mélanger les données françaises et belges.</div>';
@@ -28342,7 +28342,12 @@
         setTimeout(()=>{
             if(!franceDepartmentMap) return;
             franceDepartmentMap.invalidateSize({pan:false});
-            if(!franceSelectedDepartment && franceDepartmentLayer){
+            if(countrySelect?.value==="BE"){
+                // Ne jamais laisser le cadrage des départements français reprendre la main.
+                franceDepartmentMap.fitBounds([[49.48,2.52],[51.56,6.42]],{
+                    paddingTopLeft:[55,45],paddingBottomRight:[55,45],maxZoom:8,animate:false
+                });
+            } else if(!franceSelectedDepartment && franceDepartmentLayer){
                 franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{
                     paddingTopLeft:[24,24],
                     paddingBottomRight:[24,24],
