@@ -16090,7 +16090,7 @@
                             </div>
                         </div>
                         <div id="team-missions-view" class="admin-subview" hidden>
-                            <div class="admin-section-heading"><div><h3>🧭 Mes missions</h3><p>Prépare les aventures uniquement pour les villages qui te sont attribués. L’administration garde la validation et la publication.</p></div><button type="button" class="admin-secondary-btn" onclick="window.loadTeamMissions()">↻ Actualiser</button></div>
+                            <div class="admin-section-heading"><div><h3>🧭 Mes missions</h3><p>Prépare les aventures uniquement pour les villages qui te sont attribués. L’administration garde la validation et la publication.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="admin-secondary-btn" onclick="window.openModeratorRoadmap()">🗓️ Feuille de route</button><button type="button" class="admin-secondary-btn" onclick="window.loadTeamMissions()">↻ Actualiser</button></div></div>
                             <div class="feature" style="padding:15px;margin:12px 0"><h4>Créer une aventure</h4><form id="team-mission-form" style="display:grid;gap:10px"><label>Village attribué<select id="team-mission-village" required><option value="">Chargement…</option></select></label><label>Titre<input id="team-mission-title" required maxlength="150" placeholder="Ex. Le mystère du vieux moulin"></label><label>Niveau<select id="team-mission-level" required><option value="enfant_4_6">Petit explorateur · 4 à 6 ans</option><option value="enfant_7_9">Explorateur · 7 à 9 ans</option><option value="enfant_10_12">Aventurier · 10 à 12 ans</option><option value="enfant_13_15">Grand aventurier · 13 à 15 ans</option><option value="facile">Facile</option><option value="moyen">Moyen</option><option value="difficile">Difficile</option></select></label><label>Description<textarea id="team-mission-description" rows="3" maxlength="3000"></textarea></label><button class="admin-secondary-btn" type="submit">Créer le brouillon</button></form></div>
                             <div class="feature" style="padding:15px;margin:12px 0"><h4>Ajouter une étape à une aventure</h4><form id="team-step-form" style="display:grid;gap:9px"><label>Aventure<select id="team-step-adventure" required><option value="">Choisis une aventure</option></select></label><label>Numéro de l’étape<input id="team-step-number" type="number" min="1" required value="1"></label><label>Lieu à trouver<input id="team-step-place" required maxlength="200"></label><label>Énigme<textarea id="team-step-riddle" rows="3"></textarea></label><label>Réponse attendue<input id="team-step-answer"></label><label>Premier indice<input id="team-step-hint"></label><label>Latitude<input id="team-step-lat" type="number" step="any"></label><label>Longitude<input id="team-step-lon" type="number" step="any"></label><label>Photo HTTPS (facultatif)<input id="team-step-photo" type="url"></label><button class="admin-secondary-btn" type="submit">Ajouter l’étape</button></form></div>
                             <p id="team-missions-status" class="status" role="status" aria-live="polite"></p><div id="team-missions-list" class="admin-recent-list">Chargement…</div>
@@ -16099,13 +16099,20 @@
                             <div class="admin-section-heading"><div><h3>📋 Validation de l’équipe</h3><p>Les aventures envoyées par les modérateurs arrivent ici. Seule l’administration peut valider et publier.</p></div><button type="button" class="admin-secondary-btn" onclick="window.loadTeamMissionReview()">↻ Actualiser</button></div>
                             <p id="team-review-status" class="status" role="status" aria-live="polite"></p><div id="team-review-list" class="admin-recent-list">Chargement…</div>
                         </div>
+                        <div id="team-roadmap-view" class="admin-subview" hidden>
+                            <div class="admin-section-heading"><div><h3>🗓️ Feuille de route des modérateurs</h3><p>Suivi du village, du travail en cours, de l’avancement et de la date prévue. La validation finale reste réservée à l’administration.</p></div><button type="button" class="admin-secondary-btn" onclick="window.loadModeratorRoadmap()">↻ Actualiser</button></div>
+                            <div id="moderator-roadmap-summary" class="feature" style="padding:12px;margin:10px 0">Chargement du suivi…</div>
+                            <div class="feature" style="padding:14px;margin:10px 0"><h4>Ajouter une tâche à ma feuille de route</h4><form id="moderator-roadmap-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px"><label>Village attribué<select id="moderator-roadmap-village" required><option value="">Choisis un village</option></select></label><label>Pays<select id="moderator-roadmap-country"><option>France</option><option>Belgique</option></select></label><label>Travail à effectuer<input id="moderator-roadmap-task" required maxlength="180" placeholder="Ex. Préparer les 5 énigmes"></label><label>Date de fin prévue<input id="moderator-roadmap-due" type="date"></label><label style="grid-column:1/-1">Notes<textarea id="moderator-roadmap-notes" rows="2" maxlength="2000" placeholder="Précisions sur le travail prévu"></textarea></label><button class="admin-secondary-btn" type="submit">Ajouter à ma feuille de route</button></form></div>
+                            <div id="moderator-roadmap-list" class="admin-recent-list">Chargement…</div>
+                            <p id="moderator-roadmap-status" class="status" role="status" aria-live="polite"></p>
+                        </div>
                         <div id="admin-team-view" class="admin-subview" hidden>
                             <div class="admin-section-heading">
                                 <div>
                                     <h3>👥 Gestion de l'équipe</h3>
                                     <p>Ajoute des modérateurs, limite leurs villages et consulte leur historique.</p>
                                 </div>
-                                <button type="button" class="admin-secondary-btn" onclick="adminLoadTeam()">↻ Actualiser</button>
+                                <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="admin-secondary-btn" onclick="window.openModeratorRoadmap()">🗓️ Feuille de route des modos</button><button type="button" class="admin-secondary-btn" onclick="adminLoadTeam()">↻ Actualiser</button></div>
                             </div>
                             <div class="mailbox-admin-side">
                                 <strong>🛡️ Rôle Modérateur</strong>
@@ -22301,7 +22308,7 @@
     ;
 
     const adminSetView = window.adminSetView = function(view, title) {
-        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-commercial-view", "admin-packs-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "team-missions-view", "team-mission-review-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
+        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-commercial-view", "admin-packs-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "team-missions-view", "team-mission-review-view", "team-roadmap-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
             const el = document.getElementById(id);
             if (el)
                 el.hidden = true;
@@ -22314,7 +22321,7 @@
         if (heading)
             heading.textContent = title;
         document.querySelectorAll(".admin-nav-item").forEach(btn => btn.classList.remove("active"));
-        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-commercial-view" ? "adminOpenCommercial" : view === "admin-packs-view" ? "adminOpenPacks" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "team-missions-view" ? "openTeamMissions" : view === "team-mission-review-view" ? "openTeamMissionReview" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
+        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-commercial-view" ? "adminOpenCommercial" : view === "admin-packs-view" ? "adminOpenPacks" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "team-missions-view" ? "openTeamMissions" : view === "team-mission-review-view" ? "openTeamMissionReview" : view === "team-roadmap-view" ? "openModeratorRoadmap" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
         if (active)
             active.classList.add("active");
     }
@@ -27980,6 +27987,8 @@
     }
     let franceDepartmentMap = null;
     let franceDepartmentLayer = null;
+    let belgiumBoundaryLayer = null;
+    let belgiumBoundaryGeoJsonPromise = null;
     let franceDepartmentGeoJsonPromise = null;
     let franceVillageCache = [];
     let franceVillageVisibleCount = 8;
@@ -28220,6 +28229,51 @@
             marker.bindPopup(preview, { maxWidth: 290, minWidth: 220, closeButton: true, autoPan: true });
         });
     }
+    async function afficherContourBelgique() {
+        if (!franceDepartmentMap || !window.L) return;
+        if (franceDepartmentLayer) { franceDepartmentLayer.remove(); franceDepartmentLayer = null; }
+        try {
+            if (!belgiumBoundaryGeoJsonPromise) {
+                belgiumBoundaryGeoJsonPromise = (async () => {
+                    const urls = [
+                        "https://raw.githubusercontent.com/johan/world.geo.json/master/countries/BEL.geo.json",
+                        "https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson"
+                    ];
+                    let lastError;
+                    for (const url of urls) {
+                        try {
+                            const response = await fetch(url, {headers:{Accept:"application/geo+json, application/json"}});
+                            if (!response.ok) throw new Error(`Erreur ${response.status}`);
+                            const geo = await response.json();
+                            if (geo.type === "Feature" && geo.geometry) return geo;
+                            const feature = (geo.features || []).find(f => /belgium|belgië|belgique/i.test(String(f.properties?.name || f.properties?.ADMIN || f.properties?.name_fr || "")));
+                            if (feature) return feature;
+                            throw new Error("Contour belge absent du GeoJSON.");
+                        } catch (error) { lastError = error; }
+                    }
+                    throw lastError || new Error("Contour belge indisponible.");
+                })();
+            }
+            const feature = await belgiumBoundaryGeoJsonPromise;
+            if (belgiumBoundaryLayer) belgiumBoundaryLayer.remove();
+            belgiumBoundaryLayer = L.geoJSON(feature, {
+                style: {color:"#a84b16", weight:4, opacity:1, fillColor:"#f0b84b", fillOpacity:0.30, lineJoin:"round"},
+                interactive:true
+            }).addTo(franceDepartmentMap);
+            const bounds = belgiumBoundaryLayer.getBounds();
+            if (bounds && bounds.isValid()) {
+                franceDepartmentMap.fitBounds(bounds, {paddingTopLeft:[45,45],paddingBottomRight:[45,45],maxZoom:8,animate:false});
+            }
+            const status = document.getElementById("france-map-status");
+            if (status) status.textContent = "Belgique : contour du pays en orange et territoire légèrement coloré. Choisis une province dans la liste.";
+        } catch (error) {
+            console.warn("Contour de la Belgique indisponible :", error);
+            franceDepartmentMap.fitBounds([[49.48,2.52],[51.56,6.42]], {padding:[45,45],maxZoom:8,animate:false});
+            const status = document.getElementById("france-map-status");
+            if (status) status.textContent = "Belgique : cadrage du pays affiché. Le contour coloré n'a pas pu être chargé, vérifie la connexion puis actualise.";
+        }
+    }
+
     function franceSelectDepartment(code, zoom=true) {
         franceSelectedVillage = null;
         franceAccessibleAdventures = null;
@@ -28268,7 +28322,7 @@
                     const items=belgium?[ ["WBR","Brabant wallon"],["WHT","Hainaut"],["WLG","Liège"],["WLX","Luxembourg"],["WNA","Namur"],["VAN","Anvers"],["VBR","Brabant flamand"],["VLI","Limbourg"],["VOV","Flandre-Orientale"],["VWV","Flandre-Occidentale"],["BRU","Région de Bruxelles-Capitale"] ]:FRANCE_DEPARTMENTS;
                     items.forEach(([code,name])=>{const o=document.createElement("option");o.value=code;o.textContent=`${code} · ${name}`;select.append(o);});
                 }
-                if(franceDepartmentMap){if(franceDepartmentLayer){franceDepartmentLayer.remove();franceDepartmentLayer=null;}if(belgium){franceDepartmentMap.invalidateSize({pan:false});franceDepartmentMap.fitBounds([[49.48,2.52],[51.56,6.42]],{paddingTopLeft:[55,45],paddingBottomRight:[55,45],maxZoom:8,animate:true});if(status)status.textContent="Belgique : la carte est recentrée sur les frontières du pays. Choisis une province dans la liste.";}else{franceDepartmentMap.setView([46.6,2.4],5,{animate:false});if(status)status.textContent="Carte de France : sélectionne un département ou recherche un village.";actualiserCarteFrance();}}
+                if(franceDepartmentMap){if(belgium){franceDepartmentMap.invalidateSize({pan:false});afficherContourBelgique();}else{if(belgiumBoundaryLayer){belgiumBoundaryLayer.remove();belgiumBoundaryLayer=null;}franceDepartmentMap.setView([46.6,2.4],5,{animate:false});if(status)status.textContent="Carte de France : sélectionne un département ou recherche un village.";actualiserCarteFrance();}}
                 const count=document.getElementById("france-map-count");if(count)count.textContent=belgium?"Belgique · provinces à explorer":`${franceVillageCache.length} village(s) référencé(s)`;
                 const selectedTitle=document.getElementById("france-selected-title");if(selectedTitle)selectedTitle.textContent=belgium?"Toute la Belgique":"Toute la France";
                 const list=document.getElementById("france-village-list");if(belgium&&list)list.innerHTML='<div class="france-map-empty">La carte de Belgique est prête. Les communes et villages seront ajoutés progressivement, sans mélanger les données françaises et belges.</div>';
@@ -28298,6 +28352,12 @@
             franceDepartmentMap=L.map(mapEl,{scrollWheelZoom:false}).setView([46.6,2.4],5);
             L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:10,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(franceDepartmentMap);
         }
+        if(countrySelect?.value==="BE") {
+            await afficherContourBelgique();
+            franceRenderVillageMarkers();
+            return;
+        }
+        if(belgiumBoundaryLayer){belgiumBoundaryLayer.remove();belgiumBoundaryLayer=null;}
         if(!franceDepartmentGeoJsonPromise){
             franceDepartmentGeoJsonPromise=(async()=>{
                 // Le paramètre geometry=contour de l'API geo.api.gouv.fr ne fournit
@@ -28343,10 +28403,8 @@
             if(!franceDepartmentMap) return;
             franceDepartmentMap.invalidateSize({pan:false});
             if(countrySelect?.value==="BE"){
-                // Ne jamais laisser le cadrage des départements français reprendre la main.
-                franceDepartmentMap.fitBounds([[49.48,2.52],[51.56,6.42]],{
-                    paddingTopLeft:[55,45],paddingBottomRight:[55,45],maxZoom:8,animate:false
-                });
+                // Le contour GeoJSON fournit le cadrage précis du pays.
+                afficherContourBelgique();
             } else if(!franceSelectedDepartment && franceDepartmentLayer){
                 franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{
                     paddingTopLeft:[24,24],
@@ -30498,6 +30556,20 @@ if ("serviceWorker" in navigator) {
     el("team-mission-form")?.addEventListener("submit",async ev=>{ev.preventDefault();try{const r=await window.adminApi("/api/team/missions",{method:"POST",body:JSON.stringify({village_slug:el("team-mission-village").value,title:el("team-mission-title").value,level_key:el("team-mission-level").value,description:el("team-mission-description").value})});say("team-missions-status",`Brouillon créé : ${r.adventure.title}. Tu peux maintenant ajouter les étapes.`);el("team-mission-form").reset();await window.loadTeamMissions();if(el("team-step-adventure"))el("team-step-adventure").value=r.adventure.id;}catch(e){say("team-missions-status",e.message);}});
     el("team-step-form")?.addEventListener("submit",async ev=>{ev.preventDefault();const id=el("team-step-adventure").value;if(!id){say("team-missions-status","Choisis d’abord une aventure.");return;}try{await window.adminApi(`/api/team/missions/${id}/steps`,{method:"POST",body:JSON.stringify({step_number:Number(el("team-step-number").value),place_name:el("team-step-place").value,riddle:el("team-step-riddle").value,answer:el("team-step-answer").value,hint:el("team-step-hint").value,latitude:el("team-step-lat").value||null,longitude:el("team-step-lon").value||null,photo_url:el("team-step-photo").value})});say("team-missions-status","Étape ajoutée. Tu peux continuer ou envoyer l’aventure pour validation.");el("team-step-form").reset();}catch(e){say("team-missions-status",e.message);}});
   });
+})();
+</script>
+
+
+<script id="moderator-roadmap-workflow">
+(function(){
+ const $=id=>document.getElementById(id), esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const labels={a_commencer:'À commencer',en_cours:'En cours',en_attente:'En attente',termine:'Terminé',a_corriger:'À corriger',valide:'Validé'};
+ function remaining(date){if(!date)return 'Date non définie';const d=new Date(date+'T23:59:59'),days=Math.ceil((d-Date.now())/86400000);return days<0?`En retard de ${Math.abs(days)} jour(s)`:days===0?'Échéance aujourd’hui':`${days} jour(s) restant(s)`;}
+ window.openModeratorRoadmap=async function(){if(!window.adminAccessGranted||!(window.adminCurrentRole==='admin'||(window.adminCurrentPermissions||[]).includes('adventures'))){alert('Accès réservé aux membres autorisés.');return;}window.adminSetView?.('team-roadmap-view','Feuille de route des modérateurs');await window.loadModeratorRoadmap();};
+ window.loadModeratorRoadmap=async function(){try{const [r,m]=await Promise.all([window.adminApi('/api/team/roadmap'),window.adminApi('/api/team/missions')]);const villages=$('moderator-roadmap-village');if(villages) villages.innerHTML='<option value="">Choisis un village</option>'+(m.villages||[]).map(v=>`<option value="${esc(v.slug)}">${esc(v.name)}${v.postal_code?' ('+esc(v.postal_code)+')':''}</option>`).join('');const tasks=r.tasks||[];const summary=$('moderator-roadmap-summary');if(summary){const active=tasks.filter(t=>!['termine','valide'].includes(t.status)).length,done=tasks.filter(t=>['termine','valide'].includes(t.status)).length;summary.innerHTML=`<strong>${r.role==='admin'?'Vue de toute l’équipe':'Ma feuille de route'}</strong><p>${tasks.length} tâche(s) · ${active} en cours ou à commencer · ${done} terminée(s) / validée(s)</p>`;}
+ const list=$('moderator-roadmap-list');if(list)list.innerHTML=tasks.length?tasks.map(t=>`<article class="feature" style="padding:13px;margin:9px 0"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${esc(t.village_name)} · ${esc(t.country)}</strong><span class="roadmap-tag">${esc(labels[t.status]||t.status)}</span></div><p><strong>${esc(t.task_title)}</strong></p>${r.role==='admin'?`<small>Responsable : ${esc(t.email)}</small>`:''}<p>Avancement : ${Number(t.progress)||0}% · ${esc(remaining(t.due_date?String(t.due_date).slice(0,10):''))}</p><div style="height:8px;background:#eee;border-radius:8px;overflow:hidden"><div style="height:8px;width:${Math.max(0,Math.min(100,Number(t.progress)||0))}%;background:#28734d"></div></div><small>Fin prévue : ${esc(t.due_date?String(t.due_date).slice(0,10):'Non définie')}</small>${t.notes?`<p>${esc(t.notes)}</p>`:''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px"><label>Statut <select id="mr-status-${t.id}">${Object.entries(labels).map(([k,v])=>`<option value="${k}" ${t.status===k?'selected':''}>${v}</option>`).join('')}</select></label><label>Avancement % <input id="mr-progress-${t.id}" type="number" min="0" max="100" value="${Number(t.progress)||0}" style="width:85px"></label><label>Fin prévue <input id="mr-date-${t.id}" type="date" value="${esc(t.due_date?String(t.due_date).slice(0,10):'')}"></label><button type="button" class="admin-secondary-btn" onclick="window.saveModeratorRoadmap(${t.id})">Enregistrer</button></div></article>`).join(''):'<p>Aucune tâche enregistrée pour le moment.</p>'; }catch(e){$('moderator-roadmap-status').textContent=e.message||'Chargement impossible.';}};
+ window.saveModeratorRoadmap=async function(id){try{await window.adminApi(`/api/team/roadmap/${id}`,{method:'PATCH',body:JSON.stringify({status:$(`mr-status-${id}`).value,progress:Number($(`mr-progress-${id}`).value),due_date:$(`mr-date-${id}`).value})});$('moderator-roadmap-status').textContent='Feuille de route mise à jour.';await window.loadModeratorRoadmap();}catch(e){$('moderator-roadmap-status').textContent=e.message||'Enregistrement impossible.';}};
+ document.addEventListener('DOMContentLoaded',()=>{$('moderator-roadmap-form')?.addEventListener('submit',async e=>{e.preventDefault();try{const village=$('moderator-roadmap-village'),r=await window.adminApi('/api/team/roadmap',{method:'POST',body:JSON.stringify({village_slug:village.value,village_name:village.options[village.selectedIndex]?.textContent,country:$('moderator-roadmap-country').value,task_title:$('moderator-roadmap-task').value,due_date:$('moderator-roadmap-due').value,notes:$('moderator-roadmap-notes').value})});$('moderator-roadmap-status').textContent=`Tâche ajoutée pour ${r.task.village_name}.`;e.target.reset();await window.loadModeratorRoadmap();}catch(err){$('moderator-roadmap-status').textContent=err.message||'Impossible d’ajouter la tâche.';}});});
 })();
 </script>
 
