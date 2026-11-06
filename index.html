@@ -5399,6 +5399,21 @@
                 grid-column: 1/-1
             }
 
+            .admin-village-point-picker {
+                grid-column: 1/-1;
+                padding: 14px;
+                border: 1px solid #dfc77f;
+                border-radius: 13px;
+                background: linear-gradient(145deg,#fffaf0,#f5ecd8);
+            }
+            .admin-village-point-picker h5 { margin: 0 0 6px; color: #123d2b; font: 700 17px Georgia,serif; }
+            .admin-village-point-picker p { margin: 0 0 10px; color: #596657; font-size: 13px; line-height: 1.45; }
+            #admin-village-point-map { width: 100%; height: 330px; border: 1px solid #d7c69b; border-radius: 10px; z-index: 1; background: #e6eee8; }
+            .admin-village-point-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:9px; }
+            .admin-village-point-actions button { border:1px solid #cbb77e; border-radius:8px; padding:8px 12px; background:#fffdf7; color:#174b35; font-weight:700; }
+            #admin-village-point-feedback { font-size:12px; color:#536353; }
+            @media(max-width:650px) { #admin-village-point-map { height:270px; } }
+
             .village-form-actions {
                 display: flex;
                 justify-content: flex-end;
@@ -21053,6 +21068,15 @@
                                                 <label>
                                                     Longitude GPS<input id="admin-village-longitude" type="number" step="any" min="-180" max="180" placeholder="Ex. 1.910030">
                                                 </label>
+                                                <div class="admin-village-point-picker">
+                                                    <h5>📍 Placer le point du village sur la carte</h5>
+                                                    <p>Clique directement sur la carte à l’endroit du village. Tu peux déplacer le repère pour ajuster sa position. Les coordonnées GPS seront remplies automatiquement.</p>
+                                                    <div id="admin-village-point-map" role="application" aria-label="Carte pour choisir la position GPS du village"></div>
+                                                    <div class="admin-village-point-actions">
+                                                        <button type="button" id="admin-village-point-clear">Effacer le point GPS</button>
+                                                        <span id="admin-village-point-feedback" aria-live="polite">Aucun point sélectionné.</span>
+                                                    </div>
+                                                </div>
                                                 <div class="wide village-photo-field">
                                                     <label for="admin-village-photo-file">Photo du village (depuis ton ordinateur)</label>
                                                     <input id="admin-village-photo-file" type="file" accept="image/jpeg,image/png,image/webp">
@@ -23800,6 +23824,7 @@
         return cell;
     }
     function adminResetVillageForm() {
+        if (typeof adminClearVillagePoint === "function") adminClearVillagePoint();
         const form = document.getElementById("admin-village-form");
         if (form)
             form.reset();
@@ -23854,6 +23879,62 @@
         });
     }
     window.adminResetVillageForm = adminResetVillageForm;
+    let adminVillagePointMap = null;
+    let adminVillagePointMarker = null;
+    function adminSetVillagePoint(lat, lon, zoomMap = false) {
+        const latField = document.getElementById("admin-village-latitude");
+        const lonField = document.getElementById("admin-village-longitude");
+        const feedback = document.getElementById("admin-village-point-feedback");
+        const a = Number(lat), b = Number(lon);
+        if (!Number.isFinite(a) || !Number.isFinite(b) || a < -90 || a > 90 || b < -180 || b > 180) return;
+        if (latField) latField.value = a.toFixed(6);
+        if (lonField) lonField.value = b.toFixed(6);
+        if (feedback) feedback.textContent = `Point choisi : ${a.toFixed(6)}, ${b.toFixed(6)}`;
+        if (adminVillagePointMap && window.L) {
+            if (adminVillagePointMarker) adminVillagePointMarker.setLatLng([a,b]);
+            else adminVillagePointMarker = L.marker([a,b], {draggable:true}).addTo(adminVillagePointMap);
+            adminVillagePointMarker.off("dragend");
+            adminVillagePointMarker.on("dragend", () => { const pos = adminVillagePointMarker.getLatLng(); adminSetVillagePoint(pos.lat,pos.lng,false); });
+            if (zoomMap) adminVillagePointMap.setView([a,b], 14);
+        }
+    }
+    function adminClearVillagePoint() {
+        const latField = document.getElementById("admin-village-latitude");
+        const lonField = document.getElementById("admin-village-longitude");
+        const feedback = document.getElementById("admin-village-point-feedback");
+        if (latField) latField.value = "";
+        if (lonField) lonField.value = "";
+        if (adminVillagePointMarker && adminVillagePointMap) adminVillagePointMap.removeLayer(adminVillagePointMarker);
+        adminVillagePointMarker = null;
+        if (feedback) feedback.textContent = "Aucun point sélectionné.";
+        if (adminVillagePointMap) adminVillagePointMap.setView([50.5,2.0], 8);
+    }
+    function adminInitVillagePointMap() {
+        const el = document.getElementById("admin-village-point-map");
+        if (!el || !window.L) return;
+        if (!adminVillagePointMap) {
+            adminVillagePointMap = L.map(el, {scrollWheelZoom:false}).setView([50.5,2.0],8);
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(adminVillagePointMap);
+            adminVillagePointMap.on("click", e => adminSetVillagePoint(e.latlng.lat,e.latlng.lng,false));
+        }
+        setTimeout(() => {
+            adminVillagePointMap.invalidateSize();
+            const lat = document.getElementById("admin-village-latitude")?.value;
+            const lon = document.getElementById("admin-village-longitude")?.value;
+            if (lat !== "" && lon !== "") adminSetVillagePoint(lat,lon,true);
+            else adminVillagePointMap.setView([50.5,2.0],8);
+        }, 160);
+    }
+    const pointClearButton = document.getElementById("admin-village-point-clear");
+    if (pointClearButton) pointClearButton.addEventListener("click", adminClearVillagePoint);
+    ["admin-village-latitude","admin-village-longitude"].forEach(id => {
+        const field = document.getElementById(id);
+        if (field) field.addEventListener("change", () => {
+            const lat = document.getElementById("admin-village-latitude")?.value;
+            const lon = document.getElementById("admin-village-longitude")?.value;
+            if (lat !== "" && lon !== "") adminSetVillagePoint(lat,lon,true);
+        });
+    });
     window.adminVillageTab = function(tab) {
         document.querySelectorAll("[data-village-tab]").forEach(b => b.classList.toggle("active", b.dataset.villageTab === tab));
         const showList = tab === "list" || tab === "pending";
@@ -23878,11 +23959,10 @@
             document.getElementById("admin-village-filter").value = "";
             adminRenderVillages();
         }
-        if (tab === "add")
-            document.getElementById("village-panel-add").scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+        if (tab === "add") {
+            document.getElementById("village-panel-add").scrollIntoView({behavior:"smooth",block:"start"});
+            setTimeout(adminInitVillagePointMap, 180);
+        }
         if (tab === "map") {
             setTimeout( () => adminRenderVillageMap("admin-villages-full-map", "full"), 120);
         }
