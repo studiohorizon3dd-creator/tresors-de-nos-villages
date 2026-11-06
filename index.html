@@ -13978,10 +13978,11 @@
                 <h3>🇫🇷 La carte de France des villages</h3>
                 <p class="france-map-intro">Explore les départements, découvre les villages sélectionnés et suis l'évolution de Trésors de nos Villages partout en France.</p>
                 <div class="france-map-shell">
-                    <div class="france-map-heading"><h3>🧭 Explore la France</h3><span id="france-map-count">Les villages prennent place sur la carte</span></div>
+                    <div class="france-map-heading"><h3 id="explorer-map-title">🧭 Explore la France</h3><span id="france-map-count">Les villages prennent place sur la carte</span></div>
+                    <label style="display:block;margin:0 0 12px;font-weight:700;color:#234735">Choisir un pays <select id="explorer-country-select" style="display:block;width:100%;max-width:360px;padding:10px;border:1px solid #d7c69f;border-radius:9px;margin-top:5px"><option value="FR">🇫🇷 France</option><option value="BE">🇧🇪 Belgique</option></select></label>
                     <div id="france-department-map" role="application" aria-label="Carte interactive des départements français"></div>
                     <div class="france-map-tools">
-                        <label><span style="display:block;font-weight:700;margin:0 0 5px;color:#234735">Choisir un département</span><select id="france-department-select"><option value="">Tous les départements</option></select></label>
+                        <label id="explorer-territory-filter"><span id="explorer-territory-label" style="display:block;font-weight:700;margin:0 0 5px;color:#234735">Choisir un département</span><select id="france-department-select"><option value="">Tous les départements</option></select></label>
                         <label><span style="display:block;font-weight:700;margin:0 0 5px;color:#234735">Rechercher un village</span><input id="france-village-search" type="search" placeholder="Ex. Humbert, Sempy…"></label>
                     </div>
                     <p id="france-map-status" class="france-map-status" role="status" aria-live="polite">Chargement de la carte de France…</p>
@@ -26638,9 +26639,10 @@
         status.textContent = "Chargement des villages et des modérateurs…";
         root.replaceChildren();
         try {
-            const [data,villageData] = await Promise.all([adminApi("/api/team-space/overview"), adminApi("/api/admin/villages")]);
+            const [data,villageData] = await Promise.all([adminApi("/api/admin/team/activity"), adminApi("/api/admin/villages")]);
             const villageNames = new Map((villageData.villages || []).map(v => [v.slug, v.name]));
             const groups = new Map();
+            const adventureBySlug = new Map((data.adventures || []).map(a => [a.village_slug, a]));
             (data.members || []).filter(m => m.role === "moderator" && m.status === "active").forEach(m => {
                 (Array.isArray(m.allowed_villages) ? m.allowed_villages : []).forEach(slug => {
                     if (!groups.has(slug))
@@ -26684,7 +26686,11 @@
                     };
                     const active = (member.permissions || []).filter(x => labels[x]).map(x => labels[x]);
                     perms.textContent = "Missions : " + (active.length ? active.join(" · ") : "Aucune mission attribuée");
-                    row.append(name, email, perms);
+                    const work = adventureBySlug.get(slug);
+                    const progress = document.createElement("div");
+                    progress.style.cssText = "font-size:13px;margin-top:6px;color:#8a5b12";
+                    progress.textContent = work ? `📋 ${work.title} — ${work.status === "en_attente" ? "Envoyée pour validation" : work.status === "brouillon" ? "Brouillon en préparation" : work.status}` : "Aucune aventure commencée pour le moment";
+                    row.append(name, email, perms, progress);
                     card.append(row);
                 }
                 );
@@ -28247,6 +28253,28 @@
         const status=document.getElementById("france-map-status");
         if(!mapEl) return;
         const select=document.getElementById("france-department-select");
+        const countrySelect=document.getElementById("explorer-country-select");
+        if(countrySelect && !countrySelect.dataset.ready){
+            countrySelect.addEventListener("change",()=>{
+                const belgium=countrySelect.value==="BE";
+                const title=document.getElementById("explorer-map-title");
+                const intro=document.querySelector("#dash-village-map .france-map-intro");
+                const territoryLabel=document.getElementById("explorer-territory-label");
+                const status=document.getElementById("france-map-status");
+                if(title) title.textContent=belgium?"🧭 Explore la Belgique":"🧭 Explore la France";
+                if(intro) intro.textContent=belgium?"Explore les provinces belges. Les communes et villages seront ajoutés progressivement.":"Explore les départements, découvre les villages sélectionnés et suis l'évolution de Trésors de nos Villages partout en France.";
+                if(territoryLabel) territoryLabel.textContent=belgium?"Choisir une province":"Choisir un département";
+                if(select){select.replaceChildren();const first=document.createElement("option");first.value="";first.textContent=belgium?"Toutes les provinces":"Tous les départements";select.append(first);
+                    const items=belgium?[ ["WBR","Brabant wallon"],["WHT","Hainaut"],["WLG","Liège"],["WLX","Luxembourg"],["WNA","Namur"],["VAN","Anvers"],["VBR","Brabant flamand"],["VLI","Limbourg"],["VOV","Flandre-Orientale"],["VWV","Flandre-Occidentale"],["BRU","Région de Bruxelles-Capitale"] ]:FRANCE_DEPARTMENTS;
+                    items.forEach(([code,name])=>{const o=document.createElement("option");o.value=code;o.textContent=`${code} · ${name}`;select.append(o);});
+                }
+                if(franceDepartmentMap){if(franceDepartmentLayer){franceDepartmentLayer.remove();franceDepartmentLayer=null;}if(belgium){franceDepartmentMap.setView([50.55,4.55],8,{animate:false});if(status)status.textContent="Carte de la Belgique affichée. Les provinces sont disponibles dans le filtre ; les villages belges seront ajoutés dans une prochaine étape.";}else{franceDepartmentMap.setView([46.6,2.4],5,{animate:false});if(status)status.textContent="Carte de France : sélectionne un département ou recherche un village.";actualiserCarteFrance();}}
+                const count=document.getElementById("france-map-count");if(count)count.textContent=belgium?"Belgique · provinces à explorer":`${franceVillageCache.length} village(s) référencé(s)`;
+                const selectedTitle=document.getElementById("france-selected-title");if(selectedTitle)selectedTitle.textContent=belgium?"Toute la Belgique":"Toute la France";
+                const list=document.getElementById("france-village-list");if(belgium&&list)list.innerHTML='<div class="france-map-empty">La carte de Belgique est prête. Les communes et villages seront ajoutés progressivement, sans mélanger les données françaises et belges.</div>';
+            });
+            countrySelect.dataset.ready="1";
+        }
         if(select && !select.dataset.ready){
             FRANCE_DEPARTMENTS.forEach(([code,name])=>{const o=document.createElement("option");o.value=code;o.textContent=`${code} · ${name}`;select.append(o);});
             select.addEventListener("change",()=>franceSelectDepartment(select.value));
