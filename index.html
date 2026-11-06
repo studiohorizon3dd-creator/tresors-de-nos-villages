@@ -15231,7 +15231,7 @@
                                     Gestion commerciale <span class="admin-category-chevron">⌄</span>
                                 </summary>
                                 <div class="admin-category-links">
-                                    <button class="admin-nav-item" type="button" onclick="adminOpenLevels()">
+                                    <button class="admin-nav-item" type="button" onclick="adminOpenCommercial()">
                                         <span>€</span>
                                         Formules & paiements
                                     </button>
@@ -16573,6 +16573,23 @@
                                 <div id="admin-tester-feedback-list" class="admin-recent-list tester-table-wrap">
                                     <p>Aucun retour chargé.</p>
                                 </div>
+                            </div>
+                        </div>
+                        <div id="admin-commercial-view" class="admin-subview" hidden>
+                            <section style="background:#fffaf0;border:1px solid #e4d5ae;border-radius:16px;padding:22px;margin-bottom:18px">
+                                <h2 style="margin:0 0 8px;color:#174b35">💶 Gestion commerciale</h2>
+                                <p style="margin:0;line-height:1.6;color:#536253">Vue d’ensemble des formules enregistrées par village. Pour modifier le nombre d’énigmes, les étoiles, les tarifs et les statuts, utilise « Niveaux par village » dans la gestion des aventures.</p>
+                            </section>
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:18px">
+                                <article class="feature"><h3>🎟️ Formules par village</h3><p>Consulte les tarifs et les accès configurés pour chaque village.</p></article>
+                                <article class="feature"><h3>🎁 Packs</h3><p><strong>Pack Complet</strong> et <strong>Pack Voyageur</strong> seront gérés séparément. Aucun paiement n’est activé ici.</p></article>
+                                <article class="feature"><h3>👥 Accès des joueurs</h3><p>La consultation des droits des membres sera ajoutée dans une prochaine étape.</p></article>
+                                <article class="feature"><h3>💳 Paiements</h3><p>Stripe reste désactivé. L’historique sera raccordé lorsque les paiements seront prêts.</p></article>
+                            </div>
+                            <div style="background:#fff;border:1px solid #e4d5ae;border-radius:14px;padding:18px">
+                                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h3 style="margin:0">Catalogue des formules par village</h3><button type="button" class="admin-secondary-btn" onclick="adminLoadCommercial()">↻ Actualiser</button></div>
+                                <p id="admin-commercial-status" role="status" aria-live="polite">Chargement du catalogue…</p>
+                                <div id="admin-commercial-list" style="overflow-x:auto">Les formules apparaîtront ici.</div>
                             </div>
                         </div>
                         <div id="admin-levels-view" class="admin-subview" hidden>
@@ -22183,7 +22200,7 @@
     ;
 
     const adminSetView = window.adminSetView = function(view, title) {
-        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
+        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-commercial-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
             const el = document.getElementById(id);
             if (el)
                 el.hidden = true;
@@ -22196,7 +22213,7 @@
         if (heading)
             heading.textContent = title;
         document.querySelectorAll(".admin-nav-item").forEach(btn => btn.classList.remove("active"));
-        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
+        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-commercial-view" ? "adminOpenCommercial" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
         if (active)
             active.classList.add("active");
     }
@@ -24750,6 +24767,48 @@
             await window.adminLoadVillageLevels();
     }
     ;
+    window.adminOpenCommercial = async function() {
+        adminSetView("admin-commercial-view", "Formules & paiements");
+        await window.adminLoadCommercial();
+    };
+    window.adminLoadCommercial = async function() {
+        const status = document.getElementById("admin-commercial-status");
+        const root = document.getElementById("admin-commercial-list");
+        if (!status || !root) return;
+        status.textContent = "Chargement des formules…";
+        root.textContent = "";
+        try {
+            const data = await adminApi("/api/admin/villages");
+            const villages = Array.isArray(data.villages) ? data.villages : [];
+            if (!villages.length) { root.textContent = "Aucun village enregistré pour le moment."; status.textContent = "Catalogue vide."; return; }
+            const results = await Promise.all(villages.map(async village => {
+                const result = await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village.slug)}`);
+                return { village, levels: Array.isArray(result.levels) ? result.levels : [] };
+            }));
+            const table = document.createElement("table");
+            table.style.cssText = "width:100%;border-collapse:collapse;min-width:620px";
+            const head = document.createElement("thead");
+            const hr = document.createElement("tr");
+            ["Village", "Formule", "Accès", "Prix", "Statut"].forEach(label => { const th=document.createElement("th"); th.textContent=label; th.style.cssText="text-align:left;padding:11px;border-bottom:2px solid #dfd0a8"; hr.appendChild(th); });
+            head.appendChild(hr); table.appendChild(head);
+            const body = document.createElement("tbody");
+            for (const item of results) {
+                if (!item.levels.length) { const tr=document.createElement("tr"); const td=document.createElement("td"); td.colSpan=5; td.textContent=`${item.village.name} — aucune formule configurée`; td.style.padding="11px"; tr.appendChild(td); body.appendChild(tr); continue; }
+                for (const level of item.levels) {
+                    const tr=document.createElement("tr");
+                    const values=[item.village.name, level.display_name || level.level_key, level.access_type || "—", Number(level.price_eur || 0).toLocaleString("fr-FR",{style:"currency",currency:"EUR"}), level.status || "—"];
+                    values.forEach(value => { const td=document.createElement("td"); td.textContent=value; td.style.cssText="padding:10px 11px;border-bottom:1px solid #eee5d2"; tr.appendChild(td); });
+                    body.appendChild(tr);
+                }
+            }
+            table.appendChild(body); root.appendChild(table);
+            status.textContent = `${results.length} village(s) consulté(s). Cette page est une vue de synthèse ; les modifications se font dans « Niveaux par village ».`;
+        } catch (error) {
+            status.textContent = error.message || "Impossible de charger le catalogue commercial.";
+            root.textContent = "Vérifie que le serveur Render est disponible et que ton compte est administrateur.";
+        }
+    };
+
     function adminLevelSlug(name) {
         return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
     }
