@@ -12910,13 +12910,20 @@
 .france-village-card strong{color:#174b35;font-size:17px}.france-village-card p{margin:0;color:#596659;line-height:1.5;font-size:14px}
 .france-village-status{font-size:12px;font-weight:700;color:#72591d}.france-village-card button{align-self:flex-start;margin-top:auto}
 /* Fiche patrimoine affichée lorsqu'un visiteur sélectionne un village */
-.france-village-discovery{grid-column:1/-1;padding:16px;border:2px solid #d7ad45;background:linear-gradient(145deg,#fffdf7,#f7efd9);box-shadow:0 8px 22px rgba(6,44,32,.09)}
-.france-village-discovery-cover{width:100%;max-height:300px;overflow:hidden;border-radius:11px;background:#eee4cf}
-.france-village-discovery-cover img{display:block;width:100%;height:clamp(170px,28vw,300px);object-fit:cover}
-.france-village-photo-placeholder{min-height:150px;display:grid;place-items:center;color:#65715f;font-weight:700;background:linear-gradient(135deg,#e9e3d0,#dce6d5)}
-.france-village-discovery-title{font-size:22px!important;margin-top:5px}
-.france-village-discovery-description{font-size:15px!important;line-height:1.7!important;color:#354b39!important}
-.france-village-discovery-note{padding:11px 13px;border-left:3px solid #d7ad45;border-radius:7px;background:#f4ecd7;color:#52604d;font-size:13px!important}
+.france-village-selected-grid{grid-template-columns:minmax(250px,360px) minmax(260px,1fr);align-items:start;gap:14px}
+.france-village-discovery{grid-column:1;grid-row:1 / span 3;padding:12px;border:1px solid #d7ad45;background:linear-gradient(145deg,#fffdf7,#f7efd9);box-shadow:0 5px 15px rgba(6,44,32,.08);display:grid;grid-template-columns:112px minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:12px;row-gap:5px;align-items:start;min-height:148px}
+.france-village-discovery-cover{grid-column:1;grid-row:1 / span 4;width:112px;height:112px;overflow:hidden;border-radius:9px;background:#eee4cf}
+.france-village-discovery-cover img{display:block;width:100%;height:100%;object-fit:cover}
+.france-village-photo-placeholder{width:112px;height:112px;display:grid;place-items:center;text-align:center;padding:8px;color:#65715f;font-weight:700;font-size:12px;background:linear-gradient(135deg,#e9e3d0,#dce6d5)}
+.france-village-discovery-title{grid-column:2;font-size:18px!important;margin:0!important;line-height:1.25}
+.france-village-discovery .france-village-status{grid-column:2;line-height:1.35}
+.france-village-discovery-description{grid-column:2;font-size:13px!important;line-height:1.45!important;color:#354b39!important;margin:0!important;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.france-village-discovery-note{grid-column:2;padding:7px 9px;border-left:3px solid #d7ad45;border-radius:6px;background:#f4ecd7;color:#52604d;font-size:11px!important;line-height:1.35;margin:2px 0 0!important}
+.france-village-back{grid-column:1;grid-row:4;justify-self:start}
+.france-village-adventure-status{grid-column:2;grid-row:1;margin:0}
+.france-village-adventure-empty{grid-column:2;grid-row:2;align-self:start}
+.france-village-selected-grid>.france-village-card:not(.france-village-discovery){grid-column:2}
+@media(max-width:700px){.france-village-selected-grid{grid-template-columns:1fr}.france-village-discovery{grid-column:1;grid-row:auto;max-width:none}.france-village-back,.france-village-adventure-status,.france-village-adventure-empty,.france-village-selected-grid>.france-village-card:not(.france-village-discovery){grid-column:1;grid-row:auto}}
 .france-map-empty{padding:20px;text-align:center;background:#fffdf7;border:1px dashed #cbb982;border-radius:12px;color:#647164}
 .france-dept-label{font:700 11px Arial,sans-serif;fill:#173d2b;paint-order:stroke;stroke:#fff8e8;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .admin-department-hint{font-size:12px;color:#687467;display:block;margin-top:4px}
@@ -27688,6 +27695,7 @@
         const count = document.getElementById("france-selected-count");
         if (!list) return;
         list.replaceChildren();
+        list.classList.toggle("france-village-selected-grid", !!franceSelectedVillage);
 
         if (franceSelectedVillage) {
             const village = franceSelectedVillage;
@@ -27738,10 +27746,10 @@
             list.append(discovery);
 
             const back = document.createElement("button");
-            back.type = "button"; back.className = "small-btn"; back.textContent = "← Retour aux villages";
+            back.type = "button"; back.className = "small-btn france-village-back"; back.textContent = "← Retour aux villages";
             back.addEventListener("click", () => { franceSelectedVillage = null; franceAccessibleAdventures = null; franceRenderVillageCards(); });
             list.append(back);
-            const status = document.createElement("p"); status.className = "france-map-status"; status.textContent = "Chargement des parcours disponibles…"; list.append(status);
+            const status = document.createElement("p"); status.className = "france-map-status france-village-adventure-status"; status.textContent = "Chargement des parcours disponibles…"; list.append(status);
             playerApi('/api/adventures').then(data => {
                 if (franceSelectedVillage?.id !== village.id) return;
                 status.remove();
@@ -27749,7 +27757,7 @@
                 const adventures = (Array.isArray(data.adventures) ? data.adventures : []).filter(a => String(a.village_slug || "").toLocaleLowerCase("fr") === slug);
                 franceAccessibleAdventures = adventures;
                 if (!adventures.length) {
-                    const empty = document.createElement("p"); empty.className = "france-map-empty";
+                    const empty = document.createElement("p"); empty.className = "france-map-empty france-village-adventure-empty";
                     empty.textContent = village.status === "available"
                         ? "Aucun parcours n'est actuellement accessible sur ton compte dans ce village. Vérifie les formules disponibles ou tes accès testeur."
                         : "Les activités de ce village sont en préparation. Reviens bientôt pour partir à sa découverte !";
