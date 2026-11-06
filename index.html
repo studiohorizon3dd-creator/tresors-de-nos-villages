@@ -12966,7 +12966,7 @@
 #admin-roadmap-view button{border:1px solid #c9a34c;border-radius:9px;padding:10px 14px;background:#0c5637;color:#fff4cf;font-weight:700;cursor:pointer}
 #admin-roadmap-view button.secondary{background:#fffaf0;color:#174b35}
 #admin-roadmap-view .roadmap-table-wrap{overflow-x:auto}
-#admin-roadmap-view table{width:100%;border-collapse:collapse;min-width:720px}
+#admin-roadmap-view table{width:100%;border-collapse:collapse;min-width:900px}
 #admin-roadmap-view th,#admin-roadmap-view td{text-align:left;padding:10px;border-bottom:1px solid #eee4d0;font-size:13px}
 #admin-roadmap-view th{color:#6d5a2b;background:#faf4e5}
 #admin-roadmap-view .roadmap-tag{display:inline-block;padding:4px 8px;border-radius:20px;background:#f4edda;font-size:11px;font-weight:700}
@@ -15505,10 +15505,16 @@
                                     <p style="margin:0;line-height:1.5">Prépare les prochaines découvertes, organise les recherches et suis l'avancement des villages.</p>
                                 </div>
                                 <div class="roadmap-grid">
-                                    <div class="roadmap-kpi"><span>Villages repérés</span><strong id="roadmap-total">0</strong><small>dans le catalogue</small></div>
-                                    <div class="roadmap-kpi"><span>À étudier</span><strong id="roadmap-study">0</strong><small>histoire et patrimoine</small></div>
-                                    <div class="roadmap-kpi"><span>En préparation</span><strong id="roadmap-prep">0</strong><small>parcours à construire</small></div>
-                                    <div class="roadmap-kpi"><span>Disponibles</span><strong id="roadmap-live">0</strong><small>parcours publiés</small></div>
+                                    <div class="roadmap-kpi"><span>Villages enregistrés</span><strong id="roadmap-total">0</strong><small>planning + catalogue réel</small></div>
+                                    <div class="roadmap-kpi"><span>Villages sur la carte</span><strong id="roadmap-map">0</strong><small>dans la base du site</small></div>
+                                    <div class="roadmap-kpi"><span>Niveaux validés</span><strong id="roadmap-levels">0</strong><small>niveaux actifs</small></div>
+                                    <div class="roadmap-kpi"><span>Aventures disponibles</span><strong id="roadmap-live">0</strong><small>publiées aux joueurs</small></div>
+                                </div>
+                                <div class="roadmap-grid">
+                                    <div class="roadmap-kpi"><span>À étudier</span><strong id="roadmap-study">0</strong><small>villages du planning</small></div>
+                                    <div class="roadmap-kpi"><span>Niveaux configurés</span><strong id="roadmap-level-total">0</strong><small>tous villages confondus</small></div>
+                                    <div class="roadmap-kpi"><span>Aventures préparées</span><strong id="roadmap-prep">0</strong><small>créées ou en cours</small></div>
+                                    <div class="roadmap-kpi"><span>Énigmes / étapes</span><strong id="roadmap-steps">0</strong><small>étapes enregistrées</small></div>
                                 </div>
                                 <div class="roadmap-panel">
                                     <h4 style="margin:0 0 8px">Ajouter un village au planning</h4>
@@ -15539,14 +15545,18 @@
                                 </div>
                                 <div class="roadmap-panel">
                                     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-                                        <h4 style="margin:0">Catalogue des villages à développer</h4>
-                                        <input id="roadmap-search" style="max-width:280px" placeholder="Rechercher un village…" oninput="window.adminRenderRoadmap()">
+                                        <h4 style="margin:0">Suivi complet des villages et de leur progression</h4>
+                                        <div style="display:flex;gap:8px;flex-wrap:wrap">
+                                            <select id="roadmap-country-filter" style="max-width:150px" onchange="window.adminRenderRoadmap()"><option value="">Tous les pays</option><option value="France">France</option><option value="Belgique">Belgique</option></select>
+                                            <input id="roadmap-search" style="max-width:280px" placeholder="Rechercher village, département…" oninput="window.adminRenderRoadmap()">
+                                            <button type="button" class="secondary" onclick="window.adminLoadRoadmap(true)">↻ Actualiser</button>
+                                        </div>
                                     </div>
                                     <div class="roadmap-table-wrap">
-                                        <table><thead><tr><th>Village</th><th>Département</th><th>Code postal</th><th>Statut</th><th>Date prévue</th><th>Actions</th></tr></thead>
+                                        <table><thead><tr><th>Village / territoire</th><th>Carte</th><th>Niveaux</th><th>Aventures</th><th>Énigmes</th><th>Publication</th><th>Planning</th></tr></thead>
                                         <tbody id="roadmap-list"><tr><td colspan="6">Chargement…</td></tr></tbody></table>
                                     </div>
-                                    <p class="roadmap-note">Les données de cette première version sont conservées dans le stockage local de ce navigateur, sur cet ordinateur. Elles ne sont pas encore partagées entre plusieurs administrateurs.</p>
+                                    <p class="roadmap-note">Les indicateurs et l’avancement des villages déjà enregistrés sont lus depuis la base du site. Les villages simplement repérés dans le formulaire de planning restent des notes locales à ce navigateur. Cette page est réservée à l’administration et ne modifie jamais la carte publique.</p>
                                 </div>
                             </section>
                         </div>
@@ -22313,82 +22323,98 @@
         localStorage.setItem(ROADMAP_STORAGE_KEY, JSON.stringify(ROADMAP_STARTER_VILLAGES));
         return [...ROADMAP_STARTER_VILLAGES];
     }
+    let roadmapLiveData = { villages: [], levels: [], adventures: [], steps: [] };
+    function roadmapSlug(value) {
+        return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    }
+    function roadmapDepartment(postal) {
+        const code = String(postal || "").trim();
+        if (/^\d{5}$/.test(code)) return code.startsWith("97") || code.startsWith("98") ? code.slice(0,3) : code.slice(0,2);
+        return "—";
+    }
+    function roadmapStatusLabel(status) {
+        const labels = { pending_confirmation:"À confirmer", upcoming_preparation:"À préparer", in_progress:"En préparation", available:"Validé / disponible", suspended:"Suspendu", updating:"Mise à jour", en_creation:"En création", a_valider:"À valider", en_attente:"En attente", en_travaux:"En travaux", mise_a_jour:"Mise à jour", en_ligne:"En ligne", suspendue:"Suspendue", brouillon:"Brouillon", publie:"En ligne" };
+        return labels[status] || status || "Non renseigné";
+    }
     window.adminOpenRoadmap = function() {
-        if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") {
-            alert("La feuille de route est réservée aux administrateurs.");
-            return;
-        }
+        if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") { alert("La feuille de route est réservée aux administrateurs."); return; }
         adminSetView("admin-roadmap-view", "Feuille de route nationale");
-        window.adminRenderRoadmap();
+        window.adminLoadRoadmap();
+    };
+    window.adminLoadRoadmap = async function(force) {
+        if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
+        const tbody = document.getElementById("roadmap-list");
+        if (tbody) tbody.innerHTML = '<tr><td colspan="7">Chargement des villages, niveaux et aventures…</td></tr>';
+        try {
+            roadmapLiveData = await window.adminApi("/api/admin/roadmap-overview");
+            window.adminRenderRoadmap();
+            const msg = document.getElementById("roadmap-status-message");
+            if (msg) msg.textContent = "Données actualisées depuis la base du site. Les villages du planning manuel restent conservés.";
+        } catch (error) {
+            if (tbody) tbody.innerHTML = `<tr><td colspan="7">${roadmapEscapeHtml(error.message)} — vérifie ta connexion puis clique sur Actualiser.</td></tr>`;
+        }
     };
     window.adminRenderRoadmap = function() {
         if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
-        const rows = roadmapRead();
-        const count = status => rows.filter(v => v.status === status).length;
-        document.getElementById("roadmap-total").textContent = rows.length;
-        document.getElementById("roadmap-study").textContent = rows.filter(v => ["À étudier","Recherche historique","À contacter"].includes(v.status)).length;
-        document.getElementById("roadmap-prep").textContent = rows.filter(v => ["En préparation","À tester"].includes(v.status)).length;
-        document.getElementById("roadmap-live").textContent = count("Disponible");
+        const planned = roadmapRead();
+        const data = roadmapLiveData || { villages:[], levels:[], adventures:[], steps:[] };
+        const villages = data.villages || [], levels = data.levels || [], adventures = data.adventures || [], steps = data.steps || [];
+        const stepCount = steps.reduce((sum, row) => sum + Number(row.step_count || 0), 0);
+        const activeLevels = levels.filter(x => x.status === "actif");
+        const published = adventures.filter(x => x.is_published || x.status === "en_ligne" || x.status === "publie");
+        const prep = adventures.filter(x => !x.is_published && !["suspendue","suspendu"].includes(x.status));
+        const study = planned.filter(v => ["À étudier","Recherche historique","À contacter"].includes(v.status));
+        const set = (id, value) => { const el=document.getElementById(id); if(el) el.textContent=String(value); };
+        set("roadmap-total", new Set([...villages.map(v=>v.slug), ...planned.map(v=>roadmapSlug(v.name))]).size);
+        set("roadmap-map", villages.length);
+        set("roadmap-levels", activeLevels.length);
+        set("roadmap-live", published.length);
+        set("roadmap-study", study.length);
+        set("roadmap-level-total", levels.length);
+        set("roadmap-prep", prep.length);
+        set("roadmap-steps", stepCount);
         const query = (document.getElementById("roadmap-search")?.value || "").trim().toLocaleLowerCase("fr");
-        const filtered = rows.filter(v => [v.name,v.department,v.postal,v.status].join(" ").toLocaleLowerCase("fr").includes(query));
+        const country = document.getElementById("roadmap-country-filter")?.value || "";
+        const rows = [];
+        const seen = new Set();
+        villages.forEach(v => {
+            const slug = v.slug || roadmapSlug(v.name); seen.add(slug);
+            const vl = levels.filter(x => x.village_slug === slug);
+            const va = adventures.filter(x => x.village_slug === slug);
+            const vaPublished = va.filter(x => x.is_published || ["en_ligne","publie"].includes(x.status)).length;
+            const stepTotal = va.reduce((sum,a) => sum + Number((steps.find(x=>Number(x.adventure_id)===Number(a.id))||{}).step_count||0),0);
+            const postal = v.postal_code || "";
+            rows.push({name:v.name, department:roadmapDepartment(postal), postal, country:"France", planned:false, map:roadmapStatusLabel(v.status), levels:`${vl.filter(x=>x.status==="actif").length}/${vl.length} actifs`, adventures:`${va.length} (${va.filter(x=>x.is_validated).length} validées)`, steps:stepTotal, publication:vaPublished ? `${vaPublished} en ligne` : (va.length ? "En préparation" : "À créer"), search:[v.name,postal,roadmapDepartment(postal),v.status].join(" ").toLocaleLowerCase("fr")});
+        });
+        planned.filter(v => !seen.has(roadmapSlug(v.name))).forEach(v => rows.push({id:v.id,planned:true,name:v.name,department:v.department,postal:v.postal,country:v.country||"France",map:"Pas encore ajouté",levels:"0/0",adventures:"À créer",steps:0,publication:v.status||"À étudier",search:[v.name,v.department,v.postal,v.status,v.country].join(" ").toLocaleLowerCase("fr")}));
+        const filtered = rows.filter(v => (!country || v.country===country) && (!query || v.search.includes(query)));
         const tbody = document.getElementById("roadmap-list");
-        tbody.innerHTML = filtered.length ? filtered.map(v => `<tr>
-            <td><strong>${roadmapEscapeHtml(v.name || "")}</strong></td>
-            <td>${roadmapEscapeHtml(v.department || "")}</td>
-            <td>${roadmapEscapeHtml(v.postal || "—")}</td>
-            <td><span class="roadmap-tag">${roadmapEscapeHtml(v.status || "À étudier")}</span></td>
-            <td>${roadmapEscapeHtml(v.date || "—")}</td>
-            <td><button type="button" class="secondary" onclick="window.adminEditRoadmapVillage('${String(v.id).replace(/'/g,"")}')">Modifier</button> <button type="button" class="secondary" onclick="window.adminDeleteRoadmapVillage('${String(v.id).replace(/'/g,"")}')">Supprimer</button></td>
-        </tr>`).join("") : '<tr><td colspan="6">Aucun village correspondant.</td></tr>';
+        if (!tbody) return;
+        tbody.innerHTML = filtered.length ? filtered.map(v=>`<tr><td><strong>${roadmapEscapeHtml(v.name||"")}</strong><br><small>${roadmapEscapeHtml(v.country)} · ${roadmapEscapeHtml(v.department||"—")} · ${roadmapEscapeHtml(v.postal||"—")}</small></td><td><span class="roadmap-tag">${roadmapEscapeHtml(v.map)}</span></td><td>${roadmapEscapeHtml(v.levels)}</td><td>${roadmapEscapeHtml(v.adventures)}</td><td>${roadmapEscapeHtml(v.steps)}</td><td><span class="roadmap-tag">${roadmapEscapeHtml(v.publication)}</span></td><td>${v.planned ? `<button type="button" class="secondary" onclick="window.adminEditRoadmapVillage('${String(v.id).replace(/'/g, "")}')">Modifier</button> <button type="button" class="secondary" onclick="window.adminDeleteRoadmapVillage('${String(v.id).replace(/'/g, "")}')">Supprimer</button>` : "—"}</td></tr>`).join("") : '<tr><td colspan="7">Aucun village correspondant.</td></tr>';
     };
     window.adminSaveRoadmapVillage = function(event) {
         event.preventDefault();
         if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
         const rows = roadmapRead();
         const id = document.getElementById("roadmap-edit-id").value || ("roadmap-" + Date.now());
-        const village = {
-            id,
-            name: document.getElementById("roadmap-name").value.trim(),
-            department: document.getElementById("roadmap-dept").value.trim(),
-            postal: document.getElementById("roadmap-postal").value.trim(),
-            status: document.getElementById("roadmap-status").value,
-            date: document.getElementById("roadmap-date").value,
-            notes: document.getElementById("roadmap-notes").value.trim()
-        };
+        const village = { id, name:document.getElementById("roadmap-name").value.trim(), department:document.getElementById("roadmap-dept").value.trim(), postal:document.getElementById("roadmap-postal").value.trim(), status:document.getElementById("roadmap-status").value, date:document.getElementById("roadmap-date").value, notes:document.getElementById("roadmap-notes").value.trim(), country:"France" };
         if (!village.name || !village.department) return;
-        const index = rows.findIndex(v => v.id === id);
-        if (index >= 0) rows[index] = village; else rows.push(village);
-        localStorage.setItem(ROADMAP_STORAGE_KEY, JSON.stringify(rows));
-        document.getElementById("roadmap-status-message").textContent = "Village enregistré dans la feuille de route sur cet ordinateur.";
-        window.adminResetRoadmapForm();
-        window.adminRenderRoadmap();
+        const index = rows.findIndex(v=>v.id===id); if(index>=0) rows[index]=village; else rows.push(village);
+        localStorage.setItem(ROADMAP_STORAGE_KEY,JSON.stringify(rows));
+        document.getElementById("roadmap-status-message").textContent="Village ajouté au planning local. Dès qu’il sera créé dans la gestion des villages, ses niveaux et aventures remonteront automatiquement ici.";
+        window.adminResetRoadmapForm(); window.adminRenderRoadmap();
     };
     window.adminEditRoadmapVillage = function(id) {
         if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
-        const v = roadmapRead().find(item => item.id === id);
-        if (!v) return;
-        document.getElementById("roadmap-edit-id").value = v.id;
-        document.getElementById("roadmap-name").value = v.name || "";
-        document.getElementById("roadmap-dept").value = v.department || "";
-        document.getElementById("roadmap-postal").value = v.postal || "";
-        document.getElementById("roadmap-status").value = v.status || "À étudier";
-        document.getElementById("roadmap-date").value = v.date || "";
-        document.getElementById("roadmap-notes").value = v.notes || "";
-        document.getElementById("roadmap-status-message").textContent = "Modification de " + v.name + ".";
-        document.getElementById("roadmap-form").scrollIntoView({behavior:"smooth",block:"center"});
+        const v=roadmapRead().find(item=>item.id===id); if(!v)return;
+        document.getElementById("roadmap-edit-id").value=v.id; document.getElementById("roadmap-name").value=v.name||""; document.getElementById("roadmap-dept").value=v.department||""; document.getElementById("roadmap-postal").value=v.postal||""; document.getElementById("roadmap-status").value=v.status||"À étudier"; document.getElementById("roadmap-date").value=v.date||""; document.getElementById("roadmap-notes").value=v.notes||""; document.getElementById("roadmap-status-message").textContent="Modification de "+v.name+"."; document.getElementById("roadmap-form").scrollIntoView({behavior:"smooth",block:"center"});
     };
     window.adminDeleteRoadmapVillage = function(id) {
         if (window.adminAccessGranted !== true || window.adminCurrentRole !== "admin") return;
-        const rows = roadmapRead();
-        const v = rows.find(item => item.id === id);
-        if (!v || !confirm("Supprimer " + v.name + " de la feuille de route ?")) return;
-        localStorage.setItem(ROADMAP_STORAGE_KEY, JSON.stringify(rows.filter(item => item.id !== id)));
-        window.adminRenderRoadmap();
+        const rows=roadmapRead(), v=rows.find(item=>item.id===id); if(!v||!confirm("Supprimer "+v.name+" du planning manuel ?"))return;
+        localStorage.setItem(ROADMAP_STORAGE_KEY,JSON.stringify(rows.filter(item=>item.id!==id))); window.adminRenderRoadmap();
     };
-    window.adminResetRoadmapForm = function() {
-        document.getElementById("roadmap-form")?.reset();
-        document.getElementById("roadmap-edit-id").value = "";
-    };
+    window.adminResetRoadmapForm = function() { document.getElementById("roadmap-form")?.reset(); document.getElementById("roadmap-edit-id").value=""; };
 
     function adminShowHome() {
         adminSetView("admin-home-view", "Tableau de bord");
