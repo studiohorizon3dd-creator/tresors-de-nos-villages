@@ -15231,7 +15231,7 @@
                                     Gestion commerciale <span class="admin-category-chevron">⌄</span>
                                 </summary>
                                 <div class="admin-category-links">
-                                    <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')">
+                                    <button class="admin-nav-item" type="button" onclick="adminOpenCommercial()">
                                         <span>€</span>
                                         Formules & paiements
                                     </button>
@@ -16573,6 +16573,59 @@
                                 <div id="admin-tester-feedback-list" class="admin-recent-list tester-table-wrap">
                                     <p>Aucun retour chargé.</p>
                                 </div>
+                            </div>
+                        </div>
+                        <div id="admin-commercial-view" class="admin-subview" hidden>
+                            <style>
+                                #admin-commercial-view { color:#183326; }
+                                #admin-commercial-view .commercial-intro {
+                                    background:linear-gradient(120deg,#062c20,#174b35);
+                                    color:#fff4d2;border:1px solid #d7ad45;border-radius:16px;
+                                    padding:20px;margin:0 0 16px;line-height:1.55;
+                                }
+                                #admin-commercial-view .commercial-grid {
+                                    display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+                                    gap:13px;margin:16px 0;
+                                }
+                                #admin-commercial-view .commercial-card {
+                                    background:#fffaf0;border:1px solid #e3cf9c;border-radius:13px;
+                                    padding:16px;box-shadow:0 4px 14px #392a110b;
+                                }
+                                #admin-commercial-view .commercial-card h4 { margin:0 0 8px;color:#123d2b; }
+                                #admin-commercial-view .commercial-card p { margin:0;color:#596657;line-height:1.5;font-size:13px; }
+                                #admin-commercial-view .commercial-table-wrap {
+                                    overflow-x:auto;background:#fffaf0;border:1px solid #e3cf9c;
+                                    border-radius:13px;padding:14px;
+                                }
+                                #admin-commercial-view table { width:100%;border-collapse:collapse;min-width:620px; }
+                                #admin-commercial-view th,#admin-commercial-view td {
+                                    padding:10px;text-align:left;border-bottom:1px solid #e9dfc8;font-size:13px;
+                                }
+                                #admin-commercial-view th { color:#174b35;background:#f5eedc; }
+                                #admin-commercial-view .commercial-status { margin:12px 0;color:#596657;font-size:13px; }
+                            </style>
+                            <div class="admin-section-heading">
+                                <div>
+                                    <h3>€ Gestion commerciale</h3>
+                                    <p>Retrouvez ici les formules et les tarifs configurés pour chaque village.</p>
+                                </div>
+                                <button type="button" class="admin-secondary-btn" onclick="adminLoadCommercial()">↻ Actualiser</button>
+                            </div>
+                            <div class="commercial-intro">
+                                <strong>Catalogue des formules</strong><br>
+                                Cette page présente les réglages commerciaux déjà enregistrés. Pour modifier le nombre d’énigmes,
+                                les étoiles, le prix ou le statut d’un niveau, utilisez « Niveaux par village ».
+                                Aucun paiement n’est activé depuis cette page.
+                            </div>
+                            <div class="commercial-grid">
+                                <section class="commercial-card"><h4>🏡 Formules par village</h4><p>Consultez les accès gratuits, payants et testeurs définis pour chaque village.</p></section>
+                                <section class="commercial-card"><h4>🎒 Packs</h4><p>Pack Complet et Pack Voyageur seront gérés séparément dans une prochaine étape.</p></section>
+                                <section class="commercial-card"><h4>👤 Accès des joueurs</h4><p>La gestion des formules attribuées aux membres sera ajoutée ultérieurement.</p></section>
+                                <section class="commercial-card"><h4>💳 Paiements</h4><p>L’historique et l’activation des paiements seront préparés séparément. Aucun réglage Stripe n’est modifié.</p></section>
+                            </div>
+                            <p id="admin-commercial-status" class="commercial-status" role="status" aria-live="polite">Chargement du catalogue…</p>
+                            <div id="admin-commercial-table" class="commercial-table-wrap">
+                                <p>Les formules enregistrées apparaîtront ici.</p>
                             </div>
                         </div>
                         <div id="admin-levels-view" class="admin-subview" hidden>
@@ -22187,7 +22240,7 @@
     ;
 
     const adminSetView = window.adminSetView = function(view, title) {
-        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
+        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-commercial-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
             const el = document.getElementById(id);
             if (el)
                 el.hidden = true;
@@ -22200,7 +22253,7 @@
         if (heading)
             heading.textContent = title;
         document.querySelectorAll(".admin-nav-item").forEach(btn => btn.classList.remove("active"));
-        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
+        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-commercial-view" ? "adminOpenCommercial" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
         if (active)
             active.classList.add("active");
     }
@@ -24717,6 +24770,60 @@
             }
         }
         );
+
+    window.adminOpenCommercial = async function() {
+        adminSetView("admin-commercial-view", "Formules & paiements");
+        await window.adminLoadCommercial();
+    };
+    window.adminLoadCommercial = async function() {
+        const status = document.getElementById("admin-commercial-status");
+        const tableHost = document.getElementById("admin-commercial-table");
+        if (!status || !tableHost) return;
+        status.textContent = "Chargement des formules…";
+        tableHost.replaceChildren();
+        try {
+            const data = await adminApi("/api/admin/villages");
+            const villages = Array.isArray(data.villages) ? data.villages : [];
+            const table = document.createElement("table");
+            const thead = document.createElement("thead");
+            thead.innerHTML = "<tr><th>Village</th><th>Formule</th><th>Accès</th><th>Prix</th><th>Statut</th></tr>";
+            table.appendChild(thead);
+            const tbody = document.createElement("tbody");
+            let count = 0;
+            for (const village of villages) {
+                if (!village || !village.slug) continue;
+                const result = await adminApi(`/api/admin/village-levels?village=${encodeURIComponent(village.slug)}`);
+                const levels = Array.isArray(result.levels) ? result.levels : [];
+                for (const level of levels) {
+                    const tr = document.createElement("tr");
+                    const values = [
+                        village.name || village.slug,
+                        level.display_name || level.level_key || "—",
+                        level.access_type === "payant" ? "Payant" : level.access_type === "testeur" ? "Testeur" : "Gratuit",
+                        Number(level.price_eur) > 0 ? Number(level.price_eur).toLocaleString("fr-FR", {style:"currency",currency:"EUR"}) : "Gratuit",
+                        level.status === "actif" ? "Disponible" : level.status === "desactive" ? "Désactivé" : "En préparation"
+                    ];
+                    values.forEach(value => {
+                        const td = document.createElement("td");
+                        td.textContent = String(value);
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                    count++;
+                }
+            }
+            table.appendChild(tbody);
+            if (!count) {
+                tableHost.textContent = "Aucune formule n’est encore enregistrée pour les villages.";
+            } else {
+                tableHost.appendChild(table);
+            }
+            status.textContent = `${villages.length} village(s) vérifié(s) · ${count} formule(s) affichée(s).`;
+        } catch (error) {
+            status.textContent = error.message || "Impossible de charger le catalogue commercial.";
+            tableHost.textContent = "Le catalogue n’a pas pu être chargé. Vérifiez votre connexion administrateur puis actualisez.";
+        }
+    };
 
     const ADMIN_LEVEL_DEFINITIONS = [["enfant_4_6", "Enfant 4 à 6 ans"], ["enfant_7_9", "Enfant 7 à 9 ans"], ["enfant_10_12", "Enfant 10 à 12 ans"], ["enfant_13_15", "Enfant 13 à 15 ans"], ["enfant", "Enfant"], ["facile", "Facile"], ["famille", "Famille"], ["moyen", "Moyen"], ["difficile", "Difficile"], ["extreme", "Extrême"], ["nuit", "Nuit"]];
     let adminLevelCache = [];
