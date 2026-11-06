@@ -15231,7 +15231,7 @@
                                     Gestion commerciale <span class="admin-category-chevron">⌄</span>
                                 </summary>
                                 <div class="admin-category-links">
-                                    <button class="admin-nav-item" type="button" onclick="adminComingSoon('Formules & paiements')">
+                                    <button class="admin-nav-item" type="button" onclick="adminOpenLevels()">
                                         <span>€</span>
                                         Formules & paiements
                                     </button>
@@ -16885,10 +16885,6 @@
                                         <label>
                                             Catégorie *
                                             <select id="levels-custom-category" required><option value="enfant">Enfant</option><option value="famille">Famille</option><option value="facile">Facile</option><option value="moyen">Moyen</option><option value="difficile">Difficile</option><option value="extreme">Extrême</option><option value="nuit">Nuit</option></select>
-                                        </label>
-                                        <label>
-                                            Âge *
-                                            <select id="levels-custom-age" required><option value="4-6">4 à 6 ans</option><option value="7-9">7 à 9 ans</option><option value="10-12">10 à 12 ans</option><option value="13-15">13 à 15 ans</option></select>
                                         </label>
                                         <div class="pair">
                                             <label>
@@ -24718,10 +24714,12 @@
         }
         );
 
-    const ADMIN_LEVEL_DEFINITIONS = [["enfant_4_6", "Enfant 4 à 6 ans"], ["enfant_7_9", "Enfant 7 à 9 ans"], ["enfant_10_12", "Enfant 10 à 12 ans"], ["enfant_13_15", "Enfant 13 à 15 ans"], ["enfant", "Enfant"], ["facile", "Facile"], ["famille", "Famille"], ["moyen", "Moyen"], ["difficile", "Difficile"], ["extreme", "Extrême"], ["nuit", "Nuit"]];
+    const ADMIN_LEVEL_DEFINITIONS = [["enfant", "Enfant"], ["facile", "Facile"], ["famille", "Famille"], ["moyen", "Moyen"], ["difficile", "Difficile"], ["extreme", "Extrême"], ["nuit", "Nuit"]];
     let adminLevelCache = [];
-    window.adminOpenLevels = async function() {
-        adminSetView("admin-levels-view", "Niveaux par village");
+    window.adminOpenLevels = async function(sectionTitle = "Niveaux par village") {
+        adminSetView("admin-levels-view", sectionTitle);
+        const heroTitle = document.querySelector("#admin-levels-view .levels-hero h2");
+        if (heroTitle) heroTitle.textContent = "📊 " + sectionTitle;
         const select = document.getElementById("admin-level-village");
         if (!select.dataset.loaded) {
             try {
@@ -24890,29 +24888,15 @@
     ;
     const levelsCustomForm = document.getElementById("levels-custom-form");
     const customCategory = document.getElementById("levels-custom-category");
-    const customAge = document.getElementById("levels-custom-age");
-    function updateCustomAgeOptions() {
-        const isChild = customCategory?.value === "enfant";
-        if (!customAge) return;
-        customAge.disabled = !isChild;
-        customAge.innerHTML = isChild
-          ? '<option value="4-6">4 à 6 ans</option><option value="7-9">7 à 9 ans</option><option value="10-12">10 à 12 ans</option><option value="13-15">13 à 15 ans</option>'
-          : '<option value="tous">Tous âges</option>';
-    }
-    customCategory?.addEventListener("change", updateCustomAgeOptions);
-    updateCustomAgeOptions();
     if (levelsCustomForm)
         levelsCustomForm.addEventListener("submit", async e => {
             e.preventDefault();
             const village = document.getElementById("admin-level-village").value;
             const status = document.getElementById("admin-levels-status");
             const category = customCategory.value;
-            const age = customAge.value;
             const categoryLabels = {enfant:"Enfant",famille:"Famille",facile:"Facile",moyen:"Moyen",difficile:"Difficile",extreme:"Extrême",nuit:"Nuit"};
-            const ageLabels = {"4-6":"4 à 6 ans","7-9":"7 à 9 ans","10-12":"10 à 12 ans","13-15":"13 à 15 ans"};
-            const isChild = category === "enfant";
-            const key = isChild ? `enfant_${age.replace("-", "_")}` : category;
-            const name = isChild ? `${categoryLabels[category]} ${ageLabels[age]}` : categoryLabels[category];
+            const key = category;
+            const name = categoryLabels[category];
             if (!village) { status.textContent = "Choisis d’abord un village."; return; }
             if (adminLevelCache.some(x => x.level_key === key)) {
                 status.textContent = "Cette catégorie existe déjà pour ce village. Modifie ses nombres directement dans le tableau.";
