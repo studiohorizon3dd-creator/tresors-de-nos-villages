@@ -15176,6 +15176,14 @@
                                         <span>🛡️</span>
                                         Vie de l'équipe
                                     </button>
+                                    <button class="admin-nav-item" type="button" id="team-missions-nav-item" onclick="window.openTeamMissions()" hidden>
+                                        <span>🧭</span>
+                                        Mes missions
+                                    </button>
+                                    <button class="admin-nav-item" type="button" id="team-review-nav-item" onclick="window.openTeamMissionReview()">
+                                        <span>📋</span>
+                                        Validation de l’équipe
+                                    </button>
                                     <button class="admin-nav-item" id="moderator-space-nav-item" type="button" onclick="adminOpenCommunication()">
                                         <span>🛡️</span>
                                         Mon espace modérateur
@@ -16080,6 +16088,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="team-missions-view" class="admin-subview" hidden>
+                            <div class="admin-section-heading"><div><h3>🧭 Mes missions</h3><p>Prépare les aventures uniquement pour les villages qui te sont attribués. L’administration garde la validation et la publication.</p></div><button type="button" class="admin-secondary-btn" onclick="window.loadTeamMissions()">↻ Actualiser</button></div>
+                            <div class="feature" style="padding:15px;margin:12px 0"><h4>Créer une aventure</h4><form id="team-mission-form" style="display:grid;gap:10px"><label>Village attribué<select id="team-mission-village" required><option value="">Chargement…</option></select></label><label>Titre<input id="team-mission-title" required maxlength="150" placeholder="Ex. Le mystère du vieux moulin"></label><label>Niveau<select id="team-mission-level" required><option value="enfant_4_6">Petit explorateur · 4 à 6 ans</option><option value="enfant_7_9">Explorateur · 7 à 9 ans</option><option value="enfant_10_12">Aventurier · 10 à 12 ans</option><option value="enfant_13_15">Grand aventurier · 13 à 15 ans</option><option value="facile">Facile</option><option value="moyen">Moyen</option><option value="difficile">Difficile</option></select></label><label>Description<textarea id="team-mission-description" rows="3" maxlength="3000"></textarea></label><button class="admin-secondary-btn" type="submit">Créer le brouillon</button></form></div>
+                            <div class="feature" style="padding:15px;margin:12px 0"><h4>Ajouter une étape à une aventure</h4><form id="team-step-form" style="display:grid;gap:9px"><label>Aventure<select id="team-step-adventure" required><option value="">Choisis une aventure</option></select></label><label>Numéro de l’étape<input id="team-step-number" type="number" min="1" required value="1"></label><label>Lieu à trouver<input id="team-step-place" required maxlength="200"></label><label>Énigme<textarea id="team-step-riddle" rows="3"></textarea></label><label>Réponse attendue<input id="team-step-answer"></label><label>Premier indice<input id="team-step-hint"></label><label>Latitude<input id="team-step-lat" type="number" step="any"></label><label>Longitude<input id="team-step-lon" type="number" step="any"></label><label>Photo HTTPS (facultatif)<input id="team-step-photo" type="url"></label><button class="admin-secondary-btn" type="submit">Ajouter l’étape</button></form></div>
+                            <p id="team-missions-status" class="status" role="status" aria-live="polite"></p><div id="team-missions-list" class="admin-recent-list">Chargement…</div>
+                        </div>
+                        <div id="team-mission-review-view" class="admin-subview" hidden>
+                            <div class="admin-section-heading"><div><h3>📋 Validation de l’équipe</h3><p>Les aventures envoyées par les modérateurs arrivent ici. Seule l’administration peut valider et publier.</p></div><button type="button" class="admin-secondary-btn" onclick="window.loadTeamMissionReview()">↻ Actualiser</button></div>
+                            <p id="team-review-status" class="status" role="status" aria-live="polite"></p><div id="team-review-list" class="admin-recent-list">Chargement…</div>
+                        </div>
                         <div id="admin-team-view" class="admin-subview" hidden>
                             <div class="admin-section-heading">
                                 <div>
@@ -16129,7 +16147,7 @@
                                             <input type="checkbox" value="news" disabled title="Fonction en cours de sécurisation">📰 Actualités et publications
                                         </label>
                                         <label>
-                                            <input type="checkbox" value="adventures" disabled title="Fonction en cours de sécurisation">🧭 Suivi des aventures
+                                            <input type="checkbox" value="adventures">🧭 Préparer les aventures des villages attribués
                                         </label>
                                         <label>
                                             <input type="checkbox" value="team_communication">📝 Communication et missions de l'équipe
@@ -22282,7 +22300,7 @@
     ;
 
     const adminSetView = window.adminSetView = function(view, title) {
-        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-commercial-view", "admin-packs-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
+        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-commercial-view", "admin-packs-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "team-missions-view", "team-mission-review-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
             const el = document.getElementById(id);
             if (el)
                 el.hidden = true;
@@ -22295,7 +22313,7 @@
         if (heading)
             heading.textContent = title;
         document.querySelectorAll(".admin-nav-item").forEach(btn => btn.classList.remove("active"));
-        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-commercial-view" ? "adminOpenCommercial" : view === "admin-packs-view" ? "adminOpenPacks" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
+        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-commercial-view" ? "adminOpenCommercial" : view === "admin-packs-view" ? "adminOpenPacks" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "team-missions-view" ? "openTeamMissions" : view === "team-mission-review-view" ? "openTeamMissionReview" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
         if (active)
             active.classList.add("active");
     }
@@ -27051,17 +27069,25 @@
             const communicationOnly = action.includes("adminOpenCommunication");
             const teamSpaceItem = button.id === "team-space-nav-item";
             const moderatorSpaceItem = button.id === "moderator-space-nav-item";
+            const teamMissionsItem = button.id === "team-missions-nav-item";
+            const teamReviewItem = button.id === "team-review-nav-item";
             const teamByVillageItem = button.id === "team-by-village-nav-item";
             const testerAdminItem = action.includes("adminOpenTesters") || action.includes("adminOpenTesterManagement");
             const roadmapAdminItem = action.includes("adminOpenRoadmap");
             const perms = window.adminCurrentPermissions || [];
             const canTeamSpace = isAdmin || (perms.includes("team_communication") || perms.includes("player_reports"));
             const canManageTesters = isAdmin || perms.includes("testers");
-            const visible = isModerator ? (moderatorSpaceItem || (teamSpaceItem && canTeamSpace) || (testerAdminItem && canManageTesters)) : (isAdmin && !moderatorSpaceItem);
+            const visible = isModerator ? (moderatorSpaceItem || (teamSpaceItem && canTeamSpace) || (testerAdminItem && canManageTesters) || (teamMissionsItem && perms.includes("adventures"))) : (isAdmin && !moderatorSpaceItem);
             if (roadmapAdminItem && !isAdmin) {
                 button.hidden = true;
                 button.style.setProperty("display", "none", "important");
                 return;
+            }
+            if (teamReviewItem && !isAdmin) {
+                button.hidden = true; button.style.setProperty("display", "none", "important"); return;
+            }
+            if (teamMissionsItem && !(isAdmin || (isModerator && (window.adminCurrentPermissions || []).includes("adventures")))) {
+                button.hidden = true; button.style.setProperty("display", "none", "important"); return;
             }
             if (teamByVillageItem && !isAdmin) {
                 button.hidden = true;
@@ -30410,4 +30436,37 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
-</body></ html>
+<script id="team-missions-workflow">
+(function(){
+  const el=id=>document.getElementById(id);
+  const say=(id,msg)=>{const node=el(id);if(node)node.textContent=msg||"";};
+  const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  window.openTeamMissions=async function(){
+    if(!window.adminAccessGranted || !(window.adminCurrentRole==="admin" || (window.adminCurrentPermissions||[]).includes("adventures"))){alert("Cette mission ne t’a pas été attribuée.");return;}
+    window.adminSetView?.("team-missions-view","Mes missions"); await window.loadTeamMissions();
+  };
+  window.loadTeamMissions=async function(){
+    try{
+      const data=await window.adminApi("/api/team/missions");
+      const village=el("team-mission-village"), adventure=el("team-step-adventure");
+      if(village)village.innerHTML='<option value="">Choisis un village attribué</option>'+(data.villages||[]).map(v=>`<option value="${esc(v.slug)}">${esc(v.name)}${v.postal_code?' ('+esc(v.postal_code)+')':''}</option>`).join("");
+      if(adventure)adventure.innerHTML='<option value="">Choisis une aventure</option>'+(data.adventures||[]).filter(a=>!a.is_validated&&!a.is_published&&a.status!=="en_attente").map(a=>`<option value="${a.id}">${esc(a.title)} — ${esc(a.village)}</option>`).join("");
+      const list=el("team-missions-list");
+      if(list)list.innerHTML=(data.adventures||[]).length?(data.adventures||[]).map(a=>`<article class="feature" style="padding:12px;margin:9px 0"><strong>${esc(a.title)}</strong><p>${esc(a.village)} · ${esc(a.level_key)} · ${esc(a.status)}</p><small>${a.status==="en_attente"?"Envoyée à l’administration pour validation":"Brouillon en préparation"}</small>${!a.is_validated&&!a.is_published&&a.status!=="en_attente"?`<p><button type="button" class="admin-secondary-btn" onclick="window.editTeamMission(${a.id})">Modifier le titre / la description</button> <button type="button" class="admin-secondary-btn" onclick="window.submitTeamMission(${a.id})">Envoyer pour validation</button></p>`:""}</article>`).join(""):'<p>Aucune aventure pour le moment. Crée ton premier brouillon ci-dessus.</p>';
+      say("team-missions-status",(data.villages||[]).length?`${data.villages.length} village(s) attribué(s).`:"Aucun village ne t’a encore été attribué. Contacte l’administration.");
+    }catch(e){say("team-missions-status",e.message||"Impossible de charger les missions.");}
+  };
+  window.editTeamMission=async function(id){try{const d=await window.adminApi("/api/team/missions");const a=(d.adventures||[]).find(x=>Number(x.id)===Number(id));if(!a)return;const title=prompt("Titre de l’aventure :",a.title);if(title===null)return;const description=prompt("Description :",a.description||"");if(description===null)return;await window.adminApi(`/api/team/missions/${id}`,{method:"PATCH",body:JSON.stringify({title,description})});say("team-missions-status","Aventure mise à jour.");await window.loadTeamMissions();}catch(e){say("team-missions-status",e.message||"Modification impossible.");}};
+  window.submitTeamMission=async function(id){if(!confirm("Envoyer cette aventure à l’administration ? Tu ne pourras plus la modifier après l’envoi."))return;try{const r=await window.adminApi(`/api/team/missions/${id}/submit`,{method:"POST",body:"{}"});say("team-missions-status",r.message);await window.loadTeamMissions();}catch(e){say("team-missions-status",e.message);}};
+  window.openTeamMissionReview=async function(){if(window.adminCurrentRole!=="admin"){alert("Réservé à l’administration.");return;}window.adminSetView?.("team-mission-review-view","Validation de l’équipe");await window.loadTeamMissionReview();};
+  window.loadTeamMissionReview=async function(){if(window.adminCurrentRole!=="admin")return;try{const data=await window.adminApi("/api/admin/team/missions-review");const box=el("team-review-list");if(!box)return;box.innerHTML=(data.adventures||[]).length?data.adventures.map(a=>`<article class="feature" style="padding:14px;margin:10px 0"><h4>${esc(a.title)}</h4><p>${esc(a.village)} · ${esc(a.level_key)}</p><p>${esc(a.description||"Aucune description")}</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="admin-secondary-btn" onclick="window.reviewTeamMission(${a.id},'steps')">Voir les étapes</button><button type="button" class="admin-secondary-btn" onclick="window.reviewTeamMission(${a.id},'correction')">Demander une correction</button><button type="button" class="admin-secondary-btn" onclick="window.reviewTeamMission(${a.id},'validate')">Valider</button></div><div id="team-review-steps-${a.id}"></div></article>`).join(""):'<p>Aucune aventure en attente de validation.</p>';say("team-review-status",`${(data.adventures||[]).length} aventure(s) à examiner.`);}catch(e){say("team-review-status",e.message||"Chargement impossible.");}};
+  window.reviewTeamMission=async function(id,action){if(window.adminCurrentRole!=="admin")return;try{if(action==="steps"){const d=await window.adminApi(`/api/admin/adventures/${id}/steps`);const target=el(`team-review-steps-${id}`);if(target)target.innerHTML=(d.steps||[]).map(st=>`<div style="border-top:1px solid #ddd;padding:8px"><strong>Étape ${st.step_number} — ${esc(st.place_name)}</strong><p>${esc(st.riddle||"")}</p><small>Réponse : ${esc(st.answer||"—")} · Indice : ${esc(st.hint||"—")}</small><p>GPS : ${esc(st.latitude??"—")}, ${esc(st.longitude??"—")}</p></div>`).join("")||"Aucune étape.";return;}if(action==="correction"){const all=await window.adminApi(`/api/admin/adventures`);const a=(all.adventures||[]).find(x=>Number(x.id)===Number(id));if(!a)throw new Error("Aventure introuvable.");await window.adminApi(`/api/admin/adventures/${id}`,{method:"PATCH",body:JSON.stringify({title:a.title,village:a.village,description:a.description,status:"en_travaux"})});say("team-review-status","Aventure renvoyée en correction. Le modérateur pourra la reprendre.");await window.loadTeamMissionReview();return;}if(action==="validate"){if(!confirm("Valider le contenu ? La publication restera une action séparée."))return;await window.adminApi(`/api/admin/adventures/${id}/validate`,{method:"POST",body:"{}"});say("team-review-status","Aventure validée. Elle n’est pas encore publiée. Ouvre Aventures & énigmes pour la publier quand tu le souhaites.");await window.loadTeamMissionReview();}}catch(e){say("team-review-status",e.message||"Action impossible.");}};
+  document.addEventListener("DOMContentLoaded",()=>{
+    el("team-mission-form")?.addEventListener("submit",async ev=>{ev.preventDefault();try{const r=await window.adminApi("/api/team/missions",{method:"POST",body:JSON.stringify({village_slug:el("team-mission-village").value,title:el("team-mission-title").value,level_key:el("team-mission-level").value,description:el("team-mission-description").value})});say("team-missions-status",`Brouillon créé : ${r.adventure.title}. Tu peux maintenant ajouter les étapes.`);el("team-mission-form").reset();await window.loadTeamMissions();if(el("team-step-adventure"))el("team-step-adventure").value=r.adventure.id;}catch(e){say("team-missions-status",e.message);}});
+    el("team-step-form")?.addEventListener("submit",async ev=>{ev.preventDefault();const id=el("team-step-adventure").value;if(!id){say("team-missions-status","Choisis d’abord une aventure.");return;}try{await window.adminApi(`/api/team/missions/${id}/steps`,{method:"POST",body:JSON.stringify({step_number:Number(el("team-step-number").value),place_name:el("team-step-place").value,riddle:el("team-step-riddle").value,answer:el("team-step-answer").value,hint:el("team-step-hint").value,latitude:el("team-step-lat").value||null,longitude:el("team-step-lon").value||null,photo_url:el("team-step-photo").value})});say("team-missions-status","Étape ajoutée. Tu peux continuer ou envoyer l’aventure pour validation.");el("team-step-form").reset();}catch(e){say("team-missions-status",e.message);}});
+  });
+})();
+</script>
+
+</body>
+</html>
