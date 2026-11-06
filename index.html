@@ -21619,13 +21619,13 @@
                                     <label>
                                         Statut de l’aventure
                                         <select id="admin-adventure-edit-status-select" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px">
-                                            <option value="brouillon">En cours de création</option>
+                                            <option value="en_creation">En cours de création</option>
                                             <option value="a_valider">À valider</option>
                                             <option value="en_attente">En attente</option>
                                             <option value="en_travaux">En travaux</option>
                                             <option value="mise_a_jour">Mise à jour</option>
-                                            <option value="publie">En ligne</option>
-                                            <option value="suspendu">Suspendue</option>
+                                            <option value="en_ligne">En ligne</option>
+                                            <option value="suspendue">Suspendue</option>
                                         </select>
                                     </label>
                                     <div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap">
@@ -25136,12 +25136,15 @@
 
     window.adminSelectedAdventureId = null;
     const ADVENTURE_STATUS_LABELS = {
+        en_creation: "En cours de création",
         brouillon: "En cours de création",
         a_valider: "À valider",
         en_attente: "En attente",
         en_travaux: "En travaux",
         mise_a_jour: "Mise à jour",
+        en_ligne: "En ligne",
         publie: "En ligne",
+        suspendue: "Suspendue",
         suspendu: "Suspendue"
     };
     let adminAdventureCache = [];
@@ -25159,7 +25162,7 @@
         if (filter === "online")
             return !!a.is_published;
         if (filter === "archives")
-            return a.status === "suspendu";
+            return ["suspendu", "suspendue"].includes(a.status);
         return true;
     }
     function adminRenderAdventureList() {
@@ -25300,7 +25303,7 @@
         document.getElementById("admin-adventure-edit-title").value = a.title || "";
         document.getElementById("admin-adventure-edit-village").value = a.village || "";
         document.getElementById("admin-adventure-edit-description").value = a.description || "";
-        document.getElementById("admin-adventure-edit-status-select").value = ADVENTURE_STATUS_LABELS[a.status] ? a.status : "brouillon";
+        document.getElementById("admin-adventure-edit-status-select").value = ADVENTURE_STATUS_LABELS[a.status] ? ({brouillon:"en_creation",publie:"en_ligne",suspendu:"suspendue"}[a.status] || a.status) : "en_creation";
         document.getElementById("admin-adventure-edit-status-select").dataset.validated = String(!!a.is_validated);
         document.getElementById("admin-adventure-edit-status-select").dataset.published = String(!!a.is_published);
         document.getElementById("admin-adventure-edit-status-select").dataset.villageSlug = a.village_slug || "";
