@@ -12908,7 +12908,7 @@
 .france-village-card{background:#fffdf7;border:1px solid #e2d4b2;border-radius:13px;padding:14px;display:flex;flex-direction:column;gap:7px;min-width:0}
 .france-village-card img{width:100%;height:125px;object-fit:cover;border-radius:9px;background:#eee4cf}
 .france-village-card strong{color:#174b35;font-size:17px}.france-village-card p{margin:0;color:#596659;line-height:1.5;font-size:14px}
-.france-village-status{display:inline-flex;align-items:center;width:max-content;max-width:100%;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:700;background:#fff0ca;color:#925a0a}\n.france-village-status[data-status="available"]{background:#e0f1dc;color:#22663a}\n.france-village-status[data-status="pending_confirmation"],.france-village-status[data-status="upcoming_preparation"]{background:#fff0ca;color:#925a0a}\n.france-village-status[data-status="in_progress"]{background:#dceefa;color:#17618c}\n.france-village-status[data-status="suspended"]{background:#ffe1df;color:#a72d2b}\n.france-village-status[data-status="updating"]{background:#eee4ff;color:#6740a2}.france-village-card button{align-self:flex-start;margin-top:auto}
+.france-village-status{font-size:12px;font-weight:700;color:#72591d}.france-village-card button{align-self:flex-start;margin-top:auto}
 /* Fiche patrimoine affichée lorsqu'un visiteur sélectionne un village */
 .france-village-selected-grid{grid-template-columns:minmax(250px,360px) minmax(260px,1fr);align-items:start;gap:14px}
 .france-village-discovery{grid-column:1;grid-row:1 / span 3;padding:12px;border:1px solid #d7ad45;background:linear-gradient(145deg,#fffdf7,#f7efd9);box-shadow:0 5px 15px rgba(6,44,32,.08);display:grid;grid-template-columns:112px minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:12px;row-gap:5px;align-items:start;min-height:148px}
@@ -21036,7 +21036,7 @@
                                     <article class="village-stat">
                                         <span class="village-stat-icon pending">⌛</span>
                                         <div>
-                                            <small>Bientôt disponible</small>
+                                            <small>En attente</small>
                                             <strong id="village-stat-pending">—</strong>
                                         </div>
                                     </article>
@@ -21095,7 +21095,7 @@
                                                 <input id="admin-village-search" type="search" placeholder="⌕ Rechercher un village…" oninput="adminRenderVillages()">
                                                 <select id="admin-village-filter" onchange="adminRenderVillages()" aria-label="Filtrer par statut">
                                                     <option value="">Tous les statuts</option>
-                                                    <option value="pending_confirmation">Bientôt disponible</option>
+                                                    <option value="pending_confirmation">En attente</option>
                                                     <option value="in_progress">En travaux</option>
                                                     <option value="available">Disponible</option>
                                                     <option value="suspended">Suspendu</option>
@@ -21135,7 +21135,7 @@
                                                 <label>
                                                     Statut <em>*</em>
                                                     <select id="admin-village-status" required>
-                                                        <option value="pending_confirmation">🟠 Bientôt disponible</option>
+                                                        <option value="pending_confirmation">⌛ En attente de confirmation</option>
                                                         <option value="in_progress">🛠️ En travaux</option>
                                                         <option value="available">✓ Disponible</option>
                                                         <option value="suspended">Ⅱ Suspendu</option>
@@ -21191,10 +21191,9 @@
                                             </div>
                                             <div class="village-map-legend">
                                                 <span>🟢 Disponible</span>
-                                                <span>🟠 Bientôt disponible</span>
+                                                <span>🟠 En attente</span>
                                                 <span>🔵 En travaux</span>
                                                 <span>🔴 Suspendu</span>
-                                                <span>🟣 Mise à jour</span>
                                             </div>
                                             <button type="button" class="village-map-link" onclick="adminVillageTab('map')">◧ Voir la carte complète →</button>
                                         </section>
@@ -21214,7 +21213,7 @@
                                     <div id="admin-villages-full-map" class="village-full-map-canvas"></div>
                                 </section>
                                 <p class="village-admin-status" id="admin-villages-status-bottom"></p>
-                                <p class="admin-footnote">Les informations sont enregistrées dans Neon. Tu peux référencer un village sans attendre de confirmation.</p>
+                                <p class="admin-footnote">Les informations sont enregistrées dans Neon. Humbert reste en attente de confirmation de la mairie.</p>
                             </section>
                         </div>
                         <div id="admin-site-status-view" class="admin-subview" hidden>
@@ -23990,7 +23989,7 @@
     ;
 
     const ADMIN_VILLAGE_STATUSES = {
-        pending_confirmation: "Bientôt disponible",
+        pending_confirmation: "En attente",
         in_progress: "En travaux",
         available: "Disponible",
         suspended: "Suspendu",
@@ -24179,7 +24178,7 @@
                 counts[key]++;
         }
         );
-        [["Total des villages", counts.total], ["Bientôt disponibles", counts.pending], ["En travaux", counts.works], ["Disponibles", counts.available], ["Suspendus", counts.suspended], ["Mises à jour", counts.updating]].forEach( ([label,n]) => {
+        [["Total des villages", counts.total], ["En attente", counts.pending], ["En travaux", counts.works], ["Disponibles", counts.available], ["Suspendus", counts.suspended], ["Mises à jour", counts.updating]].forEach( ([label,n]) => {
             const d = document.createElement("div")
               , s = document.createElement("strong")
               , t = document.createElement("span");
@@ -24292,7 +24291,7 @@
               , pill = document.createElement("span");
             pill.className = "village-status-pill " + v.status;
             pill.textContent = ({
-                pending_confirmation: "🟠 Bientôt disponible",
+                pending_confirmation: "⌛ En attente",
                 in_progress: "⚒ En travaux",
                 available: "✓ Disponible",
                 suspended: "Ⅱ Suspendu",
@@ -27684,10 +27683,24 @@
         return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     }
     function franceStatusLabel(status) {
-        return ({available:"Disponible",in_progress:"En travaux",upcoming_preparation:"Bientôt disponible",pending_confirmation:"Bientôt disponible",updating:"Mise à jour",suspended:"Suspendu"})[status] || "Bientôt disponible";
+        return ({
+            available: "Disponible",
+            pending_confirmation: "Bientôt disponible",
+            in_progress: "En préparation",
+            upcoming_preparation: "À découvrir",
+            updating: "Mise à jour",
+            suspended: "Suspendu"
+        })[status] || "À découvrir";
     }
     function franceStatusColor(status) {
-        return ({available:"#238044",pending_confirmation:"#e5a000",upcoming_preparation:"#e5a000",in_progress:"#287da7",suspended:"#c63b35",updating:"#8053b8"})[status] || "#e5a000";
+        return ({
+            available: "#25814a",             // Vert : village disponible
+            pending_confirmation: "#d58a19", // Orange : bientôt disponible
+            in_progress: "#2878b8",           // Bleu : en préparation
+            upcoming_preparation: "#89918a",  // Gris : à découvrir
+            updating: "#8054b8",              // Violet : mise à jour
+            suspended: "#c94343"              // Rouge : suspendu
+        })[status] || "#89918a";
     }
     function franceRenderVillageCards() {
         const list = document.getElementById("france-village-list");
@@ -27730,7 +27743,6 @@
 
             const meta = document.createElement("span");
             meta.className = "france-village-status";
-            meta.dataset.status = village.status || "pending_confirmation";
             meta.textContent = `${village.postal_code ? village.postal_code + " · " : ""}${franceDepartmentLabel(village.postal_code)} · ${franceStatusLabel(village.status)}`;
             discovery.append(meta);
 
@@ -27743,7 +27755,15 @@
             reason.className = "france-village-discovery-note";
             reason.textContent = village.status === "available"
                 ? "Ce village vous accueille : découvrez son patrimoine puis choisissez une activité."
-                : "Ce village est en préparation. Sa fiche permet déjà de découvrir son patrimoine ; l'activité arrivera prochainement.";
+                : village.status === "pending_confirmation"
+                    ? "Ce village sera bientôt disponible. Sa fiche permet déjà de découvrir son patrimoine."
+                    : village.status === "suspended"
+                        ? "Les activités de ce village sont momentanément suspendues."
+                        : village.status === "updating"
+                            ? "La fiche de ce village est en cours de mise à jour."
+                            : village.status === "upcoming_preparation"
+                                ? "Ce village est à découvrir. Les informations et activités seront ajoutées progressivement."
+                                : "Ce village est en préparation. Sa fiche permet déjà de découvrir son patrimoine ; l'activité arrivera prochainement.";
             discovery.append(reason);
             list.append(discovery);
 
@@ -27798,7 +27818,7 @@
             const card = document.createElement("article"); card.className = "france-village-card";
             if (v.photo_url) { const img=document.createElement("img"); img.src=v.photo_url; img.alt=`Photo de ${v.name}`; img.loading="lazy"; card.append(img); }
             const h=document.createElement("strong"); h.textContent=`🏡 ${v.name}`; card.append(h);
-            const meta=document.createElement("span"); meta.className="france-village-status"; meta.dataset.status=v.status || "pending_confirmation"; meta.textContent=`${v.postal_code ? v.postal_code+" · " : ""}${franceDepartmentLabel(v.postal_code)} · ${franceStatusLabel(v.status)}`; card.append(meta);
+            const meta=document.createElement("span"); meta.className="france-village-status"; meta.textContent=`${v.postal_code ? v.postal_code+" · " : ""}${franceDepartmentLabel(v.postal_code)} · ${franceStatusLabel(v.status)}`; card.append(meta);
             const p=document.createElement("p"); p.textContent=v.description || "Une découverte à venir dans ce village."; card.append(p);
             const btn=document.createElement("button"); btn.type="button"; btn.className="small-btn";
             btn.textContent = "Découvrir ce village";
