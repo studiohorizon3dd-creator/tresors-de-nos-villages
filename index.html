@@ -27501,7 +27501,21 @@
             franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{padding:[12,12]});
             if(status) status.textContent="Clique sur un département ou utilise la liste pour découvrir les villages. Les départements d’outre-mer sont accessibles dans le sélecteur.";
         }catch(error){console.error("Carte des départements impossible à charger",error);if(status)status.textContent="Les contours ne sont pas disponibles pour le moment. Tu peux tout de même choisir un département dans la liste.";}
-        setTimeout(()=>franceDepartmentMap?.invalidateSize(),150);
+        // La carte est souvent initialisée dans une rubrique masquée.
+        // Leaflet calcule alors une mauvaise largeur : on recalcule sa taille,
+        // puis on recadre explicitement la France métropolitaine une fois visible.
+        setTimeout(()=>{
+            if(!franceDepartmentMap) return;
+            franceDepartmentMap.invalidateSize({pan:false});
+            if(!franceSelectedDepartment && franceDepartmentLayer){
+                franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{
+                    paddingTopLeft:[24,24],
+                    paddingBottomRight:[24,24],
+                    maxZoom:6,
+                    animate:false
+                });
+            }
+        },350);
     }
 
     async function actualiserCarteVillages() {
