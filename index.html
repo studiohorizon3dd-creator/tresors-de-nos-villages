@@ -12918,20 +12918,23 @@
 .france-village-name-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:25px;color:#a27a26}
 .france-village-more{margin-top:12px}
 /* Fiche patrimoine affichée lorsqu'un visiteur sélectionne un village */
-.france-village-selected-grid{grid-template-columns:minmax(250px,360px) minmax(260px,1fr);align-items:start;gap:14px}
-.france-village-discovery{grid-column:1;grid-row:1 / span 3;padding:12px;border:1px solid #d7ad45;background:linear-gradient(145deg,#fffdf7,#f7efd9);box-shadow:0 5px 15px rgba(6,44,32,.08);display:grid;grid-template-columns:112px minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:12px;row-gap:5px;align-items:start;min-height:148px}
-.france-village-discovery-cover{grid-column:1;grid-row:1 / span 4;width:112px;height:112px;overflow:hidden;border-radius:9px;background:#eee4cf}
+.france-village-selected-grid{grid-template-columns:minmax(0,1fr);align-items:start;gap:14px}
+.france-village-discovery{grid-column:1;grid-row:auto;padding:16px;border:1px solid #d7ad45;background:linear-gradient(145deg,#fffdf7,#f7efd9);box-shadow:0 5px 18px rgba(6,44,32,.09);display:grid;grid-template-columns:minmax(220px,34%) minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:18px;row-gap:9px;align-items:start;min-height:220px}
+.france-village-discovery-cover{grid-column:1;grid-row:1 / span 4;width:100%;height:220px;overflow:hidden;border-radius:11px;background:#eee4cf}
 .france-village-discovery-cover img{display:block;width:100%;height:100%;object-fit:cover}
-.france-village-photo-placeholder{width:112px;height:112px;display:grid;place-items:center;text-align:center;padding:8px;color:#65715f;font-weight:700;font-size:12px;background:linear-gradient(135deg,#e9e3d0,#dce6d5)}
-.france-village-discovery-title{grid-column:2;font-size:18px!important;margin:0!important;line-height:1.25}
-.france-village-discovery .france-village-status{grid-column:2;line-height:1.35}
-.france-village-discovery-description{grid-column:2;font-size:13px!important;line-height:1.45!important;color:#354b39!important;margin:0!important;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.france-village-discovery-note{grid-column:2;padding:7px 9px;border-left:3px solid #d7ad45;border-radius:6px;background:#f4ecd7;color:#52604d;font-size:11px!important;line-height:1.35;margin:2px 0 0!important}
-.france-village-back{grid-column:1;grid-row:4;justify-self:start}
-.france-village-adventure-status{grid-column:2;grid-row:1;margin:0}
-.france-village-adventure-empty{grid-column:2;grid-row:2;align-self:start}
-.france-village-selected-grid>.france-village-card:not(.france-village-discovery){grid-column:2}
-@media(max-width:700px){.france-village-selected-grid{grid-template-columns:1fr}.france-village-discovery{grid-column:1;grid-row:auto;max-width:none}.france-village-back,.france-village-adventure-status,.france-village-adventure-empty,.france-village-selected-grid>.france-village-card:not(.france-village-discovery){grid-column:1;grid-row:auto}}
+.france-village-photo-placeholder{width:100%;height:220px;display:grid;place-items:center;text-align:center;padding:12px;color:#65715f;font-weight:700;font-size:13px;background:linear-gradient(135deg,#e9e3d0,#dce6d5)}
+.france-village-discovery-title{grid-column:2;font-size:23px!important;margin:2px 0 0!important;line-height:1.25}
+.france-village-discovery .france-village-status{grid-column:2;line-height:1.5;font-size:13px}
+.france-village-discovery-description{grid-column:2;font-size:15px!important;line-height:1.65!important;color:#354b39!important;margin:3px 0!important;white-space:normal}
+.france-village-discovery-note{grid-column:2;padding:10px 12px;border-left:4px solid #d7ad45;border-radius:7px;background:#f4ecd7;color:#52604d;font-size:12px!important;line-height:1.5;margin:3px 0 0!important}
+.france-village-back{grid-column:1;grid-row:auto;justify-self:start}
+.france-village-adventure-status{grid-column:1;grid-row:auto;margin:0;padding:12px 14px;background:#fffdf7;border:1px dashed #cbb982;border-radius:10px}
+.france-village-adventure-empty{grid-column:1;grid-row:auto;align-self:start}
+.france-village-selected-grid>.france-village-card:not(.france-village-discovery){grid-column:1;border-color:#d7ad45;background:#fffdf7;max-width:none}
+.france-village-selected-grid>.france-village-card:not(.france-village-discovery) strong{font-size:18px}
+.france-village-selected-grid>.france-village-card:not(.france-village-discovery) p{font-size:13px}
+@media(max-width:700px){.france-village-selected-grid{grid-template-columns:1fr}.france-village-discovery{grid-template-columns:1fr;grid-template-rows:auto auto auto auto;max-width:none}.france-village-discovery-cover{grid-column:1;grid-row:1;height:190px}.france-village-photo-placeholder{height:190px}.france-village-discovery-title,.france-village-discovery .france-village-status,.france-village-discovery-description,.france-village-discovery-note{grid-column:1}.france-village-back,.france-village-adventure-status,.france-village-adventure-empty,.france-village-selected-grid>.france-village-card:not(.france-village-discovery){grid-column:1;grid-row:auto}}
+.france-village-adventure-heading{grid-column:1;margin:4px 0 0;color:#174b35;font-size:20px}
 .france-map-empty{padding:20px;text-align:center;background:#fffdf7;border:1px dashed #cbb982;border-radius:12px;color:#647164}
 .france-dept-label{font:700 11px Arial,sans-serif;fill:#173d2b;paint-order:stroke;stroke:#fff8e8;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .admin-department-hint{font-size:12px;color:#687467;display:block;margin-top:4px}
@@ -21097,7 +21100,10 @@
                                                     </h4>
                                                     <p>Retrouvez et modifiez les informations de chaque commune.</p>
                                                 </div>
-                                                <button type="button" class="admin-secondary-btn" onclick="adminLoadVillages()">↻ Actualiser</button>
+                                                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                                                    <button type="button" class="admin-secondary-btn" onclick="adminLoadVillages()">↻ Actualiser</button>
+                                                    <button type="button" class="admin-secondary-btn" id="admin-village-list-toggle" aria-expanded="false" aria-controls="admin-village-results" onclick="adminToggleVillageList()">▼ Afficher la liste</button>
+                                                </div>
                                             </div>
                                             <div class="village-list-tools">
                                                 <input id="admin-village-search" type="search" placeholder="⌕ Rechercher un village…" oninput="adminRenderVillages()">
@@ -21114,10 +21120,13 @@
                                                 </select>
                                                 <button type="button" class="village-view-toggle active" aria-label="Vue liste">☷</button>
                                             </div>
-                                            <p id="admin-villages-status" class="status" role="status" aria-live="polite">Chargement des villages…</p>
-                                            <div id="admin-villages-list" class="village-table-wrap" aria-live="polite">
-                                                <p>Les villages apparaîtront ici.</p>
+                                            <div id="admin-village-results" hidden>
+                                                <p id="admin-villages-status" class="status" role="status" aria-live="polite">Chargement des villages…</p>
+                                                <div id="admin-villages-list" class="village-table-wrap" aria-live="polite">
+                                                    <p>Les villages apparaîtront ici.</p>
+                                                </div>
                                             </div>
+                                            <p class="admin-footnote" id="admin-village-collapsed-note">La liste détaillée est masquée. Utilise la recherche ou les filtres, puis clique sur « Afficher la liste » pour consulter les résultats.</p>
                                         </section>
                                         <section class="village-panel" id="village-panel-add">
                                             <div class="village-panel-heading">
@@ -24148,6 +24157,7 @@
         if (tab === "pending") {
             document.getElementById("admin-village-filter").value = "pending_confirmation";
             adminRenderVillages();
+            adminToggleVillageList(true);
         }
         if (tab === "list") {
             document.getElementById("admin-village-filter").value = "";
@@ -24241,6 +24251,17 @@
         if (total)
             total.textContent = villages.length;
     }
+    window.adminToggleVillageList = function(forceOpen) {
+        const results = document.getElementById("admin-village-results");
+        const button = document.getElementById("admin-village-list-toggle");
+        const note = document.getElementById("admin-village-collapsed-note");
+        if (!results || !button) return;
+        const open = typeof forceOpen === "boolean" ? forceOpen : results.hidden;
+        results.hidden = !open;
+        button.setAttribute("aria-expanded", String(open));
+        button.textContent = open ? "▲ Masquer la liste" : "▼ Afficher la liste";
+        if (note) note.hidden = open;
+    };
     window.adminRenderVillages = function() {
         const list = document.getElementById("admin-villages-list");
         if (!list)
@@ -27816,6 +27837,10 @@
                         : "Les activités de ce village sont en préparation. Reviens bientôt pour partir à sa découverte !";
                     list.append(empty); return;
                 }
+                const adventureHeading = document.createElement("h4");
+                adventureHeading.className = "france-village-adventure-heading";
+                adventureHeading.textContent = "🧭 Les aventures de ce village";
+                list.append(adventureHeading);
                 adventures.forEach(adventure => {
                     const card = document.createElement("article"); card.className = "france-village-card";
                     const h = document.createElement("strong"); h.textContent = adventure.title || "Parcours"; card.append(h);
