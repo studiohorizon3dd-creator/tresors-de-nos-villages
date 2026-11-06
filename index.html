@@ -27454,11 +27454,26 @@
         franceSelectedDepartment = FRANCE_DEPARTMENTS.some(d=>d[0]===code) ? code : "";
         const select=document.getElementById("france-department-select"); if(select) select.value=franceSelectedDepartment;
         franceRenderVillageCards();
-        if (zoom && franceDepartmentLayer && franceDepartmentMap && franceSelectedDepartment) {
+        if (zoom && franceDepartmentMap && franceSelectedDepartment) {
             let target=null;
-            franceDepartmentLayer.eachLayer(layer=>{ if(String(layer.feature?.properties?.code || layer.feature?.properties?.CODE || "")===franceSelectedDepartment) target=layer; });
-            if(target && target.getBounds) franceDepartmentMap.fitBounds(target.getBounds(),{padding:[18,18],maxZoom:8});
-        } else if (franceDepartmentMap && !franceSelectedDepartment) franceDepartmentMap.setView([46.6,2.4],5);
+            if (franceDepartmentLayer) {
+                franceDepartmentLayer.eachLayer(layer=>{
+                    if(String(layer.feature?.properties?.code || layer.feature?.properties?.CODE || "")===franceSelectedDepartment) target=layer;
+                });
+            }
+            if(target && target.getBounds && target.getBounds().isValid()) {
+                franceDepartmentMap.fitBounds(target.getBounds(),{padding:[28,28],maxZoom:9,animate:false});
+            } else {
+                // Repli visuel si les contours sont momentanément indisponibles.
+                const fallbackCenters={"62":[50.55,2.35],"59":[50.45,3.0],"80":[49.9,2.3],"60":[49.4,2.5],"02":[49.5,3.6],"75":[48.8566,2.3522]};
+                const center=fallbackCenters[franceSelectedDepartment];
+                if(center) franceDepartmentMap.setView(center,9,{animate:false});
+            }
+        } else if (franceDepartmentMap && !franceSelectedDepartment) {
+            if(franceDepartmentLayer && franceDepartmentLayer.getBounds().isValid()) {
+                franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{padding:[24,24],maxZoom:6,animate:false});
+            } else franceDepartmentMap.setView([46.6,2.4],5);
+        }
     }
     async function actualiserCarteFrance() {
         const mapEl=document.getElementById("france-department-map");
@@ -27479,60 +27494,62 @@
             franceRenderVillageCards();
         } catch(error) { if(status) status.textContent=error.message||"Impossible de charger les villages."; }
         if(!window.L){if(status) status.textContent="La carte interactive nécessite une connexion internet pour charger Leaflet.";return;}
-
-        // Emprise fixe de la France métropolitaine : le cadrage reste correct
-        // même si le service qui fournit les contours est momentanément indisponible.
-        const franceBounds=L.latLngBounds([[41.2,-5.5],[51.3,9.8]]);
         if(!franceDepartmentMap){
-            franceDepartmentMap=L.map(mapEl,{scrollWheelZoom:false}).fitBounds(franceBounds,{padding:[18,18],maxZoom:6});
+            franceDepartmentMap=L.map(mapEl,{scrollWheelZoom:false}).setView([46.6,2.4],5);
             L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:10,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(franceDepartmentMap);
         }
-
+        if(!franceDepartmentGeoJsonPromise){
+            franceDepartmentGeoJsonPromise=(async()=>{
+                // Le paramètre geometry=contour de l'API geo.api.gouv.fr ne fournit
+                // pas toujours les géométries GeoJSON. On utilise un vrai fichier GeoJSON.
+                const sources=[
+                    "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements-version-simplifiee.geojson",
+                    "https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements.geojson"
+                ];
+                let lastError=null;
+                for(const url of sources){
+                    try{
+                        const r=await fetch(url,{headers:{Accept:"application/geo+json, application/json"}});
+                        if(!r.ok) throw new Error(`Erreur ${r.status} sur la source des contours.`);
+                        const data=await r.json();
+                        if(data && Array.isArray(data.features) && data.features.length>0) return data;
+                        throw new Error("Le fichier reçu ne contient pas de contours GeoJSON.");
+                    }catch(error){lastError=error;console.warn("Source GeoJSON indisponible :",url,error);}
+                }
+                throw lastError || new Error("Aucune source de contours départementaux n'est disponible.");
+            })();
+        }
         try{
-            if(!franceDepartmentGeoJsonPromise){
-                franceDepartmentGeoJsonPromise=(async()=>{
-                    // Source principale officielle, puis fichier national de secours.
-                    const urls=[
-                        "https://geo.api.gouv.fr/departements?fields=nom,code&format=geojson&geometry=contour",
-                        "https://etalab-datasets.geo.data.gouv.fr/contours-administratifs/latest/geojson/departements-100m.geojson"
-                    ];
-                    let lastError=null;
-                    for(const url of urls){
-                        try{
-                            const r=await fetch(url,{headers:{Accept:"application/geo+json, application/json"}});
-                            if(!r.ok) throw new Error(`Service cartographique : erreur ${r.status}`);
-                            const geo=await r.json();
-                            if(!geo || !Array.isArray(geo.features) || !geo.features.length) throw new Error("Le fichier des départements est vide ou invalide.");
-                            return geo;
-                        }catch(err){lastError=err;}
-                    }
-                    throw lastError||new Error("Impossible de récupérer les contours départementaux.");
-                })();
-            }
             const geo=await franceDepartmentGeoJsonPromise;
             if(franceDepartmentLayer) franceDepartmentLayer.remove();
-            const metroFeatures=(geo.features||[]).filter(f=>{const c=String(f.properties?.code||f.properties?.CODE||"");return /^(?:0[1-9]|[1-9]\d|2A|2B)$/.test(c);});
-            if(!metroFeatures.length) throw new Error("Aucun contour de département métropolitain n'a été trouvé.");
+            const metroFeatures=(geo.features||[]).filter(f=>{const c=String(f.properties?.code||"");return /^(?:0[1-9]|[1-9]\d|2A|2B)$/.test(c);});
             franceDepartmentLayer=L.geoJSON({type:"FeatureCollection",features:metroFeatures},{
-                style:feature=>{const code=String(feature.properties?.code||feature.properties?.CODE||"");const has=franceVillageCache.some(v=>franceDepartmentCode(v.postal_code)===code);return {color:"#fffaf0",weight:1.5,opacity:1,fillColor:has?"#d7ad45":"#8eae91",fillOpacity:has?.78:.58};},
-                onEachFeature:(feature,layer)=>{const code=String(feature.properties?.code||feature.properties?.CODE||"");const name=String(feature.properties?.nom||feature.properties?.NOM||"");const n=franceVillageCache.filter(v=>franceDepartmentCode(v.postal_code)===code).length;layer.bindTooltip(`${code} · ${name}${n?` · ${n} village(s)` : ""}`,{sticky:true});layer.on({mouseover:e=>e.target.setStyle({fillColor:"#e5bd5a",fillOpacity:.95,weight:2.5}),mouseout:e=>franceDepartmentLayer.resetStyle(e.target),click:()=>franceSelectDepartment(code,false)});}
+                style:feature=>{const code=String(feature.properties?.code||"");const has=franceVillageCache.some(v=>franceDepartmentCode(v.postal_code)===code);return {color:"#fffaf0",weight:1.5,opacity:1,fillColor:has?"#d7ad45":"#8eae91",fillOpacity:has?.78:.58};},
+                onEachFeature:(feature,layer)=>{const code=String(feature.properties?.code||"");const name=String(feature.properties?.nom||"");const n=franceVillageCache.filter(v=>franceDepartmentCode(v.postal_code)===code).length;layer.bindTooltip(`${code} · ${name}${n?` · ${n} village(s)`:""}`,{sticky:true});layer.on({mouseover:e=>e.target.setStyle({fillColor:"#e5bd5a",fillOpacity:.95,weight:2.5}),mouseout:e=>franceDepartmentLayer.resetStyle(e.target),click:()=>franceSelectDepartment(code,true)});}
             }).addTo(franceDepartmentMap);
+            if(franceSelectedDepartment) franceSelectDepartment(franceSelectedDepartment,true);
+            else franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{padding:[24,24],maxZoom:6,animate:false});
             if(status) status.textContent="Clique sur un département ou utilise la liste pour découvrir les villages. Les départements d’outre-mer sont accessibles dans le sélecteur.";
         }catch(error){
             console.error("Carte des départements impossible à charger",error);
-            if(status) status.textContent="Les contours des départements ne répondent pas pour le moment. La carte de France et le choix par liste restent disponibles.";
+            if(franceSelectedDepartment) franceSelectDepartment(franceSelectedDepartment,true);
+            if(status)status.textContent="Les contours n'ont pas pu être téléchargés. Tu peux tout de même utiliser la recherche et la sélection des départements.";
         }
-
-        // La rubrique peut être initialisée alors qu'elle est masquée : on attend
-        // son affichage, on recalcule sa taille puis on recadre toujours la France.
+        // La carte est souvent initialisée dans une rubrique masquée.
+        // Leaflet calcule alors une mauvaise largeur : on recalcule sa taille,
+        // puis on recadre explicitement la France métropolitaine une fois visible.
         setTimeout(()=>{
             if(!franceDepartmentMap) return;
             franceDepartmentMap.invalidateSize({pan:false});
-            if(!franceSelectedDepartment){
-                const bounds=franceDepartmentLayer ? franceDepartmentLayer.getBounds() : franceBounds;
-                franceDepartmentMap.fitBounds(bounds,{padding:[22,22],maxZoom:6,animate:false});
+            if(!franceSelectedDepartment && franceDepartmentLayer){
+                franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{
+                    paddingTopLeft:[24,24],
+                    paddingBottomRight:[24,24],
+                    maxZoom:6,
+                    animate:false
+                });
             }
-        },500);
+        },350);
     }
 
     async function actualiserCarteVillages() {
