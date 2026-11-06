@@ -15235,6 +15235,10 @@
                                         <span>€</span>
                                         Formules & paiements
                                     </button>
+                                    <button class="admin-nav-item" type="button" onclick="window.adminOpenPacks()">
+                                        <span>🎁</span>
+                                        Gestion des packs
+                                    </button>
                                     <button class="admin-nav-item" type="button" onclick="adminOpenRewards()">
                                         <span>🏆</span>
                                         Récompenses des explorateurs
@@ -16575,6 +16579,44 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="admin-packs-view" class="admin-subview" hidden>
+                            <style>
+                                #admin-packs-view { color:#183326; }
+                                #admin-packs-view .pack-admin-panel { background:#fffaf0;border:1px solid #e3cf9c;border-radius:15px;padding:18px;margin:14px 0; }
+                                #admin-packs-view .pack-admin-form { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:end; }
+                                #admin-packs-view label { display:block;font-weight:700;color:#174b35;font-size:13px; }
+                                #admin-packs-view input,#admin-packs-view select,#admin-packs-view textarea { width:100%;margin-top:6px;padding:10px;border:1px solid #d9c99f;border-radius:9px;background:#fff;color:#183326; }
+                                #admin-packs-view .pack-admin-form button { border:0;border-radius:9px;padding:12px 16px;background:#0b6037;color:white;font-weight:700;cursor:pointer; }
+                                #admin-packs-view .pack-admin-status { margin:12px 0 0;color:#536253;font-size:13px; }
+                                #admin-packs-view .pack-admin-cards { display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px; }
+                                #admin-packs-view .pack-admin-card { background:#fffaf0;border:1px solid #e3cf9c;border-radius:14px;padding:16px; }
+                                #admin-packs-view .pack-admin-card h3 { margin:0 0 8px;color:#174b35; }
+                                #admin-packs-view .pack-admin-card p,#admin-packs-view .pack-admin-card li { color:#536253;font-size:13px;line-height:1.5; }
+                            </style>
+                            <div class="admin-section-heading">
+                                <div><h3>🎁 Gestion des packs</h3><p>Attribue un pack gratuitement à un joueur. Les paiements restent désactivés depuis cette page.</p></div>
+                                <button type="button" class="admin-secondary-btn" onclick="window.adminLoadPackForm()">↻ Actualiser</button>
+                            </div>
+                            <section class="pack-admin-panel">
+                                <h3 style="margin:0 0 8px;color:#174b35">Attribuer un pack à un joueur</h3>
+                                <p style="margin:0 0 14px;color:#536253;font-size:13px">Cette attribution est gratuite et enregistrée comme cadeau administratif. Elle ne déclenche aucun paiement Stripe.</p>
+                                <form id="admin-pack-grant-form" class="pack-admin-form">
+                                    <label>Joueur<select id="admin-pack-player" required><option value="">Chargement des joueurs…</option></select></label>
+                                    <label>Pack<select id="admin-pack-key" required><option value="pack_complet">Pack Complet — 1 village</option><option value="pack_voyageur">Pack Voyageur — 2 villages</option><option value="pack_grand_voyageur">Pack Grand Voyageur — 3 villages</option></select></label>
+                                    <label class="pack-village-field" data-slot="1">Village 1<select id="admin-pack-village-1" required><option value="">Choisir un village…</option></select></label>
+                                    <label class="pack-village-field" data-slot="2" hidden>Village 2<select id="admin-pack-village-2"><option value="">Choisir un village…</option></select></label>
+                                    <label class="pack-village-field" data-slot="3" hidden>Village 3<select id="admin-pack-village-3"><option value="">Choisir un village…</option></select></label>
+                                    <label style="grid-column:1/-1">Motif / note (facultatif)<input id="admin-pack-note" maxlength="300" placeholder="Ex. cadeau concours, récompense, geste commercial…"></label>
+                                    <button type="submit" id="admin-pack-grant-submit">🎁 Attribuer le pack gratuitement</button>
+                                </form>
+                                <p id="admin-pack-grant-status" class="pack-admin-status" role="status" aria-live="polite">Choisis le joueur, le pack et le ou les villages.</p>
+                            </section>
+                            <div class="pack-admin-cards">
+                                <article class="pack-admin-card"><h3>🎁 Pack Complet</h3><p>Un village. Inclut les niveaux Famille, Moyen, Difficile, Extrême et Nuit, lorsqu'ils sont configurés et actifs.</p><p><strong>Prix public indicatif déjà affiché : 9,99 €.</strong> Vente non activée.</p></article>
+                                <article class="pack-admin-card"><h3>🧭 Pack Voyageur</h3><p>Deux villages au choix. Donne accès aux niveaux actifs configurés dans ces deux villages.</p><p><strong>Prix : à définir.</strong> Vente non activée.</p></article>
+                                <article class="pack-admin-card"><h3>🗺️ Pack Grand Voyageur</h3><p>Trois villages au choix. Donne accès aux niveaux actifs configurés dans ces trois villages.</p><p><strong>Prix : à définir.</strong> Vente non activée.</p></article>
+                            </div>
+                        </div>
                         <div id="admin-commercial-view" class="admin-subview" hidden>
                             <style>
                                 #admin-commercial-view { color:#183326; }
@@ -16619,9 +16661,10 @@
                             </div>
                             <div class="commercial-grid">
                                 <section class="commercial-card"><h4>🏡 Formules par village</h4><p>Consultez les accès gratuits, payants et testeurs définis pour chaque village.</p></section>
-                                <section class="commercial-card"><h4>🎒 Packs</h4><p>Pack Complet et Pack Voyageur seront gérés séparément dans une prochaine étape.</p></section>
-                                <section class="commercial-card"><h4>👤 Accès des joueurs</h4><p>La gestion des formules attribuées aux membres sera ajoutée ultérieurement.</p></section>
-                                <section class="commercial-card"><h4>💳 Paiements</h4><p>L’historique et l’activation des paiements seront préparés séparément. Aucun réglage Stripe n’est modifié.</p></section>
+                                <section class="commercial-card"><h4>🎒 Packs</h4><p>Attribuez gratuitement Pack Complet, Pack Voyageur ou Grand Voyageur depuis la gestion des packs.</p><p><button type="button" class="admin-secondary-btn" onclick="window.adminOpenPacks()">Ouvrir la gestion des packs</button></p></section>
+                                <section class="commercial-card"><h4>👤 Cadeaux et accès joueurs</h4><p>Offrez une formule ou un accès gratuit à un joueur, par exemple comme cadeau ou récompense.</p><p><button type="button" class="admin-secondary-btn" onclick="adminOpenRewards()">Attribuer un cadeau / accès</button></p></section>
+                                <section class="commercial-card"><h4>🧪 Accès testeurs</h4><p>Les demandes, villages et niveaux des testeurs restent gérés dans l’espace testeurs existant.</p><p><button type="button" class="admin-secondary-btn" onclick="adminOpenTesterManagement()">Gérer les testeurs</button></p></section>
+                                <section class="commercial-card"><h4>💳 Achats et paiements</h4><p>Les achats Stripe déjà prévus restent séparés des cadeaux et des accès testeurs. Aucun paiement n’est activé depuis cette page.</p></section>
                             </div>
                             <p id="admin-commercial-status" class="commercial-status" role="status" aria-live="polite">Chargement du catalogue…</p>
                             <div id="admin-commercial-table" class="commercial-table-wrap">
@@ -22240,7 +22283,7 @@
     ;
 
     const adminSetView = window.adminSetView = function(view, title) {
-        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-commercial-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
+        ["admin-home-view", "admin-roadmap-view", "admin-analytics-view", "admin-placeholder-view", "admin-adventures-view", "admin-support-view", "admin-players-view", "admin-testers-view", "admin-tester-management-view", "admin-villages-view", "admin-puzzle-view", "admin-levels-view", "admin-commercial-view", "admin-packs-view", "admin-news-view", "admin-site-status-view", "admin-mailbox-view", "admin-inbox-view", "admin-team-view", "admin-team-space-view", "admin-team-by-village-view", "admin-rewards-view", "admin-community-view"].forEach(id => {
             const el = document.getElementById(id);
             if (el)
                 el.hidden = true;
@@ -22253,7 +22296,7 @@
         if (heading)
             heading.textContent = title;
         document.querySelectorAll(".admin-nav-item").forEach(btn => btn.classList.remove("active"));
-        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-commercial-view" ? "adminOpenCommercial" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
+        const active = Array.from(document.querySelectorAll(".admin-nav-item")).find(btn => (btn.getAttribute("onclick") || "").includes(view === "admin-home-view" ? "adminShowHome" : view === "admin-roadmap-view" ? "adminOpenRoadmap" : view === "admin-support-view" ? "adminOpenCommunication" : view === "admin-adventures-view" ? "adminOpenAdventures" : view === "admin-analytics-view" ? "adminShowAnalytics" : view === "admin-players-view" ? "adminOpenPlayers" : view === "admin-testers-view" ? "adminOpenTesters" : view === "admin-tester-management-view" ? "adminOpenTesterManagement" : view === "admin-villages-view" ? "adminOpenVillages" : view === "admin-puzzle-view" ? "adminOpenPuzzle" : view === "admin-levels-view" ? "adminOpenLevels" : view === "admin-commercial-view" ? "adminOpenCommercial" : view === "admin-packs-view" ? "adminOpenPacks" : view === "admin-news-view" ? "adminOpenNews" : view === "admin-site-status-view" ? "adminOpenSiteStatus" : view === "admin-mailbox-view" ? "adminOpenCommunication" : view === "admin-rewards-view" ? "adminOpenRewards" : view === "admin-team-space-view" ? "adminOpenTeamSpace" : view === "admin-team-by-village-view" ? "adminOpenTeamByVillage" : view === "admin-community-view" ? "adminOpenCommunity" : "adminComingSoon"));
         if (active)
             active.classList.add("active");
     }
@@ -24770,6 +24813,56 @@
             }
         }
         );
+
+    window.adminOpenPacks = async function() {
+        adminSetView("admin-packs-view", "Gestion des packs");
+        await window.adminLoadPackForm();
+    };
+    window.adminLoadPackForm = async function() {
+        const status = document.getElementById("admin-pack-grant-status");
+        if (!status) return;
+        status.textContent = "Chargement des joueurs et des villages…";
+        try {
+            const data = await adminApi("/api/admin/rewards");
+            const playerSelect = document.getElementById("admin-pack-player");
+            const villageSelects = [1,2,3].map(n => document.getElementById(`admin-pack-village-${n}`));
+            playerSelect.replaceChildren(new Option("Choisir un joueur…", ""));
+            (data.players || []).forEach(p => playerSelect.add(new Option(`${p.pseudo || p.name || "Explorateur"} — ${p.email || p.user_id}`, p.user_id)));
+            villageSelects.forEach(select => {
+                select.replaceChildren(new Option("Choisir un village…", ""));
+                (data.villages || []).forEach(v => select.add(new Option(v.name, v.slug)));
+            });
+            status.textContent = `${(data.players || []).length} joueur(s) et ${(data.villages || []).length} village(s) disponibles. L’attribution restera gratuite.`;
+        } catch (error) { status.textContent = error.message || "Impossible de charger les joueurs et les villages."; }
+    };
+    document.getElementById("admin-pack-key")?.addEventListener("change", event => {
+        const count = event.target.value === "pack_complet" ? 1 : event.target.value === "pack_voyageur" ? 2 : 3;
+        document.querySelectorAll("#admin-packs-view .pack-village-field").forEach(label => {
+            const slot = Number(label.dataset.slot);
+            label.hidden = slot > count;
+            const select = label.querySelector("select");
+            select.required = slot <= count;
+            if (slot > count) select.value = "";
+        });
+    });
+    document.getElementById("admin-pack-grant-form")?.addEventListener("submit", async event => {
+        event.preventDefault();
+        const submit = document.getElementById("admin-pack-grant-submit");
+        const status = document.getElementById("admin-pack-grant-status");
+        const packKey = document.getElementById("admin-pack-key").value;
+        const count = packKey === "pack_complet" ? 1 : packKey === "pack_voyageur" ? 2 : 3;
+        const villages = [1,2,3].slice(0,count).map(n => document.getElementById(`admin-pack-village-${n}`).value);
+        if (!document.getElementById("admin-pack-player").value || villages.some(v => !v) || new Set(villages).size !== villages.length) {
+            status.textContent = "Choisis un joueur et des villages différents pour le pack."; return;
+        }
+        submit.disabled = true; status.textContent = "Attribution du pack en cours…";
+        try {
+            const result = await adminApi("/api/admin/packs/grant", { method:"POST", body:JSON.stringify({ user_id:document.getElementById("admin-pack-player").value, pack_key:packKey, villages, note:document.getElementById("admin-pack-note").value.trim() }) });
+            status.textContent = result.message || "Pack attribué gratuitement.";
+            document.getElementById("admin-pack-note").value = "";
+        } catch (error) { status.textContent = error.message || "Impossible d’attribuer le pack."; }
+        finally { submit.disabled = false; }
+    });
 
     window.adminOpenCommercial = async function() {
         adminSetView("admin-commercial-view", "Formules & paiements");
