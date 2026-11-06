@@ -12874,7 +12874,33 @@
                 }
             }
         </style>
-    </head>
+    
+<style>
+/* ===== Carte nationale des départements ===== */
+.france-map-intro{max-width:950px;margin:0 auto 22px;text-align:center;line-height:1.65;color:#526354}
+.france-map-shell{background:linear-gradient(145deg,#fffaf0,#f1e5c8);border:1px solid #d9c48e;border-radius:22px;padding:clamp(12px,2.5vw,24px);box-shadow:0 12px 32px #18332612}
+.france-map-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.france-map-heading h3{margin:0;color:#153d2c;font-size:clamp(20px,2.5vw,27px)}
+.france-map-heading span{font-size:13px;color:#687466}
+#france-department-map{width:100%;height:clamp(390px,58vw,650px);border:1px solid #dfd0a8;border-radius:16px;background:#e9f0e8;overflow:hidden}
+#france-department-map .leaflet-container{background:#e9f0e8}
+.france-map-tools{display:grid;grid-template-columns:minmax(220px,1fr) auto;gap:12px;align-items:center;margin:14px 0}
+.france-map-tools select,.france-map-tools input{width:100%;padding:12px 14px;border:1px solid #cfc4a5;border-radius:10px;background:#fffdf7;color:#173d2b;font:inherit}
+.france-map-status{font-size:13px;color:#637264;min-height:20px;margin:6px 0}
+.france-map-selected{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 10px;padding:15px 17px;background:#0b3828;color:#fff5d8;border:1px solid #d7ad45;border-radius:14px}
+.france-map-selected h4{margin:0;font-size:20px}.france-map-selected p{margin:4px 0 0;color:#e5dfc5;font-size:13px}
+.france-village-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+.france-village-card{background:#fffdf7;border:1px solid #e2d4b2;border-radius:13px;padding:14px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.france-village-card img{width:100%;height:125px;object-fit:cover;border-radius:9px;background:#eee4cf}
+.france-village-card strong{color:#174b35;font-size:17px}.france-village-card p{margin:0;color:#596659;line-height:1.5;font-size:14px}
+.france-village-status{font-size:12px;font-weight:700;color:#72591d}.france-village-card button{align-self:flex-start;margin-top:auto}
+.france-map-empty{padding:20px;text-align:center;background:#fffdf7;border:1px dashed #cbb982;border-radius:12px;color:#647164}
+.france-dept-label{font:700 11px Arial,sans-serif;fill:#173d2b;paint-order:stroke;stroke:#fff8e8;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.admin-department-hint{font-size:12px;color:#687467;display:block;margin-top:4px}
+@media(max-width:650px){.france-map-tools{grid-template-columns:1fr}#france-department-map{height:420px}.france-map-shell{padding:10px}}
+</style>
+
+</head>
     <body>
         <script>
             (function() {
@@ -13874,8 +13900,21 @@
                 </article>
             </section>
             <section class="dash-section hidden" id="dash-village-map">
-                <h3>🗺️ La carte des villages</h3>
-                <p>Retrouve les villages de nos aventures. Appuie sur un repère pour voir son statut.</p>
+                <h3>🇫🇷 La carte de France des villages</h3>
+                <p class="france-map-intro">Explore les départements, découvre les villages sélectionnés et suis l'évolution de Trésors de nos Villages partout en France.</p>
+                <div class="france-map-shell">
+                    <div class="france-map-heading"><h3>🧭 Explore la France</h3><span id="france-map-count">Les villages prennent place sur la carte</span></div>
+                    <div id="france-department-map" role="application" aria-label="Carte interactive des départements français"></div>
+                    <div class="france-map-tools">
+                        <label><span style="display:block;font-weight:700;margin:0 0 5px;color:#234735">Choisir un département</span><select id="france-department-select"><option value="">Tous les départements</option></select></label>
+                        <label><span style="display:block;font-weight:700;margin:0 0 5px;color:#234735">Rechercher un village</span><input id="france-village-search" type="search" placeholder="Ex. Humbert, Sempy…"></label>
+                    </div>
+                    <p id="france-map-status" class="france-map-status" role="status" aria-live="polite">Chargement de la carte de France…</p>
+                    <div class="france-map-selected"><div><h4 id="france-selected-title">Toute la France</h4><p id="france-selected-description">Choisis un département pour découvrir les villages associés.</p></div><span id="france-selected-count">0 village</span></div>
+                    <div id="france-village-list" class="france-village-grid"><div class="france-map-empty">Les villages apparaîtront ici.</div></div>
+                </div>
+                <h3 style="margin:30px 0 8px">📍 Carte des points GPS des villages</h3>
+                <p>Cette carte montre les positions GPS des villages déjà enregistrés.</p>
                 <div class="map-legend" aria-label="Légende de la carte">
                     <span>
                         <i class="map-dot" style="background:#23834a"></i>
@@ -13890,23 +13929,7 @@
                         À découvrir
                     </span>
                 </div>
-                <div id="village-map" role="application" aria-label="Carte interactive des villages Humbert et Sempy"></div>
-                <h3 style="margin:26px 0 8px">🌿 Les villages sur la carte</h3>
-                <p>Choisis un village pour découvrir sa fiche et son aventure.</p>
-                <div class="map-village-list">
-                    <article class="map-village-card">
-                        <strong>🏡 Humbert · 62650</strong>
-                        <span id="map-status-humbert">Statut : vérification…</span>
-                        <p style="font-size:14px;margin:8px 0">Notre première aventure : pars à la découverte du village grâce aux indices et aux énigmes.</p>
-                        <button class="small-btn" type="button" onclick="showDashSection('dash-adventures')">Découvrir l’aventure</button>
-                    </article>
-                    <article class="map-village-card">
-                        <strong>⛪ Sempy · 62170</strong>
-                        <span id="map-status-sempy">Statut : à découvrir</span>
-                        <p style="font-size:14px;margin:8px 0">Un nouveau village à découvrir prochainement. Son parcours est en préparation.</p>
-                        <button class="small-btn" type="button" onclick="showDashSection('dash-news')">Suivre les actualités</button>
-                    </article>
-                </div>
+                <div id="village-map" role="application" aria-label="Carte interactive des villages avec leurs points GPS"></div>
                 <div class="village-proposal-banner" style="margin-top:22px">
                     <div>
                         <h3>Votre village a aussi une histoire à raconter ?</h3>
@@ -21006,6 +21029,10 @@
                                                 </label>
                                                 <label>
                                                     Code postal<input id="admin-village-postal" maxlength="10" placeholder="Ex. 62650">
+                                                    <small class="admin-department-hint">Le département sera reconnu automatiquement grâce au code postal.</small>
+                                                </label>
+                                                <label>
+                                                    Département reconnu<input id="admin-village-department" readonly placeholder="Sera détecté avec le code postal" aria-live="polite">
                                                 </label>
                                                 <label>
                                                     Statut <em>*</em>
@@ -23776,6 +23803,7 @@
         const form = document.getElementById("admin-village-form");
         if (form)
             form.reset();
+        const deptField = document.getElementById("admin-village-department"); if (deptField) deptField.value = "";
         document.getElementById("admin-village-id").value = "";
         const preview = document.getElementById("admin-village-photo-preview");
         if (preview)
@@ -23807,6 +23835,7 @@
         document.getElementById("admin-village-name").value = v.name || "";
         document.getElementById("admin-village-slug").value = v.slug || "";
         document.getElementById("admin-village-postal").value = v.postal_code || "";
+        const deptField = document.getElementById("admin-village-department"); if (deptField) deptField.value = franceDepartmentLabel(v.postal_code);
         document.getElementById("admin-village-status").value = v.status || "pending_confirmation";
         document.getElementById("admin-village-description").value = v.description || "";
         document.getElementById("admin-village-latitude").value = v.latitude ?? "";
@@ -23944,7 +23973,7 @@
             return;
         const q = (document.getElementById("admin-village-search")?.value || "").trim().toLocaleLowerCase("fr");
         const filter = document.getElementById("admin-village-filter")?.value || "";
-        const villages = ADMIN_VILLAGES_CACHE.filter(v => (!filter || v.status === filter) && (!q || [v.name, v.postal_code, v.description].some(x => String(x || "").toLocaleLowerCase("fr").includes(q))));
+        const villages = ADMIN_VILLAGES_CACHE.filter(v => (!filter || v.status === filter) && (!q || [v.name, v.postal_code, franceDepartmentLabel(v.postal_code), v.description].some(x => String(x || "").toLocaleLowerCase("fr").includes(q))));
         list.replaceChildren();
         if (!villages.length) {
             const p = document.createElement("p");
@@ -23956,7 +23985,7 @@
         table.className = "village-table";
         const thead = document.createElement("thead")
           , hr = document.createElement("tr");
-        ["Village", "Code postal", "Statut", "Description", "Dernière mise à jour", "Actions"].forEach(x => {
+        ["Village", "Code postal", "Département", "Statut", "Description", "Dernière mise à jour", "Actions"].forEach(x => {
             const th = document.createElement("th");
             th.textContent = x;
             hr.append(th);
@@ -23994,7 +24023,7 @@
             name.textContent = v.name;
             nameWrap.append(name);
             nameTd.append(nameWrap);
-            tr.append(nameTd, adminVillageCell(v.postal_code));
+            tr.append(nameTd, adminVillageCell(v.postal_code), adminVillageCell(franceDepartmentLabel(v.postal_code)));
             const st = document.createElement("td")
               , pill = document.createElement("span");
             pill.className = "village-status-pill " + v.status;
@@ -24319,6 +24348,11 @@
             throw new Error(uploaded.error?.message || "L’envoi de la photo a échoué.");
         return uploaded.secure_url;
     }
+    const adminVillagePostal = document.getElementById("admin-village-postal");
+    if (adminVillagePostal) adminVillagePostal.addEventListener("input", () => {
+        const field = document.getElementById("admin-village-department");
+        if (field) field.value = franceDepartmentLabel(adminVillagePostal.value);
+    });
     const adminVillageForm = document.getElementById("admin-village-form");
     if (adminVillageForm)
         adminVillageForm.addEventListener("submit", async event => {
@@ -27354,7 +27388,124 @@
 
     let villageMarkersLayer = null;
     let villageMapLoadPromise = null;
+    const FRANCE_DEPARTMENTS = [
+        ["01","Ain"],["02","Aisne"],["03","Allier"],["04","Alpes-de-Haute-Provence"],["05","Hautes-Alpes"],["06","Alpes-Maritimes"],["07","Ardèche"],["08","Ardennes"],["09","Ariège"],["10","Aube"],["11","Aude"],["12","Aveyron"],["13","Bouches-du-Rhône"],["14","Calvados"],["15","Cantal"],["16","Charente"],["17","Charente-Maritime"],["18","Cher"],["19","Corrèze"],["2A","Corse-du-Sud"],["2B","Haute-Corse"],["21","Côte-d'Or"],["22","Côtes-d'Armor"],["23","Creuse"],["24","Dordogne"],["25","Doubs"],["26","Drôme"],["27","Eure"],["28","Eure-et-Loir"],["29","Finistère"],["30","Gard"],["31","Haute-Garonne"],["32","Gers"],["33","Gironde"],["34","Hérault"],["35","Ille-et-Vilaine"],["36","Indre"],["37","Indre-et-Loire"],["38","Isère"],["39","Jura"],["40","Landes"],["41","Loir-et-Cher"],["42","Loire"],["43","Haute-Loire"],["44","Loire-Atlantique"],["45","Loiret"],["46","Lot"],["47","Lot-et-Garonne"],["48","Lozère"],["49","Maine-et-Loire"],["50","Manche"],["51","Marne"],["52","Haute-Marne"],["53","Mayenne"],["54","Meurthe-et-Moselle"],["55","Meuse"],["56","Morbihan"],["57","Moselle"],["58","Nièvre"],["59","Nord"],["60","Oise"],["61","Orne"],["62","Pas-de-Calais"],["63","Puy-de-Dôme"],["64","Pyrénées-Atlantiques"],["65","Hautes-Pyrénées"],["66","Pyrénées-Orientales"],["67","Bas-Rhin"],["68","Haut-Rhin"],["69","Rhône"],["70","Haute-Saône"],["71","Saône-et-Loire"],["72","Sarthe"],["73","Savoie"],["74","Haute-Savoie"],["75","Paris"],["76","Seine-Maritime"],["77","Seine-et-Marne"],["78","Yvelines"],["79","Deux-Sèvres"],["80","Somme"],["81","Tarn"],["82","Tarn-et-Garonne"],["83","Var"],["84","Vaucluse"],["85","Vendée"],["86","Vienne"],["87","Haute-Vienne"],["88","Vosges"],["89","Yonne"],["90","Territoire de Belfort"],["91","Essonne"],["92","Hauts-de-Seine"],["93","Seine-Saint-Denis"],["94","Val-de-Marne"],["95","Val-d'Oise"],["971","Guadeloupe"],["972","Martinique"],["973","Guyane"],["974","La Réunion"],["976","Mayotte"]
+    ];
+    function franceDepartmentCode(postalCode) {
+        const pc = String(postalCode || "").replace(/\s/g, "");
+        if (/^97[1-6]/.test(pc)) return pc.slice(0, 3);
+        if (/^20\d{3}$/.test(pc)) return Number(pc) >= 20200 ? "2B" : "2A";
+        return /^\d{2}/.test(pc) ? pc.slice(0, 2) : "";
+    }
+    function franceDepartmentLabel(postalCode) {
+        const code = franceDepartmentCode(postalCode);
+        const found = FRANCE_DEPARTMENTS.find(d => d[0] === code);
+        return found ? `${code} · ${found[1]}` : "À préciser";
+    }
+    let franceDepartmentMap = null;
+    let franceDepartmentLayer = null;
+    let franceDepartmentGeoJsonPromise = null;
+    let franceVillageCache = [];
+    let franceSelectedDepartment = "";
+    function franceEscape(value) {
+        return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+    function franceStatusLabel(status) {
+        return ({available:"Disponible",in_progress:"En préparation",upcoming_preparation:"À découvrir",pending_confirmation:"En préparation",updating:"Mise à jour",suspended:"Suspendu"})[status] || "À découvrir";
+    }
+    function franceStatusColor(status) {
+        return status === "available" ? "#25814a" : status === "in_progress" ? "#c18a22" : "#89918a";
+    }
+    function franceRenderVillageCards() {
+        const list = document.getElementById("france-village-list");
+        const title = document.getElementById("france-selected-title");
+        const description = document.getElementById("france-selected-description");
+        const count = document.getElementById("france-selected-count");
+        if (!list) return;
+        const q = (document.getElementById("france-village-search")?.value || "").trim().toLocaleLowerCase("fr");
+        const selected = FRANCE_DEPARTMENTS.find(d => d[0] === franceSelectedDepartment);
+        let rows = franceVillageCache.filter(v => {
+            const dep = franceDepartmentCode(v.postal_code);
+            return (!franceSelectedDepartment || dep === franceSelectedDepartment) && (!q || [v.name,v.postal_code,v.description].some(x => String(x || "").toLocaleLowerCase("fr").includes(q)));
+        });
+        rows.sort((a,b) => String(a.name).localeCompare(String(b.name),"fr"));
+        if (title) title.textContent = selected ? `${selected[0]} · ${selected[1]}` : "Toute la France";
+        if (description) description.textContent = selected ? `Les villages référencés dans le département ${selected[1]}.` : "Les villages sélectionnés pour les aventures et les prochaines découvertes.";
+        if (count) count.textContent = `${rows.length} village${rows.length > 1 ? "s" : ""}`;
+        list.replaceChildren();
+        if (!rows.length) {
+            const empty = document.createElement("div"); empty.className = "france-map-empty";
+            empty.textContent = q ? "Aucun village ne correspond à cette recherche dans ce département." : selected ? "Aucun village n'est encore affiché dans ce département. Il pourra être ajouté progressivement." : "Les villages seront ajoutés progressivement. La carte grandira au fil du développement du jeu.";
+            list.append(empty); return;
+        }
+        rows.forEach(v => {
+            const card = document.createElement("article"); card.className = "france-village-card";
+            if (v.photo_url) { const img=document.createElement("img"); img.src=v.photo_url; img.alt=`Photo de ${v.name}`; img.loading="lazy"; card.append(img); }
+            const h=document.createElement("strong"); h.textContent=`🏡 ${v.name}`; card.append(h);
+            const meta=document.createElement("span"); meta.className="france-village-status"; meta.textContent=`${v.postal_code ? v.postal_code+" · " : ""}${franceDepartmentLabel(v.postal_code)} · ${franceStatusLabel(v.status)}`; card.append(meta);
+            const p=document.createElement("p"); p.textContent=v.description || "Une découverte à venir dans ce village."; card.append(p);
+            const btn=document.createElement("button"); btn.type="button"; btn.className="small-btn";
+            if (v.status === "available") { btn.textContent="Découvrir les aventures"; btn.addEventListener("click",()=>showDashSection("dash-adventures")); }
+            else { btn.textContent="Suivre les nouveautés"; btn.addEventListener("click",()=>showDashSection("dash-news")); }
+            card.append(btn); list.append(card);
+        });
+    }
+    function franceSelectDepartment(code, zoom=true) {
+        franceSelectedDepartment = FRANCE_DEPARTMENTS.some(d=>d[0]===code) ? code : "";
+        const select=document.getElementById("france-department-select"); if(select) select.value=franceSelectedDepartment;
+        franceRenderVillageCards();
+        if (zoom && franceDepartmentLayer && franceDepartmentMap && franceSelectedDepartment) {
+            let target=null;
+            franceDepartmentLayer.eachLayer(layer=>{ if(String(layer.feature?.properties?.code || layer.feature?.properties?.CODE || "")===franceSelectedDepartment) target=layer; });
+            if(target && target.getBounds) franceDepartmentMap.fitBounds(target.getBounds(),{padding:[18,18],maxZoom:8});
+        } else if (franceDepartmentMap && !franceSelectedDepartment) franceDepartmentMap.setView([46.6,2.4],5);
+    }
+    async function actualiserCarteFrance() {
+        const mapEl=document.getElementById("france-department-map");
+        const status=document.getElementById("france-map-status");
+        if(!mapEl) return;
+        const select=document.getElementById("france-department-select");
+        if(select && !select.dataset.ready){
+            FRANCE_DEPARTMENTS.forEach(([code,name])=>{const o=document.createElement("option");o.value=code;o.textContent=`${code} · ${name}`;select.append(o);});
+            select.addEventListener("change",()=>franceSelectDepartment(select.value));
+            document.getElementById("france-village-search")?.addEventListener("input",franceRenderVillageCards);
+            select.dataset.ready="1";
+        }
+        try {
+            const response=await fetch(`${window.API_BASE}/api/villages`,{headers:{Accept:"application/json"}});
+            const data=await response.json().catch(()=>({})); if(!response.ok) throw new Error(data.error||`Erreur ${response.status}`);
+            franceVillageCache=Array.isArray(data.villages)?data.villages:[];
+            const countEl=document.getElementById("france-map-count"); if(countEl) countEl.textContent=`${franceVillageCache.length} village(s) référencé(s)`;
+            franceRenderVillageCards();
+        } catch(error) { if(status) status.textContent=error.message||"Impossible de charger les villages."; }
+        if(!window.L){if(status) status.textContent="La carte interactive nécessite une connexion internet pour charger Leaflet.";return;}
+        if(!franceDepartmentMap){
+            franceDepartmentMap=L.map(mapEl,{scrollWheelZoom:false}).setView([46.6,2.4],5);
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:10,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(franceDepartmentMap);
+        }
+        if(!franceDepartmentGeoJsonPromise){
+            franceDepartmentGeoJsonPromise=(async()=>{
+                const r=await fetch("https://geo.api.gouv.fr/departements?fields=nom,code&format=geojson&geometry=contour");
+                if(!r.ok) throw new Error("Le service des contours départementaux est indisponible.");
+                return await r.json();
+            })();
+        }
+        try{
+            const geo=await franceDepartmentGeoJsonPromise;
+            if(franceDepartmentLayer) franceDepartmentLayer.remove();
+            const metroFeatures=(geo.features||[]).filter(f=>{const c=String(f.properties?.code||"");return /^(?:0[1-9]|[1-9]\d|2A|2B)$/.test(c);});
+            franceDepartmentLayer=L.geoJSON({type:"FeatureCollection",features:metroFeatures},{
+                style:feature=>{const code=String(feature.properties?.code||"");const has=franceVillageCache.some(v=>franceDepartmentCode(v.postal_code)===code);return {color:"#fffaf0",weight:1.5,opacity:1,fillColor:has?"#d7ad45":"#8eae91",fillOpacity:has?.78:.58};},
+                onEachFeature:(feature,layer)=>{const code=String(feature.properties?.code||"");const name=String(feature.properties?.nom||"");const n=franceVillageCache.filter(v=>franceDepartmentCode(v.postal_code)===code).length;layer.bindTooltip(`${code} · ${name}${n?` · ${n} village(s)`:""}`,{sticky:true});layer.on({mouseover:e=>e.target.setStyle({fillColor:"#e5bd5a",fillOpacity:.95,weight:2.5}),mouseout:e=>franceDepartmentLayer.resetStyle(e.target),click:()=>franceSelectDepartment(code,false)});}
+            }).addTo(franceDepartmentMap);
+            franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{padding:[12,12]});
+            if(status) status.textContent="Clique sur un département ou utilise la liste pour découvrir les villages. Les départements d’outre-mer sont accessibles dans le sélecteur.";
+        }catch(error){console.error("Carte des départements impossible à charger",error);if(status)status.textContent="Les contours ne sont pas disponibles pour le moment. Tu peux tout de même choisir un département dans la liste.";}
+        setTimeout(()=>franceDepartmentMap?.invalidateSize(),150);
+    }
+
     async function actualiserCarteVillages() {
+        actualiserCarteFrance();
         const humbertDone = localStorage.getItem("humbertTamponObtenu") === "true";
         const hStatus = document.getElementById("map-status-humbert");
         if (hStatus) hStatus.textContent = humbertDone ? "Statut : visité ✓" : "Statut : disponible";
