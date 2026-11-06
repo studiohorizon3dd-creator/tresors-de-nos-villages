@@ -15173,6 +15173,10 @@
                                         <span>🏘️</span>
                                         Équipe par village
                                     </button>
+                                    <button class="admin-nav-item" id="moderator-roadmap-admin-nav-item" type="button" onclick="window.openModeratorRoadmap()">
+                                        <span>🗓️</span>
+                                        Feuille de route des modérateurs
+                                    </button>
                                     <button class="admin-nav-item" id="team-space-nav-item" type="button" onclick="adminOpenTeamSpace()">
                                         <span>🛡️</span>
                                         Vie de l'équipe
@@ -21722,7 +21726,7 @@
                             <div class="admin-section-heading">
                                 <div>
                                     <h3>🏘️ Équipe par village</h3>
-                                    <p>Vue d'ensemble réservée aux administrateurs : retrouve les modérateurs responsables de chaque village.</p>
+                                    <p>Vue d’ensemble réservée aux administrateurs : retrouve les modérateurs responsables de chaque village.</p>
                                 </div>
                                 <button type="button" class="admin-secondary-btn" onclick="adminLoadTeamByVillage()">↻ Actualiser</button>
                             </div>
@@ -26456,7 +26460,7 @@
         reports: "🚩 Signalements des joueurs",
         testers: "🧪 Gestion des testeurs",
         news: "📰 Actualités et publications",
-        adventures: "🧭 Suivi des aventures",
+        adventures: "🧭 Préparation des aventures et feuille de route",
         team_communication: "📝 Communication et missions de l'équipe",
         player_reports: "🚩 Signalement des joueurs"
     };
@@ -26498,7 +26502,7 @@
                 const title = document.createElement("strong");
                 title.textContent = `${member.name || "Membre"} — ${member.email}`;
                 const meta = document.createElement("p");
-                meta.textContent = `Modérateur · ${member.status === "active" ? "Actif" : "Suspendu"} · Villages : ${(member.allowed_villages || []).join(", ") || "Tous / non précisés"}`;
+                meta.textContent = `Modérateur · ${member.status === "active" ? "Actif" : "Suspendu"} · Villages : ${(member.allowed_villages || []).length ? member.allowed_villages.join(", ") : "Aucun village attribué"}`;
                 const permissionTitle = document.createElement("strong");
                 permissionTitle.textContent = "Autorisations de ce modérateur";
                 const permissionGrid = document.createElement("div");
@@ -26510,7 +26514,7 @@
                     cb.type = "checkbox";
                     cb.value = key;
                     cb.checked = (member.permissions || []).includes(key);
-                    cb.disabled = !(["support", "testers", "team_communication", "player_reports"].includes(key));
+                    cb.disabled = !(["support", "testers", "team_communication", "player_reports", "adventures"].includes(key));
                     if (cb.disabled)
                         lab.title = "Fonction en cours de sécurisation";
                     lab.append(cb, document.createTextNode(label + (cb.disabled ? " — bientôt disponible" : "")));
@@ -26587,7 +26591,10 @@
                 }
                 );
                 controls.append(save, toggle, history);
-                card.append(title, meta, permissionTitle, permissionGrid, document.createTextNode("Villages autorisés"), villages, controls);
+                const villageHelp = document.createElement("small");
+                villageHelp.textContent = "Choisis précisément les villages confiés à ce modérateur. Pour en sélectionner plusieurs, maintiens Ctrl pendant le clic. Sans village sélectionné, il ne pourra préparer aucune aventure.";
+                villageHelp.style.cssText = "display:block;color:#665b48;margin:4px 0 6px";
+                card.append(title, meta, permissionTitle, permissionGrid, document.createTextNode("Villages autorisés"), villageHelp, villages, controls);
                 list.append(card);
             }
             );
@@ -26687,6 +26694,7 @@
                     const perms = document.createElement("div");
                     perms.style.cssText = "font-size:13px;margin-top:5px";
                     const labels = {
+                        adventures: "Préparation des aventures",
                         support: "Messages et support",
                         team_communication: "Communication et missions de l'équipe",
                         player_reports: "Signalement des joueurs"
@@ -27085,6 +27093,7 @@
             const teamMissionsItem = button.id === "team-missions-nav-item";
             const teamReviewItem = button.id === "team-review-nav-item";
             const teamByVillageItem = button.id === "team-by-village-nav-item";
+            const moderatorRoadmapAdminItem = button.id === "moderator-roadmap-admin-nav-item";
             const testerAdminItem = action.includes("adminOpenTesters") || action.includes("adminOpenTesterManagement");
             const roadmapAdminItem = action.includes("adminOpenRoadmap");
             const perms = window.adminCurrentPermissions || [];
@@ -27099,7 +27108,10 @@
             if (teamReviewItem && !isAdmin) {
                 button.hidden = true; button.style.setProperty("display", "none", "important"); return;
             }
-            if (teamMissionsItem && !(isAdmin || (isModerator && (window.adminCurrentPermissions || []).includes("adventures")))) {
+            if (teamMissionsItem && !(isModerator && (window.adminCurrentPermissions || []).includes("adventures"))) {
+                button.hidden = true; button.style.setProperty("display", "none", "important"); return;
+            }
+            if (moderatorRoadmapAdminItem && !isAdmin) {
                 button.hidden = true; button.style.setProperty("display", "none", "important"); return;
             }
             if (teamByVillageItem && !isAdmin) {
@@ -30567,7 +30579,7 @@ if ("serviceWorker" in navigator) {
  function remaining(date){if(!date)return 'Date non définie';const d=new Date(date+'T23:59:59'),days=Math.ceil((d-Date.now())/86400000);return days<0?`En retard de ${Math.abs(days)} jour(s)`:days===0?'Échéance aujourd’hui':`${days} jour(s) restant(s)`;}
  window.openModeratorRoadmap=async function(){if(!window.adminAccessGranted||!(window.adminCurrentRole==='admin'||(window.adminCurrentPermissions||[]).includes('adventures'))){alert('Accès réservé aux membres autorisés.');return;}window.adminSetView?.('team-roadmap-view','Feuille de route des modérateurs');await window.loadModeratorRoadmap();};
  window.loadModeratorRoadmap=async function(){try{const [r,m]=await Promise.all([window.adminApi('/api/team/roadmap'),window.adminApi('/api/team/missions')]);const villages=$('moderator-roadmap-village');if(villages) villages.innerHTML='<option value="">Choisis un village</option>'+(m.villages||[]).map(v=>`<option value="${esc(v.slug)}">${esc(v.name)}${v.postal_code?' ('+esc(v.postal_code)+')':''}</option>`).join('');const tasks=r.tasks||[];const summary=$('moderator-roadmap-summary');if(summary){const active=tasks.filter(t=>!['termine','valide'].includes(t.status)).length,done=tasks.filter(t=>['termine','valide'].includes(t.status)).length;summary.innerHTML=`<strong>${r.role==='admin'?'Vue de toute l’équipe':'Ma feuille de route'}</strong><p>${tasks.length} tâche(s) · ${active} en cours ou à commencer · ${done} terminée(s) / validée(s)</p>`;}
- const list=$('moderator-roadmap-list');if(list)list.innerHTML=tasks.length?tasks.map(t=>`<article class="feature" style="padding:13px;margin:9px 0"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${esc(t.village_name)} · ${esc(t.country)}</strong><span class="roadmap-tag">${esc(labels[t.status]||t.status)}</span></div><p><strong>${esc(t.task_title)}</strong></p>${r.role==='admin'?`<small>Responsable : ${esc(t.email)}</small>`:''}<p>Avancement : ${Number(t.progress)||0}% · ${esc(remaining(t.due_date?String(t.due_date).slice(0,10):''))}</p><div style="height:8px;background:#eee;border-radius:8px;overflow:hidden"><div style="height:8px;width:${Math.max(0,Math.min(100,Number(t.progress)||0))}%;background:#28734d"></div></div><small>Fin prévue : ${esc(t.due_date?String(t.due_date).slice(0,10):'Non définie')}</small>${t.notes?`<p>${esc(t.notes)}</p>`:''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px"><label>Statut <select id="mr-status-${t.id}">${Object.entries(labels).map(([k,v])=>`<option value="${k}" ${t.status===k?'selected':''}>${v}</option>`).join('')}</select></label><label>Avancement % <input id="mr-progress-${t.id}" type="number" min="0" max="100" value="${Number(t.progress)||0}" style="width:85px"></label><label>Fin prévue <input id="mr-date-${t.id}" type="date" value="${esc(t.due_date?String(t.due_date).slice(0,10):'')}"></label><button type="button" class="admin-secondary-btn" onclick="window.saveModeratorRoadmap(${t.id})">Enregistrer</button></div></article>`).join(''):'<p>Aucune tâche enregistrée pour le moment.</p>'; }catch(e){$('moderator-roadmap-status').textContent=e.message||'Chargement impossible.';}};
+ const form=$('moderator-roadmap-form');if(form&&form.closest('.feature'))form.closest('.feature').hidden=(r.role==='admin');const list=$('moderator-roadmap-list');if(list)list.innerHTML=tasks.length?tasks.map(t=>`<article class="feature" style="padding:13px;margin:9px 0"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><strong>${esc(t.village_name)} · ${esc(t.country)}</strong><span class="roadmap-tag">${esc(labels[t.status]||t.status)}</span></div><p><strong>${esc(t.task_title)}</strong></p>${r.role==='admin'?`<small>Responsable : ${esc(t.email)}</small>`:''}<p>Avancement : ${Number(t.progress)||0}% · ${esc(remaining(t.due_date?String(t.due_date).slice(0,10):''))}</p><div style="height:8px;background:#eee;border-radius:8px;overflow:hidden"><div style="height:8px;width:${Math.max(0,Math.min(100,Number(t.progress)||0))}%;background:#28734d"></div></div><small>Fin prévue : ${esc(t.due_date?String(t.due_date).slice(0,10):'Non définie')}</small>${t.notes?`<p>${esc(t.notes)}</p>`:''}<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px"><label>Statut <select id="mr-status-${t.id}">${Object.entries(labels).map(([k,v])=>`<option value="${k}" ${t.status===k?'selected':''}>${v}</option>`).join('')}</select></label><label>Avancement % <input id="mr-progress-${t.id}" type="number" min="0" max="100" value="${Number(t.progress)||0}" style="width:85px"></label><label>Fin prévue <input id="mr-date-${t.id}" type="date" value="${esc(t.due_date?String(t.due_date).slice(0,10):'')}"></label><button type="button" class="admin-secondary-btn" onclick="window.saveModeratorRoadmap(${t.id})">Enregistrer</button></div></article>`).join(''):'<p>Aucune tâche enregistrée pour le moment.</p>'; }catch(e){$('moderator-roadmap-status').textContent=e.message||'Chargement impossible.';}};
  window.saveModeratorRoadmap=async function(id){try{await window.adminApi(`/api/team/roadmap/${id}`,{method:'PATCH',body:JSON.stringify({status:$(`mr-status-${id}`).value,progress:Number($(`mr-progress-${id}`).value),due_date:$(`mr-date-${id}`).value})});$('moderator-roadmap-status').textContent='Feuille de route mise à jour.';await window.loadModeratorRoadmap();}catch(e){$('moderator-roadmap-status').textContent=e.message||'Enregistrement impossible.';}};
  document.addEventListener('DOMContentLoaded',()=>{$('moderator-roadmap-form')?.addEventListener('submit',async e=>{e.preventDefault();try{const village=$('moderator-roadmap-village'),r=await window.adminApi('/api/team/roadmap',{method:'POST',body:JSON.stringify({village_slug:village.value,village_name:village.options[village.selectedIndex]?.textContent,country:$('moderator-roadmap-country').value,task_title:$('moderator-roadmap-task').value,due_date:$('moderator-roadmap-due').value,notes:$('moderator-roadmap-notes').value})});$('moderator-roadmap-status').textContent=`Tâche ajoutée pour ${r.task.village_name}.`;e.target.reset();await window.loadModeratorRoadmap();}catch(err){$('moderator-roadmap-status').textContent=err.message||'Impossible d’ajouter la tâche.';}});});
 })();
