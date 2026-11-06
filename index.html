@@ -27675,6 +27675,8 @@
     let franceDepartmentLayer = null;
     let franceDepartmentGeoJsonPromise = null;
     let franceVillageCache = [];
+    let franceVillageVisibleCount = 8;
+    const FRANCE_VILLAGE_PAGE_SIZE = 8;
     let franceSelectedDepartment = "";
     let franceSelectedVillage = null;
     let franceVillageMarkersLayer = null;
@@ -27808,13 +27810,18 @@
         rows.sort((a,b) => String(a.name).localeCompare(String(b.name),"fr"));
         if (title) title.textContent = selected ? `${selected[0]} · ${selected[1]}` : "Toute la France";
         if (description) description.textContent = selected ? `Clique sur un repère ou choisis un village du département ${selected[1]}.` : "Clique sur un département, puis sur le repère d'un village pour voir ses parcours.";
-        if (count) count.textContent = `${rows.length} village${rows.length > 1 ? "s" : ""}`;
+        if (count) {
+            const shown = Math.min(franceVillageVisibleCount, rows.length);
+            count.textContent = rows.length
+                ? `${shown} affiché${shown > 1 ? "s" : ""} sur ${rows.length} village${rows.length > 1 ? "s" : ""}`
+                : "0 village";
+        }
         if (!rows.length) {
             const empty = document.createElement("div"); empty.className = "france-map-empty";
             empty.textContent = q ? "Aucun village ne correspond à cette recherche dans ce département." : selected ? "Aucun village n'est encore affiché dans ce département." : "Les villages seront ajoutés progressivement. La carte grandira au fil du développement du jeu.";
             list.append(empty); return;
         }
-        rows.forEach(v => {
+        rows.slice(0, franceVillageVisibleCount).forEach(v => {
             const card = document.createElement("article"); card.className = "france-village-card";
             if (v.photo_url) { const img=document.createElement("img"); img.src=v.photo_url; img.alt=`Photo de ${v.name}`; img.loading="lazy"; card.append(img); }
             const h=document.createElement("strong"); h.textContent=`🏡 ${v.name}`; card.append(h);
@@ -27825,6 +27832,19 @@
             btn.addEventListener("click",()=>franceOpenVillage(v));
             card.append(btn); list.append(card);
         });
+
+        if (rows.length > franceVillageVisibleCount) {
+            const remaining = rows.length - franceVillageVisibleCount;
+            const more = document.createElement("button");
+            more.type = "button";
+            more.className = "small-btn france-village-more";
+            more.textContent = `Voir les ${Math.min(FRANCE_VILLAGE_PAGE_SIZE, remaining)} villages suivants`;
+            more.addEventListener("click", () => {
+                franceVillageVisibleCount += FRANCE_VILLAGE_PAGE_SIZE;
+                franceRenderVillageCards();
+            });
+            list.append(more);
+        }
     }
     function franceOpenVillage(village) {
         franceSelectedVillage = village;
@@ -27856,6 +27876,7 @@
         franceSelectedVillage = null;
         franceAccessibleAdventures = null;
         franceSelectedDepartment = FRANCE_DEPARTMENTS.some(d=>d[0]===code) ? code : "";
+        franceVillageVisibleCount = FRANCE_VILLAGE_PAGE_SIZE;
         const select=document.getElementById("france-department-select"); if(select) select.value=franceSelectedDepartment;
         franceRenderVillageCards();
         if (zoom && franceDepartmentMap && franceSelectedDepartment) {
@@ -27887,7 +27908,11 @@
         if(select && !select.dataset.ready){
             FRANCE_DEPARTMENTS.forEach(([code,name])=>{const o=document.createElement("option");o.value=code;o.textContent=`${code} · ${name}`;select.append(o);});
             select.addEventListener("change",()=>franceSelectDepartment(select.value));
-            document.getElementById("france-village-search")?.addEventListener("input",franceRenderVillageCards);
+            document.getElementById("france-village-search")?.addEventListener("input",() => {
+                franceVillageVisibleCount = FRANCE_VILLAGE_PAGE_SIZE;
+                franceSelectedVillage = null;
+                franceRenderVillageCards();
+            });
             select.dataset.ready="1";
         }
         try {
