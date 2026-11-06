@@ -12899,7 +12899,7 @@
 .france-map-heading span{font-size:13px;color:#687466}
 #france-department-map{width:100%;height:clamp(390px,58vw,650px);border:1px solid #dfd0a8;border-radius:16px;background:#e9f0e8;overflow:hidden}
 #france-department-map .leaflet-container{background:#e9f0e8}
-.france-map-tools{display:grid;grid-template-columns:minmax(220px,1fr) auto;gap:12px;align-items:center;margin:14px 0}
+.france-map-tools{display:grid;grid-template-columns:1fr;gap:12px;align-items:stretch;margin:14px 0}
 .france-map-tools select,.france-map-tools input{width:100%;padding:12px 14px;border:1px solid #cfc4a5;border-radius:10px;background:#fffdf7;color:#173d2b;font:inherit}
 .france-map-status{font-size:13px;color:#637264;min-height:20px;margin:6px 0}
 .france-map-selected{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 10px;padding:15px 17px;background:#0b3828;color:#fff5d8;border:1px solid #d7ad45;border-radius:14px}
@@ -12909,6 +12909,14 @@
 .france-village-card img{width:100%;height:125px;object-fit:cover;border-radius:9px;background:#eee4cf}
 .france-village-card strong{color:#174b35;font-size:17px}.france-village-card p{margin:0;color:#596659;line-height:1.5;font-size:14px}
 .france-village-status{font-size:12px;font-weight:700;color:#72591d}.france-village-card button{align-self:flex-start;margin-top:auto}
+.france-village-name-list{display:block!important}
+.france-village-name-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}
+.france-village-name-item{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;min-height:62px;padding:11px 38px 11px 13px;border:1px solid #dfd1ae;border-radius:10px;background:#fffdf7;color:#173d2b;text-align:left;cursor:pointer;font:inherit;transition:background .15s,border-color .15s,transform .15s}
+.france-village-name-item:hover{background:#f4ecd7;border-color:#c49b42;transform:translateY(-1px)}
+.france-village-name-main{font-weight:700;font-size:15px;color:#174b35}
+.france-village-name-meta{font-size:12px;color:#76643c}
+.france-village-name-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:25px;color:#a27a26}
+.france-village-more{margin-top:12px}
 /* Fiche patrimoine affichée lorsqu'un visiteur sélectionne un village */
 .france-village-selected-grid{grid-template-columns:minmax(250px,360px) minmax(260px,1fr);align-items:start;gap:14px}
 .france-village-discovery{grid-column:1;grid-row:1 / span 3;padding:12px;border:1px solid #d7ad45;background:linear-gradient(145deg,#fffdf7,#f7efd9);box-shadow:0 5px 15px rgba(6,44,32,.08);display:grid;grid-template-columns:112px minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:12px;row-gap:5px;align-items:start;min-height:148px}
@@ -12927,7 +12935,7 @@
 .france-map-empty{padding:20px;text-align:center;background:#fffdf7;border:1px dashed #cbb982;border-radius:12px;color:#647164}
 .france-dept-label{font:700 11px Arial,sans-serif;fill:#173d2b;paint-order:stroke;stroke:#fff8e8;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .admin-department-hint{font-size:12px;color:#687467;display:block;margin-top:4px}
-@media(max-width:650px){.france-map-tools{grid-template-columns:1fr}#france-department-map{height:420px}.france-map-shell{padding:10px}}
+@media(max-width:650px){#france-department-map{height:420px}.france-map-shell{padding:10px}}
 </style>
 
 
@@ -27676,7 +27684,7 @@
     let franceDepartmentGeoJsonPromise = null;
     let franceVillageCache = [];
     let franceVillageVisibleCount = 8;
-    const FRANCE_VILLAGE_PAGE_SIZE = 8;
+    const FRANCE_VILLAGE_PAGE_SIZE = 20;
     let franceSelectedDepartment = "";
     let franceSelectedVillage = null;
     let franceVillageMarkersLayer = null;
@@ -27821,17 +27829,18 @@
             empty.textContent = q ? "Aucun village ne correspond à cette recherche dans ce département." : selected ? "Aucun village n'est encore affiché dans ce département." : "Les villages seront ajoutés progressivement. La carte grandira au fil du développement du jeu.";
             list.append(empty); return;
         }
+        list.classList.add("france-village-name-list");
+        const names = document.createElement("div");
+        names.className = "france-village-name-items";
         rows.slice(0, franceVillageVisibleCount).forEach(v => {
-            const card = document.createElement("article"); card.className = "france-village-card";
-            if (v.photo_url) { const img=document.createElement("img"); img.src=v.photo_url; img.alt=`Photo de ${v.name}`; img.loading="lazy"; card.append(img); }
-            const h=document.createElement("strong"); h.textContent=`🏡 ${v.name}`; card.append(h);
-            const meta=document.createElement("span"); meta.className="france-village-status"; meta.textContent=`${v.postal_code ? v.postal_code+" · " : ""}${franceDepartmentLabel(v.postal_code)} · ${franceStatusLabel(v.status)}`; card.append(meta);
-            const p=document.createElement("p"); p.textContent=v.description || "Une découverte à venir dans ce village."; card.append(p);
-            const btn=document.createElement("button"); btn.type="button"; btn.className="small-btn";
-            btn.textContent = "Découvrir ce village";
-            btn.addEventListener("click",()=>franceOpenVillage(v));
-            card.append(btn); list.append(card);
+            const item = document.createElement("button");
+            item.type = "button";
+            item.className = "france-village-name-item";
+            item.innerHTML = `<span class="france-village-name-main">🏡 ${franceEscape(v.name || "Village")}</span><span class="france-village-name-meta">${franceEscape(v.postal_code || "Code postal à préciser")} · ${franceEscape(franceStatusLabel(v.status))}</span><span class="france-village-name-arrow" aria-hidden="true">›</span>`;
+            item.addEventListener("click", () => franceOpenVillage(v));
+            names.append(item);
         });
+        list.append(names);
 
         if (rows.length > franceVillageVisibleCount) {
             const remaining = rows.length - franceVillageVisibleCount;
