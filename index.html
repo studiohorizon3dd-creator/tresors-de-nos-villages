@@ -12909,6 +12909,14 @@
 .france-village-card img{width:100%;height:125px;object-fit:cover;border-radius:9px;background:#eee4cf}
 .france-village-card strong{color:#174b35;font-size:17px}.france-village-card p{margin:0;color:#596659;line-height:1.5;font-size:14px}
 .france-village-status{font-size:12px;font-weight:700;color:#72591d}.france-village-card button{align-self:flex-start;margin-top:auto}
+/* Fiche patrimoine affichée lorsqu'un visiteur sélectionne un village */
+.france-village-discovery{grid-column:1/-1;padding:16px;border:2px solid #d7ad45;background:linear-gradient(145deg,#fffdf7,#f7efd9);box-shadow:0 8px 22px rgba(6,44,32,.09)}
+.france-village-discovery-cover{width:100%;max-height:300px;overflow:hidden;border-radius:11px;background:#eee4cf}
+.france-village-discovery-cover img{display:block;width:100%;height:clamp(170px,28vw,300px);object-fit:cover}
+.france-village-photo-placeholder{min-height:150px;display:grid;place-items:center;color:#65715f;font-weight:700;background:linear-gradient(135deg,#e9e3d0,#dce6d5)}
+.france-village-discovery-title{font-size:22px!important;margin-top:5px}
+.france-village-discovery-description{font-size:15px!important;line-height:1.7!important;color:#354b39!important}
+.france-village-discovery-note{padding:11px 13px;border-left:3px solid #d7ad45;border-radius:7px;background:#f4ecd7;color:#52604d;font-size:13px!important}
 .france-map-empty{padding:20px;text-align:center;background:#fffdf7;border:1px dashed #cbb982;border-radius:12px;color:#647164}
 .france-dept-label{font:700 11px Arial,sans-serif;fill:#173d2b;paint-order:stroke;stroke:#fff8e8;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .admin-department-hint{font-size:12px;color:#687467;display:block;margin-top:4px}
@@ -27685,7 +27693,50 @@
             const village = franceSelectedVillage;
             if (title) title.textContent = `🏡 ${village.name}`;
             if (description) description.textContent = "Choisis un parcours pour commencer ton aventure dans ce village.";
-            if (count) count.textContent = "Parcours";
+            if (count) count.textContent = "Découverte";
+
+            // Fiche de découverte affichée dès le clic sur un village.
+            const discovery = document.createElement("article");
+            discovery.className = "france-village-card france-village-discovery";
+            const cover = document.createElement("div");
+            cover.className = "france-village-discovery-cover";
+            if (village.photo_url) {
+                const image = document.createElement("img");
+                image.src = village.photo_url;
+                image.alt = `Photo de ${village.name || "ce village"}`;
+                image.loading = "lazy";
+                cover.append(image);
+            } else {
+                const placeholder = document.createElement("div");
+                placeholder.className = "france-village-photo-placeholder";
+                placeholder.textContent = "🏡 Photo du village à venir";
+                cover.append(placeholder);
+            }
+            discovery.append(cover);
+
+            const heading = document.createElement("strong");
+            heading.className = "france-village-discovery-title";
+            heading.textContent = `🏡 ${village.name || "Village"}`;
+            discovery.append(heading);
+
+            const meta = document.createElement("span");
+            meta.className = "france-village-status";
+            meta.textContent = `${village.postal_code ? village.postal_code + " · " : ""}${franceDepartmentLabel(village.postal_code)} · ${franceStatusLabel(village.status)}`;
+            discovery.append(meta);
+
+            const story = document.createElement("p");
+            story.className = "france-village-discovery-description";
+            story.textContent = village.description || "L'histoire et les trésors de ce village seront bientôt présentés ici.";
+            discovery.append(story);
+
+            const reason = document.createElement("p");
+            reason.className = "france-village-discovery-note";
+            reason.textContent = village.status === "available"
+                ? "Ce village vous accueille : découvrez son patrimoine puis choisissez une activité."
+                : "Ce village est en préparation. Sa fiche permet déjà de découvrir son patrimoine ; l'activité arrivera prochainement.";
+            discovery.append(reason);
+            list.append(discovery);
+
             const back = document.createElement("button");
             back.type = "button"; back.className = "small-btn"; back.textContent = "← Retour aux villages";
             back.addEventListener("click", () => { franceSelectedVillage = null; franceAccessibleAdventures = null; franceRenderVillageCards(); });
@@ -27699,7 +27750,9 @@
                 franceAccessibleAdventures = adventures;
                 if (!adventures.length) {
                     const empty = document.createElement("p"); empty.className = "france-map-empty";
-                    empty.textContent = "Aucun parcours n'est actuellement accessible sur ton compte dans ce village. Vérifie les formules disponibles ou tes accès testeur.";
+                    empty.textContent = village.status === "available"
+                        ? "Aucun parcours n'est actuellement accessible sur ton compte dans ce village. Vérifie les formules disponibles ou tes accès testeur."
+                        : "Les activités de ce village sont en préparation. Reviens bientôt pour partir à sa découverte !";
                     list.append(empty); return;
                 }
                 adventures.forEach(adventure => {
@@ -27738,10 +27791,8 @@
             const meta=document.createElement("span"); meta.className="france-village-status"; meta.textContent=`${v.postal_code ? v.postal_code+" · " : ""}${franceDepartmentLabel(v.postal_code)} · ${franceStatusLabel(v.status)}`; card.append(meta);
             const p=document.createElement("p"); p.textContent=v.description || "Une découverte à venir dans ce village."; card.append(p);
             const btn=document.createElement("button"); btn.type="button"; btn.className="small-btn";
-            btn.textContent = "Voir les parcours";
-            btn.disabled = v.status !== "available";
-            if (btn.disabled) btn.textContent = "Bientôt disponible";
-            else btn.addEventListener("click",()=>franceOpenVillage(v));
+            btn.textContent = "Découvrir ce village";
+            btn.addEventListener("click",()=>franceOpenVillage(v));
             card.append(btn); list.append(card);
         });
     }
