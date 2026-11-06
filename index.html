@@ -13928,23 +13928,7 @@
                     <div class="france-map-selected"><div><h4 id="france-selected-title">Toute la France</h4><p id="france-selected-description">Choisis un département pour découvrir les villages associés.</p></div><span id="france-selected-count">0 village</span></div>
                     <div id="france-village-list" class="france-village-grid"><div class="france-map-empty">Les villages apparaîtront ici.</div></div>
                 </div>
-                <h3 style="margin:30px 0 8px">📍 Carte des points GPS des villages</h3>
-                <p>Cette carte montre les positions GPS des villages déjà enregistrés.</p>
-                <div class="map-legend" aria-label="Légende de la carte">
-                    <span>
-                        <i class="map-dot" style="background:#23834a"></i>
-                        Visité
-                    </span>
-                    <span>
-                        <i class="map-dot" style="background:#d39b25"></i>
-                        Disponible
-                    </span>
-                    <span>
-                        <i class="map-dot" style="background:#8b9290"></i>
-                        À découvrir
-                    </span>
-                </div>
-                <div id="village-map" role="application" aria-label="Carte interactive des villages avec leurs points GPS"></div>
+                <p class="france-map-status" style="margin-top:12px">📍 Les repères des villages sont directement affichés sur la carte. Clique sur un repère pour découvrir les parcours accessibles.</p>
                 <div class="village-proposal-banner" style="margin-top:22px">
                     <div>
                         <h3>Votre village a aussi une histoire à raconter ?</h3>
@@ -27487,6 +27471,9 @@
     let franceDepartmentGeoJsonPromise = null;
     let franceVillageCache = [];
     let franceSelectedDepartment = "";
+    let franceSelectedVillage = null;
+    let franceVillageMarkersLayer = null;
+    let franceAccessibleAdventures = null;
     function franceEscape(value) {
         return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     }
@@ -27502,6 +27489,43 @@
         const description = document.getElementById("france-selected-description");
         const count = document.getElementById("france-selected-count");
         if (!list) return;
+        list.replaceChildren();
+
+        if (franceSelectedVillage) {
+            const village = franceSelectedVillage;
+            if (title) title.textContent = `🏡 ${village.name}`;
+            if (description) description.textContent = "Choisis un parcours pour commencer ton aventure dans ce village.";
+            if (count) count.textContent = "Parcours";
+            const back = document.createElement("button");
+            back.type = "button"; back.className = "small-btn"; back.textContent = "← Retour aux villages";
+            back.addEventListener("click", () => { franceSelectedVillage = null; franceAccessibleAdventures = null; franceRenderVillageCards(); });
+            list.append(back);
+            const status = document.createElement("p"); status.className = "france-map-status"; status.textContent = "Chargement des parcours disponibles…"; list.append(status);
+            playerApi('/api/adventures').then(data => {
+                if (franceSelectedVillage?.id !== village.id) return;
+                status.remove();
+                const slug = String(village.slug || "").toLocaleLowerCase("fr");
+                const adventures = (Array.isArray(data.adventures) ? data.adventures : []).filter(a => String(a.village_slug || "").toLocaleLowerCase("fr") === slug);
+                franceAccessibleAdventures = adventures;
+                if (!adventures.length) {
+                    const empty = document.createElement("p"); empty.className = "france-map-empty";
+                    empty.textContent = "Aucun parcours n'est actuellement accessible sur ton compte dans ce village. Vérifie les formules disponibles ou tes accès testeur.";
+                    list.append(empty); return;
+                }
+                adventures.forEach(adventure => {
+                    const card = document.createElement("article"); card.className = "france-village-card";
+                    const h = document.createElement("strong"); h.textContent = adventure.title || "Parcours"; card.append(h);
+                    const info = document.createElement("p"); info.textContent = `${adventure.level_name || "Parcours"} · ${adventure.total_steps || 0} étapes · ${adventure.total_stars || 0} étoiles`; card.append(info);
+                    const open = document.createElement("button"); open.type = "button"; open.className = "small-btn"; open.textContent = "▶ Commencer le parcours";
+                    open.addEventListener("click", () => { showDashSection("dash-adventures", { skipAdventureLoad: true }); openPlayerAdventure(adventure.id); });
+                    card.append(open); list.append(card);
+                });
+            }).catch(error => {
+                status.textContent = error.message || "Impossible de charger les parcours. Connecte-toi puis réessaie.";
+            });
+            return;
+        }
+
         const q = (document.getElementById("france-village-search")?.value || "").trim().toLocaleLowerCase("fr");
         const selected = FRANCE_DEPARTMENTS.find(d => d[0] === franceSelectedDepartment);
         let rows = franceVillageCache.filter(v => {
@@ -27510,12 +27534,11 @@
         });
         rows.sort((a,b) => String(a.name).localeCompare(String(b.name),"fr"));
         if (title) title.textContent = selected ? `${selected[0]} · ${selected[1]}` : "Toute la France";
-        if (description) description.textContent = selected ? `Les villages référencés dans le département ${selected[1]}.` : "Les villages sélectionnés pour les aventures et les prochaines découvertes.";
+        if (description) description.textContent = selected ? `Clique sur un repère ou choisis un village du département ${selected[1]}.` : "Clique sur un département, puis sur le repère d'un village pour voir ses parcours.";
         if (count) count.textContent = `${rows.length} village${rows.length > 1 ? "s" : ""}`;
-        list.replaceChildren();
         if (!rows.length) {
             const empty = document.createElement("div"); empty.className = "france-map-empty";
-            empty.textContent = q ? "Aucun village ne correspond à cette recherche dans ce département." : selected ? "Aucun village n'est encore affiché dans ce département. Il pourra être ajouté progressivement." : "Les villages seront ajoutés progressivement. La carte grandira au fil du développement du jeu.";
+            empty.textContent = q ? "Aucun village ne correspond à cette recherche dans ce département." : selected ? "Aucun village n'est encore affiché dans ce département." : "Les villages seront ajoutés progressivement. La carte grandira au fil du développement du jeu.";
             list.append(empty); return;
         }
         rows.forEach(v => {
@@ -27525,12 +27548,42 @@
             const meta=document.createElement("span"); meta.className="france-village-status"; meta.textContent=`${v.postal_code ? v.postal_code+" · " : ""}${franceDepartmentLabel(v.postal_code)} · ${franceStatusLabel(v.status)}`; card.append(meta);
             const p=document.createElement("p"); p.textContent=v.description || "Une découverte à venir dans ce village."; card.append(p);
             const btn=document.createElement("button"); btn.type="button"; btn.className="small-btn";
-            if (v.status === "available") { btn.textContent="Découvrir les aventures"; btn.addEventListener("click",()=>showDashSection("dash-adventures")); }
-            else { btn.textContent="Suivre les nouveautés"; btn.addEventListener("click",()=>showDashSection("dash-news")); }
+            btn.textContent = "Voir les parcours";
+            btn.disabled = v.status !== "available";
+            if (btn.disabled) btn.textContent = "Bientôt disponible";
+            else btn.addEventListener("click",()=>franceOpenVillage(v));
             card.append(btn); list.append(card);
         });
     }
+    function franceOpenVillage(village) {
+        franceSelectedVillage = village;
+        franceAccessibleAdventures = null;
+        franceRenderVillageCards();
+        const lat = Number(village.latitude), lon = Number(village.longitude);
+        if (franceDepartmentMap && Number.isFinite(lat) && Number.isFinite(lon)) {
+            franceDepartmentMap.setView([lat, lon], 12, { animate: true });
+            if (franceVillageMarkersLayer) franceVillageMarkersLayer.eachLayer(marker => {
+                if (marker.options?.villageId === village.id) marker.openPopup();
+            });
+        }
+    }
+    function franceRenderVillageMarkers() {
+        if (!franceDepartmentMap || !window.L) return;
+        if (!franceVillageMarkersLayer) franceVillageMarkersLayer = L.layerGroup().addTo(franceDepartmentMap);
+        franceVillageMarkersLayer.clearLayers();
+        franceVillageCache.forEach(v => {
+            const lat = Number(v.latitude), lon = Number(v.longitude);
+            if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) return;
+            const marker = L.circleMarker([lat, lon], { radius: 8, color: "#fffaf0", weight: 2, fillColor: franceStatusColor(v.status), fillOpacity: 1 });
+            marker.options.villageId = v.id;
+            marker.addTo(franceVillageMarkersLayer);
+            marker.bindTooltip(String(v.name || "Village"), { direction: "top", offset: [0,-7] });
+            marker.on("click", () => franceOpenVillage(v));
+        });
+    }
     function franceSelectDepartment(code, zoom=true) {
+        franceSelectedVillage = null;
+        franceAccessibleAdventures = null;
         franceSelectedDepartment = FRANCE_DEPARTMENTS.some(d=>d[0]===code) ? code : "";
         const select=document.getElementById("france-department-select"); if(select) select.value=franceSelectedDepartment;
         franceRenderVillageCards();
@@ -27570,6 +27623,7 @@
             const response=await fetch(`${window.API_BASE}/api/villages`,{headers:{Accept:"application/json"}});
             const data=await response.json().catch(()=>({})); if(!response.ok) throw new Error(data.error||`Erreur ${response.status}`);
             franceVillageCache=Array.isArray(data.villages)?data.villages:[];
+            franceRenderVillageMarkers();
             const countEl=document.getElementById("france-map-count"); if(countEl) countEl.textContent=`${franceVillageCache.length} village(s) référencé(s)`;
             franceRenderVillageCards();
         } catch(error) { if(status) status.textContent=error.message||"Impossible de charger les villages."; }
@@ -27607,6 +27661,7 @@
                 style:feature=>{const code=String(feature.properties?.code||"");const has=franceVillageCache.some(v=>franceDepartmentCode(v.postal_code)===code);return {color:"#fffaf0",weight:1.5,opacity:1,fillColor:has?"#d7ad45":"#8eae91",fillOpacity:has?.78:.58};},
                 onEachFeature:(feature,layer)=>{const code=String(feature.properties?.code||"");const name=String(feature.properties?.nom||"");const n=franceVillageCache.filter(v=>franceDepartmentCode(v.postal_code)===code).length;layer.bindTooltip(`${code} · ${name}${n?` · ${n} village(s)`:""}`,{sticky:true});layer.on({mouseover:e=>e.target.setStyle({fillColor:"#e5bd5a",fillOpacity:.95,weight:2.5}),mouseout:e=>franceDepartmentLayer.resetStyle(e.target),click:()=>franceSelectDepartment(code,true)});}
             }).addTo(franceDepartmentMap);
+            franceRenderVillageMarkers();
             if(franceSelectedDepartment) franceSelectDepartment(franceSelectedDepartment,true);
             else franceDepartmentMap.fitBounds(franceDepartmentLayer.getBounds(),{padding:[24,24],maxZoom:6,animate:false});
             if(status) status.textContent="Clique sur un département ou utilise la liste pour découvrir les villages. Les départements d’outre-mer sont accessibles dans le sélecteur.";
@@ -27633,62 +27688,7 @@
     }
 
     async function actualiserCarteVillages() {
-        actualiserCarteFrance();
-        const humbertDone = localStorage.getItem("humbertTamponObtenu") === "true";
-        const hStatus = document.getElementById("map-status-humbert");
-        if (hStatus) hStatus.textContent = humbertDone ? "Statut : visité ✓" : "Statut : disponible";
-        const mapSection = document.getElementById("dash-village-map");
-        if (!mapSection || mapSection.classList.contains("hidden")) return;
-        const mapElement = document.getElementById("village-map");
-        if (typeof L === "undefined") {
-            if (mapElement) mapElement.textContent = "La carte n’a pas pu être chargée. Vérifie ta connexion internet.";
-            return;
-        }
-        if (!villageMapInstance) {
-            villageMapInstance = L.map("village-map").setView([50.4982, 1.8925], 11);
-            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(villageMapInstance);
-            villageMarkersLayer = L.layerGroup().addTo(villageMapInstance);
-        }
-        if (villageMapLoadPromise) return villageMapLoadPromise;
-        villageMapLoadPromise = (async () => {
-            try {
-                const response = await fetch(`${window.API_BASE}/api/villages`, { headers: { Accept: "application/json" } });
-                const data = await response.json().catch(() => ({}));
-                if (!response.ok) throw new Error(data.error || `Erreur ${response.status}`);
-                const villages = Array.isArray(data.villages) ? data.villages : [];
-                villageMarkersLayer.clearLayers();
-                const bounds = [];
-                villages.forEach(village => {
-                    const lat = Number(village.latitude);
-                    const lon = Number(village.longitude);
-                    if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) return;
-                    const visited = village.slug === "humbert" && humbertDone;
-                    const marker = L.circleMarker([lat, lon], {
-                        radius: 9, color: "#fff", weight: 2,
-                        fillColor: visited ? "#23834a" : (village.status === "available" ? "#d39b25" : "#8b9290"),
-                        fillOpacity: 1
-                    }).addTo(villageMarkersLayer);
-                    const name = String(village.name || "Village").replace(/[<>&"]/g, "");
-                    const postal = village.postal_code ? ` · ${String(village.postal_code).replace(/[<>&"]/g, "")}` : "";
-                    marker.bindPopup(`<strong>${name}${postal}</strong><br>${visited ? "Village visité ✓" : "Village à découvrir"}`);
-                    bounds.push([lat, lon]);
-                });
-                if (bounds.length) villageMapInstance.fitBounds(bounds, { padding: [25, 25], maxZoom: 13 });
-                else if (mapElement) {
-                    mapElement.insertAdjacentHTML("beforeend", '<p class="map-empty-note">Aucun village ne possède encore de coordonnées GPS enregistrées.</p>');
-                }
-                setTimeout(() => villageMapInstance.invalidateSize(), 100);
-            } catch (error) {
-                console.error("Chargement des points GPS des villages impossible :", error);
-                if (mapElement) mapElement.insertAdjacentHTML("beforeend", '<p class="map-empty-note">Impossible de charger les points GPS. Vérifie les coordonnées enregistrées pour les villages.</p>');
-            } finally {
-                villageMapLoadPromise = null;
-            }
-        })();
-        return villageMapLoadPromise;
+        return actualiserCarteFrance();
     }
 
     function actualiserPasseport() {
