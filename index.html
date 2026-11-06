@@ -21101,6 +21101,9 @@
                                             </div>
                                             <div class="village-list-tools">
                                                 <input id="admin-village-search" type="search" placeholder="⌕ Rechercher un village…" oninput="adminRenderVillages()">
+                                                <select id="admin-village-department-filter" onchange="adminRenderVillages()" aria-label="Filtrer par département">
+                                                    <option value="">Tous les départements</option>
+                                                </select>
                                                 <select id="admin-village-filter" onchange="adminRenderVillages()" aria-label="Filtrer par statut">
                                                     <option value="">Tous les statuts</option>
                                                     <option value="pending_confirmation">En attente</option>
@@ -24244,7 +24247,25 @@
             return;
         const q = (document.getElementById("admin-village-search")?.value || "").trim().toLocaleLowerCase("fr");
         const filter = document.getElementById("admin-village-filter")?.value || "";
-        const villages = ADMIN_VILLAGES_CACHE.filter(v => (!filter || v.status === filter) && (!q || [v.name, v.postal_code, franceDepartmentLabel(v.postal_code), v.description].some(x => String(x || "").toLocaleLowerCase("fr").includes(q))));
+        const departmentFilter = document.getElementById("admin-village-department-filter")?.value || "";
+        const departmentSelect = document.getElementById("admin-village-department-filter");
+        if (departmentSelect && !departmentSelect.dataset.ready) {
+            FRANCE_DEPARTMENTS.forEach(([code, name]) => {
+                const option = document.createElement("option");
+                option.value = code;
+                option.textContent = `${code} · ${name}`;
+                departmentSelect.append(option);
+            });
+            departmentSelect.dataset.ready = "1";
+        }
+        const villages = ADMIN_VILLAGES_CACHE.filter(v => {
+            const departmentCode = franceDepartmentCode(v.postal_code);
+            return (!departmentFilter || departmentCode === departmentFilter)
+                && (!filter || v.status === filter)
+                && (!q || [v.name, v.postal_code, franceDepartmentLabel(v.postal_code), v.description].some(x => String(x || "").toLocaleLowerCase("fr").includes(q)));
+        });
+        const resultStatus = document.getElementById("admin-villages-status");
+        if (resultStatus) resultStatus.textContent = `${villages.length} village(s) affiché(s) sur ${ADMIN_VILLAGES_CACHE.length}.`;
         list.replaceChildren();
         if (!villages.length) {
             const p = document.createElement("p");
