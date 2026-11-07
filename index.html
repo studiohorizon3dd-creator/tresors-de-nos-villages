@@ -21703,15 +21703,18 @@
                                     <label class="admin-step-writing-field" style="grid-column:1/-1">
                                         Énigme<textarea id="admin-step-riddle" rows="4" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea>
                                     </label>
+                                    <div class="admin-step-writing-field" style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-top:-4px"><button type="button" class="admin-secondary-btn" id="admin-step-riddle-voice">🔊 Écouter l’énigme</button></div>
                                     <label class="admin-step-writing-field" style="grid-column:1/-1">
                                         Réponse<input id="admin-step-answer" maxlength="500" style="display:block;width:100%;box-sizing:border-box;padding:12px">
                                     </label>
                                     <label class="admin-step-writing-field" style="grid-column:1/-1">
                                         Premier indice (avant la réponse)<textarea id="admin-step-hint" maxlength="1000" rows="4" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea>
                                     </label>
+                                    <div class="admin-step-writing-field" style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-top:-4px"><button type="button" class="admin-secondary-btn" id="admin-step-hint-voice">🔊 Écouter le premier indice</button></div>
                                     <label class="admin-step-writing-field" style="grid-column:1/-1">
                                         Indice du prochain lieu (après bonne réponse)<textarea id="admin-step-next-hint" maxlength="1000" rows="4" placeholder="Un nouvel indice pour guider vers la prochaine étape…" style="display:block;width:100%;min-height:112px;box-sizing:border-box;padding:12px;resize:vertical"></textarea>
                                     </label>
+                                    <div class="admin-step-writing-field" style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;margin-top:-4px"><button type="button" class="admin-secondary-btn" id="admin-step-next-hint-voice">🔊 Écouter l’indice du prochain lieu</button><button type="button" class="admin-secondary-btn" id="admin-step-voice-stop">⏹ Arrêter la voix</button></div>
                                     <label>
                                         Étoiles attribuées<input id="admin-step-stars" type="number" min="0" max="10" step="1" value="1" style="display:block;width:100%;box-sizing:border-box;padding:10px">
                                     </label>
@@ -27294,6 +27297,27 @@
         controls.append(play, stop);
         container.appendChild(controls);
     };
+
+    // Boutons de pré-écoute vocale dans le formulaire de création des étapes.
+    window.previewAdminStepVoice = function (fieldId, prefix) {
+        const field = document.getElementById(fieldId);
+        const value = field ? field.value.trim() : '';
+        if (!value) { alert('Écris d’abord le texte à écouter.'); return; }
+        if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+            alert('La lecture vocale n’est pas disponible sur ce navigateur. Essaie avec Chrome ou Edge.'); return;
+        }
+        window.stopChildAdventureVoice();
+        const utterance = new SpeechSynthesisUtterance((prefix || '') + value);
+        utterance.lang = 'fr-FR'; utterance.rate = 0.88; utterance.pitch = 1.08;
+        const voices = window.speechSynthesis.getVoices();
+        const frenchVoice = voices.find(v => /^fr(-|_)/i.test(v.lang));
+        if (frenchVoice) utterance.voice = frenchVoice;
+        window.speechSynthesis.speak(utterance);
+    };
+    document.getElementById('admin-step-riddle-voice')?.addEventListener('click', () => window.previewAdminStepVoice('admin-step-riddle', ''));
+    document.getElementById('admin-step-hint-voice')?.addEventListener('click', () => window.previewAdminStepVoice('admin-step-hint', 'Premier indice. '));
+    document.getElementById('admin-step-next-hint-voice')?.addEventListener('click', () => window.previewAdminStepVoice('admin-step-next-hint', 'Indice du prochain lieu. '));
+    document.getElementById('admin-step-voice-stop')?.addEventListener('click', window.stopChildAdventureVoice);
 
     window.currentAdventureIsAdminPreview = false;
     async function openPlayerAdventure(id, testerMode=false) {
