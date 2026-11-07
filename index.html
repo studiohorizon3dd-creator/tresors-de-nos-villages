@@ -21662,7 +21662,19 @@
                                         <button class="admin-secondary-btn" id="admin-adventure-edit-cancel" type="button">Annuler</button>
                                     </div>
                                 </form>
-                                <p style="font-size:12px;color:#66736a;margin-bottom:0">« Valider » confirme le contenu sans le publier. « Mettre en ligne » reste une action distincte.</p>
+                                <section style="grid-column:1/-1;margin-top:14px;padding:14px;border:1px solid #d9c99e;border-radius:12px;background:#fffaf0">
+                                    <h4 style="margin:0 0 8px">📅 Programmer la sortie (après validation)</h4>
+                                    <p style="font-size:13px;color:#66736a;margin:0 0 10px">Choisis la date et l’heure. L’aventure sera publiée automatiquement uniquement si elle est validée. Cette fonction ne modifie pas ton compte à rebours.</p>
+                                    <label style="display:block;max-width:360px">Date et heure de publication
+                                        <input id="admin-adventure-schedule-date" type="datetime-local" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px;margin-top:5px">
+                                    </label>
+                                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                                        <button class="admin-secondary-btn" id="admin-adventure-schedule" type="button">🗓️ Programmer la publication</button>
+                                        <button class="admin-secondary-btn" id="admin-adventure-unschedule" type="button">Annuler la programmation</button>
+                                    </div>
+                                    <p id="admin-adventure-schedule-status" class="status" role="status" aria-live="polite"></p>
+                                </section>
+                                <p style="font-size:12px;color:#66736a;margin-bottom:0">« Valider » confirme le contenu sans le publier. « Mettre en ligne » reste une action distincte. Le compte à rebours reste entièrement sous ton contrôle.</p>
                                 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
                                     <button class="admin-secondary-btn" id="admin-adventure-validate" type="button">☑ Valider</button>
                                     <button class="admin-secondary-btn" id="admin-adventure-publish" type="button">🌐 Mettre en ligne</button>
@@ -25200,7 +25212,7 @@
     function adminAdventureStatusPill(a) {
         const status = ADVENTURE_STATUS_LABELS[a.status] || "En cours de création";
         const cls = a.is_published ? "admin-adventure-pill" : a.is_validated ? "admin-adventure-pill" : "admin-adventure-pill pending";
-        return `<span class="${cls}">${status}</span><span class="admin-adventure-pill ${a.is_validated ? "" : "bad"}">${a.is_validated ? "Validée" : "Non validée"}</span><span class="admin-adventure-pill ${a.is_published ? "" : "pending"}">${a.is_published ? "En ligne" : "Non publiée"}</span>`;
+        return `<span class="${cls}">${status}</span><span class="admin-adventure-pill ${a.is_validated ? "" : "bad"}">${a.is_validated ? "Validée" : "Non validée"}</span><span class="admin-adventure-pill ${a.is_published ? "" : "pending"}">${a.is_published ? "En ligne" : a.scheduled_at ? "Programmée" : "Non publiée"}</span>${a.scheduled_at ? `<small style="display:block;margin-top:5px">Sortie prévue : ${new Date(a.scheduled_at).toLocaleString("fr-FR")}</small>` : ""}`;
     }
     function adminAdventureMatchesFilter(a, filter) {
         if (filter === "drafts")
@@ -25359,6 +25371,16 @@
         document.getElementById("admin-adventure-edit-status-select").dataset.id = a.id;
         document.getElementById("admin-adventure-validate").disabled = !!a.is_validated;
         document.getElementById("admin-adventure-publish").disabled = !!a.is_published || !a.is_validated;
+        const scheduleInput = document.getElementById("admin-adventure-schedule-date");
+        if (scheduleInput) {
+            if (a.scheduled_at) {
+                const d = new Date(a.scheduled_at);
+                const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+                scheduleInput.value = local.toISOString().slice(0,16);
+            } else scheduleInput.value = "";
+        }
+        const scheduleStatus = document.getElementById("admin-adventure-schedule-status");
+        if (scheduleStatus) scheduleStatus.textContent = a.scheduled_at ? `Publication prévue le ${new Date(a.scheduled_at).toLocaleString("fr-FR")}.` : "Aucune publication programmée.";
         document.getElementById("admin-adventure-edit-message").textContent = "";
         panel.scrollIntoView({
             behavior: "smooth",
@@ -25458,6 +25480,36 @@
     );
     document.getElementById("admin-adventure-validate")?.addEventListener("click", () => window.adminAdventureAction(document.getElementById("admin-adventure-edit-id").value, "validate"));
     document.getElementById("admin-adventure-publish")?.addEventListener("click", () => window.adminAdventureAction(document.getElementById("admin-adventure-edit-id").value, "publish"));
+    document.getElementById("admin-adventure-schedule")?.addEventListener("click", async () => {
+        const id = document.getElementById("admin-adventure-edit-id")?.value;
+        const input = document.getElementById("admin-adventure-schedule-date");
+        const status = document.getElementById("admin-adventure-schedule-status");
+        if (!id || !input?.value) { if (status) status.textContent = "Choisis une date et une heure."; return; }
+        if (document.getElementById("admin-adventure-edit-status-select")?.dataset.validated !== "true") {
+            if (status) status.textContent = "Valide d’abord cette aventure avant de programmer sa sortie.";
+            return;
+        }
+        if (!confirm("Programmer la publication automatique à la date choisie ? Le compte à rebours ne sera pas modifié.")) return;
+        try {
+            const date = new Date(input.value);
+            await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/schedule`, {
+                method: "POST", body: JSON.stringify({ scheduled_at: date.toISOString() })
+            });
+            if (status) status.textContent = `Publication programmée pour le ${date.toLocaleString("fr-FR")}.`;
+            await window.adminLoadAdventures();
+        } catch (error) { if (status) status.textContent = error.message || "Programmation impossible."; }
+    });
+    document.getElementById("admin-adventure-unschedule")?.addEventListener("click", async () => {
+        const id = document.getElementById("admin-adventure-edit-id")?.value;
+        const status = document.getElementById("admin-adventure-schedule-status");
+        if (!id || !confirm("Annuler la publication programmée ?")) return;
+        try {
+            await adminApi(`/api/admin/adventures/${encodeURIComponent(id)}/schedule`, { method: "DELETE" });
+            const input = document.getElementById("admin-adventure-schedule-date"); if (input) input.value = "";
+            if (status) status.textContent = "Programmation annulée.";
+            await window.adminLoadAdventures();
+        } catch (error) { if (status) status.textContent = error.message || "Annulation impossible."; }
+    });
     const adventureCategorySelect = document.getElementById("admin-adventure-category");
     const adventureAgeWrap = document.getElementById("admin-adventure-age-wrap");
     adventureCategorySelect?.addEventListener("change", () => {
