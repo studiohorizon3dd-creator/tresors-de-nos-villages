@@ -27267,6 +27267,34 @@
     ;
 
     window.currentAdventureIsTester = false;
+    // Lecture vocale des aventures destinées aux 4-6 ans (synthèse vocale du navigateur).
+    window.stopChildAdventureVoice = function () {
+        try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {}
+    };
+    window.addChildAdventureVoice = function (container, textToRead) {
+        const text = String(textToRead || '').trim();
+        if (!container || !text || !('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+        const controls = document.createElement('div');
+        controls.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin:8px 0';
+        const play = document.createElement('button');
+        play.type = 'button'; play.className = 'small-btn'; play.textContent = '🔊 Écouter';
+        play.setAttribute('aria-label', 'Écouter le texte');
+        play.addEventListener('click', () => {
+            window.stopChildAdventureVoice();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'fr-FR'; utterance.rate = 0.88; utterance.pitch = 1.08;
+            const voices = window.speechSynthesis.getVoices();
+            const frenchVoice = voices.find(v => /^fr(-|_)/i.test(v.lang));
+            if (frenchVoice) utterance.voice = frenchVoice;
+            window.speechSynthesis.speak(utterance);
+        });
+        const stop = document.createElement('button');
+        stop.type = 'button'; stop.className = 'small-btn'; stop.textContent = '⏹ Arrêter';
+        stop.addEventListener('click', window.stopChildAdventureVoice);
+        controls.append(play, stop);
+        container.appendChild(controls);
+    };
+
     window.currentAdventureIsAdminPreview = false;
     async function openPlayerAdventure(id, testerMode=false) {
         window.currentAdventureIsTester = !!testerMode;
@@ -27286,6 +27314,14 @@
                 : `⭐ ${progress.stars_earned} / ${progress.total_stars} étoiles · ${progress.validated_steps} / ${progress.total_steps} étapes validées`;
             stepsBox.replaceChildren();
             const steps = Array.isArray(data.steps) ? data.steps : [];
+            const adventureLevelKey = String(data.adventure?.level_key || '').toLowerCase();
+            const childVoiceEnabled = adventureLevelKey === 'enfant_4_6';
+            if (childVoiceEnabled) {
+                const voiceNote = document.createElement('p');
+                voiceNote.textContent = '🔊 Tu peux écouter les histoires, les énigmes et les indices. Appuie sur « Écouter » autant de fois que tu veux.';
+                voiceNote.style.cssText = 'padding:10px;background:#eef7e9;border-radius:10px;font-weight:600';
+                stepsBox.appendChild(voiceNote);
+            }
             steps.forEach(step => {
                 const article = document.createElement('article');
                 article.className = 'feature';
@@ -27350,10 +27386,12 @@
                         riddle.textContent = step.riddle || '⚠️ Aucune énigme renseignée pour cette étape.';
                         riddle.style.cssText = 'font-size:16px;font-weight:700;line-height:1.5;margin-top:14px';
                         article.appendChild(riddle);
+                        if (childVoiceEnabled) window.addChildAdventureVoice(article, step.riddle || 'Aucune énigme renseignée.');
                         if (step.hint) {
                             const hint = document.createElement('p');
                             hint.textContent = '💡 Indice : ' + step.hint;
                             article.appendChild(hint);
+                            if (childVoiceEnabled) window.addChildAdventureVoice(article, 'Premier indice. ' + step.hint);
                         }
                         const answerLabel = document.createElement('label');
                         answerLabel.textContent = 'Tester une réponse (simulation uniquement)';
@@ -27400,10 +27438,12 @@
                     riddle.textContent = step.riddle || 'Aucune énigme renseignée pour cette étape.';
                     riddle.style.cssText = 'font-size:16px;font-weight:700;line-height:1.5';
                     article.appendChild(riddle);
+                    if (childVoiceEnabled) window.addChildAdventureVoice(article, step.riddle || 'Aucune énigme renseignée.');
                     if (step.hint) {
                         const hint = document.createElement('p');
                         hint.textContent = `💡 Indice : ${step.hint}`;
                         article.appendChild(hint);
+                        if (childVoiceEnabled) window.addChildAdventureVoice(article, 'Premier indice. ' + step.hint);
                     }
                     if (step.answered) {
                         const done = document.createElement('p');
@@ -27415,6 +27455,7 @@
                             nextHint.textContent = '🔎 ' + step.next_hint;
                             nextHint.style.cssText = 'padding:12px;background:#fff4d8;border-left:4px solid #c99a32;border-radius:8px;font-weight:600';
                             article.appendChild(nextHint);
+                            if (childVoiceEnabled) window.addChildAdventureVoice(article, 'Bravo ! Voici le prochain indice. ' + step.next_hint);
                         }
                     } else {
                         const label = document.createElement('label');
