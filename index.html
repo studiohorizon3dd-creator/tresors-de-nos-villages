@@ -21642,6 +21642,26 @@
                                     <label>
                                         Village<input id="admin-adventure-edit-village" required maxlength="150" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px">
                                     </label>
+                                    <label>
+                                        Catégorie du parcours
+                                        <select id="admin-adventure-edit-level" required style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px">
+                                            <optgroup label="Espace Enfant">
+                                                <option value="enfant_4_6">Enfant · 4 à 6 ans</option>
+                                                <option value="enfant_7_9">Enfant · 7 à 9 ans</option>
+                                                <option value="enfant_10_12">Enfant · 10 à 12 ans</option>
+                                                <option value="enfant_13_15">Enfant · 13 à 15 ans</option>
+                                            </optgroup>
+                                            <optgroup label="Autres parcours">
+                                                <option value="facile">Facile</option>
+                                                <option value="famille">Famille</option>
+                                                <option value="moyen">Moyen</option>
+                                                <option value="difficile">Difficile</option>
+                                                <option value="extreme">Extrême</option>
+                                                <option value="nuit">Nuit</option>
+                                            </optgroup>
+                                        </select>
+                                        <small>Changer cette catégorie conserve les étapes et les énigmes de l’aventure.</small>
+                                    </label>
                                     <label style="grid-column:1/-1">
                                         Description<textarea id="admin-adventure-edit-description" rows="3" maxlength="3000" style="display:block;width:100%;padding:10px;border:1px solid #d4c49c;border-radius:8px"></textarea>
                                     </label>
@@ -25363,6 +25383,12 @@
         document.getElementById("admin-adventure-edit-title").value = a.title || "";
         document.getElementById("admin-adventure-edit-village").value = a.village || "";
         document.getElementById("admin-adventure-edit-description").value = a.description || "";
+        const levelSelect = document.getElementById("admin-adventure-edit-level");
+        if (levelSelect) {
+            const currentLevel = String(a.level_key || "facile").toLowerCase();
+            levelSelect.value = currentLevel;
+            if (levelSelect.value !== currentLevel) levelSelect.value = "facile";
+        }
         document.getElementById("admin-adventure-edit-status-select").value = ADVENTURE_STATUS_LABELS[a.status] ? ({brouillon:"en_creation",publie:"en_ligne",suspendu:"suspendue"}[a.status] || a.status) : "en_creation";
         document.getElementById("admin-adventure-edit-status-select").dataset.validated = String(!!a.is_validated);
         document.getElementById("admin-adventure-edit-status-select").dataset.published = String(!!a.is_published);
@@ -25457,6 +25483,7 @@
             title: document.getElementById("admin-adventure-edit-title").value.trim(),
             village: document.getElementById("admin-adventure-edit-village").value.trim(),
             description: document.getElementById("admin-adventure-edit-description").value.trim(),
+            level_key: document.getElementById("admin-adventure-edit-level").value,
             status: document.getElementById("admin-adventure-edit-status-select").value
         };
         btn.disabled = true;
